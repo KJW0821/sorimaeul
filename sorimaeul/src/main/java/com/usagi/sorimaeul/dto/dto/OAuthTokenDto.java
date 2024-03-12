@@ -1,8 +1,14 @@
 package com.usagi.sorimaeul.dto.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OAuthTokenDto {
     private String access_token;
     private String token_type;

@@ -4,14 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
 @Data
+@Builder
 @Table(name = "user_tb")
 public class User {
 
