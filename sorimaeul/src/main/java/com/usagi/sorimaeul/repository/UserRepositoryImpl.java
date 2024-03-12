@@ -1,8 +1,9 @@
 package com.usagi.sorimaeul.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.usagi.sorimaeul.dto.request.SignUpRequest;
-import com.usagi.sorimaeul.dto.request.UserInfoRequest;
+import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
 import com.usagi.sorimaeul.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -50,18 +51,20 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     public UserInfoResponse getUserInfo(long userCode) {
 
-        String userNickname = queryFactory
-                .select(quser.nickname)
+        Tuple userInfo = queryFactory
+                .select(quser.nickname, quser.profileImage, quser.learnCount)
                 .from(quser)
                 .where(quser.userCode.eq(userCode))
                 .fetchFirst();
 
         return UserInfoResponse.builder()
-                .nickname(userNickname)
+                .nickname(userInfo.get(quser.nickname))
+                .profileImage(userInfo.get(quser.profileImage))
+                .learnCount(userInfo.get(quser.learnCount))
                 .build();
     }
 
-    public void setUserInfo(UserInfoRequest request) {
+    public void setUserInfo(NicknameUpdateRequest request) {
         queryFactory.insert(quser)
                 .columns(
                         quser.userCode,

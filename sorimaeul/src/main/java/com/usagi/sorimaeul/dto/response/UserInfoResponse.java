@@ -10,5 +10,7 @@ import lombok.Data;
 public class UserInfoResponse {
 
     private String nickname;
+    private String profileImage;
+    private int learnCount;
 
 }
