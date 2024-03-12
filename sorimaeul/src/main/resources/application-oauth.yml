@@ -5,17 +5,17 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ENC(tGBMpaFYOr9v4vD6NCBgQqyyx6sjO+NKja58/7AblVCSa9+nitEPS0XdBwoh1Xif)
-            redirect-uri: ENC(I5ouPRahyvuhjNkNzNTrq/92qMpk2NxLnKlMkfZW4HPNcJgi3EG3qBTfCJ8/A4MHRG2yDoWCzBw=)
+            client-id: 40a6ee1bb9a630be39ffadabd71c51bd
+            redirect-uri: http://localhost:3000/login-callback
             client-authentication-method: POST
-            client-secret: ENC(d+ueansefZk6QdoADExq1B6lqUdjEZ5t7LtUuZmaWeY2QGBIW1SrdlxL6zZGZSSS)
+            client-secret: zPTNIFgvrKxFEzMFYZWgSmDbFleYUpZG
             authorization-grant-type: authorization_code
             client_name: kakao
-          google:
-            client-id: ENC(YROBiwrWocFI0OGZCEDse+j/iHoWN4eO216IVv3+HaZP0tsMPfXIMkJqWGfyYFuty/rb4f7UDi9B/OByAgeNxGQbRgwcC7nHTi/lhasIXaRfW/ETFNQo4g==)    # REST API 키
-            client-secret: ENC(7a9NSzNM7KRlnEW5/UmYcKvcDNrbah0tPTV43EzKUZ1xJi1objqQLUANPHdpp6rv)
-            scope: profile, email # 기본값이 openid, profile, email이지만 openid를 등록하게 되면 서비스마다(카카오, 네이버) OAuth2Service를 만들어야하기 때문에 profile, email만 scope로 지정
-            redirect-uri: "<https://66challenge-server.store/login/oauth2/code/google>"
+#          google:
+#            client-id: ENC(YROBiwrWocFI0OGZCEDse+j/iHoWN4eO216IVv3+HaZP0tsMPfXIMkJqWGfyYFuty/rb4f7UDi9B/OByAgeNxGQbRgwcC7nHTi/lhasIXaRfW/ETFNQo4g==)    # REST API 키
+#            client-secret: ENC(7a9NSzNM7KRlnEW5/UmYcKvcDNrbah0tPTV43EzKUZ1xJi1objqQLUANPHdpp6rv)
+#            scope: profile, email # 기본값이 openid, profile, email이지만 openid를 등록하게 되면 서비스마다(카카오, 네이버) OAuth2Service를 만들어야하기 때문에 profile, email만 scope로 지정
+#            redirect-uri: "<https://66challenge-server.store/login/oauth2/code/google>"
 
         provider:
           kakao:
@@ -26,7 +26,7 @@ spring:
 
 jwt:
   token:
-    secret-key: ENC(HKk1M8Cgd+DREXx72LbvVkpB8nih586RWRPov7XoiJbqq/pYcsLfwlzTYH+r3VFhPWRaZWvW3zWYiGUMxynqUvO6S6QTV7oCdYIUONpHor4=)
+    secret-key: a054d41e0323429ba0e6e7cc1380091fe4f416a04d04a3f372399a8303ec0fb7
   access-token:
     expire-length: 1800000
   refresh-token:
