@@ -23,8 +23,8 @@ public class OAuthController {
 
     private final OAuthService oAuthService;
 
-    @Operation(summary = "소셜 로그인 페이지로 이동",
-            description = "소셜 로그인 페이지로 이동하여 소셜 로그인 후 code 받음")
+    @Operation(summary = "카카오 로그인 페이지로 이동",
+            description = "카카오 로그인 페이지로 이동하여 소셜 로그인 후 code 받음")
     @ApiResponse(responseCode = "303", description = "카카오 로그인 페이지로 이동")
     @GetMapping("/code/{provider}")
 
