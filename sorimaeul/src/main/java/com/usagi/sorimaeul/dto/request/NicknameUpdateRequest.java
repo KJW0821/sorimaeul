@@ -1,8 +1,13 @@
 package com.usagi.sorimaeul.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class NicknameUpdateRequest {
 
-    long userCode;
-    String nickname;
+    private long userCode;
+    private String nickname;
 
 }

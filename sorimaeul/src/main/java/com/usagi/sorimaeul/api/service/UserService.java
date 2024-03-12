@@ -36,13 +36,15 @@ public class UserService {
 
     public UserInfoResponse userInfo(long userCode) { return userRepository.getUserInfo(userCode); }
 
-    public HttpStatus nicknameUpdate(NicknameUpdateRequest nicknameUpdateRequest) {
-        long userCode = nicknameUpdateRequest.getUserCode();
-
+    public HttpStatus nicknameUpdate(NicknameUpdateRequest nicknameUpdateRequest, long userCode) {
         User user = userRepository.getUser(userCode);
 
         if (user == null) return HttpStatus.BAD_REQUEST;
-        else return HttpStatus.OK;
+        else {
+            user.setNickname(nicknameUpdateRequest.getNickname());
+            userRepository.save(user);
+            return HttpStatus.OK;
+        }
     }
 
 

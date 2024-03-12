@@ -4,7 +4,6 @@ import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
-import com.usagi.sorimaeul.filter.JwtAuthenticationFilter;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +23,6 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
     @Operation(summary = "로그인",
@@ -66,22 +64,25 @@ public class UserController {
         String bearer = request.getHeader("Authorization").substring(7);
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(bearer));
         UserInfoResponse response = userService.userInfo(userCode);
-//        long userCd = jwtAuthenticationFilter.doFilter();
         return ResponseEntity.ok(response);
     }
-    @Operation(summary = "유저 정보 수정",
+
+
+    @Operation(summary = "유저 닉네임 수정",
             description = "유저의 닉네임 수정")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "유저 정보 수정 성공"),
+            @ApiResponse(responseCode = "200", description = "유저 닉네임 수정 성공"),
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저")
     })
-    @PatchMapping("/userinfo/modify")
-    public ResponseEntity<?> nicknameUpdate(@RequestBody NicknameUpdateRequest request) {
-        HttpStatus status = userService.nicknameUpdate(request);
+    @PatchMapping("/nickname")
+    public ResponseEntity<?> nicknameUpdate(HttpServletRequest request, @RequestBody NicknameUpdateRequest nicknameUpdateRequest) {
+        String bearer = request.getHeader("Authorization").substring(7);
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(bearer));
+        HttpStatus status = userService.nicknameUpdate(nicknameUpdateRequest, userCode);
         return ResponseEntity.status(status).build();
     }
 
-    // 테스트를 위한 토큰 확인 함수 작성
+    // 테스트를 위한 유저코드를 통해 토큰을 확인하는 함수 작성
     @GetMapping( "/token/{userCode}")
     public String getUserToken(@PathVariable long userCode) {
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(userCode));

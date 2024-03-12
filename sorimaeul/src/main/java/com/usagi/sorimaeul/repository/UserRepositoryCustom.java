@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.repository;
 
 import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
+import com.usagi.sorimaeul.dto.request.UserInfoRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
 import com.usagi.sorimaeul.entity.User;
 
@@ -15,6 +16,6 @@ public interface UserRepositoryCustom {
 
     UserInfoResponse getUserInfo(long userCode);
 
-    void setUserInfo(NicknameUpdateRequest request);
+    void setUserInfo(UserInfoRequest request);
 
 }

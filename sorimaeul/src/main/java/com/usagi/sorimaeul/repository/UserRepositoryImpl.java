@@ -2,8 +2,9 @@ package com.usagi.sorimaeul.repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
+import com.usagi.sorimaeul.dto.request.SignUpRequest;
+import com.usagi.sorimaeul.dto.request.UserInfoRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
 import com.usagi.sorimaeul.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .build();
     }
 
-    public void setUserInfo(NicknameUpdateRequest request) {
+    public void setUserInfo(UserInfoRequest request) {
         queryFactory.insert(quser)
                 .columns(
                         quser.userCode,
@@ -75,5 +76,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         request.getNickname())
                 .execute();
     }
+
 
 }
