@@ -1,5 +1,6 @@
 package com.usagi.sorimaeul.api.service;
 
+import com.usagi.sorimaeul.dto.request.ProfileImageUpdateRequest;
 import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
@@ -42,6 +43,17 @@ public class UserService {
         if (user == null) return HttpStatus.BAD_REQUEST;
         else {
             user.setNickname(nicknameUpdateRequest.getNickname());
+            userRepository.save(user);
+            return HttpStatus.OK;
+        }
+    }
+
+    public HttpStatus profileImageUpdate(ProfileImageUpdateRequest profileImageUpdateRequest, long userCode) {
+        User user = userRepository.getUser(userCode);
+
+        if (user == null) return HttpStatus.BAD_REQUEST;
+        else {
+            user.setProfileImage(profileImageUpdateRequest.getProfileImage());
             userRepository.save(user);
             return HttpStatus.OK;
         }

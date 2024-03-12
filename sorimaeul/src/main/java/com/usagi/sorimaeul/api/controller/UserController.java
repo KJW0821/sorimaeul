@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.UserService;
+import com.usagi.sorimaeul.dto.request.ProfileImageUpdateRequest;
 import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
@@ -82,7 +83,22 @@ public class UserController {
         return ResponseEntity.status(status).build();
     }
 
+    @Operation(summary = "유저 프로필 이미지 수정",
+            description = "유저의 프로필 이미지 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "유저 프로필 이미지 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 유저")
+    })
+    @PatchMapping("/image")
+    public ResponseEntity<?> profileImageUpdate(HttpServletRequest request, @RequestBody ProfileImageUpdateRequest profileImageUpdateRequest) {
+        String bearer = request.getHeader("Authorization").substring(7);
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(bearer));
+        HttpStatus status = userService.profileImageUpdate(profileImageUpdateRequest, userCode);
+        return ResponseEntity.status(status).build();
+    }
+
     // 테스트를 위한 유저코드를 통해 토큰을 확인하는 함수 작성
+
     @GetMapping( "/token/{userCode}")
     public String getUserToken(@PathVariable long userCode) {
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(userCode));
