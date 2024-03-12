@@ -19,10 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final CorsConfiguration corsConfiguration;
+    private final CorsConfig corsConfig;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -44,7 +44,7 @@ public class SecurityConfiguration {
                         .permitAll())
 //								.authenticated())
                 // CORS 설정
-                .addFilter(corsConfiguration.corsFilter())
+                .addFilter(corsConfig.corsFilter())
                 // JWT 인증을 위하여 필터 실행
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
