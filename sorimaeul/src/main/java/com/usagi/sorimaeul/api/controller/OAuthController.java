@@ -23,11 +23,10 @@ public class OAuthController {
 
     private final OAuthService oAuthService;
 
-    @Operation(summary = "카카오 로그인 페이지로 이동",
-            description = "카카오 로그인 페이지로 이동하여 소셜 로그인 후 code 받음")
-    @ApiResponse(responseCode = "303", description = "카카오 로그인 페이지로 이동")
+    @Operation(summary = "소셜 로그인 페이지로 이동",
+            description = "소셜 로그인 페이지로 이동하여 소셜 로그인 후 code 받음")
+    @ApiResponse(responseCode = "303", description = "소셜 로그인 페이지로 이동")
     @GetMapping("/code/{provider}")
-
     public ResponseEntity<?> getCode(@PathVariable String provider) throws URISyntaxException {
         URI redirectUri = oAuthService.getCode(provider);
 
@@ -38,7 +37,7 @@ public class OAuthController {
     }
 
     @Operation(summary = "로그인",
-            description = "소셜 로그인 code를 받아 FATTLE 로그인 실행")
+            description = "소셜 로그인 code를 받아 소리마을 로그인 실행")
     @ApiResponse(responseCode = "200", description = "토큰 제공")
     @GetMapping("/login/{provider}")
     public ResponseEntity<?> login(@PathVariable String provider,
