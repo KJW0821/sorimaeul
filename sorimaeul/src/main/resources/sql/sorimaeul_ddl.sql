@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `sorimaeul`.`voice_model_tb` (
   `model_name` VARCHAR(40) NULL,
   `storage_path` VARCHAR(200) NOT NULL,
   `image_path` VARCHAR(200) NOT NULL,
-  `state` TINYINT NULL,
+  `state` TINYINT NULL DEFAULT 0,
   `record_count` INT NULL,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`model_code`),
