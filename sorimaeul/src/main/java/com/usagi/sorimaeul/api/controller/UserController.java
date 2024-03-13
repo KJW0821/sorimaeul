@@ -61,9 +61,8 @@ public class UserController {
             description = "유저 코드를 받아 유저 정보를 응답")
     @ApiResponse(responseCode = "200", description = "유저 정보 응답")
     @GetMapping("/info")
-    public ResponseEntity<UserInfoResponse> userInfo(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization").substring(7);
-        long userCode = Long.parseLong(jwtTokenProvider.getPayload(bearer));
+    public ResponseEntity<UserInfoResponse> userInfo(@RequestHeader("Authorization") String token) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         UserInfoResponse response = userService.userInfo(userCode);
         return ResponseEntity.ok(response);
     }
@@ -76,9 +75,9 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저")
     })
     @PatchMapping("/nickname")
-    public ResponseEntity<?> nicknameUpdate(HttpServletRequest request, @RequestBody NicknameUpdateRequest nicknameUpdateRequest) {
-        String bearer = request.getHeader("Authorization").substring(7);
-        long userCode = Long.parseLong(jwtTokenProvider.getPayload(bearer));
+    public ResponseEntity<?> nicknameUpdate(@RequestHeader("Authorization") String token,
+                                            @RequestBody NicknameUpdateRequest nicknameUpdateRequest) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         HttpStatus status = userService.nicknameUpdate(nicknameUpdateRequest, userCode);
         return ResponseEntity.status(status).build();
     }
@@ -90,9 +89,9 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "존재하지 않는 유저")
     })
     @PatchMapping("/image")
-    public ResponseEntity<?> profileImageUpdate(HttpServletRequest request, @RequestBody ProfileImageUpdateRequest profileImageUpdateRequest) {
-        String bearer = request.getHeader("Authorization").substring(7);
-        long userCode = Long.parseLong(jwtTokenProvider.getPayload(bearer));
+    public ResponseEntity<?> profileImageUpdate(@RequestHeader("Authorization") String token,
+                                                @RequestBody ProfileImageUpdateRequest profileImageUpdateRequest) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         HttpStatus status = userService.profileImageUpdate(profileImageUpdateRequest, userCode);
         return ResponseEntity.status(status).build();
     }
