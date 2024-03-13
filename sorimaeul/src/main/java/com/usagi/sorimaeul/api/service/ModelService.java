@@ -6,4 +6,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface ModelService {
     ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode);
+    ResponseEntity<?> uploadFiles(int modelCode, int num, long userCode);
 }

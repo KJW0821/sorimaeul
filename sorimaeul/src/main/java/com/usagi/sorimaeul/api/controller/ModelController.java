@@ -30,4 +30,10 @@ public class ModelController {
         ResponseEntity<ModelTableCreateResponse> response = modelService.createModelTable(request, userCode);
         return response;
     }
+
+    public ResponseEntity<?> uploadFiles(@RequestHeader("Authorizarion") String token,
+                              @PathVariable int modelCode, @PathVariable int num) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.uploadFiles(modelCode, num, userCode);
+    }
 }

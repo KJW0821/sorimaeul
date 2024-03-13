@@ -38,4 +38,8 @@ public class ModelServiceImpl implements ModelService {
                         .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    public ResponseEntity<?> uploadFiles(int modelCode, int num, long userCode) {
+        return null;
+    }
 }
