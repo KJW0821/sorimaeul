@@ -1,14 +1,11 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.usagi.sorimaeul.dto.request.ProfileImageUpdateRequest;
-import com.usagi.sorimaeul.dto.request.SignUpRequest;
-import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
+import com.usagi.sorimaeul.dto.request.UserInfoRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +19,7 @@ public class UserService {
         return userRepository.getUser(userCode);
     }
 
-    public UserInfoResponse signUp(long userCode, SignUpRequest request) {
+    public UserInfoResponse signUp(long userCode, UserInfoRequest request) {
         userRepository.joinUser(userCode, request);
 
         User user = userRepository.getUser(userCode);
@@ -38,29 +35,20 @@ public class UserService {
         return userRepository.checkNickname(nickname);
     }
 
-    public UserInfoResponse userInfo(long userCode) { return userRepository.getUserInfo(userCode); }
+    public UserInfoResponse modifyUserInfo(long userCode, UserInfoRequest request) {
+        userRepository.updateUser(userCode, request);
 
-    public HttpStatus nicknameUpdate(NicknameUpdateRequest nicknameUpdateRequest, long userCode) {
         User user = userRepository.getUser(userCode);
 
-        if (user == null) return HttpStatus.BAD_REQUEST;
-        else {
-            user.setNickname(nicknameUpdateRequest.getNickname());
-            userRepository.save(user);
-            return HttpStatus.OK;
-        }
+        return UserInfoResponse.builder()
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .learnCount(user.getLearnCount())
+                .build();
     }
 
-    public HttpStatus profileImageUpdate(ProfileImageUpdateRequest profileImageUpdateRequest, long userCode) {
-        User user = userRepository.getUser(userCode);
-
-        if (user == null) return HttpStatus.BAD_REQUEST;
-        else {
-            user.setProfileImage(profileImageUpdateRequest.getProfileImage());
-            userRepository.save(user);
-            return HttpStatus.OK;
-        }
+    public UserInfoResponse userInfo(long userCode) {
+        return userRepository.getUserInfo(userCode);
     }
-
 
 }

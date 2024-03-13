@@ -2,8 +2,6 @@ package com.usagi.sorimaeul.repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
-import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.UserInfoRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
 import com.usagi.sorimaeul.entity.*;
@@ -26,7 +24,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .fetchFirst();
     }
 
-    public void joinUser(long userCode, SignUpRequest request) {
+    public void joinUser(long userCode, UserInfoRequest request) {
         queryFactory
                 .insert(quser)
                 .columns(
@@ -50,10 +48,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .intValue();
     }
 
-
-
     public UserInfoResponse getUserInfo(long userCode) {
-
         Tuple userInfo = queryFactory
                 .select(quser.nickname, quser.profileImage, quser.learnCount)
                 .from(quser)
@@ -67,17 +62,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .build();
     }
 
-    public void setUserInfo(UserInfoRequest request) {
-        queryFactory.insert(quser)
-                .columns(
-                        quser.userCode,
-                        quser.nickname
-                        )
-                .values(
-                        request.getUserCode(),
-                        request.getNickname())
+    @Override
+    public void updateUser(long userCode, UserInfoRequest request) {
+        queryFactory
+                .update(quser)
+                .set(quser.nickname, request.getNickname())
+                .set(quser.profileImage, request.getProfileImage())
+                .where(quser.userCode.eq(userCode))
                 .execute();
     }
-
 
 }
