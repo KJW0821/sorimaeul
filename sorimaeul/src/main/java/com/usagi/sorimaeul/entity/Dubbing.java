@@ -43,7 +43,7 @@ public class Dubbing {
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @Column(name = "created_time")
+    @Column(name = "updated_time")
     private LocalDateTime updatedTime;
 
     @Column(name = "like_count")
