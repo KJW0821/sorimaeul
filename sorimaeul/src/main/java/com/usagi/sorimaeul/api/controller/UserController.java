@@ -86,7 +86,7 @@ public class UserController {
 	@Operation(summary = "유저 정보",
 			description = "유저 정보 응답")
 	@ApiResponse(responseCode = "200", description = "유저 정보 응답")
-	@GetMapping("/info")
+	@GetMapping
 	public ResponseEntity<UserInfoResponse> userInfo(@RequestHeader("Authorization") String token) {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 		UserInfoResponse response = userService.userInfo(userCode);
