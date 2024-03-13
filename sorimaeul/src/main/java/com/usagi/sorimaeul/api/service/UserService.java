@@ -18,12 +18,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public HttpStatus login(long userCode) {
-        User user = userRepository.getUser(userCode);
-
-        if (user == null) return HttpStatus.NO_CONTENT;
-
-        return HttpStatus.OK;
+    public User login(long userCode) {
+        return userRepository.getUser(userCode);
     }
 
     public void signUp(SignUpRequest signUpRequest) { userRepository.joinUser(signUpRequest); }
