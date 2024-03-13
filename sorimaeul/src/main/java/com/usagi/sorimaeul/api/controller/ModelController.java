@@ -27,9 +27,7 @@ public class ModelController {
     public ResponseEntity<ModelTableCreateResponse> createModelTable(@RequestHeader("Authorization") String token,
                                                                      @RequestBody ModelTableCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        System.out.println(userCode);
         ResponseEntity<ModelTableCreateResponse> response = modelService.createModelTable(request, userCode);
-        System.out.println(response);
         return response;
     }
 }
