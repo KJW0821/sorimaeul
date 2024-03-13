@@ -65,10 +65,7 @@ public class UserController {
 
 	@Operation(summary = "닉네임 중복 확인",
 			description = "기존에 존재하는 닉네임인지 확인")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "닉네임 사용 가능"),
-			@ApiResponse(responseCode = "204", description = "닉네임 중복")
-	})
+	@ApiResponse(responseCode = "200", description = "닉네임 중복 확인 성공")
 	@GetMapping("/nickname/{nickname}")
 	public ResponseEntity<NicknameResponse> checkNickname(@PathVariable String nickname) {
 		int cnt = userService.checkNickname(nickname);
