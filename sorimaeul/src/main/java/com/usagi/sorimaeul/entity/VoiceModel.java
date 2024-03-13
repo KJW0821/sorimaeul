@@ -1,10 +1,18 @@
 package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 @Table(name = "voice_model_tb")
 public class VoiceModel {
 
@@ -18,7 +26,7 @@ public class VoiceModel {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "video_code", referencedColumnName = "video_code")
+    @JoinColumn(name = "video_code", referencedColumnName = "video_source_code")
     private VideoSource videoSource;
 
     @Column(name = "model_name")
