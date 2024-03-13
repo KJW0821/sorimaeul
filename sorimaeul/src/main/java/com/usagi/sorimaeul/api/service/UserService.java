@@ -22,13 +22,20 @@ public class UserService {
         return userRepository.getUser(userCode);
     }
 
-    public void signUp(SignUpRequest signUpRequest) { userRepository.joinUser(signUpRequest); }
+    public UserInfoResponse signUp(long userCode, SignUpRequest request) {
+        userRepository.joinUser(userCode, request);
 
-    public HttpStatus checkNickname(String nickname) {
-        int cnt = userRepository.checkNickname(nickname);
+        User user = userRepository.getUser(userCode);
 
-        if (cnt == 0) return HttpStatus.OK;
-        else return HttpStatus.NOT_ACCEPTABLE;
+        return UserInfoResponse.builder()
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .learnCount(user.getLearnCount())
+                .build();
+    }
+
+    public int checkNickname(String nickname) {
+        return userRepository.checkNickname(nickname);
     }
 
     public UserInfoResponse userInfo(long userCode) { return userRepository.getUserInfo(userCode); }

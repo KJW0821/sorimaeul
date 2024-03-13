@@ -10,7 +10,7 @@ import com.usagi.sorimaeul.entity.User;
 public interface UserRepositoryCustom {
     User getUser(long userCode);
 
-    void joinUser(SignUpRequest request);
+    void joinUser(long userCode, SignUpRequest request);
 
     int checkNickname(String nickname);
 

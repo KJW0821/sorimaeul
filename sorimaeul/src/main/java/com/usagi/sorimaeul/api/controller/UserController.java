@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.ProfileImageUpdateRequest;
 import com.usagi.sorimaeul.dto.request.SignUpRequest;
 import com.usagi.sorimaeul.dto.request.NicknameUpdateRequest;
+import com.usagi.sorimaeul.dto.response.NicknameResponse;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -56,9 +57,10 @@ public class UserController {
 			description = "유저 정보를 받아 회원가입")
 	@ApiResponse(responseCode = "201", description = "회원가입 성공")
 	@PostMapping("/signup")
-	public ResponseEntity<?> signUp(@RequestBody SignUpRequest request) {
-		userService.signUp(request);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<UserInfoResponse> signUp(@RequestHeader("Authorization") String token, @RequestBody SignUpRequest request) {
+		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+		UserInfoResponse response = userService.signUp(userCode, request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@Operation(summary = "닉네임 중복 확인",
@@ -68,8 +70,12 @@ public class UserController {
 			@ApiResponse(responseCode = "204", description = "닉네임 중복")
 	})
 	@GetMapping("/nickname/{nickname}")
-	public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
-		return ResponseEntity.status(userService.checkNickname(nickname)).build();
+	public ResponseEntity<NicknameResponse> checkNickname(@PathVariable String nickname) {
+		int cnt = userService.checkNickname(nickname);
+		NicknameResponse response = NicknameResponse.builder()
+				.result(cnt)
+				.build();
+		return ResponseEntity.ok(response);
 	}
 
 	@Operation(summary = "유저 정보",

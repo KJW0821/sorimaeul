@@ -26,15 +26,17 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .fetchFirst();
     }
 
-    public void joinUser(SignUpRequest request) {
+    public void joinUser(long userCode, SignUpRequest request) {
         queryFactory
                 .insert(quser)
                 .columns(
                         quser.userCode,
-                        quser.nickname)
+                        quser.nickname,
+                        quser.profileImage)
                 .values(
-                        request.getUserCode(),
-                        request.getNickname())
+                        userCode,
+                        request.getNickname(),
+                        request.getProfileImage())
                 .execute();
 
     }
