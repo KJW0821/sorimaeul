@@ -13,11 +13,13 @@ public class VoiceModel {
     @Column(name = "model_code")
     private int modelCode;
 
-    @Column(name = "user_code")
-    private long userCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_code", referencedColumnName = "user_code")
+    private User user;
 
-    @Column(name = "video_code")
-    private Integer videoCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_code", referencedColumnName = "video_code")
+    private VideoSource videoSource;
 
     @Column(name = "model_name")
     private String modelName;
