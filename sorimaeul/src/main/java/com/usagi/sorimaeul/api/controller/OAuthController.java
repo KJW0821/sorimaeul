@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +39,8 @@ public class OAuthController {
             description = "소셜 로그인 code를 받아 소리마을 로그인 실행")
     @ApiResponse(responseCode = "200", description = "토큰 제공")
     @GetMapping("/login/{provider}")
-    public ResponseEntity<?> login(@PathVariable String provider,
-                                   @RequestParam("code") String code) {
+    public ResponseEntity<TokenResponse> login(@PathVariable String provider,
+                                       @RequestParam("code") String code) {
         TokenResponse response = oAuthService.login(provider, code);
 
         return ResponseEntity.ok(response);

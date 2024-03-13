@@ -1,6 +1,6 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.usagi.sorimaeul.dto.dto.KakaoProfileDto;
+import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -38,7 +38,8 @@ public class OAuthService {
                 + "?response_type=code&redirect_uri="
                 + provider.getRedirectUri()
                 + "&client_id="
-                + provider.getClientId();
+                + provider.getClientId()
+                + "&scope=openid";
         return new URI(uri);
     }
 
@@ -86,9 +87,9 @@ public class OAuthService {
 
     private long getUserProfile(OAuthTokenDto token, ClientRegistration provider) {
         Map<String, Object> userAttributes = getUserAttributes(provider, token);
-        KakaoProfileDto profile = new KakaoProfileDto(userAttributes);
+        SocialProfileDto profile = new SocialProfileDto(userAttributes);
 
-        return profile.getProviderId();
+        return profile.getProviderId(provider);
     }
 
     private Map<String, Object> getUserAttributes(ClientRegistration provider, OAuthTokenDto token) {
