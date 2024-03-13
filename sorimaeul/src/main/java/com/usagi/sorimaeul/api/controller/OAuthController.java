@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.api.service.OAuthService;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -45,4 +46,18 @@ public class OAuthController {
 
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "토큰 재발급",
+            description = "액세스 토큰 만료 시 리프레시 토큰 재발급")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "토큰 재발급"),
+            @ApiResponse(responseCode = "401", description = "만료된 리프레시 토큰")
+    })
+    @GetMapping("/reissue")
+    public ResponseEntity<TokenResponse> reissue(@RequestHeader("Authorization") String token) {
+        String refreshToken = token.substring(7);
+        TokenResponse response = oAuthService.reissue(refreshToken);
+        return ResponseEntity.ok(response);
+    }
+
 }

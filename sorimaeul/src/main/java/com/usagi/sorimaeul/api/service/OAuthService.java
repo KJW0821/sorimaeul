@@ -3,9 +3,12 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
+import com.usagi.sorimaeul.entity.RefreshToken;
+import com.usagi.sorimaeul.repository.RefreshTokenRepository;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,6 +34,8 @@ public class OAuthService {
     private final InMemoryClientRegistrationRepository inMemoryRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public URI getCode(String providerName) throws URISyntaxException {
         ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
@@ -50,8 +56,19 @@ public class OAuthService {
 
         long userCode = getUserProfile(token, provider);
 
+        return createToken(userCode);
+    }
+
+    private TokenResponse createToken(long userCode) {
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(userCode));
         String refreshToken = jwtTokenProvider.createRefreshToken();
+
+        RefreshToken token = RefreshToken.builder()
+                .userCode(userCode)
+                .refreshToken(refreshToken)
+                .build();
+
+        refreshTokenRepository.save(token);
 
         return TokenResponse.builder()
                 .userCode(userCode)
@@ -101,4 +118,20 @@ public class OAuthService {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                 .block();
     }
+
+    public TokenResponse reissue(String refreshToken) {
+        RefreshToken token = refreshTokenRepository.findById(refreshToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        refreshTokenRepository.deleteById(refreshToken);
+
+        boolean isValid = jwtTokenProvider.validateToken(token.getRefreshToken());
+
+        if (!isValid) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        return createToken(token.getUserCode());
+    }
+
 }
