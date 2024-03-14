@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.ModelService;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,5 +40,13 @@ public class ModelController {
                                              @PathVariable int modelCode, @PathVariable int num, MultipartFile recordingFile) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.uploadFile(modelCode, num, userCode, recordingFile);
+    }
+
+
+    @GetMapping
+    public ResponseEntity<ModelListResponse> getModelResponse(@RequestHeader("Authorization") String token,
+                                                              @RequestParam int page, @RequestParam int videoSourceCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.getModelResponse(page, userCode, videoSourceCode);
     }
 }

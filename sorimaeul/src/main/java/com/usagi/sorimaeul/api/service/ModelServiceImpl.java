@@ -1,6 +1,8 @@
 package com.usagi.sorimaeul.api.service;
 
+import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.entity.VoiceModel;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -84,5 +87,22 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         voiceModel.setRecordCount(num);
         voiceModelRepository.save(voiceModel);
+    }
+
+
+    public ResponseEntity<ModelListResponse> getModelResponse(int page, long userCode, int videoSourceCode) {
+        List<ModelInfoDto> modelList = voiceModelRepository.getModelList(userCode, videoSourceCode);
+        boolean end = modelList.size() <= 4 * page;
+        List<ModelInfoDto> modelListInfo;
+        if (!end) {
+            modelListInfo = modelList.subList(4 * (page - 1), 4 * page);
+        } else {
+            modelListInfo = modelList.subList(4 * (page - 1), modelList.size());
+        }
+        ModelListResponse modelListResponse = ModelListResponse.builder()
+                .voiceModels(modelListInfo)
+                .end(end)
+                .build();
+        return ResponseEntity.ok(modelListResponse);
     }
 }
