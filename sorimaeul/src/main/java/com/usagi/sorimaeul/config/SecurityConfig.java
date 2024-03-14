@@ -4,9 +4,11 @@ import com.usagi.sorimaeul.filter.JwtAuthenticationFilter;
 import com.usagi.sorimaeul.utils.AuthenticatedMatchers;
 import com.usagi.sorimaeul.utils.JwtAccessDeniedHandler;
 import com.usagi.sorimaeul.utils.JwtAuthenticationEntryPoint;
+import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -34,8 +37,8 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
                 // JWT를 사용하기 때문에 session을 사용하지 않음
-                .sessionManagement(configurer ->
-                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(configurer -> configurer
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 요청 권한
                 .authorizeHttpRequests(authorize -> authorize
                         // 해당 API에 대해서는 모든 요청을 허가
@@ -43,15 +46,14 @@ public class SecurityConfig {
                         .permitAll()
                         // 이 밖에 모든 요청에 대해서 인증을 필요로 함
                         .anyRequest()
-//                        .permitAll())
                         .authenticated())
-                .exceptionHandling(configurer -> configurer
-                        .accessDeniedHandler(new JwtAccessDeniedHandler())
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 // CORS 설정
                 .addFilter(corsConfig.corsFilter())
-                // JWT 인증을 위하여 필터 실행
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(new JwtAccessDeniedHandler())
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 .build();
     }
 
