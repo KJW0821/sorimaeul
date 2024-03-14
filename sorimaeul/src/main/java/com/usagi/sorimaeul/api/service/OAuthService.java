@@ -127,38 +127,39 @@ public class OAuthService {
         RefreshToken token = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
+        if (!jwtTokenProvider.validateToken(token.getRefreshToken())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
         long userCode = token.getUserCode();
 
         refreshTokenRepository.deleteById(refreshToken);
 
         BlackList blackList = BlackList.builder()
-                .userCode(userCode)
-                .refreshToken(refreshToken)
+                .token(refreshToken)
                 .expiration(jwtTokenProvider.getExpiration(refreshToken))
                 .build();
 
         blackListRepository.save(blackList);
-
-        boolean isValid = jwtTokenProvider.validateToken(token.getRefreshToken());
-
-        if (!isValid) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
 
         return createToken(userCode);
     }
 
-    public void logout(long userCode, String accessToken, String refreshToken) {
+    public void logout(String accessToken, String refreshToken) {
         refreshTokenRepository.deleteById(refreshToken);
 
-        BlackList blackList = BlackList.builder()
-                .userCode(userCode)
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .expiration(jwtTokenProvider.getExpiration(refreshToken))
+        BlackList access = BlackList.builder()
+                .token(accessToken)
+                .expiration(jwtTokenProvider.getExpiration(accessToken))
                 .build();
 
-        blackListRepository.save(blackList);
+        BlackList refresh = BlackList.builder()
+                .token(accessToken)
+                .expiration(jwtTokenProvider.getExpiration(accessToken))
+                .build();
+
+        blackListRepository.save(access);
+        blackListRepository.save(refresh);
     }
 
 }

@@ -74,9 +74,8 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        BlackList blackList = blackListRepository.findByAccessToken(token)
-                .orElse(blackListRepository.findByRefreshToken(token)
-                        .orElse(null));
+        BlackList blackList = blackListRepository.findById(token)
+                .orElse(null);
 
         if (blackList != null) {
             return false;

@@ -19,10 +19,6 @@ public class BlackList {
 	private long expiration;
 
 	@Id
-	private long userCode;
-
-	private String accessToken;
-
-	private String refreshToken;
+	private String token;
 
 }

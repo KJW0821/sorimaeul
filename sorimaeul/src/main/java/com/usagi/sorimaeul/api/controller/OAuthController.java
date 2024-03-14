@@ -52,11 +52,9 @@ public class OAuthController {
     @Operation(summary = "로그아웃",
             description = "토큰을 받아 로그아웃")
     @ApiResponse(responseCode = "200", description = "로그아웃 성공")
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken,
-                                    @RequestHeader("RefreshToken") String refreshToken) {
-        long userCode = Long.parseLong(jwtTokenProvider.getPayload(accessToken.substring(7)));
-        oAuthService.logout(userCode, accessToken, refreshToken);
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestParam String accessToken, @RequestParam String refreshToken) {
+        oAuthService.logout(accessToken, refreshToken);
         return ResponseEntity.ok().build();
     }
 
