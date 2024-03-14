@@ -134,4 +134,8 @@ public class OAuthService {
         return createToken(token.getUserCode());
     }
 
+    public void logout(String accessToken, String refreshToken) {
+        refreshTokenRepository.deleteById(refreshToken);
+    }
+
 }
