@@ -2,6 +2,8 @@ package com.usagi.sorimaeul.config;
 
 import com.usagi.sorimaeul.filter.JwtAuthenticationFilter;
 import com.usagi.sorimaeul.utils.AuthenticatedMatchers;
+import com.usagi.sorimaeul.utils.JwtAccessDeniedHandler;
+import com.usagi.sorimaeul.utils.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +45,9 @@ public class SecurityConfig {
                         .anyRequest()
 //                        .permitAll())
                         .authenticated())
+                .exceptionHandling(configurer -> configurer
+                        .accessDeniedHandler(new JwtAccessDeniedHandler())
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 // CORS 설정
                 .addFilter(corsConfig.corsFilter())
                 // JWT 인증을 위하여 필터 실행
