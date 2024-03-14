@@ -31,6 +31,7 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 public class OAuthService {
+
     private static final String BEARER_TYPE = "Bearer";
 
     private final InMemoryClientRegistrationRepository inMemoryRepository;
@@ -154,8 +155,8 @@ public class OAuthService {
                 .build();
 
         BlackList refresh = BlackList.builder()
-                .token(accessToken)
-                .expiration(jwtTokenProvider.getExpiration(accessToken))
+                .token(refreshToken)
+                .expiration(jwtTokenProvider.getExpiration(refreshToken))
                 .build();
 
         blackListRepository.save(access);
