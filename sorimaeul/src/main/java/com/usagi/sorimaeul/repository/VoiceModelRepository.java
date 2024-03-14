@@ -9,6 +9,5 @@ import java.util.List;
 @Repository
 public interface VoiceModelRepository extends JpaRepository<VoiceModel, Integer> {
 
-//    List<VoiceModel> findByUser_UserCodeAndVideoSource_VideoSourceCode(long userCode, Integer videoSourceCode);
-
+    VoiceModel findByModelCode(int modelCode);
 }

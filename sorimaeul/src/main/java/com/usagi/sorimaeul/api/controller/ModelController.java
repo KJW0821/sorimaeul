@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/model")
@@ -27,13 +28,14 @@ public class ModelController {
     public ResponseEntity<ModelTableCreateResponse> createModelTable(@RequestHeader("Authorization") String token,
                                                                      @RequestBody ModelTableCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        ResponseEntity<ModelTableCreateResponse> response = modelService.createModelTable(request, userCode);
-        return response;
+        return modelService.createModelTable(request, userCode);
     }
 
-    public ResponseEntity<?> uploadFiles(@RequestHeader("Authorizarion") String token,
-                              @PathVariable int modelCode, @PathVariable int num) {
+
+    @PostMapping
+    public ResponseEntity<String> uploadFile(@RequestHeader("Authorizarion") String token,
+                                             @PathVariable int modelCode, @PathVariable int num, MultipartFile recordingFile) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return modelService.uploadFiles(modelCode, num, userCode);
+        return modelService.uploadFile(modelCode, num, userCode, recordingFile);
     }
 }

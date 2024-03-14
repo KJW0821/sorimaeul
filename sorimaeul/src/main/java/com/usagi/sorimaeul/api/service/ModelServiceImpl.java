@@ -10,6 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +23,7 @@ public class ModelServiceImpl implements ModelService {
 
     private final UserRepository userRepository;
     private final VoiceModelRepository voiceModelRepository;
+    private static final String BASE_PATH = "/path/to/base/directory";
 
     // 모델 테이블 생성
     public ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode) {
@@ -39,7 +46,36 @@ public class ModelServiceImpl implements ModelService {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    public ResponseEntity<?> uploadFiles(int modelCode, int num, long userCode) {
-        return null;
+    public ResponseEntity<String> uploadFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
+        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
+        try {
+            createFolder(folderPath);
+            String fileName = "record_" + num + ".wav";
+            saveFile(folderPath + fileName, recordingFile.getBytes());
+            countRecord(modelCode, num);
+            return ResponseEntity.ok("Recording file saved successfully with name: " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error while saving recording file: " + e.getMessage());
+        }
+    }
+
+    private void createFolder(String folderPath) throws IOException {
+        Path path = Paths.get(folderPath);
+        if (!Files.exists(path)) Files.createDirectories(path);
+    }
+
+    private void saveFile(String filePath, byte[] data) throws IOException {
+        Path path = Paths.get(filePath);
+        Files.write(path, data);
+    }
+
+
+    private void countRecord(int modelCode, int num) {
+        // 음성 모델 가져와서 녹음문장개수(record_count) 값 1 증가된 값으로 변경시키고 저장
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        voiceModel.setRecordCount(num);
+        voiceModelRepository.save(voiceModel);
     }
 }
