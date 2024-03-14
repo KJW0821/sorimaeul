@@ -46,10 +46,13 @@ public class ModelServiceImpl implements ModelService {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+
     public ResponseEntity<String> uploadFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
+        // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
         try {
             createFolder(folderPath);
+            // record_1.wav 형식으로 저장
             String fileName = "record_" + num + ".wav";
             saveFile(folderPath + fileName, recordingFile.getBytes());
             countRecord(modelCode, num);
@@ -61,19 +64,23 @@ public class ModelServiceImpl implements ModelService {
         }
     }
 
+
+    // 폴더 생성
     private void createFolder(String folderPath) throws IOException {
         Path path = Paths.get(folderPath);
         if (!Files.exists(path)) Files.createDirectories(path);
     }
 
+
+    // 파일 저장
     private void saveFile(String filePath, byte[] data) throws IOException {
         Path path = Paths.get(filePath);
         Files.write(path, data);
     }
 
 
+    // 녹음 문장 개수(record_count) 갱신
     private void countRecord(int modelCode, int num) {
-        // 음성 모델 가져와서 녹음문장개수(record_count) 값 1 증가된 값으로 변경시키고 저장
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         voiceModel.setRecordCount(num);
         voiceModelRepository.save(voiceModel);
