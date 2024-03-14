@@ -55,7 +55,8 @@ public class OAuthController {
     @GetMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken,
                                     @RequestHeader("RefreshToken") String refreshToken) {
-        oAuthService.logout(accessToken, refreshToken);
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(accessToken.substring(7)));
+        oAuthService.logout(userCode, accessToken, refreshToken);
         return ResponseEntity.ok().build();
     }
 

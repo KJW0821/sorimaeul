@@ -1,49 +1,38 @@
 package com.usagi.sorimaeul.utils;
 
+import com.usagi.sorimaeul.entity.BlackList;
+import com.usagi.sorimaeul.repository.BlackListRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
 
 @Component
-@Slf4j
 public class JwtTokenProvider {
 
     private final Key key;
-
-    public static final String AUTHORIUZATION_HEADER = "Authorization";
 
     private final long accessTokenValidity;
 
     private final long refreshTokenValidity;
 
+    private final BlackListRepository blackListRepository;
+
     public JwtTokenProvider(
-            @Value("${jwt.token.secret-key}") String secretKey,
-            @Value("${jwt.access-token.expire-length}") long accessTokenValidity,
-            @Value("${jwt.refresh-token.expire-length}") long refreshTokenValidity
-    ) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+			@Value("${jwt.token.secret-key}") String secretKey,
+			@Value("${jwt.access-token.expire-length}") long accessTokenValidity,
+			@Value("${jwt.refresh-token.expire-length}") long refreshTokenValidity, BlackListRepository blackListRepository) {
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidity = accessTokenValidity;
         this.refreshTokenValidity = refreshTokenValidity;
+        this.blackListRepository = blackListRepository;
     }
 
     public String createAccessToken(String payload) {
@@ -85,6 +74,14 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
+        BlackList blackList = blackListRepository.findByAccessToken(token)
+                .orElse(blackListRepository.findByRefreshToken(token)
+                        .orElse(null));
+
+        if (blackList != null) {
+            return false;
+        }
+
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -96,37 +93,14 @@ public class JwtTokenProvider {
         }
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = parseClaims(token);
+    public long getExpiration(String token) {
+        Jws<Claims> claimsJws = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
 
-        if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get("auth").toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .toList();
-
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        Date expiration = claimsJws.getBody().getExpiration();
+        return (expiration.getTime() - new Date().getTime()) / 1000L;
     }
-
-    public Claims parseClaims(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
-    }
-
-
-
-
 
 }

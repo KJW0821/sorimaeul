@@ -3,7 +3,9 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
+import com.usagi.sorimaeul.entity.BlackList;
 import com.usagi.sorimaeul.entity.RefreshToken;
+import com.usagi.sorimaeul.repository.BlackListRepository;
 import com.usagi.sorimaeul.repository.RefreshTokenRepository;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,8 @@ public class OAuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final BlackListRepository blackListRepository;
 
     public URI getCode(String providerName) throws URISyntaxException {
         ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
@@ -123,7 +127,17 @@ public class OAuthService {
         RefreshToken token = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
+        long userCode = token.getUserCode();
+
         refreshTokenRepository.deleteById(refreshToken);
+
+        BlackList blackList = BlackList.builder()
+                .userCode(userCode)
+                .refreshToken(refreshToken)
+                .expiration(jwtTokenProvider.getExpiration(refreshToken))
+                .build();
+
+        blackListRepository.save(blackList);
 
         boolean isValid = jwtTokenProvider.validateToken(token.getRefreshToken());
 
@@ -131,11 +145,20 @@ public class OAuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        return createToken(token.getUserCode());
+        return createToken(userCode);
     }
 
-    public void logout(String accessToken, String refreshToken) {
+    public void logout(long userCode, String accessToken, String refreshToken) {
         refreshTokenRepository.deleteById(refreshToken);
+
+        BlackList blackList = BlackList.builder()
+                .userCode(userCode)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .expiration(jwtTokenProvider.getExpiration(refreshToken))
+                .build();
+
+        blackListRepository.save(blackList);
     }
 
 }
