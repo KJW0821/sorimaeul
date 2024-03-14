@@ -23,7 +23,7 @@ public class ModelController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "음성 모델 테이블 생성", description = "음성 모델 테이블 생성")
-    @ApiResponse(responseCode = "200", description = "음성 모델 테이블 생성 성공")
+    @ApiResponse(responseCode = "201", description = "음성 모델 테이블 생성 성공")
     @PostMapping
     public ResponseEntity<ModelTableCreateResponse> createModelTable(@RequestHeader("Authorization") String token,
                                                                      @RequestBody ModelTableCreateRequest request) {
@@ -32,6 +32,8 @@ public class ModelController {
     }
 
 
+    @Operation(summary = "음성 녹음", description = "음성 녹음 파일 업로드")
+    @ApiResponse(responseCode = "200", description = "업로드 성공")
     @PostMapping
     public ResponseEntity<String> uploadFile(@RequestHeader("Authorizarion") String token,
                                              @PathVariable int modelCode, @PathVariable int num, MultipartFile recordingFile) {
