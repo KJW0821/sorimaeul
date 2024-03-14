@@ -1,15 +1,13 @@
 package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +17,7 @@ public class VideoSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "video_source_code")
-    private int videoSource;
+    private int videoSourceCode;
 
     @Column(name = "storage_path")
     private String storagePath;

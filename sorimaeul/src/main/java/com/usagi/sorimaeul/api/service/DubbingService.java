@@ -1,14 +1,15 @@
 package com.usagi.sorimaeul.api.service;
 
+import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.repository.DubbingRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-@Service
-@Transactional
-@RequiredArgsConstructor
-public class DubbingService {
+public interface DubbingService {
 
-    private final DubbingRepository dubbingRepository;
+    HttpStatus createDub(long userCode, DubCreateRequest dubCreateRequest);
+
+//    private final DubbingRepository dubbingRepository;
+
 }

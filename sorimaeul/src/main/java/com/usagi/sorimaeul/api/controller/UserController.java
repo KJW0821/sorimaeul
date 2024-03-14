@@ -94,12 +94,12 @@ public class UserController {
 	}
 
 	// 테스트를 위한 유저코드를 통해 토큰을 확인하는 함수 작성
-	@Operation(summary = "유저 토큰 조회",
-			description = "유저 토큰 조회")
-	@ApiResponse(responseCode = "200", description = "토큰 조회 성공")
-	@GetMapping("/token/{userCode}")
-	public String getUserToken(@PathVariable long userCode) {
-		String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(userCode));
-		return accessToken;
-	}
+//	@Operation(summary = "유저 토큰 조회",
+//			description = "유저 토큰 조회")
+//	@ApiResponse(responseCode = "200", description = "토큰 조회 성공")
+//	@GetMapping("/token/{userCode}")
+//	public String getUserToken(@PathVariable long userCode) {
+//		String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(userCode));
+//		return accessToken;
+//	}
 }
