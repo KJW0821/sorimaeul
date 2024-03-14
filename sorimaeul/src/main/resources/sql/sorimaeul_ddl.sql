@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `sorimaeul`.`cover_tb` (
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `updated_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `thumbnail_path` VARCHAR(200) NULL,
-  `like_count` INT NOT NULL,
+  `like_count` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`cover_code`),
   INDEX `fk_cover_tb_user_tb_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_cover_tb_user_tb`

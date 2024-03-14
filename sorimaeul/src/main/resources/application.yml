@@ -66,7 +66,7 @@ logging:
         root: debug
         web: debug
     com:
-      fattle: debug
+      sorimaeul: debug
     zaxxer:
       hikari:
         pool:

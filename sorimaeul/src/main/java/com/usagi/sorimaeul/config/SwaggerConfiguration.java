@@ -30,7 +30,7 @@ public class SwaggerConfiguration {
         Server localhost = new Server();
         localhost.setUrl("http://localhost:8000/api");
         Server server = new Server();
-        server.setUrl("https://i10e106.p.ssafy.io/api");
+        server.setUrl("https://i10e201.p.ssafy.io/api");
 
         List<Server> servers = new ArrayList<>();
         servers.add(localhost);
@@ -45,8 +45,8 @@ public class SwaggerConfiguration {
 
     private Info apiInfo() {
         return new Info()
-                .title("FATTLE API")
-                .description("FATTLE API DOCS")
+                .title("소리마을 API")
+                .description("소리마을 API DOCS")
                 .version("1.0.0");
     }
 }
