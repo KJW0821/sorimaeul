@@ -102,7 +102,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`voice_model_tb` (
   `model_code` INT NOT NULL AUTO_INCREMENT,
-  `user_code` BIGINT NOT NULL,
+  `user_code` BIGINT NULL,
   `video_source_code` INT NULL,
   `model_name` VARCHAR(40) NULL,
   `storage_path` VARCHAR(200) NOT NULL,
