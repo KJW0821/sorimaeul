@@ -21,9 +21,8 @@ CREATE TABLE IF NOT EXISTS `sorimaeul`.`user_tb` (
   `user_code` BIGINT NOT NULL,
   `nickname` VARCHAR(10) NOT NULL,
   `profile_image` VARCHAR(200) NULL,
-  `social_type` VARCHAR(6) NOT NULL,
   `join_date` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `learn_count` TINYINT NOT NULL,
+  `learn_count` TINYINT NOT NULL DEFAULT 3,
   PRIMARY KEY (`user_code`))
 ENGINE = InnoDB;
 
