@@ -19,7 +19,7 @@ public class VideoSource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "video_source_code")
-    private int videoSource;
+    private int videoSourceCode;
 
     @Column(name = "storage_path")
     private String storagePath;

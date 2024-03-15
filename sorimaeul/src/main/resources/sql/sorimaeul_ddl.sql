@@ -21,9 +21,8 @@ CREATE TABLE IF NOT EXISTS `sorimaeul`.`user_tb` (
   `user_code` BIGINT NOT NULL,
   `nickname` VARCHAR(10) NOT NULL,
   `profile_image` VARCHAR(200) NULL,
-  `social_type` VARCHAR(6) NOT NULL,
   `join_date` TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  `learn_count` TINYINT NOT NULL,
+  `learn_count` TINYINT NOT NULL DEFAULT 3,
   PRIMARY KEY (`user_code`))
 ENGINE = InnoDB;
 
@@ -33,7 +32,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`cover_tb` (
   `cover_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
+  `user_code` BIGINT NOT NULL,
   `cover_name` VARCHAR(100) NOT NULL,
   `cover_singer` VARCHAR(100) NOT NULL,
   `singer` VARCHAR(100) NOT NULL,
@@ -44,11 +43,11 @@ CREATE TABLE IF NOT EXISTS `sorimaeul`.`cover_tb` (
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `updated_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `thumbnail_path` VARCHAR(200) NULL,
-  `like_count` INT NOT NULL,
+  `like_count` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`cover_code`),
-  INDEX `fk_cover_tb_user_tb_idx` (`user_tb_user_code` ASC) VISIBLE,
+  INDEX `fk_cover_tb_user_tb_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_cover_tb_user_tb`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -73,8 +72,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`dub_tb` (
   `dub_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
-  `video_source_tb_video_source_code` INT NOT NULL,
+  `user_code` BIGINT NOT NULL,
+  `video_source_code` INT NOT NULL,
   `dub_name` VARCHAR(100) NOT NULL,
   `dub_detail` TEXT NULL,
   `storage_path` VARCHAR(200) NULL,
@@ -83,15 +82,15 @@ CREATE TABLE IF NOT EXISTS `sorimaeul`.`dub_tb` (
   `updated_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `like_count` INT NOT NULL,
   PRIMARY KEY (`dub_code`),
-  INDEX `fk_dub_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
-  INDEX `fk_dub_tb_video_source_tb1_idx` (`video_source_tb_video_source_code` ASC) VISIBLE,
+  INDEX `fk_dub_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
+  INDEX `fk_dub_tb_video_source_tb1_idx` (`video_source_code` ASC) VISIBLE,
   CONSTRAINT `fk_dub_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_dub_tb_video_source_tb1`
-    FOREIGN KEY (`video_source_tb_video_source_code`)
+    FOREIGN KEY (`video_source_code`)
     REFERENCES `sorimaeul`.`video_source_tb` (`video_source_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -103,24 +102,24 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`voice_model_tb` (
   `model_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
-  `video_source_tb_video_source_code` INT NOT NULL,
+  `user_code` BIGINT NULL,
+  `video_source_code` INT NULL,
   `model_name` VARCHAR(40) NULL,
   `storage_path` VARCHAR(200) NOT NULL,
-  `image_path` VARCHAR(200) NOT NULL,
-  `state` TINYINT NULL,
-  `record_count` INT NULL,
+  `image_path` VARCHAR(200) NULL,
+  `state` TINYINT NULL DEFAULT 0,
+  `record_count` INT NOT NULL DEFAULT 0,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`model_code`),
-  INDEX `fk_voice_model_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
-  INDEX `fk_voice_model_tb_video_source_tb1_idx` (`video_source_tb_video_source_code` ASC) VISIBLE,
+  INDEX `fk_voice_model_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
+  INDEX `fk_voice_model_tb_video_source_tb1_idx` (`video_source_code` ASC) VISIBLE,
   CONSTRAINT `fk_voice_model_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_voice_model_tb_video_source_tb1`
-    FOREIGN KEY (`video_source_tb_video_source_code`)
+    FOREIGN KEY (`video_source_code`)
     REFERENCES `sorimaeul`.`video_source_tb` (`video_source_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -132,19 +131,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`voice_source_tb` (
   `voice_source_code` INT NOT NULL AUTO_INCREMENT,
-  `video_source_tb_video_source_code` INT NOT NULL,
-  `voice_model_tb_model_code` INT NOT NULL,
+  `video_source_code` INT NOT NULL,
+  `model_code` INT NOT NULL,
   `voice_path` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`voice_source_code`),
-  INDEX `fk_voice_source_tb_video_source_tb1_idx` (`video_source_tb_video_source_code` ASC) VISIBLE,
-  INDEX `fk_voice_source_tb_voice_model_tb1_idx` (`voice_model_tb_model_code` ASC) VISIBLE,
+  INDEX `fk_voice_source_tb_video_source_tb1_idx` (`video_source_code` ASC) VISIBLE,
+  INDEX `fk_voice_source_tb_voice_model_tb1_idx` (`model_code` ASC) VISIBLE,
   CONSTRAINT `fk_voice_source_tb_video_source_tb1`
-    FOREIGN KEY (`video_source_tb_video_source_code`)
+    FOREIGN KEY (`video_source_code`)
     REFERENCES `sorimaeul`.`video_source_tb` (`video_source_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_voice_source_tb_voice_model_tb1`
-    FOREIGN KEY (`voice_model_tb_model_code`)
+    FOREIGN KEY (`model_code`)
     REFERENCES `sorimaeul`.`voice_model_tb` (`model_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -156,14 +155,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`alert_tb` (
   `alert_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
+  `user_code` BIGINT NOT NULL,
   `alert_content` VARCHAR(200) NOT NULL,
   `is_checked` TINYINT NOT NULL,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`alert_code`),
-  INDEX `fk_alert_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
+  INDEX `fk_alert_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_alert_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -175,28 +174,28 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`comment_tb` (
   `comment_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
-  `cover_tb_cover_code` INT NULL,
-  `dub_tb_dub_code` INT NULL,
+  `user_code` BIGINT NOT NULL,
+  `cover_code` INT NULL,
+  `dub_code` INT NULL,
   `content` TEXT NOT NULL,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   `comment_tbcol` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`comment_code`),
-  INDEX `fk_comment_tb_dub_tb1_idx` (`dub_tb_dub_code` ASC) VISIBLE,
-  INDEX `fk_comment_tb_cover_tb1_idx` (`cover_tb_cover_code` ASC) VISIBLE,
-  INDEX `fk_comment_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
+  INDEX `fk_comment_tb_dub_tb1_idx` (`dub_code` ASC) VISIBLE,
+  INDEX `fk_comment_tb_cover_tb1_idx` (`cover_code` ASC) VISIBLE,
+  INDEX `fk_comment_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_comment_tb_dub_tb1`
-    FOREIGN KEY (`dub_tb_dub_code`)
+    FOREIGN KEY (`dub_code`)
     REFERENCES `sorimaeul`.`dub_tb` (`dub_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_tb_cover_tb1`
-    FOREIGN KEY (`cover_tb_cover_code`)
+    FOREIGN KEY (`cover_code`)
     REFERENCES `sorimaeul`.`cover_tb` (`cover_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -208,26 +207,26 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`like_tb` (
   `like_code` INT NOT NULL AUTO_INCREMENT,
-  `cover_tb_cover_code` INT NULL,
-  `dub_tb_dub_code` INT NULL,
-  `user_tb_user_code` BIGINT NOT NULL,
+  `cover_code` INT NULL,
+  `dub_code` INT NULL,
+  `user_code` BIGINT NOT NULL,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`like_code`),
-  INDEX `fk_like_tb_cover_tb1_idx` (`cover_tb_cover_code` ASC) VISIBLE,
-  INDEX `fk_like_tb_dub_tb1_idx` (`dub_tb_dub_code` ASC) VISIBLE,
-  INDEX `fk_like_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
+  INDEX `fk_like_tb_cover_tb1_idx` (`cover_code` ASC) VISIBLE,
+  INDEX `fk_like_tb_dub_tb1_idx` (`dub_code` ASC) VISIBLE,
+  INDEX `fk_like_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_like_tb_cover_tb1`
-    FOREIGN KEY (`cover_tb_cover_code`)
+    FOREIGN KEY (`cover_code`)
     REFERENCES `sorimaeul`.`cover_tb` (`cover_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_like_tb_dub_tb1`
-    FOREIGN KEY (`dub_tb_dub_code`)
+    FOREIGN KEY (`dub_code`)
     REFERENCES `sorimaeul`.`dub_tb` (`dub_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_like_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -249,15 +248,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`req_board_tb` (
   `board_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
+  `user_code` BIGINT NOT NULL,
   `type_code` INT NOT NULL,
   `title` VARCHAR(40) NOT NULL,
   `content` TEXT NOT NULL,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`board_code`),
-  INDEX `fk_req_board_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
+  INDEX `fk_req_board_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_req_board_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -269,13 +268,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`playlist_tb` (
   `playlist_code` INT NOT NULL AUTO_INCREMENT,
-  `user_tb_user_code` BIGINT NOT NULL,
+  `user_code` BIGINT NOT NULL,
   `playlist_name` VARCHAR(40) NOT NULL,
   `created_time` TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`playlist_code`),
-  INDEX `fk_playlist_tb_user_tb1_idx` (`user_tb_user_code` ASC) VISIBLE,
+  INDEX `fk_playlist_tb_user_tb1_idx` (`user_code` ASC) VISIBLE,
   CONSTRAINT `fk_playlist_tb_user_tb1`
-    FOREIGN KEY (`user_tb_user_code`)
+    FOREIGN KEY (`user_code`)
     REFERENCES `sorimaeul`.`user_tb` (`user_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -287,19 +286,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sorimaeul`.`playlist_cover_tb` (
   `list_cover_code` INT NOT NULL AUTO_INCREMENT,
-  `playlist_tb_playlist_code` INT NOT NULL,
-  `cover_tb_cover_code` INT NOT NULL,
+  `playlist_code` INT NOT NULL,
+  `cover_code` INT NOT NULL,
   `cover_index` INT NOT NULL,
   PRIMARY KEY (`list_cover_code`),
-  INDEX `fk_playlist_cover_tb_playlist_tb1_idx` (`playlist_tb_playlist_code` ASC) VISIBLE,
-  INDEX `fk_playlist_cover_tb_cover_tb1_idx` (`cover_tb_cover_code` ASC) VISIBLE,
+  INDEX `fk_playlist_cover_tb_playlist_tb1_idx` (`playlist_code` ASC) VISIBLE,
+  INDEX `fk_playlist_cover_tb_cover_tb1_idx` (`cover_code` ASC) VISIBLE,
   CONSTRAINT `fk_playlist_cover_tb_playlist_tb1`
-    FOREIGN KEY (`playlist_tb_playlist_code`)
+    FOREIGN KEY (`playlist_code`)
     REFERENCES `sorimaeul`.`playlist_tb` (`playlist_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_playlist_cover_tb_cover_tb1`
-    FOREIGN KEY (`cover_tb_cover_code`)
+    FOREIGN KEY (`cover_code`)
     REFERENCES `sorimaeul`.`cover_tb` (`cover_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

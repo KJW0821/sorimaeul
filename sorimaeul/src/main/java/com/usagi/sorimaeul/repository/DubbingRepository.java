@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface DubbingRepository extends JpaRepository<Dubbing, Integer> {
 
-    List<Dubbing> findByUserCode(long userCode);
+//    List<Dubbing> findByUserCode(long userCode);
 }

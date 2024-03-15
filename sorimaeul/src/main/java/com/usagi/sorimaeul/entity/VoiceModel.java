@@ -1,10 +1,17 @@
 package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 @Table(name = "voice_model_tb")
 public class VoiceModel {
 
@@ -13,11 +20,13 @@ public class VoiceModel {
     @Column(name = "model_code")
     private int modelCode;
 
-    @Column(name = "user_code")
-    private long userCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_code", referencedColumnName = "user_code")
+    private User user;
 
-    @Column(name = "video_code")
-    private Integer videoCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_source_code", referencedColumnName = "video_source_code")
+    private VideoSource videoSource;
 
     @Column(name = "model_name")
     private String modelName;
@@ -34,6 +43,7 @@ public class VoiceModel {
     @Column(name = "record_count")
     private Integer recordCount;
 
+    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
