@@ -57,6 +57,11 @@ public class ModelController {
     }
 
 
+    @Operation(summary = "모델 상세 조회", description = "모델 상세 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모델 상세 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
     @GetMapping("/detail/{modelCode}")
     public ResponseEntity<ModelInfoResponse> getModelInfo(@RequestHeader("Authorization") String token,
                                                           @PathVariable int modelCode) {
