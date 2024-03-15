@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.ModelService;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -10,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +53,14 @@ public class ModelController {
     public ResponseEntity<ModelListResponse> getModelResponse(@RequestHeader("Authorization") String token,
                                                               @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer videoSourceCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return modelService.getModelResponse(page, userCode, videoSourceCode);
+        return modelService.getModelList(page, userCode, videoSourceCode);
+    }
+
+
+    @GetMapping("/detail/{modelCode}")
+    public ResponseEntity<ModelInfoResponse> getModelInfo(@RequestHeader("Authorization") String token,
+                                                          @PathVariable int modelCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.getModelInfo(modelCode, userCode);
     }
 }

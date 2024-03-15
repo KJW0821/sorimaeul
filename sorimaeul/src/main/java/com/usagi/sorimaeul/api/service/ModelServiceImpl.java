@@ -142,5 +142,21 @@ public class ModelServiceImpl implements ModelService {
 
 
     // 모델 상세 조회
-//    public ResponseEntity<ModelInfoResponse> getModelInfo()
+    public ResponseEntity<ModelInfoResponse> getModelInfo(int modelCode, long userCode) {
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        long modelUserCode = voiceModel.getUser().getUserCode();
+        if (modelUserCode != userCode) {
+            return ResponseEntity.badRequest().build();
+        }
+        ModelInfoResponse response = ModelInfoResponse.builder()
+                .modelCode(voiceModel.getModelCode())
+                .modelName(voiceModel.getModelName())
+                .storagePath(voiceModel.getStoragePath())
+                .imagePath(voiceModel.getImagePath())
+                .recordCount(voiceModel.getRecordCount())
+                .state(voiceModel.getState())
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
 }
