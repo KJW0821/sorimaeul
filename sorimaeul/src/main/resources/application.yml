@@ -73,6 +73,8 @@ logging:
         pool:
           HikariPool: debug
 
+sse:
+  time-out: 3600000 # 1시간
 
 jasypt:
   encryptor:
