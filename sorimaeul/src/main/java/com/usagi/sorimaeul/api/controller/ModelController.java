@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/model")
 @RequiredArgsConstructor
-@Tag(name = "Model 컨트롤러", description = "모델 API")
+@Tag(name = "Model 컨트롤러", description = "음성 모델 관리를 위한 API")
 public class ModelController {
 
     private final ModelService modelService;
