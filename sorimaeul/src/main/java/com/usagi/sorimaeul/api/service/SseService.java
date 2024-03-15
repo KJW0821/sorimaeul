@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.repository.EmitterRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -37,6 +38,10 @@ public class SseService {
 		} catch (IOException e) {
 			emitterRepository.deleteByUserCode(userCode);
 		}
+	}
+
+	public void disConnect(long userCode) {
+		emitterRepository.deleteByUserCode(userCode);
 	}
 
 }
