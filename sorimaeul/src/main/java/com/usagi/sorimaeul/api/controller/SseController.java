@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.SseService;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ public class SseController {
 
 	private final JwtTokenProvider jwtTokenProvider;
 
+	@Operation(summary = "SSE 연결 요청",
+			description = "SSE 연결 요청")
 	@GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter connect(@RequestHeader("Authorization") String token, HttpServletResponse response) {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
