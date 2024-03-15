@@ -1,12 +1,12 @@
 package com.usagi.sorimaeul.dto.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ModelInfoDto {
 
     private int modelCode;

@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VoiceModelRepository extends JpaRepository<VoiceModel, Integer> {
+public interface VoiceModelRepository extends JpaRepository<VoiceModel, Integer>, VoiceModelRepositoryCustom {
 
     VoiceModel findByModelCode(int modelCode);
-//    VoiceModel findByVideoCode(int videoCode);
-//    VoiceModel findByUserCode(long userCode);
-@Query(value = "SELECT new com.usagi.sorimaeul.dto.dto.ModelInfoDto(v.modelCode, v.modelName, v.imagePath, v.recordCount, v.state) " +
-        "FROM VoiceModel v WHERE v.user.userCode = :userCode OR v.videoSource.videoSourceCode = :videoSourceCode")
-    List<ModelInfoDto> getModelList(@Param("userCode") long userCode, @Param("videoSourceCode") int videoSourceCode);
+
+    // 기본 모델 가져오기
+//    @Query(value = "SELECT new com.usagi.sorimaeul.dto.dto.ModelInfoDto(v.modelCode, v.modelName, v.imagePath, v.recordCount, v.state) " +
+//            "FROM VoiceModel v WHERE v.state = 3 AND v.user.userCode = NULL AND v.videoSource.videoSourceCode = NULL")
+//    List<ModelInfoDto> getCommonModelList();
 
 }

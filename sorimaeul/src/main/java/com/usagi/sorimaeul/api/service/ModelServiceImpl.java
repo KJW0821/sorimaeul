@@ -5,9 +5,12 @@ import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.User;
+import com.usagi.sorimaeul.entity.VideoSource;
 import com.usagi.sorimaeul.entity.VoiceModel;
 import com.usagi.sorimaeul.repository.UserRepository;
+import com.usagi.sorimaeul.repository.VideoSourceRepository;
 import com.usagi.sorimaeul.repository.VoiceModelRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +21,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ModelServiceImpl implements ModelService {
 
     private final UserRepository userRepository;
     private final VoiceModelRepository voiceModelRepository;
+    private final VideoSourceRepository videoSourceRepository;
     private static final String BASE_PATH = "/path/to/base/directory";
 
     // 모델 테이블 생성
@@ -50,6 +56,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
 
+    // 음성 녹음 파일 업로드
     public ResponseEntity<String> uploadFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
@@ -90,19 +97,45 @@ public class ModelServiceImpl implements ModelService {
     }
 
 
-    public ResponseEntity<ModelListResponse> getModelResponse(int page, long userCode, int videoSourceCode) {
-        List<ModelInfoDto> modelList = voiceModelRepository.getModelList(userCode, videoSourceCode);
-        boolean end = modelList.size() <= 4 * page;
-        List<ModelInfoDto> modelListInfo;
-        if (!end) {
-            modelListInfo = modelList.subList(4 * (page - 1), 4 * page);
+    // 모델 조회
+    public ResponseEntity<ModelListResponse> getModelResponse(Integer page, long userCode, Integer videoSourceCode) {
+        List<ModelInfoDto> mergedModelList;
+        boolean end = false;
+        User user = userRepository.getUser(userCode);
+        VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
+
+
+        // videoSourceCode 와 page 가 모두 null 이면 AI 커버 음성 모델 조회(기본 제공 모델, 내가 학습 시킨 모델)
+        if (page == null && videoSourceCode == null) {
+            List<ModelInfoDto> commonModelList = voiceModelRepository.commonModelList();
+            List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, 3);
+            mergedModelList = new ArrayList<>(commonModelList);
+            mergedModelList.addAll(myModelList);
+
+        // videoSourceCode 만 null 이면 마이페이지 음성 모델 조회(페이지 네이션, 내가 학습 시킨 모델)
+        } else if (videoSourceCode == null) {
+            List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, -1);
+            int startIdx = (page - 1) * 4;
+            int endIdx = Math.min(startIdx + 4, myModelList.size());
+            mergedModelList = myModelList.subList(startIdx, endIdx);
+            end = endIdx >= myModelList.size();
+
+        // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델)
+        } else if (page == null) {
+            List<ModelInfoDto> videoSourceModelList = voiceModelRepository.videoSourceModelList(videoSource);
+            List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, 3);
+            mergedModelList = new ArrayList<>(videoSourceModelList);
+            mergedModelList.addAll(myModelList);
         } else {
-            modelListInfo = modelList.subList(4 * (page - 1), modelList.size());
+            // 잘못된 요청
+            return ResponseEntity.badRequest().build();
         }
+
         ModelListResponse modelListResponse = ModelListResponse.builder()
-                .voiceModels(modelListInfo)
+                .voiceModels(mergedModelList)
                 .end(end)
                 .build();
+
         return ResponseEntity.ok(modelListResponse);
     }
 }
