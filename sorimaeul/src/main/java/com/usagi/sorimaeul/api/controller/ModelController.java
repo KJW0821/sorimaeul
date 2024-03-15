@@ -7,6 +7,7 @@ import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,11 @@ public class ModelController {
     }
 
 
+    @Operation(summary = "모델 리스트 조회", description = "모델 리스트를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모델 리스트 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
     @GetMapping
     public ResponseEntity<ModelListResponse> getModelResponse(@RequestHeader("Authorization") String token,
                                                               @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer videoSourceCode) {
