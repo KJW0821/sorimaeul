@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.ModelService;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,5 +69,19 @@ public class ModelController {
                                                           @PathVariable int modelCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.getModelInfo(modelCode, userCode);
+    }
+
+
+    @Operation(summary = "모델 수정", description = "모델명 혹은 모델 대표 이미지 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모델 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    @PatchMapping("/detail/{modelCode}")
+    public HttpStatus updateModel(@RequestHeader("Authorization") String token,
+                                  @PathVariable int modelCode,
+                                  @RequestBody ModelUpdateRequest request) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.updateModel(modelCode, userCode, request);
     }
 }

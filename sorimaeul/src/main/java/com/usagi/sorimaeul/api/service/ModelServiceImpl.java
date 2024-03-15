@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
@@ -158,5 +159,18 @@ public class ModelServiceImpl implements ModelService {
                 .build();
 
         return ResponseEntity.ok(response);
+    }
+
+
+    public HttpStatus updateModel(int modelCode, long userCode, ModelUpdateRequest request) {
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        long modelUserCode = voiceModel.getUser().getUserCode();
+        if (modelUserCode != userCode) {
+            return HttpStatus.BAD_REQUEST;
+        }
+        voiceModel.setModelName(request.getModelName());
+        voiceModel.setImagePath(request.getImagePath());
+        voiceModelRepository.save(voiceModel);
+        return HttpStatus.OK;
     }
 }
