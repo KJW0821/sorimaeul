@@ -26,9 +26,6 @@ public class User {
     @Column(name = "profile_image")
     private String profileImage;
 
-    @Column(name = "social_type")
-    private String socialType;
-
     @Column(name = "join_date")
     private LocalDateTime joinDate;
 
