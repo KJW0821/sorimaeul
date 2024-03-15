@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.User;
@@ -98,7 +99,7 @@ public class ModelServiceImpl implements ModelService {
 
 
     // 모델 조회
-    public ResponseEntity<ModelListResponse> getModelResponse(Integer page, long userCode, Integer videoSourceCode) {
+    public ResponseEntity<ModelListResponse> getModelList(Integer page, long userCode, Integer videoSourceCode) {
         List<ModelInfoDto> mergedModelList;
         boolean end = false;
         User user = userRepository.getUser(userCode);
@@ -138,4 +139,8 @@ public class ModelServiceImpl implements ModelService {
 
         return ResponseEntity.ok(modelListResponse);
     }
+
+
+    // 모델 상세 조회
+//    public ResponseEntity<ModelInfoResponse> getModelInfo()
 }
