@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 @Repository
 public class EmitterRepository {
 
-	public final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
+	private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
 	// emitter 저장
 	public SseEmitter save(long userCode, SseEmitter sseEmitter) {
@@ -17,12 +17,12 @@ public class EmitterRepository {
 		return sseEmitter;
 	}
 
-	// 한 유저의 sseEmitter 찾기
-	public Optional<SseEmitter> findByUserCode(long userCode) {
-		return Optional.ofNullable(emitters.get(userCode));
+	// 유저의 sseEmitter 찾기
+	public SseEmitter findByUserCode(long userCode) {
+		return emitters.get(userCode);
 	}
 
-	// 한 유저의 sseEmitter 삭제
+	// 유저의 sseEmitter 삭제
 	public void deleteByUserCode(long userCode) {
 		emitters.remove(userCode);
 	}

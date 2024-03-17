@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -18,32 +18,29 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Tag(name = "SSE 컨트롤러", description = "SSE 통신을 위한 컨트롤러")
 public class SseController {
 
-	@Value("${sse.time-out}")
-	private final long TIME_OUT;
-
 	private final SseService sseService;
-
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Operation(summary = "SSE 연결 요청",
 			description = "SSE 연결 요청")
 	@GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public SseEmitter connect(@RequestHeader("Authorization") String token, HttpServletResponse response) {
+	public ResponseEntity<SseEmitter> connect(
+			@RequestHeader("Authorization") String token,
+			HttpServletResponse response) {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+		SseEmitter sseEmitter = sseService.subscribe(userCode);
 
 		response.addHeader("X-Accel-Buffering", "no"); // nginx 관련 설정
-
-		SseEmitter sseEmitter = new SseEmitter(TIME_OUT);
-		sseEmitter = sseService.subscribe(userCode, sseEmitter);
-		return sseEmitter;
+		return ResponseEntity.ok(sseEmitter);
 	}
 
 	@Operation(summary = "SSE 연결 종료",
 			description = "SSE 연결 종료")
 	@DeleteMapping("/disconnect")
-	public void disconnect(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<Void> disconnect(@RequestHeader("Authorization") String token) {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 		sseService.disConnect(userCode);
+		return ResponseEntity.ok().build();
 	}
 
 }
