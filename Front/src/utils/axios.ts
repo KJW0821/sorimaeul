@@ -5,7 +5,7 @@ export const URL = "http://localhost:8000";
 
 const API = axios.create({
     baseURL: URL,
-    // withCredentials: true, 자격 증명
+    withCredentials: true, 
 })
 
   
