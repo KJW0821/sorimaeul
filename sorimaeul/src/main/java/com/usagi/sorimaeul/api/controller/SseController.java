@@ -45,7 +45,7 @@ public class SseController {
 
 	@Operation(summary = "알림 전송",
 			description = "파라미터를 받아 알림 전송")
-	@PostMapping("/test")
+	@PostMapping("/alarm")
 	public ResponseEntity<Void> test(@RequestBody SseRequest request) {
 		sseService.sendToClient(request.getUserCode(), "alarm", request.getData());
 		return ResponseEntity.ok().build();
