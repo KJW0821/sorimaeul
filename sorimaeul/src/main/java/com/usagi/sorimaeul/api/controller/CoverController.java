@@ -25,7 +25,9 @@ public class CoverController {
     @ApiResponse(responseCode = "200", description = "AI 커버 목록 조회 성공")
     @GetMapping
     public ResponseEntity<CoverListResponse> getCoverList(@RequestHeader("Authorization") String token,
-                                                          @RequestParam String target, @RequestParam String keyword, @RequestParam int page) {
+                                                          @RequestParam String target,
+                                                          @RequestParam(required = false) String keyword,
+                                                          @RequestParam(required = false) int page) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.getCoverList(userCode, target, keyword, page);
     }
