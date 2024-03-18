@@ -18,14 +18,14 @@ import java.time.LocalDateTime;
 public class Notify {
 
 	@Id
-	@Column(name = "alert_code")
-	private int alertCode;
+	@Column(name = "notify_code")
+	private int notifyCode;
 
 	@Column(name = "user_code")
 	private long userCode;
 
-	@Column(name = "alert_content")
-	private String alertContent;
+	@Column(name = "notify_content")
+	private String notifyContent;
 
 	@Column(name = "is_checked")
 	private int isChecked;
