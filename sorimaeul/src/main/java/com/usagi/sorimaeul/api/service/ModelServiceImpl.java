@@ -9,9 +9,11 @@ import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.entity.VideoSource;
 import com.usagi.sorimaeul.entity.VoiceModel;
+import com.usagi.sorimaeul.entity.VoiceSource;
 import com.usagi.sorimaeul.repository.UserRepository;
 import com.usagi.sorimaeul.repository.VideoSourceRepository;
 import com.usagi.sorimaeul.repository.VoiceModelRepository;
+import com.usagi.sorimaeul.repository.VoiceSourceRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,7 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 모델 테이블 생성
         // modelCode = auto_increment, video_code = null, storage_path = 임시값, image_path = null, state = 기본값 0,
         // record_count = null, created_time = now()
         VoiceModel voiceModel = VoiceModel.builder()
@@ -51,6 +55,7 @@ public class ModelServiceImpl implements ModelService {
                 .storagePath(request.getImagePath())
                 .build();
         voiceModelRepository.save(voiceModel);
+        // 리스폰스 생성
         ModelTableCreateResponse response = ModelTableCreateResponse.builder()
                         .modelCode(voiceModel.getModelCode())
                         .build();
@@ -61,7 +66,8 @@ public class ModelServiceImpl implements ModelService {
     // 음성 녹음 파일 업로드
     public ResponseEntity<String> uploadRecordFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
+        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         try {
             // 폴더 생성
             createFolder(folderPath);
@@ -70,8 +76,10 @@ public class ModelServiceImpl implements ModelService {
             // 파일 생성
             saveFile(folderPath + fileName, recordingFile.getBytes());
             // 녹음 문장 개수 갱신
-            countRecord(modelCode, num);
+            countRecord(voiceModel, num);
             return ResponseEntity.ok(num + "번 녹음 파일 업로드 성공!");
+
+        // 서버 오류 처리
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -83,16 +91,20 @@ public class ModelServiceImpl implements ModelService {
     // 외부 음성 녹음 파일 업로드
     public ResponseEntity<String> uploadExRecordFile(int modelCode, long userCode, MultipartFile[] files) {
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
+        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
         try {
             // 폴더 생성
             createFolder(folderPath);
-            // record_1.wav 형식으로 저장
+
             for (int i = 0; i < files.length; i++) {
+                // record_1.wav 형식으로 저장
                 String fileName = "record_" + (i + 1) + ".wav";
+                // 파일 저장
                 saveFile(folderPath + fileName, files[i].getBytes());
             }
             return ResponseEntity.ok("외부 녹음 파일 업로드 성공!");
+
+        // 서버 오류 처리
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -101,25 +113,42 @@ public class ModelServiceImpl implements ModelService {
     }
 
 
-    // 폴더 생성
-    private void createFolder(String folderPath) throws IOException {
-        Path path = Paths.get(folderPath);
-        if (!Files.exists(path)) Files.createDirectories(path);
-    }
+    // 외부 음성 모델 업로드
+    public ResponseEntity<String> uploadExModelFile(int modelCode, long userCode, MultipartFile[] modelFiles) {
+        User user = userRepository.getUser(userCode);
+        // 모델 학습 가능 횟수 검사
+        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+        // 폴더 경로 설정
+        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/model/";
+        try {
+            // 폴더 생성
+            createFolder(folderPath);
+            String fileName;
+            for (int i = 0; i < modelFiles.length; i++) {
+                // 첫번째 파일은 .pth 파일
+                if (i == 0) {fileName = "model.pth";}
+                // 두번째 파일은 .index 파일
+                else {fileName = "model.index";}
+                // 파일 저장
+                saveFile(folderPath + fileName, modelFiles[i].getBytes());
+            }
+            VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+            // 해당 모델의 유저 코드와 모델 파일 경로, 생성시간, 학습상태 DB에 저장
+            voiceModel.setUser(user);
+            voiceModel.setStoragePath(folderPath);
+            voiceModel.setCreatedTime(LocalDateTime.now());
+            voiceModel.setState(3);
+            voiceModelRepository.save(voiceModel);
+            // 유저 모델 학습 가능 횟수 차감
+            user.setLearnCount(user.getLearnCount() - 1);
+            return ResponseEntity.ok("모델 파일 업로드 성공!");
 
-
-    // 파일 저장
-    private void saveFile(String filePath, byte[] data) throws IOException {
-        Path path = Paths.get(filePath);
-        Files.write(path, data);
-    }
-
-
-    // 녹음 문장 개수(record_count) 갱신
-    private void countRecord(int modelCode, int num) {
-        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
-        voiceModel.setRecordCount(num);
-        voiceModelRepository.save(voiceModel);
+        // 서버 오류 처리
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("모델 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+        }
     }
 
 
@@ -156,7 +185,8 @@ public class ModelServiceImpl implements ModelService {
             // 잘못된 요청
             return ResponseEntity.badRequest().build();
         }
-
+        
+        // 리스폰스 생성
         ModelListResponse modelListResponse = ModelListResponse.builder()
                 .voiceModels(mergedModelList)
                 .end(end)
@@ -170,9 +200,11 @@ public class ModelServiceImpl implements ModelService {
     public ResponseEntity<ModelInfoResponse> getModelInfo(int modelCode, long userCode) {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         long modelUserCode = voiceModel.getUser().getUserCode();
+        // 유저 코드가 일치하지 않을 경우 400 반환
         if (modelUserCode != userCode) {
             return ResponseEntity.badRequest().build();
         }
+        // 리스폰스 생성
         ModelInfoResponse response = ModelInfoResponse.builder()
                 .modelCode(voiceModel.getModelCode())
                 .modelName(voiceModel.getModelName())
@@ -186,15 +218,50 @@ public class ModelServiceImpl implements ModelService {
     }
 
 
+    // 모델 수정(모델 이름, 대표 이미지)
     public HttpStatus updateModel(int modelCode, long userCode, ModelUpdateRequest request) {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         long modelUserCode = voiceModel.getUser().getUserCode();
+        // 유저 코드가 일치하지 않을 경우 400 반환
         if (modelUserCode != userCode) {
             return HttpStatus.BAD_REQUEST;
         }
+        // 모델 이름과 대표 이미지 경로 DB 수정
         voiceModel.setModelName(request.getModelName());
         voiceModel.setImagePath(request.getImagePath());
         voiceModelRepository.save(voiceModel);
         return HttpStatus.OK;
     }
+
+
+    // 폴더 생성
+    private void createFolder(String folderPath) throws IOException {
+        Path path = Paths.get(folderPath);
+        if (!Files.exists(path)) Files.createDirectories(path);
+    }
+
+
+    // 파일 저장
+    private void saveFile(String filePath, byte[] data) throws IOException {
+        Path path = Paths.get(filePath);
+        Files.write(path, data);
+    }
+
+
+    // 녹음 문장 개수(record_count) 갱신
+    private void countRecord(VoiceModel voiceModel, int num) {
+        voiceModel.setRecordCount(num);
+        voiceModelRepository.save(voiceModel);
+    }
+
+
+//    // 음성 녹음 파일 데이터 voice_source_tb 에 저장
+//    private void createVoiceSource(VoiceModel voiceModel, String voicePath) {
+//        // Id 자동 생성, videoSourceCode = null
+//        VoiceSource voiceSource = VoiceSource.builder()
+//                .voiceModel(voiceModel)
+//                .voicePath(voicePath)
+//                .build();
+//        voiceSourceRepository.save(voiceSource);
+//    }
 }
