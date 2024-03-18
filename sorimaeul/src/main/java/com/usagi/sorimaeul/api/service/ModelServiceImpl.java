@@ -65,6 +65,11 @@ public class ModelServiceImpl implements ModelService {
 
     // 음성 녹음 파일 업로드
     public ResponseEntity<String> uploadRecordFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
@@ -90,6 +95,11 @@ public class ModelServiceImpl implements ModelService {
 
     // 외부 음성 녹음 파일 업로드
     public ResponseEntity<String> uploadExRecordFile(int modelCode, long userCode, MultipartFile[] files) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
         try {
@@ -120,7 +130,11 @@ public class ModelServiceImpl implements ModelService {
 
     // 외부 음성 모델 업로드
     public ResponseEntity<String> uploadModelFile(int modelCode, long userCode, MultipartFile[] modelFiles) {
+        // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 폴더 경로 설정
@@ -158,6 +172,11 @@ public class ModelServiceImpl implements ModelService {
 
     // 음성 모델 학습 시작
     public ResponseEntity<String> learnVoiceModel(int modelCode, long userCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         // 녹음 파일 저장 경로
         String recordFolderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
@@ -176,9 +195,13 @@ public class ModelServiceImpl implements ModelService {
 
     // 모델 조회
     public ResponseEntity<ModelListResponse> getModelList(Integer page, long userCode, Integer videoSourceCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         List<ModelInfoDto> mergedModelList;
         boolean end = false;
-        User user = userRepository.getUser(userCode);
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
 
 
@@ -220,6 +243,11 @@ public class ModelServiceImpl implements ModelService {
 
     // 모델 상세 조회
     public ResponseEntity<ModelInfoResponse> getModelInfo(int modelCode, long userCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         long modelUserCode = voiceModel.getUser().getUserCode();
         // 유저 코드가 일치하지 않을 경우 400 반환
@@ -242,6 +270,11 @@ public class ModelServiceImpl implements ModelService {
 
     // 모델 수정(모델 이름, 대표 이미지)
     public HttpStatus updateModel(int modelCode, long userCode, ModelUpdateRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return HttpStatus.NOT_FOUND;
+        }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         long modelUserCode = voiceModel.getUser().getUserCode();
         // 유저 코드가 일치하지 않을 경우 400 반환
@@ -278,14 +311,4 @@ public class ModelServiceImpl implements ModelService {
         voiceModelRepository.save(voiceModel);
     }
 
-
-//    // 음성 녹음 파일 데이터 voice_source_tb 에 저장
-//    private void createVoiceSource(VoiceModel voiceModel, String voicePath) {
-//        // Id 자동 생성, videoSourceCode = null
-//        VoiceSource voiceSource = VoiceSource.builder()
-//                .voiceModel(voiceModel)
-//                .voicePath(voicePath)
-//                .build();
-//        voiceSourceRepository.save(voiceSource);
-//    }
 }
