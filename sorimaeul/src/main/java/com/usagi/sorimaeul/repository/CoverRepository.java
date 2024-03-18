@@ -9,4 +9,8 @@ public interface CoverRepository extends JpaRepository<Cover, Integer> {
 
     List<Cover> findByUser_userCode(long userCode);
 
+    List<Cover> findByCoverName(String coverName);
+
+    List<Cover> findByCoverCode(int coverCode);
+
 }
