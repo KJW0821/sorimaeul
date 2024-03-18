@@ -37,7 +37,10 @@ public class ModelController {
 
 
     @Operation(summary = "음성 녹음", description = "음성 녹음 파일 업로드")
-    @ApiResponse(responseCode = "200", description = "업로드 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업로드 성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
     @PostMapping("/record/{modelCode}/{num}")
     public ResponseEntity<String> uploadRecordFile(@RequestHeader("Authorization") String token,
                                              @PathVariable int modelCode, @PathVariable int num, MultipartFile recordingFile) {
@@ -47,12 +50,28 @@ public class ModelController {
 
 
     @Operation(summary = "외부 음성 업로드", description = "외부 음성 녹음 파일을 여러개 업로드 한다.")
-    @ApiResponse(responseCode = "200", description = "업로드 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업로드 성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
     @PostMapping("/voice/{modelCode}")
     public ResponseEntity<String> uploadExRecordFile(@RequestHeader("Authorization") String token,
                                                      @PathVariable int modelCode, MultipartFile[] files) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.uploadExRecordFile(modelCode, userCode, files);
+    }
+
+
+    @Operation(summary = "외부 모델 업로드", description = "외부 음성 모델 파일을 업로드 한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업로드 성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
+    @PostMapping("/external/{modelCode}")
+    public ResponseEntity<String> uploadExModelFile(@RequestHeader("Authorization") String token,
+                                                     @PathVariable int modelCode, MultipartFile[] modelFiles) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.uploadExModelFile(modelCode, userCode, modelFiles);
     }
 
 
