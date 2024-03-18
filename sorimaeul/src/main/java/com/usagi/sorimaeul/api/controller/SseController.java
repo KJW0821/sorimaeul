@@ -1,10 +1,10 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.SseService;
+import com.usagi.sorimaeul.dto.request.SseRequest;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -40,6 +40,14 @@ public class SseController {
 	public ResponseEntity<Void> disconnect(@RequestHeader("Authorization") String token) {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 		sseService.disConnect(userCode);
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "알림 전송",
+			description = "파라미터를 받아 알림 전송")
+	@PostMapping("/test")
+	public ResponseEntity<Void> test(@RequestBody SseRequest request) {
+		sseService.sendToClient(request.getUserCode(), "alarm", request.getData());
 		return ResponseEntity.ok().build();
 	}
 
