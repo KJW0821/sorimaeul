@@ -30,4 +30,12 @@ public class NotifyRepositoryImpl implements NotifyRepositoryCustom {
 				.execute();
 	}
 
+	@Override
+	public void insertNotify(long userCode, Object data) {
+		queryFactory.insert(qnotify)
+				.columns(qnotify.userCode, qnotify.notifyContent)
+				.values(userCode, data.toString())
+				.execute();
+	}
+
 }

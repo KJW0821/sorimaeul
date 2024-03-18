@@ -5,10 +5,12 @@ import com.usagi.sorimaeul.entity.Notify;
 import com.usagi.sorimaeul.repository.NotifyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class NotifyService {
 
@@ -27,6 +29,10 @@ public class NotifyService {
 
 	public int deleteNotify(int notifyCode) {
 		return notifyRepository.deleteNotify(notifyCode);
+	}
+
+	public void createNotify(long userCode, Object data) {
+		notifyRepository.insertNotify(userCode, data);
 	}
 
 }

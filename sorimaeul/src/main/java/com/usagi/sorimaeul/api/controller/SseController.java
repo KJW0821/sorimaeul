@@ -1,5 +1,6 @@
 package com.usagi.sorimaeul.api.controller;
 
+import com.usagi.sorimaeul.api.service.NotifyService;
 import com.usagi.sorimaeul.api.service.SseService;
 import com.usagi.sorimaeul.dto.request.SseRequest;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseController {
 
 	private final SseService sseService;
+	private final NotifyService notifyService;
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Operation(summary = "SSE 연결 요청",
@@ -45,8 +47,9 @@ public class SseController {
 
 	@Operation(summary = "알림 전송",
 			description = "파라미터를 받아 알림 전송")
-	@PostMapping("/alarm")
-	public ResponseEntity<Void> test(@RequestBody SseRequest request) {
+	@PostMapping("/notify")
+	public ResponseEntity<Void> notify(@RequestBody SseRequest request) {
+		notifyService.createNotify(request.getUserCode(), request.getData());
 		sseService.sendToClient(request.getUserCode(), "alarm", request.getData());
 		return ResponseEntity.ok().build();
 	}

@@ -6,4 +6,6 @@ public interface NotifyRepositoryCustom {
 
 	int deleteNotify(int notifyCode);
 
+	void insertNotify(long userCode, Object data);
+
 }
