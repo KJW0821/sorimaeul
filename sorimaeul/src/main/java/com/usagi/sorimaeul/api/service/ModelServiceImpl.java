@@ -63,21 +63,42 @@ public class ModelServiceImpl implements ModelService {
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
         try {
+            // 폴더 생성
             createFolder(folderPath);
             // record_1.wav 형식으로 저장
             String fileName = "record_" + num + ".wav";
+            // 파일 생성
             saveFile(folderPath + fileName, recordingFile.getBytes());
+            // 녹음 문장 개수 갱신
             countRecord(modelCode, num);
-            return ResponseEntity.ok("Recording file saved successfully with name: " + fileName);
+            return ResponseEntity.ok(num + "번 녹음 파일 업로드 성공!");
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error while saving recording file: " + e.getMessage());
+                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
         }
     }
 
 
-//    public ResponseEntity<?>
+    // 외부 음성 녹음 파일 업로드
+    public ResponseEntity<String> uploadExRecordFile(int modelCode, long userCode, MultipartFile[] files) {
+        // 폴더 경로 설정
+        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
+        try {
+            // 폴더 생성
+            createFolder(folderPath);
+            // record_1.wav 형식으로 저장
+            for (int i = 0; i < files.length; i++) {
+                String fileName = "record_" + (i + 1) + ".wav";
+                saveFile(folderPath + fileName, files[i].getBytes());
+            }
+            return ResponseEntity.ok("외부 녹음 파일 업로드 성공!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+        }
+    }
 
 
     // 폴더 생성

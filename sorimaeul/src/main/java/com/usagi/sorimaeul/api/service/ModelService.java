@@ -13,6 +13,8 @@ public interface ModelService {
     ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode);
     ResponseEntity<String> uploadRecordFile(int modelCode, int num, long userCode, MultipartFile recodingFile);
 
+    ResponseEntity<String> uploadExRecordFile(int modelCode, long userCode, MultipartFile[] files);
+
     ResponseEntity<ModelListResponse> getModelList(Integer page, long userCode, Integer videoSourceCode);
 
     ResponseEntity<ModelInfoResponse> getModelInfo(int modelCode, long userCode);

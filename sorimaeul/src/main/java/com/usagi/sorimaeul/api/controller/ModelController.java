@@ -39,10 +39,20 @@ public class ModelController {
     @Operation(summary = "음성 녹음", description = "음성 녹음 파일 업로드")
     @ApiResponse(responseCode = "200", description = "업로드 성공")
     @PostMapping("/record/{modelCode}/{num}")
-    public ResponseEntity<String> uploadFile(@RequestHeader("Authorizarion") String token,
+    public ResponseEntity<String> uploadRecordFile(@RequestHeader("Authorization") String token,
                                              @PathVariable int modelCode, @PathVariable int num, MultipartFile recordingFile) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.uploadRecordFile(modelCode, num, userCode, recordingFile);
+    }
+
+
+    @Operation(summary = "외부 음성 업로드", description = "외부 음성 녹음 파일을 여러개 업로드 한다.")
+    @ApiResponse(responseCode = "200", description = "업로드 성공")
+    @PostMapping("/voice/{modelCode}")
+    public ResponseEntity<String> uploadExRecordFile(@RequestHeader("Authorization") String token,
+                                                     @PathVariable int modelCode, MultipartFile[] files) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.uploadExRecordFile(modelCode, userCode, files);
     }
 
 
