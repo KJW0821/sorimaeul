@@ -5,13 +5,11 @@ import com.usagi.sorimaeul.dto.response.NotifyResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/notify")
@@ -30,6 +28,22 @@ public class NotifyController {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token).substring(7));
 		NotifyResponse response = notifyService.getNotify(userCode);
 		return ResponseEntity.ok(response);
+	}
+
+	@Operation(summary = "알림 리스트 조회",
+			description = "해당 유저의 알림 리스트 조회")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "알림 리스트 조회 성공"),
+			@ApiResponse(responseCode = "404", description = "알림 존재하지 않음")
+	})
+	@PatchMapping("/{notify-code}")
+	public ResponseEntity<Void> checkNotify(@PathVariable int notifyCode) {
+		int cnt = notifyService.checkNotify(notifyCode);
+		if (cnt == 1) {
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 }

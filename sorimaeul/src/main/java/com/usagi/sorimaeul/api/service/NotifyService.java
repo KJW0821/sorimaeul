@@ -21,4 +21,8 @@ public class NotifyService {
 				.build();
 	}
 
+	public int checkNotify(int alertCode) {
+		return notifyRepository.checkNotify(alertCode);
+	}
+
 }
