@@ -22,4 +22,12 @@ public class NotifyRepositoryImpl implements NotifyRepositoryCustom {
 				.execute();
 	}
 
+	@Override
+	public int deleteNotify(int notifyCode) {
+		return (int) queryFactory
+				.delete(qnotify)
+				.where(qnotify.notifyCode.eq(notifyCode))
+				.execute();
+	}
+
 }

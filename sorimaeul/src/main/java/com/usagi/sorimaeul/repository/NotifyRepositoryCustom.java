@@ -4,4 +4,6 @@ public interface NotifyRepositoryCustom {
 
 	int checkNotify(int alertCode);
 
+	int deleteNotify(int notifyCode);
+
 }

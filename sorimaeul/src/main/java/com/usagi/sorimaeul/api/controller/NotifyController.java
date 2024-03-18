@@ -30,15 +30,31 @@ public class NotifyController {
 		return ResponseEntity.ok(response);
 	}
 
-	@Operation(summary = "알림 리스트 조회",
-			description = "해당 유저의 알림 리스트 조회")
+	@Operation(summary = "알림 확인",
+			description = "해당 알림 확인")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "알림 리스트 조회 성공"),
+			@ApiResponse(responseCode = "200", description = "알림 확인 성공"),
 			@ApiResponse(responseCode = "404", description = "알림 존재하지 않음")
 	})
 	@PatchMapping("/{notify-code}")
 	public ResponseEntity<Void> checkNotify(@PathVariable int notifyCode) {
 		int cnt = notifyService.checkNotify(notifyCode);
+		if (cnt == 1) {
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@Operation(summary = "알림 삭제",
+			description = "해당 알림 삭제")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "알림 삭제 성공"),
+			@ApiResponse(responseCode = "404", description = "알림 존재하지 않음")
+	})
+	@DeleteMapping("/{notify-code")
+	public ResponseEntity<Void> deleteNotify(@PathVariable int notifyCode) {
+		int cnt = notifyService.deleteNotify(notifyCode);
 		if (cnt == 1) {
 			return ResponseEntity.ok().build();
 		} else {

@@ -25,4 +25,8 @@ public class NotifyService {
 		return notifyRepository.checkNotify(alertCode);
 	}
 
+	public int deleteNotify(int notifyCode) {
+		return notifyRepository.deleteNotify(notifyCode);
+	}
+
 }
