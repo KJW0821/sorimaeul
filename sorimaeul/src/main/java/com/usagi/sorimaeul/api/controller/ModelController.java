@@ -42,7 +42,7 @@ public class ModelController {
     public ResponseEntity<String> uploadFile(@RequestHeader("Authorizarion") String token,
                                              @PathVariable int modelCode, @PathVariable int num, MultipartFile recordingFile) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return modelService.uploadFile(modelCode, num, userCode, recordingFile);
+        return modelService.uploadRecordFile(modelCode, num, userCode, recordingFile);
     }
 
 

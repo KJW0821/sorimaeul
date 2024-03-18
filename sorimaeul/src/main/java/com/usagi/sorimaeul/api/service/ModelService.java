@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ModelService {
     ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode);
-    ResponseEntity<String> uploadFile(int modelCode, int num, long userCode, MultipartFile recodingFile);
+    ResponseEntity<String> uploadRecordFile(int modelCode, int num, long userCode, MultipartFile recodingFile);
 
     ResponseEntity<ModelListResponse> getModelList(Integer page, long userCode, Integer videoSourceCode);
 

@@ -7,5 +7,6 @@ public class ModelTableCreateRequest {
 
     private long userCode;
     private String modelName;
+    private String imagePath;
 
 }

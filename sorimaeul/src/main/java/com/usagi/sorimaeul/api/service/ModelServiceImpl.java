@@ -48,7 +48,7 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = VoiceModel.builder()
                 .modelName(request.getModelName())
                 .user(user)
-                .storagePath("test")
+                .storagePath(request.getImagePath())
                 .build();
         voiceModelRepository.save(voiceModel);
         ModelTableCreateResponse response = ModelTableCreateResponse.builder()
@@ -59,7 +59,7 @@ public class ModelServiceImpl implements ModelService {
 
 
     // 음성 녹음 파일 업로드
-    public ResponseEntity<String> uploadFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
+    public ResponseEntity<String> uploadRecordFile(int modelCode, int num, long userCode, MultipartFile recordingFile) {
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/";
         try {
@@ -75,6 +75,9 @@ public class ModelServiceImpl implements ModelService {
                     .body("Error while saving recording file: " + e.getMessage());
         }
     }
+
+
+//    public ResponseEntity<?>
 
 
     // 폴더 생성

@@ -1,11 +1,13 @@
 package com.usagi.sorimaeul.repository;
 
 import com.usagi.sorimaeul.entity.Dubbing;
+import com.usagi.sorimaeul.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface DubbingRepository extends JpaRepository<Dubbing, Integer> {
 
-//    List<Dubbing> findByUserCode(long userCode);
+//    List<Dubbing> findByUser_userCode(long userCode);
+
 }
