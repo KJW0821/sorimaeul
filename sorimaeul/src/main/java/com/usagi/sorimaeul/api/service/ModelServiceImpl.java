@@ -52,7 +52,7 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = VoiceModel.builder()
                 .modelName(request.getModelName())
                 .user(user)
-                .storagePath(request.getImagePath())
+                .imagePath(request.getImagePath())
                 .build();
         voiceModelRepository.save(voiceModel);
         // 리스폰스 생성
@@ -102,6 +102,11 @@ public class ModelServiceImpl implements ModelService {
                 // 파일 저장
                 saveFile(folderPath + fileName, files[i].getBytes());
             }
+            
+            // state = 1 : '학습전'으로 DB 갱신
+            VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+            voiceModel.setState(1);
+            voiceModelRepository.save(voiceModel);
             return ResponseEntity.ok("외부 녹음 파일 업로드 성공!");
 
         // 서버 오류 처리
@@ -114,7 +119,7 @@ public class ModelServiceImpl implements ModelService {
 
 
     // 외부 음성 모델 업로드
-    public ResponseEntity<String> uploadExModelFile(int modelCode, long userCode, MultipartFile[] modelFiles) {
+    public ResponseEntity<String> uploadModelFile(int modelCode, long userCode, MultipartFile[] modelFiles) {
         User user = userRepository.getUser(userCode);
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
@@ -134,7 +139,6 @@ public class ModelServiceImpl implements ModelService {
             }
             VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
             // 해당 모델의 유저 코드와 모델 파일 경로, 생성시간, 학습상태 DB에 저장
-            voiceModel.setUser(user);
             voiceModel.setStoragePath(folderPath);
             voiceModel.setCreatedTime(LocalDateTime.now());
             voiceModel.setState(3);
@@ -149,6 +153,24 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("모델 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
         }
+    }
+
+
+    // 음성 모델 학습 시작
+    public ResponseEntity<String> learnVoiceModel(int modelCode, long userCode) {
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        // 녹음 파일 저장 경로
+        String recordFolderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        // 모델 학습 로직 작성
+
+
+        // state = 2: '학습중'으로 갱신
+        voiceModel.setState(2);
+        voiceModelRepository.save(voiceModel);
+
+        // 생성된 모델을 서버에 저장
+//        uploadModelFile(modelCode, userCode, modelFiles);
+        return ResponseEntity.badRequest().body("실패");
     }
 
 
@@ -251,6 +273,8 @@ public class ModelServiceImpl implements ModelService {
     // 녹음 문장 개수(record_count) 갱신
     private void countRecord(VoiceModel voiceModel, int num) {
         voiceModel.setRecordCount(num);
+        // 녹음 문장 개수가 200개가 되면 state = 1: '학습전'으로 DB 갱신
+        if (num == 200) voiceModel.setState(1);
         voiceModelRepository.save(voiceModel);
     }
 

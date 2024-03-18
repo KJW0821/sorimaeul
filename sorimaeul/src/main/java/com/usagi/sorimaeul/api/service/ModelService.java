@@ -15,7 +15,9 @@ public interface ModelService {
 
     ResponseEntity<String> uploadExRecordFile(int modelCode, long userCode, MultipartFile[] files);
 
-    ResponseEntity<String> uploadExModelFile(int modelCode, long userCode, MultipartFile[] modelFiles);
+    ResponseEntity<String> uploadModelFile(int modelCode, long userCode, MultipartFile[] modelFiles);
+
+    ResponseEntity<String> learnVoiceModel(int modelCode, long userCode);
 
     ResponseEntity<ModelListResponse> getModelList(Integer page, long userCode, Integer videoSourceCode);
 

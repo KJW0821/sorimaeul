@@ -68,10 +68,23 @@ public class ModelController {
             @ApiResponse(responseCode = "400", description = "실패")
     })
     @PostMapping("/external/{modelCode}")
-    public ResponseEntity<String> uploadExModelFile(@RequestHeader("Authorization") String token,
+    public ResponseEntity<String> uploadModelFile(@RequestHeader("Authorization") String token,
                                                      @PathVariable int modelCode, MultipartFile[] modelFiles) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return modelService.uploadExModelFile(modelCode, userCode, modelFiles);
+        return modelService.uploadModelFile(modelCode, userCode, modelFiles);
+    }
+
+
+    @Operation(summary = "음성 모델 학습", description = "음성 모델을 학습한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "학습 성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
+    @PostMapping("/start/{modelCode}")
+    public ResponseEntity<String> learnVoiceModel(@RequestHeader("Authorization") String token,
+                                                  @PathVariable int modelCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.learnVoiceModel(modelCode, userCode);
     }
 
 
