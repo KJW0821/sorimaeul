@@ -6,7 +6,7 @@ import LandingPage from './pages/home/LandingPage'
 import HomePage from './pages/home/HomePage'
 import LoginCallbackPage from './pages/users/LoginCallbackPage';
 import SignUpPage from "./pages/users/SignUpPage";
-
+import FAQPage from './pages/inquiry/FAQPage';
 
 const router = createBrowserRouter([
   {
@@ -18,12 +18,16 @@ const router = createBrowserRouter([
     element: <LoginCallbackPage />
   },
   {
-    path: "/home",
+    path: "/",
     element: <HomePage />
   },
   {
     path: "/signup",
     element: <SignUpPage /> 
+  },
+  {
+    path: "/FAQ",
+    element: <FAQPage />
   }
 ]);
 
