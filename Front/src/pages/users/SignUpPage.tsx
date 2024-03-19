@@ -13,7 +13,9 @@ function SignUpPage() {
   const [ selectedImage, setSelectedImage ] = useState("");
   const [ isValidNickname, setIsValidNickname ] = useState(false);
 
-
+  // 추후 handler 추가 필요, build를 위해 임시로 작성
+  setSelectedImage("default");
+  
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
     setIsValidNickname(false);
