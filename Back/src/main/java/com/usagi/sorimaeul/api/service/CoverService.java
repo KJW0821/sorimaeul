@@ -19,4 +19,6 @@ public interface CoverService {
 
     ResponseEntity<?> createCoverBoard(long userCode, int coverCode, CoverBoardRequest request);
 
+    ResponseEntity<?> deleteCover(long userCode, int coverCode);
+
 }

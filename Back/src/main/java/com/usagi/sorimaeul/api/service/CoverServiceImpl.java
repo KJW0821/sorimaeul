@@ -158,11 +158,11 @@ public class CoverServiceImpl implements CoverService {
                 .build();
         coverRepository.save(cover);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body("생성 성공");
     }
 
 
-    // AI 커버 게시글 등록/수정
+    // AI 커버 등록/수정
     public ResponseEntity<?> createCoverBoard(long userCode, int coverCode, CoverBoardRequest request) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
@@ -178,8 +178,23 @@ public class CoverServiceImpl implements CoverService {
         cover.setPublic(request.isPublic());
         coverRepository.save(cover);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
 
+    }
+
+
+    // AI 커버 게시글 삭제
+    public ResponseEntity<?> deleteCover(long userCode, int coverCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 커버 삭제
+        coverRepository.deleteById(coverCode);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
     }
 
 }

@@ -56,7 +56,7 @@ public class CoverController {
     }
 
 
-    @Operation(summary = "AI 커버 게시글 등록/수정", description = "AI 커버를 등록하거나 수정한다.")
+    @Operation(summary = "AI 커버 등록/수정", description = "AI 커버를 등록하거나 수정한다.")
     @ApiResponse(responseCode = "200", description = "AI 커버 등록/수정 성공")
     @PatchMapping("/board/{coverCode}")
     public ResponseEntity<?> createCoverBoard(@RequestHeader("Authorization") String token,
@@ -64,5 +64,15 @@ public class CoverController {
                                          @RequestBody CoverBoardRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.createCoverBoard(userCode, coverCode, request);
+    }
+
+
+    @Operation(summary = "AI 커버 삭제", description = "AI 커버를 삭제한다.")
+    @ApiResponse(responseCode = "204", description = "AI 커버 삭제 성공")
+    @DeleteMapping("/board/{coverCode}")
+    public ResponseEntity<?> deleteCover(@RequestHeader("Authorization") String token,
+                                              @PathVariable int coverCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return coverService.deleteCover(userCode, coverCode);
     }
 }
