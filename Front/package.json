@@ -13,9 +13,11 @@
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.7",
     "react": "^18.2.0",
+    "react-cookie": "^7.1.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.3",
+    "redux": "^5.0.1",
     "styled-components": "^6.1.8",
     "tailwind-styled-components": "^2.2.0"
   },
@@ -36,5 +38,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
     "vite": "^5.1.6"
-  }
+  },
+  "proxy": "http://localhost:8000/"
 }
