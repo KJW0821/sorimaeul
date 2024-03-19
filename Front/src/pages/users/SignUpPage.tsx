@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { set } from "../../stores/user";
 import { checkNickname, signUp } from "../../utils/userAPI";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,9 @@ function SignUpPage() {
   const [ isValidNickname, setIsValidNickname ] = useState(false);
 
   // 추후 handler 추가 필요, build를 위해 임시로 작성
-  setSelectedImage("default");
+  useEffect(() => {
+    setSelectedImage("default");
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행되도록 함
   
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
