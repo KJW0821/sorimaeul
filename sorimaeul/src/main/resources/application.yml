@@ -1,9 +1,87 @@
-#---
+
+server:
+  port: 8000
+  servlet:
+    context-path: /api
+
+
 spring:
   profiles:
     active: dev
     include: oauth
-#---
-#spring:
-#  profiles:
-#    active: deploy
+  # DataBase Settings : hikariCP : https://github.com/brettwooldridge/HikariCP
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: usagi
+      password: (#9)@%Bve1wv%pC
+      pool-name: Hikari Connection Pool
+      # hikariCP property setting
+      maximum-pool-size: 50
+      minimum-idle: 50
+      connection-timeout: 5000
+      connection-init-sql: SELECT 1
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
+  security:
+    user:
+      name: admin
+      password: admin
+
+
+jwt:
+  token:
+    secret-key: a054d41e0323429ba0e6e7cc1380091fe4f416a04d04a3f372399a8303ec0fb7
+  access-token:
+    expire-length: 1800000
+  refresh-token:
+    expire-length: 1209600000
+  redis:
+    host: localhost
+    port: 6379
+    password: lMG=LxBOZtHV7a}
+
+
+# Multipart File Upload Setting
+file:
+  multipart:
+    maxUploadSize: 100
+    maxUploadSizePerFile: 100
+
+
+## Swagger setting
+springdoc:
+  packages-to-scan: com.usagi.sorimaeul.api.controller
+  swagger-ui:
+    path: /api-docs
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: alpha
+    disabled-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  show-actuator: true
+  cache:
+    disabled: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+
+
+# log level Setting
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        root: debug
+        web: debug
+    com:
+      sorimaeul: debug
+    zaxxer:
+      hikari:
+        pool:
+          HikariPool: debug

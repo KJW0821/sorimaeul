@@ -14,6 +14,8 @@ public class CorsConfig {
         org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("*");
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("https://j10e201.p.ssafy.io");
         config.addAllowedHeader("*");
         config.addExposedHeader("*");
         config.addAllowedMethod("*");
