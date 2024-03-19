@@ -3,18 +3,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import closeBtn from '../../assets/closeBtn.png';
 import openBtn from '../../assets/openBtn.png';
+import { useNavigate } from "react-router-dom";
+import SubTitle from "../../components/inquiry/SubTitle";
 
-const SubTitle = styled.span`
-  font-family: 'GmarketSansBold';
-  .lg-font {
-    font-size: 2.5rem;
-  }
-  font-size: 2rem;
-  color: black;
-  .disabled {
-    color: #A3A3A3;
-  }
-`
 
 const Question = styled.p`
   font-family: 'GmarketSansMedium';
@@ -35,6 +26,8 @@ interface questionData {
 }
 
 function FAQPage() {
+  const navigate = useNavigate();
+
   const questions: questionData[] = [
     {
       q: '이 사이트는 어떻게 이용하나요?',
@@ -64,7 +57,7 @@ function FAQPage() {
           <SubTitle>
             <span className="lg-font">자</span>주 묻는 질문 FAQ
           </SubTitle>
-          <SubTitle><span className="disabled">| 요청 게시판</span></SubTitle>
+          <SubTitle><span className="disabled" onClick={() => navigate('/request')}>| 요청 게시판</span></SubTitle>
         </div>
         <div className="flex flex-col gap-6">
           {
