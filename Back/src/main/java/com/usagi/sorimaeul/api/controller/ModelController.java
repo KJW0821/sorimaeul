@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.controller;
 import com.usagi.sorimaeul.api.service.ModelService;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
 import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
+import com.usagi.sorimaeul.dto.response.GetScriptResponse;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
@@ -126,4 +127,14 @@ public class ModelController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.updateModel(modelCode, userCode, request);
     }
+
+
+    @Operation(summary = "스크립트 조회", description = "모델 학습을 위한 스크립트를 조회한다.")
+    @ApiResponse(responseCode = "200", description = "스크립트 조회 성공")
+    @GetMapping("/script")
+    public ResponseEntity<GetScriptResponse> getScript(@RequestHeader("Authorization") String token) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.getScript(userCode);
+    }
+
 }
