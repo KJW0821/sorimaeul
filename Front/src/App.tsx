@@ -7,6 +7,7 @@ import HomePage from './pages/home/HomePage'
 import LoginCallbackPage from './pages/users/LoginCallbackPage';
 import SignUpPage from "./pages/users/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
+import RequestListPage from './pages/inquiry/RequestListPage';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,15 @@ const router = createBrowserRouter([
   {
     path: "/FAQ",
     element: <FAQPage />
+  },
+  {
+    path: "/request",
+    children: [
+      {
+        index: true,
+        element: <RequestListPage />
+      }
+    ]
   }
 ]);
 
