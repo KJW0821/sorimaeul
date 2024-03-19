@@ -17,7 +17,7 @@ spring:
       password: (#9)@%Bve1wv%pC
       pool-name: Hikari Connection Pool
       # hikariCP property setting
-      maximum-pool-size: 44
+      maximum-pool-size: 10
       connection-timeout: 5000
       connection-init-sql: SELECT 1
       idle-timeout: 600000
