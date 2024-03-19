@@ -8,13 +8,12 @@ server:
 spring:
   profiles:
     active: dev
-    include: oauth
   # DataBase Settings : hikariCP : https://github.com/brettwooldridge/HikariCP
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: usagi
-      password: (#9)@%Bve1wv%pC
+      username: ENC(6D5UHgUn8PlWmRpNCLfvPg==)
+      password: ENC(HchKvSrfF8OBFm/PILKNjD+EfHY5+hPi)
       pool-name: Hikari Connection Pool
       # hikariCP property setting
       maximum-pool-size: 10
@@ -27,25 +26,44 @@ spring:
     user:
       name: admin
       password: admin
+    # OAuth 설정
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ENC(EJ8R1u3WY1/eiBujSWUlblHBbl5VFKiv5gXbj3/jW6XD6lD/2bToFgwIDRogBCrb)
+            client-authentication-method: POST
+            client-secret: ENC(1v20Lih3Z5U+RWLNzTZs7c+dzbumLWoTxFcXfsrg/p5ggRN/FK17dfIGjHMMb9X1)
+            authorization-grant-type: authorization_code
+            client_name: kakao
+          google:
+            client-id: ENC(DdZKFBof+WHnQmwtGFwGPh2YI37ny9HAmjl05JgJIgsqrwmcZDhGwopw7kkgzPmmMXidTFxniStRwPnf7ZuXTxpThtN35EsAGyC8f2ADNbfAxyhDDVZPxw==)
+            client-secret: ENC(kqrGdtIp2XQURxr9qQrdVBsi75M2pPLK7Ur0+6iCFmNwvQHJg5Ma99Fpzo/FM51T)
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
 
 jwt:
   token:
-    secret-key: a054d41e0323429ba0e6e7cc1380091fe4f416a04d04a3f372399a8303ec0fb7
+    secret-key: ENC(p9Yv00Nggrip5TR3DvDckg2vyWmTVOo78dD+6g8ME/SJBdv6sGwo9pP0xvU1jZrleDx5Ip26uxTYoB+aHXbi9r1eFkq4teuwYYAbgiAIrRE=)
   access-token:
     expire-length: 1800000
   refresh-token:
     expire-length: 1209600000
   redis:
     port: 6379
-    password: lMG=LxBOZtHV7a}
+    password: ENC(fbVzkxQrgWvOBja+l//F2trn+HeA7ekU)
 
 
 # Multipart File Upload Setting
 file:
   multipart:
-    maxUploadSize: 100
-    maxUploadSizePerFile: 100
+    maxUploadSize: 1000
+    maxUploadSizePerFile: 1000
 
 
 ## Swagger setting
