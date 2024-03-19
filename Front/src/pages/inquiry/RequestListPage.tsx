@@ -10,7 +10,7 @@ function RequestListPage() {
   return (
     <>
       <ColorLine />
-      <div className="mx-auto w-9/12 flex flex-col gap-8 mt-12">
+      <div className="mx-auto w-9/12 flex flex-col gap-8">
         <div className="flex gap-4 items-center">
           <SubTitle>
             <span className="lg-font">요</span>청 게시판
@@ -18,7 +18,7 @@ function RequestListPage() {
           <SubTitle><span className="disabled" onClick={() => navigate('/FAQ')}>| 자주 묻는 질문 FAQ</span></SubTitle>
         </div>
         <RequestList />
-        <Button onClick={() => navigate('/request/create')} $marginLeft={0} $marginTop={0} $width={4.375} $height={2} $background="#28BEFF">글쓰기</Button>
+        <Button onClick={() => navigate('/request/create')} $marginTop={0} $width={4.375} $height={2} $background="#28BEFF">글쓰기</Button>
       </div>
     </>
   )

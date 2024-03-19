@@ -8,12 +8,10 @@ import SubTitle from "../../components/inquiry/SubTitle";
 
 
 const Question = styled.p`
-  font-family: 'GmarketSansMedium';
   font-size: 2rem;
 `
 
 const Answer = styled.p`
-  font-family: 'GmarketSansMedium';
   font-size: 1.125rem;
   white-space: pre-wrap;
   margin-left: 3rem;
@@ -52,7 +50,7 @@ function FAQPage() {
   return (
     <>
       <ColorLine />
-      <div className="mx-auto w-9/12 flex flex-col gap-8 mt-12">
+      <div className="mx-auto w-9/12 flex flex-col gap-8">
         <div className="flex gap-4 items-center">
           <SubTitle>
             <span className="lg-font">자</span>주 묻는 질문 FAQ

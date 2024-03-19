@@ -1,8 +1,6 @@
 import styled from "styled-components";
-
-const Line = styled.hr<{$color?: string}>`
-  border-color: ${(props) => (props.$color ? `${props.$color}rem` : "black")};
-`
+import { Line } from "../../common/Line";
+import { useNavigate } from "react-router-dom";
 
 const List = styled.div`
   width: 100%;
@@ -11,7 +9,6 @@ const List = styled.div`
   gap: .5rem;
 
   .title {
-    font-family: 'GmarketSansMedium';
     font-size: 1.25rem;
     margin-top: .4rem;
   }
@@ -24,6 +21,8 @@ const List = styled.div`
 `
 
 function RequestList() {
+  const navigate = useNavigate();
+
   const data = [
     {
       id: 1,
@@ -67,7 +66,7 @@ function RequestList() {
       {
         data.map(el => (
           <>
-            <div className="flex items-center justify-center">
+            <div onClick={() => navigate(`/request/${el.id}`)} className="flex items-center justify-center">
               <p className="title w-3/4">{el.title}</p>
               <p className="date w-1/6">{el.createdTime}</p>
             </div>

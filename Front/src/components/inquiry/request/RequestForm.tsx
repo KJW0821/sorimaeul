@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Button } from "../../common/Button";
-import { useNavigate } from "react-router-dom";
 
 const Form = styled.form`
   width: 75%;
@@ -11,7 +10,6 @@ const Form = styled.form`
 
   .label {
     width: 100%;
-    font-family: 'GmarketSansMedium';
     font-size: 1.25rem;
   }
 
@@ -37,16 +35,18 @@ const Form = styled.form`
 `
 
 const RequestForm: React.FC<{ isEdit: boolean }> = ({isEdit}) => {
-  const navigate = useNavigate();
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+  }
 
   return (
-    <Form>
+    <Form onSubmit={submitHandler}>
       <label className="label" htmlFor="title" id="title">제목</label>
       <input className="content input" type="text" name="title" />
       <label className="label" htmlFor="content" id="content">내용</label>
-      <textarea className="content textarea" name="content" id="" cols={30} rows={10}></textarea>
+      <textarea className="content textarea" wrap="hard" name="content" id="" cols={30} rows={10}></textarea>
       <div className="button-box">
-        <Button onClick={() => navigate('/request')} $marginLeft={0} $marginTop={0} $height={2} $width={4.375}>취소</Button>
+        <Button onClick={() => window.history.back()} $marginLeft={0} $marginTop={0} $height={2} $width={4.375}>취소</Button>
         <Button $marginLeft={0} $marginTop={0} $height={2} $width={4.375} $background="#28BEFF">{ isEdit ? "수정" : "작성" }</Button>
       </div>
     </Form>
