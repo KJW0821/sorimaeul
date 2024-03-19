@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.CoverService;
+import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
@@ -42,4 +43,13 @@ public class CoverController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.getCoverDetail(userCode, coverCode);
     }
+
+
+    @Operation(summary = "AI 커버 생성", description = "AI 커버를 생성한다.")
+    @ApiResponse(responseCode = "201", description = "AI 커버 생성 성공")
+    @PostMapping("/create")
+    public ResponseEntity<?> createCover(@RequestHeader("Authorization") String token,
+                                                              @RequestBody CoverCreateRequest request) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return coverService.createCover(userCode, request);
 }
