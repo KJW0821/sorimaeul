@@ -12,7 +12,7 @@ spring:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: usagi
-      password: usagi123!
+      password: (#9)@%Bve1wv%pC
       pool-name: Hikari Connection Pool
       # hikariCP property setting
       maximum-pool-size: 50

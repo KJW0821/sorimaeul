@@ -58,7 +58,7 @@ public class CoverServiceImpl implements CoverService {
         } else {
             // 나의 유저 코드와 일치하는 like 리스트를 가져온다.
             List<Like> likes = likeRepository.findByUser_userCode(userCode);
-            // like 와 매핑되는 Cover 들을 cover 에 넣는다.
+            // like 와 매핑되는 Cover 들을 covers 에 넣는다.
             for (Like like : likes) {
                 Cover cover = like.getCover();
                 if (cover != null) {
