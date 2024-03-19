@@ -1,14 +1,17 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
+import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
 import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.Like;
 import com.usagi.sorimaeul.entity.User;
+import com.usagi.sorimaeul.entity.VoiceModel;
 import com.usagi.sorimaeul.repository.CoverRepository;
 import com.usagi.sorimaeul.repository.LikeRepository;
 import com.usagi.sorimaeul.repository.UserRepository;
+import com.usagi.sorimaeul.repository.VoiceModelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,7 @@ public class CoverServiceImpl implements CoverService {
     private final CoverRepository coverRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final VoiceModelRepository voiceModelRepository;
 
 
     // AI 커버 리스트 조회
@@ -125,6 +129,34 @@ public class CoverServiceImpl implements CoverService {
                 .build();
 
         return ResponseEntity.ok(response);
+    }
+
+
+    // AI 커버 생성
+    public ResponseEntity<?> createCover(long userCode, CoverCreateRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // AI 커버 생성 로직 작성
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(request.getModelCode());
+
+
+        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime, updatedTime 현재 시간, likeCount 기본값 0
+        // isPublic 기본값 false
+        Cover cover = Cover.builder()
+                .user(user)
+                .coverName(request.getCoverName())
+                .coverSinger(voiceModel.getModelName())
+                .singer(request.getSinger())
+                .title(request.getTitle())
+//                .storagePath()
+                .build();
+        coverRepository.save(cover);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 }
