@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
+import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
 import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.Like;
@@ -26,6 +27,8 @@ public class CoverServiceImpl implements CoverService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
 
+
+    // AI 커버 리스트 조회
     public ResponseEntity<CoverListResponse> getCoverList(long userCode, String target, String keyword, int page) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
@@ -73,11 +76,6 @@ public class CoverServiceImpl implements CoverService {
         List<Cover> pageCovers = covers.subList(startIdx, endIdx);
         // cover 리스트를 순회
         for (Cover cover : pageCovers) {
-//            boolean isLiked;
-//            // LikeCount 가 1 이상이면 isLiked = true
-//            if (cover.getLikeCount() > 0) isLiked = true;
-//            // 0이면 isLiked = false
-//            else isLiked = false;
             // Dto 에 담기
             CoverInfoDto coverInfoDto = CoverInfoDto.builder()
                     .coverCode(cover.getCoverCode())
@@ -86,7 +84,6 @@ public class CoverServiceImpl implements CoverService {
                     .isPublic(cover.isPublic())
                     .likeCount(cover.getLikeCount())
                     .thumbnailPath(cover.getThumbnailPath())
-//                    .isLiked(isLiked)
                     .nickname(cover.getUser().getNickname())
                     .coverSinger(cover.getCoverSinger())
                     .singer(cover.getSinger())
@@ -102,6 +99,32 @@ public class CoverServiceImpl implements CoverService {
                 .build();
 
         return ResponseEntity.ok(coverListResponse);
+    }
+
+
+    // AI 커버 상세 조회
+    public ResponseEntity<CoverDetailResponse> getCoverDetail(long userCode, int coverCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Cover cover = coverRepository.findByCoverCode(coverCode);
+        boolean isLiked;
+//            // LikeCount 가 1 이상이면 isLiked = true
+            if (cover.getLikeCount() > 0) isLiked = true;
+//            // 0이면 isLiked = false
+            else isLiked = false;
+        // 리스폰스 생성
+        CoverDetailResponse response = CoverDetailResponse.builder()
+                .coverCode(coverCode)
+                .coverName(cover.getCoverName())
+                .storagePath(cover.getStoragePath())
+                .thumbnailPath(cover.getThumbnailPath())
+                .isLiked(isLiked)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
 }

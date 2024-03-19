@@ -11,6 +11,6 @@ public interface CoverRepository extends JpaRepository<Cover, Integer> {
 
     List<Cover> findByCoverName(String coverName);
 
-    List<Cover> findByCoverCode(int coverCode);
+    Cover findByCoverCode(int coverCode);
 
 }
