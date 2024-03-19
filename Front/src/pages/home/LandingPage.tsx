@@ -14,7 +14,7 @@ const LandingPage: React.FC = () => {
             <button onClick={() => handleSocialLogin('kakao')}>카카오 로그인</button>
         </div>
         <div>
-            <button>구글 로그인</button>
+            <button onClick={() => handleSocialLogin('google')}>구글 로그인</button>
         </div>
     </>
   );
