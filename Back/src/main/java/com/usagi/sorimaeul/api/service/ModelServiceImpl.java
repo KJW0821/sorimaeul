@@ -70,6 +70,10 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 파일 업로드 확인
+        if (recordingFile == null || recordingFile.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
+        }
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
@@ -99,6 +103,10 @@ public class ModelServiceImpl implements ModelService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 파일 업로드 확인
+        if (files == null || files.length == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
         }
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
@@ -134,6 +142,10 @@ public class ModelServiceImpl implements ModelService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 파일 업로드 확인
+        if (modelFiles == null || modelFiles.length == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
         }
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
