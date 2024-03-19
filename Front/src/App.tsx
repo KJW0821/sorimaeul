@@ -10,7 +10,7 @@ import SignUpPage from "./pages/users/SignUpPage";
 
 const router = createBrowserRouter([
   {
-    path: "/landing",
+    path: "/",
     element: <LandingPage />
   },
   {

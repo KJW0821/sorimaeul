@@ -15,18 +15,24 @@ const LoginCallbackPage: React.FC = () => {
       if (code) {
           API.get(`/oauth/login/${provider}?code=${code}`)
           .then((res) => {
-              const token = res.data.accessToken;
+              const access = res.data.accessToken;
+              const refresh = res.data.refreshToken;
 
               // accessToken이 쿠키에 저장되어있으면 삭제
               if (getCookie("accessToken")) {
                   removeCookie("accessToken");
               }
 
-              setCookie("accessToken",`Bearer ${token}`, { path: "/"}); // Https 적용하면 option 설정 하자!
-
+              // refreshToken이 쿠키에 저장되어있으면 삭제
+              if (getCookie("refreshToken")) {
+                  removeCookie("refreshToken");
+              }
+              
+              setCookie("accessToken",`Bearer ${access}`, { path: "/"}); // Https 적용하면 option 설정 하자!
+              setCookie("refreshToken", `Bearer ${refresh}`, { path: "/"});
               const accessToken = getCookie("accessToken");
 
-              // 로그인 요청 보내기 
+              // 사이트 로그인 요청 보내기 - 회원 db에 있는지 판별
               API.get("/user/login", {
                   headers: {
                       Authorization: accessToken
