@@ -8,6 +8,7 @@ import LoginCallbackPage from './pages/users/LoginCallbackPage';
 import SignUpPage from "./pages/users/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
+import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <RequestListPage />
+      },
+      {
+        path: "create",
+        element: <RequestCreatePage />
       }
     ]
   }
