@@ -8,7 +8,7 @@ const API = axios.create({
     baseURL: URL,
     withCredentials: true, 
     headers: {
-        accessToken: await getCookie("accessToken"),
+        accessToken: getCookie("accessToken"),
     },
 })
   
