@@ -9,6 +9,8 @@ import SignUpPage from "./pages/users/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
+import RequestDetailPage from './pages/inquiry/RequestDetailPage';
+import RequestEditPage from './pages/inquiry/RequestEditPage';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "create",
         element: <RequestCreatePage />
+      },
+      {
+        path: ":id",
+        element: <RequestDetailPage />
+      },
+      {
+        path: ":id/edit",
+        element: <RequestEditPage />
       }
     ]
   }
