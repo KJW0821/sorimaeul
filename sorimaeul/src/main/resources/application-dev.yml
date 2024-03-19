@@ -3,6 +3,10 @@ spring:
     url: jdbc:mysql://j10e201.p.ssafy.io:3306/sorimaeul?serverTimezone=Asia/Seoul&useUniCode=yes&characterEncoding=UTF-8
 
 
+redis:
+  host: j10e201.p.ssafy.io
+
+
 jasypt:
   encryptor:
     password: usagi
