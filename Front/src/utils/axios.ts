@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getCookie, removeCookie, setCookie } from "./cookie";
 import { logout } from "../stores/user";
-import { useNavigate } from "react-router-dom";
 
 // 백엔드 서버 기본 url 지정
 export const URL = "http://localhost:8000/api";
@@ -32,9 +31,7 @@ API.interceptors.response.use(res => {
             })
             .catch((err) => {
                 // refresh 토큰도 만료된 경우 -> 재로그인 필요 
-
-
-
+                handleLogout();
                 console.log(err);
             })
         }
@@ -43,11 +40,10 @@ API.interceptors.response.use(res => {
 });
 
 function handleLogout() {
-    const navigate = useNavigate();
     logout();
     removeCookie("accessToken");
     removeCookie("refreshToken");
-    navigate("/");
+    window.location.href = "/";
 }
 
 export default API;
