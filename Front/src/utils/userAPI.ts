@@ -1,8 +1,9 @@
 import API from "./axios";
-import { getCookie } from "./cookie";
+import { getCookie, removeCookie } from "./cookie";
 
-const accessToken = getCookie("accessToken");
-const headers = { Authorization: accessToken };
+const access = getCookie("accessToken");
+const refresh= getCookie("refreshToken");
+const headers = { Authorization: access };
 
 export const checkNickname = ( nickname: string ) => {
   return API.get(`user/nickname/${nickname}`, { headers })
@@ -22,4 +23,13 @@ export const signUp = async ( nickname: string, profileImage: string ) => {
   } catch (err) {
     console.error("회원 가입 실패", err);
   }
+}
+
+export const logout = () => {
+  // 접두사와 그 뒤의 공백 제거 -> base64 decoding error 해결
+  const accessToken = access.replace(/Bearer\s/, "");
+  const refreshToken = refresh.replace(/Bearer\s/, "");
+  removeCookie("accessToken");
+  removeCookie("refreshToken");
+  return API.get('oauth/logout', { params: { accessToken, refreshToken } });
 }
