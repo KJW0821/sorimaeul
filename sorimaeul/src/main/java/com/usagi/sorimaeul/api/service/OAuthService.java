@@ -61,6 +61,20 @@ public class OAuthService {
 
         long userCode = getUserProfile(token, provider);
 
+        RefreshToken refreshToken = refreshTokenRepository.findByUserCode(userCode);
+
+        if (refreshToken != null) {
+            String ref = refreshToken.getRefreshToken();
+
+            BlackList blackList = BlackList.builder()
+                    .token(ref)
+                    .expiration(jwtTokenProvider.getExpiration(ref))
+                    .build();
+
+            blackListRepository.save(blackList);
+            refreshTokenRepository.deleteById(ref);
+        }
+
         return createToken(userCode);
     }
 
