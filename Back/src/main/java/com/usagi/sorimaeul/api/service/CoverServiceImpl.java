@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
+import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,6 +159,27 @@ public class CoverServiceImpl implements CoverService {
         coverRepository.save(cover);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+
+    // AI 커버 게시글 등록/수정
+    public ResponseEntity<?> createCoverBoard(long userCode, int coverCode, CoverBoardRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 커버 수정
+        Cover cover = coverRepository.findByCoverCode(coverCode);
+        cover.setCoverName(request.getCoverName());
+        cover.setCoverDetail(request.getCoverDetail());
+        cover.setThumbnailPath(request.getThumbnailPath());
+        cover.setPublic(request.isPublic());
+        coverRepository.save(cover);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+
     }
 
 }

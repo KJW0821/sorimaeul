@@ -9,6 +9,8 @@ public class CoverBoardRequest {
     private String coverName;
     @Nullable
     private String coverDetail;
+    @Nullable
+    private String thumbnailPath;
     private boolean isPublic;
 
 }
