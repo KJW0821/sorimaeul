@@ -2,7 +2,7 @@ import API from "./axios";
 import { getCookie, removeCookie } from "./cookie";
 
 const access = getCookie("accessToken");
-const refresh= getCookie("refreshToken");
+const refreshToken = getCookie("refreshToken");
 const headers = { Authorization: access };
 
 export const checkNickname = ( nickname: string ) => {
@@ -27,8 +27,7 @@ export const signUp = async ( nickname: string, profileImage: string ) => {
 
 export const logout = () => {
   // 접두사와 그 뒤의 공백 제거 -> base64 decoding error 해결
-  const accessToken = access.replace(/Bearer\s/, "");
-  const refreshToken = refresh.replace(/Bearer\s/, "");
+  const accessToken = access ? access.replace(/Bearer\s/, "") : undefined;
   removeCookie("accessToken");
   removeCookie("refreshToken");
   return API.get('oauth/logout', { params: { accessToken, refreshToken } });
