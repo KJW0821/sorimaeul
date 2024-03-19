@@ -18,7 +18,7 @@ export const checkNickname = ( nickname: string ) => {
 
 export const signUp = async ( nickname: string, profileImage: string ) => {
   try {
-    const res = await API.post('user/signup', { nickname, profileImage }, { headers });
+    const res = await API.post("user/signup", { nickname, profileImage }, { headers });
     console.log("회원 가입 성공", res.data);
   } catch (err) {
     console.error("회원 가입 실패", err);
@@ -30,5 +30,5 @@ export const logout = () => {
   const accessToken = access ? access.replace(/Bearer\s/, "") : undefined;
   removeCookie("accessToken");
   removeCookie("refreshToken");
-  return API.get('oauth/logout', { params: { accessToken, refreshToken } });
+  return API.get("oauth/logout", { params: { accessToken, refreshToken } });
 }
