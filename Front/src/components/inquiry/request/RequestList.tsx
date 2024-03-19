@@ -13,13 +13,13 @@ const List = styled.div`
   .title {
     font-family: 'GmarketSansMedium';
     font-size: 1.25rem;
-    margin-top: .25rem;
+    margin-top: .4rem;
   }
 
   .date {
     font-family: 'GmarketSansLight';
     font-size: 0.75rem;
-    margin-top: .25rem;
+    margin-top: .4rem;
   }
 `
 
