@@ -1,11 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../stores/store";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { set } from "../../stores/user";
 import { checkNickname, signUp } from "../../utils/userAPI";
+import { useNavigate } from "react-router-dom";
+
 
 function SignUpPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [ inputNickname, setInputNickname ] = useState(""); // 입력된 닉네임을 저장할 상태
 
   const [ selectedImage, setSelectedImage ] = useState("");
@@ -35,12 +37,14 @@ function SignUpPage() {
     if (isValidNickname) {
       try {
         await signUp(inputNickname, selectedImage);
-        // 회원 가입 성공 시 redux store 로그인 상태 반영 
+        // 회원 가입 성공 시 redux store 로그인 상태 반영 후 홈페이지로 이동
         dispatch(set({ nickname: inputNickname, profileImage: selectedImage, loggedIn: true  }));
-
+        navigate('/home');
       } catch (error){
         console.error("회원 가입 실패", error);
       }
+    } else {
+      console.log("중복된 닉네임입니다.");
     }
 
   };

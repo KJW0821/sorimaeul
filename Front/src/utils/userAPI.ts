@@ -5,13 +5,11 @@ const accessToken = getCookie("accessToken");
 const headers = { Authorization: accessToken };
 
 export const checkNickname = ( nickname: string ) => {
-
   return API.get(`user/nickname/${nickname}`, { headers })
   .then((res) => {
     return res.data.result;
   })
   .catch((err) => {
-    console.log(nickname);
     console.log("err", err);
     return err;
   });
