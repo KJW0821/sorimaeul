@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Notify {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "notify_code")
 	private int notifyCode;
 
