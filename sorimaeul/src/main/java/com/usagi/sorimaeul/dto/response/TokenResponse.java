@@ -7,7 +7,6 @@ import lombok.Data;
 @Builder
 public class TokenResponse {
 
-    private long userCode;
     private String tokenType;
     private String accessToken;
     private String refreshToken;

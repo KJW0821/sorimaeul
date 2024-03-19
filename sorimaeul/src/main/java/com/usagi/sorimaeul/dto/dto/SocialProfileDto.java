@@ -18,10 +18,10 @@ public class SocialProfileDto {
 
     public long getProviderId(ClientRegistration provider) {
         String providerName = provider.getClientName();
-        if (providerName.equals("kakao")) {
+        if (providerName.equalsIgnoreCase("kakao")) {
             return Long.parseLong(String.valueOf(attributes.get("id")));
-        } else if (providerName.equals("google")) {
-            return Long.parseLong(String.valueOf(attributes.get("sub")));
+        } else if (providerName.equalsIgnoreCase("google")) {
+            return Long.parseLong(String.valueOf(attributes.get("sub")).substring(5));
         }
 
         return 0;

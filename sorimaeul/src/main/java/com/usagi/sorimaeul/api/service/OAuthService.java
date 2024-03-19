@@ -76,7 +76,6 @@ public class OAuthService {
         refreshTokenRepository.save(token);
 
         return TokenResponse.builder()
-                .userCode(userCode)
                 .tokenType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
