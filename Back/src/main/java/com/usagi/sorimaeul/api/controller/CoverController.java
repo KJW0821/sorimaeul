@@ -52,4 +52,5 @@ public class CoverController {
                                                               @RequestBody CoverCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.createCover(userCode, request);
+    }
 }
