@@ -52,7 +52,7 @@ function FAQPage() {
   return (
     <>
       <ColorLine />
-      <div className="mx-32 w-9/12 flex flex-col gap-8 mt-12">
+      <div className="mx-auto w-9/12 flex flex-col gap-8 mt-12">
         <div className="flex gap-4 items-center">
           <SubTitle>
             <span className="lg-font">자</span>주 묻는 질문 FAQ
