@@ -3,6 +3,7 @@ import { getCookie, removeCookie } from "./cookie";
 
 const access = getCookie("accessToken");
 const refreshToken = getCookie("refreshToken");
+const accessToken = access ? access.replace(/Bearer\s/, "") : undefined; // 접두사와 그 뒤의 공백 제거 -> base64 decoding error 해결
 const headers = { Authorization: access };
 
 export const checkNickname = ( nickname: string ) => {
@@ -26,9 +27,12 @@ export const signUp = async ( nickname: string, profileImage: string ) => {
 }
 
 export const logout = () => {
-  // 접두사와 그 뒤의 공백 제거 -> base64 decoding error 해결
-  const accessToken = access ? access.replace(/Bearer\s/, "") : undefined;
-  removeCookie("accessToken");
-  removeCookie("refreshToken");
-  return API.get("oauth/logout", { params: { accessToken, refreshToken } });
+  return API.get("oauth/logout", { params: { accessToken, refreshToken } })
+  .then(() => {
+    removeCookie("accessToken");
+    removeCookie("refreshToken");
+  })
+  .catch((err) => {
+    console.error("로그아웃 중 오류 발생", err);
+  })
 }
