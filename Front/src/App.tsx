@@ -1,10 +1,12 @@
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { CookiesProvider } from 'react-cookie'
 import './App.css'
 import LandingPage from './pages/home/LandingPage'
 import HomePage from './pages/home/HomePage'
 import LoginCallbackPage from './pages/users/LoginCallbackPage';
 import SignUpPage from "./pages/users/SignUpPage";
+
 
 const router = createBrowserRouter([
   {
@@ -30,9 +32,9 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <div>
+    <CookiesProvider>
       <RouterProvider router={router} />
-    </div>
+    </CookiesProvider>
   )
 }
 

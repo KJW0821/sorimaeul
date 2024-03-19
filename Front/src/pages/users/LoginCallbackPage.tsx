@@ -28,45 +28,39 @@ const LoginCallbackPage: React.FC = () => {
 
             });
 
-            console.log(1 , cookie);
-            console.log(2, cookie.get("U_ID"));
-
-            // 로그인 함수 호출
-            login();
 
         })
         .catch((err) => {
             console.log(err);
-
         });
     }, [code, provider, cookie]);
 
-    const login = () => {
-        const token = cookie.get("U_ID");
-        console.log(3, token);
+    // const login = () => {
+    //     const token = cookie.get("U_ID");
+    //     console.log(3, token);
 
-        if (token) {
-            // 로그인 요청 보내기
-            API.post('/user/login', {}, {
-                headers: {
-                    Authorization: token
-                }
-            })
-            .then((res) => {
-                console.log(res.data);
-                if (res.status === 200) {
-                    window.location.href = '/';
-                } else if (res.status === 204) {
+    //     if (token) {
+    //         // 로그인 요청 보내기
+    //         API.post('/user/login', {}, {
+    //             headers: {
+    //                 Authorization: token
+    //             }
+    //         })
+    //         .then((res) => {
+    //             console.log(res.data);
+    //             if (res.status === 200) {
+    //                 window.location.href = '/';
+    //             } else if (res.status === 204) {
 
-                } 
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-        } else {
-            console.log("토큰이 없습니다.")
-        }
-    }
+    //             } 
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    //     } else {
+    //         console.log("토큰이 없습니다.")
+    //     }
+    // }
     
     
         return (
