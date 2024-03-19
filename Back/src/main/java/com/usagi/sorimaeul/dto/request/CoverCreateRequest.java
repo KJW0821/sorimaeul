@@ -1,5 +1,8 @@
 package com.usagi.sorimaeul.dto.request;
 
+import lombok.Getter;
+
+@Getter
 public class CoverCreateRequest {
 
     private String youtubeLink;
