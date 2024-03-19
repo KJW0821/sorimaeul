@@ -10,6 +10,7 @@ public class AuthenticatedMatchers {
             "/oauth/login/**",
             "/oauth/logout",
             "/oauth/reissue",
+            "/sse/**",
             "/api-docs",
             "/api-docs/json",
             "/v3/**",

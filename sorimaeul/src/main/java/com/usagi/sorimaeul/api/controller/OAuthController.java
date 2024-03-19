@@ -50,7 +50,7 @@ public class OAuthController {
     @Operation(summary = "로그아웃",
             description = "토큰을 받아 로그아웃")
     @ApiResponse(responseCode = "200", description = "로그아웃 성공")
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<?> logout(@RequestParam String accessToken, @RequestParam String refreshToken) {
         oAuthService.logout(accessToken, refreshToken);
         return ResponseEntity.ok().build();
