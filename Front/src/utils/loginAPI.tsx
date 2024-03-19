@@ -1,3 +1,4 @@
+import { Navigate, redirect } from "react-router-dom"
 import API from "./axios"
 import { getCookie } from "./cookie"
 
@@ -7,18 +8,13 @@ export const login = () => {
 
   if (token) {
     // 로그인 요청 보내기 
-    API.post("/user/login", {}, {
+    API.get("/user/login", {
       headers: {
         Authorization: token
       }
     })
     .then((res) => {
-      console.log(res.data);
-      if (res.status === 200) {
-        window.location.href = '/home';
-      } else if (res.status === 204) {
-        window.localStorage.href = '/signup'
-      }
+      const status: number = res.status;
     })
     .catch((err) => {
       console.log(err);
@@ -26,4 +22,5 @@ export const login = () => {
   } else {
     console.log("토큰이 없습니다.");
   }
+
 }     
