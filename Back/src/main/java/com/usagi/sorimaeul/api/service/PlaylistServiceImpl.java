@@ -138,6 +138,21 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // playlistCode 로 플레이리스트 조회
+        Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
+        // 데이터 없으면 404 반환
+        if (playlist == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 플레이리스트 생성자 조회
+        User playlistCreator = playlist.getUser();
+        // 클라이언트와 플레이리스트 생성자가 일치하지 않으면 400 반환
+        if (user != playlistCreator) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         // 플레이리스트 코드로 AI 커버들을 조회후 개수 + 1만큼 index 값 정하기
         List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
         int coverIndex;
@@ -166,11 +181,23 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // playlistCode 로 플레이리스트 조회
+        Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
+
+        // 플레이리스트 생성자 조회
+        User playlistCreator = playlist.getUser();
+
         // 플레이리스트 코드와 커버 코드가 일치하는 값 찾기
         PlaylistCover playlistCover = playlistCoverRepository.findByPlaylist_PlaylistCodeAndCover_CoverCode(playlistCode, coverCode);
+
         // 데이터 없으면 404 반환
-        if (playlistCover == null) {
+        if (playlistCover == null || playlist == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 클라이언트와 플레이리스트 생성자가 일치하지 않으면 400 반환
+        if (user != playlistCreator) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         // coverIndex 값 저장해두기
         int coverIndex = playlistCover.getCoverIndex();
@@ -223,6 +250,15 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         // playlistCode 로 플레이리스트 조회
         Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
+        // 플레이리스트 생성자 조회
+        User playlistCreator = playlist.getUser();
+        // 데이터 없으면 404 반환
+        if (playlist == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        // 클라이언트와 플레이리스트 생성자가 일치하지 않으면 400 반환
+        } else if (user != playlistCreator) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         // 플레이리스트 이름 변경
         playlist.setPlaylistName(request.getPlaylistName());
         // 변동사항 반영
@@ -242,9 +278,14 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         // playlistCode 로 플레이리스트 조회
         Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
-        // 없으면 404 반환
+        // 플레이리스트 생성자 조회
+        User playlistCreator = playlist.getUser();
+        // 데이터 없으면 404 반환
         if (playlist == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        // 클라이언트와 플레이리스트 생성자가 일치하지 않으면 400 반환
+        } else if (user != playlistCreator) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         // 삭제
         playlistRepository.delete(playlist);
