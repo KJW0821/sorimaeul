@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.PlaylistCoverInfoDto;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
+import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.Playlist;
@@ -191,8 +192,26 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
 
-//    // 플레이리스트 생성
-//    public
+    // 플레이리스트 생성
+    public ResponseEntity<?> createPlaylist(long userCode, PlaylistCreateRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // playlist_code = auto_increment, created_time = now()
+        Playlist playlist = Playlist.builder()
+                .user(user)
+                .playlistName(request.getPlaylistName())
+                .build();
+
+        playlistRepository.save(playlist);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+
 
 
 }

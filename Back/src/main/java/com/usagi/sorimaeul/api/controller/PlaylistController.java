@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.PlaylistService;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
+import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.repository.UserRepository;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -63,5 +64,16 @@ public class PlaylistController {
                                               @PathVariable int coverCode  ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return playlistService.deletePlaylistCover(userCode, playlistCode, coverCode);
+    }
+
+
+    @Operation(summary = "플레이리스트 생성", description = "플레이리스트를 생성한다.")
+    @ApiResponse(responseCode = "201", description = "플레이리스트 생성 성공")
+    @PostMapping
+    public ResponseEntity<?> createPlaylist(@RequestHeader(name = "Authorization") String token,
+                                            @PathVariable int playlistCode,
+                                            @RequestBody PlaylistCreateRequest request) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return playlistService.createPlaylist(userCode, request);
     }
 }
