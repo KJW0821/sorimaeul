@@ -9,4 +9,6 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
 
     List<Playlist> findByUser_UserCode(long userCode);
 
+    Playlist findByPlaylistCode(int playlistCode);
+
 }

@@ -43,4 +43,14 @@ public class PlaylistController {
         return playlistService.getPlaylistCoverList(userCode, playlistCode);
     }
 
+
+    @Operation(summary = "플레이리스트 - AI 커버 추가", description = "플레이리스트에 AI 커버를 추가한다.")
+    @ApiResponse(responseCode = "200", description = "플레이리스트에 AI 커버 추가 성공")
+    @GetMapping("/{playlistCode}/{coverCode}")
+    public ResponseEntity<?> addPlaylistCover(@RequestHeader(name = "Authorization") String token,
+                                            @PathVariable int playlistCode,
+                                            @PathVariable int coverCode  ) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return playlistService.addPlaylistCover(userCode, playlistCode, coverCode);
+    }
 }

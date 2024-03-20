@@ -10,4 +10,6 @@ public interface PlaylistService {
 
     ResponseEntity<PlaylistInfoDto> getPlaylistCoverList(long userCode, int playlistCode);
 
+    ResponseEntity<?> addPlaylistCover(long userCode, int playlistCode, int coverCode);
+
 }

@@ -9,4 +9,8 @@ public interface PlaylistCoverRepository extends JpaRepository<PlaylistCover, In
 
     List<PlaylistCover> findByPlaylist_PlaylistCode(int playlistCode);
 
+    PlaylistCover findByPlaylist_PlaylistCodeAndCover_CoverCode(int playlistCode, int coverCode);
+
+    List<PlaylistCover> findPlaylistCoversToUpdate(int playlistCode, int removedCoverIndex);
+
 }

@@ -7,6 +7,7 @@ import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.Playlist;
 import com.usagi.sorimaeul.entity.PlaylistCover;
 import com.usagi.sorimaeul.entity.User;
+import com.usagi.sorimaeul.repository.CoverRepository;
 import com.usagi.sorimaeul.repository.PlaylistCoverRepository;
 import com.usagi.sorimaeul.repository.PlaylistRepository;
 import com.usagi.sorimaeul.repository.UserRepository;
@@ -27,6 +28,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final UserRepository userRepository;
     private final PlaylistRepository playlistRepository;
     private final PlaylistCoverRepository playlistCoverRepository;
+    private final CoverRepository coverRepository;
 
     // 플레이리스트 전체 조회
     public ResponseEntity<PlaylistListResponse> getPlaylistList(long userCode) {
@@ -125,5 +127,34 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+
+    // 플레이리스트 - AI 커버 추가
+    public ResponseEntity<?> addPlaylistCover(long userCode, int playlistCode, int coverCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 플레이리스트 코드로 AI 커버들을 조회후 개수 + 1만큼 index 값 정하기
+        List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
+        int coverIndex;
+        if (playlistCovers.isEmpty()) {
+            coverIndex = 1;
+        } else {
+            coverIndex = playlistCovers.size() + 1;
+        }
+
+        // 플레이리스트에 커버 생성
+        PlaylistCover playlistCover = PlaylistCover.builder()
+                .playlist(playlistRepository.findByPlaylistCode(playlistCode))
+                .cover(coverRepository.findByCoverCode(coverCode))
+                .coverIndex(coverIndex)
+                .build();
+        playlistCoverRepository.save(playlistCover);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
 
 }
