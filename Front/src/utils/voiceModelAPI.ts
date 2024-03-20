@@ -9,12 +9,7 @@ export interface modelCreationData {
 }
 
 export const createModel = (data: modelCreationData) => {
-  return API.post(URL, data, {
-    method: "POST",
-    headers: {
-      Authorization: getCookie("accessToken")
-    }
-  })
+  return API.post(URL, data)
     .then((res) => {
       return res.data
     })
