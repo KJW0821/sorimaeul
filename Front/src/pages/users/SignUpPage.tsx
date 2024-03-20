@@ -40,8 +40,8 @@ function SignUpPage() {
       try {
         await signUp(inputNickname, selectedImage);
         // 회원 가입 성공 시 redux store 로그인 상태 반영 후 홈페이지로 이동
-        dispatch(set({ nickname: inputNickname, profileImage: selectedImage }));
         dispatch(login());
+        dispatch(set({ nickname: inputNickname, profileImage: selectedImage }));
         navigate('/');
       } catch (error){
         console.error("회원 가입 실패", error);

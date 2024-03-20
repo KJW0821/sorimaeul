@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import API from "../../utils/axios";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
-import { userSlice } from "../../stores/user";
+import { set, login } from "../../stores/user";
 
 // 소셜 로그인 후 redirect될 페이지 (call back)
 // 서버로부터 token(access, refresh)까지 받는 역할
@@ -35,8 +35,9 @@ const LoginCallbackPage: React.FC = () => {
               setCookie("refreshToken", `${refresh}`, { path: "/"});
               const accessToken = getCookie("accessToken");
 
-              // redux store user 상태를 업데이트 
-              dispatch(userSlice.actions.login()); 
+
+            //   dispatch(set({ nickname:}))
+
               // 사이트 로그인 요청 보내기 - 회원 db에 있는지 판별
               API.get("/user/login", {
                   headers: {
@@ -44,7 +45,11 @@ const LoginCallbackPage: React.FC = () => {
                   }
               })
               .then((res) => {
-                  setStatus(res.status);
+                // 유저 판별 코드 - 200 or 204
+                setStatus(res.status);
+                // redux store user 상태를 업데이트 
+                dispatch(login()); 
+                dispatch(set({ nickname: res.data.nickname , profileImage: res.data.profileImage }));
               })
               .catch((err) => {
                   console.log(err);
