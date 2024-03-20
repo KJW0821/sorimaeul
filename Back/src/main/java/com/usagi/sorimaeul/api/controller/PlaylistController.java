@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.controller;
 import com.usagi.sorimaeul.api.service.PlaylistService;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
 import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
+import com.usagi.sorimaeul.dto.request.PlaylistUpdateRequest;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.repository.UserRepository;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -71,9 +72,19 @@ public class PlaylistController {
     @ApiResponse(responseCode = "201", description = "플레이리스트 생성 성공")
     @PostMapping
     public ResponseEntity<?> createPlaylist(@RequestHeader(name = "Authorization") String token,
-                                            @PathVariable int playlistCode,
                                             @RequestBody PlaylistCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return playlistService.createPlaylist(userCode, request);
+    }
+
+
+    @Operation(summary = "플레이리스트 이름 변경", description = "플레이리스트의 이름을 변경한다.")
+    @ApiResponse(responseCode = "200", description = "플레이리스트 이름 변경 성공")
+    @PostMapping
+    public ResponseEntity<?> updatePlaylist(@RequestHeader(name = "Authorization") String token,
+                                            @PathVariable int playlistCode,
+                                            @RequestBody PlaylistUpdateRequest request) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return playlistService.updatePlaylist(userCode, playlistCode, request);
     }
 }

@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.PlaylistCoverInfoDto;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
 import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
+import com.usagi.sorimaeul.dto.request.PlaylistUpdateRequest;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.Playlist;
@@ -212,6 +213,22 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
 
+    // 플레이리스트 수정
+    public ResponseEntity<?> updatePlaylist(long userCode, int playlistCode, PlaylistUpdateRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
+        // playlistCode 로 플레이리스트 조회
+        Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
+        // 플레이리스트 이름 변경
+        playlist.setPlaylistName(request.getPlaylistName());
+        // 변동사항 반영
+        playlistRepository.save(playlist);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
 }
