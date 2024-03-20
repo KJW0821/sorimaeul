@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import SelectBox from "./SelectBox";
+import SelfRecordMethod from "./SelfRecordMethod";
 
 const Container = styled.div`
   border-radius: 35px;
@@ -20,6 +21,7 @@ function SelectMethod() {
     <Container>
       <SelectBox />
       <hr className="line" />
+      <SelfRecordMethod />
     </Container>  
   )
 }
