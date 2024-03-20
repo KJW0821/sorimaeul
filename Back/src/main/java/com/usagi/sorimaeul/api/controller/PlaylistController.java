@@ -80,11 +80,21 @@ public class PlaylistController {
 
     @Operation(summary = "플레이리스트 이름 변경", description = "플레이리스트의 이름을 변경한다.")
     @ApiResponse(responseCode = "200", description = "플레이리스트 이름 변경 성공")
-    @PostMapping
+    @PatchMapping("/{playlistCode}")
     public ResponseEntity<?> updatePlaylist(@RequestHeader(name = "Authorization") String token,
                                             @PathVariable int playlistCode,
                                             @RequestBody PlaylistUpdateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return playlistService.updatePlaylist(userCode, playlistCode, request);
+    }
+
+
+    @Operation(summary = "플레이리스트 삭제", description = "플레이리스트를 삭제한다.")
+    @ApiResponse(responseCode = "201", description = "플레이리스트 삭제 성공")
+    @DeleteMapping("/{playlistCode}")
+    public ResponseEntity<?> deletePlaylist(@RequestHeader(name = "Authorization") String token,
+                                            @PathVariable int playlistCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return playlistService.deletePlaylist(userCode, playlistCode);
     }
 }

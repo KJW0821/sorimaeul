@@ -20,4 +20,6 @@ public interface PlaylistService {
 
     ResponseEntity<?> updatePlaylist(long userCode, int playlistCode, PlaylistUpdateRequest request);
 
+    ResponseEntity<?> deletePlaylist(long userCode, int playlistCode);
+
 }

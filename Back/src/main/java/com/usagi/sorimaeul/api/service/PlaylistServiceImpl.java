@@ -231,4 +231,25 @@ public class PlaylistServiceImpl implements PlaylistService {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+
+    // 플레이리스트 삭제
+    public ResponseEntity<?> deletePlaylist(long userCode, int playlistCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // playlistCode 로 플레이리스트 조회
+        Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
+        // 없으면 404 반환
+        if (playlist == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 삭제
+        playlistRepository.delete(playlist);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
 }
