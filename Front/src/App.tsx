@@ -13,6 +13,7 @@ import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
 import SideBar from './components/common/SideBar'
+import CoverListPage from './pages/aiCover/CoverListPage'
 
 function Layout() {
   return (
@@ -72,6 +73,15 @@ const router = createBrowserRouter([
         path: "/FAQ",
         element: <FAQPage />
       },
+      {
+        path: "cover",
+        children: [
+          {
+            index: true,
+            element: <CoverListPage />
+          }
+        ]
+      }
     ]
   },
 ]);
