@@ -11,6 +11,22 @@ const API = axios.create({
     withCredentials: true, 
 });
 
+// 요청 인터셉터(인증 헤더 넣기)
+API.interceptors.request.use(config => {
+    // 토큰이 필요 없는 URL 목록
+    const urlsWithoutToken: (string | undefined)[] = []; 
+    // 현재 요청 URL이 토큰이 필요없는 목록에 있는지 확인 
+    const requiresToken = !urlsWithoutToken.includes(config.url);
+
+    const accessToken = getCookie("accessToken");
+    if (accessToken && requiresToken)  {
+        config.headers["Authorization"] = accessToken;
+    }
+    return config;
+}, err => {
+    return Promise.reject(err);
+})
+
 // 응답 인터셉터(토큰 만료 처리)
 API.interceptors.response.use(res => {
     return res;

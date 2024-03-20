@@ -4,10 +4,9 @@ import { getCookie, removeCookie } from "./cookie";
 const access = getCookie("accessToken");
 const refreshToken = getCookie("refreshToken");
 const accessToken = access ? access.replace(/Bearer\s/, "") : undefined; // 접두사와 그 뒤의 공백 제거 -> base64 decoding error 해결
-const headers = { Authorization: access };
 
 export const checkNickname = ( nickname: string ) => {
-  return API.get(`user/nickname/${nickname}`, { headers })
+  return API.get(`user/nickname/${nickname}`)
   .then((res) => {
     return res.data.result;
   })
@@ -18,7 +17,7 @@ export const checkNickname = ( nickname: string ) => {
 
 export const signUp = async ( nickname: string, profileImage: string ) => {
   try {
-    const res = await API.post("user/signup", { nickname, profileImage }, { headers });
+    const res = await API.post("user/signup", { nickname, profileImage });
     console.log("회원 가입 성공", res.data);
   } catch (err) {
     console.error("회원 가입 실패", err);
