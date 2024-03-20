@@ -1,25 +1,50 @@
 import axios from "axios";
-import { getCookie } from "./cookie";
+import { getCookie, removeCookie, setCookie } from "./cookie";
+import { logout } from "../stores/user";
 
 // 백엔드 서버 기본 url 지정
 export const URL = "http://localhost:8000/api";
 
+// axios instance 생성 
 const API = axios.create({
     baseURL: URL,
-    withCredentials: true,
+    withCredentials: true, 
 });
 
-// 요청 인터셉터 추가
-API.interceptors.request.use(async (config) => {
-    // accessToken을 쿠키에서 비동기적으로 가져옴
-    const accessToken = await getCookie("accessToken");
-    if (accessToken) {
-        config.headers['accessToken'] = accessToken;  // 헤더에 accessToken 추가
+// 응답 인터셉터(토큰 만료 처리)
+API.interceptors.response.use(res => {
+    return res;
+}, err => {
+    if (err.response && err.response.status === 401) {
+        if (err.response.data.message === "JWT token expired") {
+            console.log('Access 토큰 만료');
+            const refreshToken = getCookie("refreshToken");
+            const headers = { Authorization: refreshToken };
+            API.get("/oauth/reissue", { headers })
+            .then((res) => {
+                const access = res.data.accessToken;
+                setCookie("accessToken", `Bearer ${access}`, { path: "/"});
+                // token 재발급 요청 이전에 행한(실패한) 요청을 재실행
+                const originalRequest = err.config;
+                originalRequest.headers.Authorization = `Bearer ${access}`;
+                return API(originalRequest);
+            })
+            .catch((err) => {
+                // refresh 토큰도 만료된 경우 -> 재로그인 필요 
+                handleLogout();
+                console.log(err);
+            })
+        }
     }
-    return config;
-}, (error) => {
-    return Promise.reject(error);
+    return Promise.reject(err);
 });
+
+function handleLogout() {
+    logout();
+    removeCookie("accessToken");
+    removeCookie("refreshToken");
+    window.location.href = "/";
+}
 
 export default API;
 

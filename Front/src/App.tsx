@@ -1,10 +1,11 @@
-
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { CookiesProvider } from 'react-cookie'
 import './App.css'
 import LandingPage from './pages/home/LandingPage'
 import HomePage from './pages/home/HomePage'
 import LoginCallbackPage from './pages/users/LoginCallbackPage';
+import { Provider } from "react-redux";
+import store from "./stores/store";
 import SignUpPage from "./pages/users/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
@@ -23,6 +24,7 @@ function Layout() {
     </div>
   );
 }
+
 
 const router = createBrowserRouter([
   {
@@ -79,9 +81,11 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <CookiesProvider>
-      <RouterProvider router={router} />
-    </CookiesProvider>
+    <Provider store={store}>
+      <CookiesProvider>
+        <RouterProvider router={router} />
+      </CookiesProvider>
+    </Provider>
   )
 }
 
