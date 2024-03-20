@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class Playlist {
     @Column(name = "playlist_name")
     private String playlistName;
 
+    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createTime;
 

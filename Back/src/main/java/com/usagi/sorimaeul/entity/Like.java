@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +32,7 @@ public class Like {
     @JoinColumn(name = "user_code", referencedColumnName = "user_code")
     private User user;
 
+    @CreationTimestamp
     @Column(name = "create_time")
     private LocalDateTime createTime;
 

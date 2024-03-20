@@ -37,11 +37,13 @@ public class VoiceModel {
     @Column(name = "image_path")
     private String imagePath;
 
+    @Builder.Default
     @Column(name = "state")
-    private int state;
+    private int state = 0;
 
+    @Builder.Default
     @Column(name = "record_count")
-    private Integer recordCount;
+    private Integer recordCount = 0;
 
     @CreationTimestamp
     @Column(name = "created_time")
