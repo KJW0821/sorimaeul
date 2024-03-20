@@ -101,3 +101,16 @@ logging:
       hikari:
         pool:
           HikariPool: debug
+
+# S3 Bucket
+cloud:
+  aws:
+    s3:
+      bucket: usagi-sorimaeul
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIAZYHAZ4TLW6RGV4YN
+      secret-key: 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
+    stack:
+      auto: false
