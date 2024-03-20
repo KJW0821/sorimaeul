@@ -33,7 +33,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
         // 클라이언트 userCode 와 일치하는 Playlist 모두 조회
