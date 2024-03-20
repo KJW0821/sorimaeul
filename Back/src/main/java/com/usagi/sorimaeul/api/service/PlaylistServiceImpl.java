@@ -83,22 +83,47 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     }
 
-//
-//    // 플레이리스트 상세 조회 - AI 커버 리스트 조회
-//    public ResponseEntity<PlaylistInfoDto> getPlaylistCoverList(long userCode, int playlistCode) {
-//        // 사용자 정보 확인
-//        User user = userRepository.getUser(userCode);
-//        if (user == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//
-//        // PlaylistCode 로 플레이리스트 조회하기
-//        List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
-//
-//        // 비어있으면 204 반환
-//        if (playlistCovers.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-//        }
-//    }
+
+    // 플레이리스트 상세 조회 - AI 커버 리스트 조회
+    public ResponseEntity<PlaylistInfoDto> getPlaylistCoverList(long userCode, int playlistCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // PlaylistCode 로 플레이리스트 조회하기
+        List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
+
+        // 비어있으면 204 반환
+        if (playlistCovers.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // PlaylistCoverInfoDto 리스트 빈 리스트 생성
+        List<PlaylistCoverInfoDto> playlistCoverInfoDtos = new ArrayList<>();
+        // AI 커버 목록 순회하며
+        for (PlaylistCover playlistCover : playlistCovers) {
+            // 커버 불러오기
+            Cover cover = playlistCover.getCover();
+            // Dto 에 값 넣기
+            PlaylistCoverInfoDto playlistCoverInfoDto = PlaylistCoverInfoDto.builder()
+                    .coverSinger(cover.getCoverSinger())
+                    .singer(cover.getSinger())
+                    .title(cover.getTitle())
+                    .writer(cover.getUser().getNickname())
+                    .storagePath(cover.getStoragePath())
+                    .isPublic(cover.isPublic())
+                    .build();
+            // List 안에 Dto 추가
+            playlistCoverInfoDtos.add(playlistCoverInfoDto);
+        }
+
+        // 반환할 Dto 생성
+        PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
+                .playlist(playlistCoverInfoDtos)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
 }
