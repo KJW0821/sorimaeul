@@ -18,7 +18,7 @@ interface buttonInterface {
 export const Button = styled.button<buttonInterface>`
   border: ${(props) => props.$border || "none"};
   border-radius: 5px;
-  color: ${(props) => props.color || "white"};
+  color: ${(props) => props.$color || "white"};
   font-size: ${(props) => `${props.$fontSize || .875}rem`};
   padding-top: ${(props) =>
     props.$paddingY === 0 || props.$paddingY
@@ -49,10 +49,6 @@ export const Button = styled.button<buttonInterface>`
   padding-top: 0.4rem;
   font-family: ${(props) => props.$fontFamily || "GmarketSansMedium"};
   opacity: ${(props) => props.$selected === undefined ? 'none' : props.$selected ? 'none' : '0.6' };
-
-  &:hover {
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  }
 
   &:disabled {
     opacity: .6;
