@@ -43,6 +43,11 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 학습 가능 횟수 예외 처리
+        int learnCount = user.getLearnCount();
+        if (learnCount <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         // 모델 테이블 생성
         // modelCode = auto_increment, video_code = null, storage_path = 임시값, image_path = null, state = 기본값 0,
         // record_count = null, created_time = now()
@@ -66,6 +71,11 @@ public class ModelServiceImpl implements ModelService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 학습 가능 횟수 예외 처리
+        int learnCount = user.getLearnCount();
+        if (learnCount <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         // 파일 업로드 확인
         if (recordingFile == null || recordingFile.isEmpty()) {
@@ -100,6 +110,11 @@ public class ModelServiceImpl implements ModelService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 학습 가능 횟수 예외 처리
+        int learnCount = user.getLearnCount();
+        if (learnCount <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         // 파일 업로드 확인
         if (files == null || files.length == 0) {
@@ -139,6 +154,11 @@ public class ModelServiceImpl implements ModelService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 학습 가능 횟수 예외 처리
+        int learnCount = user.getLearnCount();
+        if (learnCount <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         // 파일 업로드 확인
         if (modelFiles == null || modelFiles.length == 0) {
@@ -185,6 +205,11 @@ public class ModelServiceImpl implements ModelService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 학습 가능 횟수 예외 처리
+        int learnCount = user.getLearnCount();
+        if (learnCount <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         // 녹음 파일 저장 경로
