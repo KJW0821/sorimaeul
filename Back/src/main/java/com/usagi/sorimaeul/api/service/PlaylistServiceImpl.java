@@ -153,7 +153,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .build();
         playlistCoverRepository.save(playlistCover);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
 
@@ -175,7 +175,8 @@ public class PlaylistServiceImpl implements PlaylistService {
         // 커버 삭제
         playlistCoverRepository.delete(playlistCover);
         // 삭제한 데이터의 인덱스보다 인덱스가 큰 커버들을 가져옴
-        List<PlaylistCover> playlistCovers = playlistCoverRepository.findPlaylistCoversToUpdate(playlistCode, coverIndex);
+        List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
+        playlistCovers = playlistCovers.subList(coverIndex, playlistCovers.size());
         // 순회하면서 index 감소 시키기
         for (PlaylistCover cover : playlistCovers) {
             if (cover.getCoverIndex() > coverIndex) {
@@ -188,5 +189,10 @@ public class PlaylistServiceImpl implements PlaylistService {
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
     }
+
+
+//    // 플레이리스트 생성
+//    public
+
 
 }
