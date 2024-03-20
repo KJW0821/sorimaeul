@@ -16,7 +16,7 @@ import RequestEditPage from './pages/inquiry/RequestEditPage';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/landing",
     element: <LandingPage />
   },
   {

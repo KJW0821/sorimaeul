@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
     .then(() => {
       dispatch(logout());
       console.log("로그아웃 성공");
-      navigate("/");
+      navigate("/landing");
     })
     .catch((err) => {
       console.error("로그아웃 실패;", err);

@@ -58,7 +58,7 @@ const LoginCallbackPage: React.FC = () => {
 
   return (
       <div>
-          { status === 200 && <Navigate to={"/home"} />}
+          { status === 200 && <Navigate to={"/"} />}
           { status === 204 && <Navigate to={"/signup"} />}
       </div>
   );
