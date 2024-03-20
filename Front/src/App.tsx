@@ -1,10 +1,11 @@
-
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { CookiesProvider } from 'react-cookie'
-import './App.css'
-import LandingPage from './pages/home/LandingPage'
-import HomePage from './pages/home/HomePage'
-import LoginCallbackPage from './pages/users/LoginCallbackPage';
+import { Provider } from "react-redux";
+import store from "./stores/store";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
+import "./App.css";
+import LandingPage from "./pages/home/LandingPage";
+import HomePage from "./pages/home/HomePage";
+import LoginCallbackPage from "./pages/users/LoginCallbackPage";
 import SignUpPage from "./pages/users/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
@@ -12,9 +13,10 @@ import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
 
+
 const router = createBrowserRouter([
   {
-    path: "/landing",
+    path: "/",
     element: <LandingPage />
   },
   {
@@ -61,9 +63,11 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <CookiesProvider>
-      <RouterProvider router={router} />
-    </CookiesProvider>
+    <Provider store={store}>
+      <CookiesProvider>
+        <RouterProvider router={router} />
+      </CookiesProvider>
+    </Provider>
   )
 }
 
