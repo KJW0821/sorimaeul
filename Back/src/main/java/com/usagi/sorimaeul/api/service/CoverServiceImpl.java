@@ -47,6 +47,8 @@ public class CoverServiceImpl implements CoverService {
         // 인덱스 선언
         int startIdx;
         int endIdx;
+        // 총 페이지 수 선언
+        int totalPages;
 
         // 모든 게시물 조회
         if (target.equals("all")) {
@@ -57,12 +59,16 @@ public class CoverServiceImpl implements CoverService {
             // 한 페이지 당 10개씩 조회
             startIdx = (page - 1) * 10;
             endIdx = Math.min(startIdx + 10, covers.size());
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil(covers.size()/10);
         // 마이 페이지 - 나의 게시물 조회
         } else if (target.equals("mine")) {
             covers = coverRepository.findByUser_userCode(userCode);
             // 한 페이지 당 6개씩 조회
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, covers.size());
+            // // 총 페이지 수 계산
+            totalPages = (int) Math.ceil(covers.size()/6);
         // 마이 페이지 - 관심 컨텐츠 - 좋아요 누른 게시물 조회
         } else {
             // 나의 유저 코드와 일치하는 like 리스트를 가져온다.
@@ -77,6 +83,8 @@ public class CoverServiceImpl implements CoverService {
             // 한 페이지 당 6개씩 조회
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, covers.size());
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil(covers.size()/6);
         }
         // cover 리스트 페이지네이션
         List<Cover> pageCovers = covers.subList(startIdx, endIdx);
@@ -102,6 +110,7 @@ public class CoverServiceImpl implements CoverService {
         // 리스폰스 생성
         CoverListResponse coverListResponse = CoverListResponse.builder()
                 .covers(customCovers)
+                .totalPages(totalPages)
                 .build();
 
         return ResponseEntity.ok(coverListResponse);
