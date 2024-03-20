@@ -15,6 +15,7 @@ import RequestEditPage from './pages/inquiry/RequestEditPage';
 import SideBar from './components/common/SideBar'
 import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
 import CoverListPage from './pages/aiCover/CoverListPage'
+import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
 
 function Layout() {
   return (
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
           {
             path: "create",
             element: <ModelCreatePage />
+          },
+          {
+            path: ":code",
+            element: <ModelDetailPage />
           }
         ]
       },
