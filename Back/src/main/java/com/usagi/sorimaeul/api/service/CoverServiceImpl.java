@@ -179,8 +179,13 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // 커버 수정
         Cover cover = coverRepository.findByCoverCode(coverCode);
+        // 클라이언트와 커버 생성자 일치하지 않으면 400 반환
+        User coverCreator = cover.getUser();
+        if (coverCreator != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        // 커버 수정
         cover.setCoverName(request.getCoverName());
         cover.setCoverDetail(request.getCoverDetail());
         cover.setThumbnailPath(request.getThumbnailPath());
@@ -198,6 +203,13 @@ public class CoverServiceImpl implements CoverService {
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Cover cover = coverRepository.findByCoverCode(coverCode);
+        // 클라이언트와 커버 생성자 일치하지 않으면 400 반환
+        User coverCreator = cover.getUser();
+        if (coverCreator != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         // 커버 삭제
