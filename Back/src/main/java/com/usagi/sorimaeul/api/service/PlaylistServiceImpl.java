@@ -157,4 +157,36 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
 
+    // 플레이리스트 - AI 커버 삭제
+    public ResponseEntity<?> deletePlaylistCover(long userCode, int playlistCode, int coverCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 플레이리스트 코드와 커버 코드가 일치하는 값 찾기
+        PlaylistCover playlistCover = playlistCoverRepository.findByPlaylist_PlaylistCodeAndCover_CoverCode(playlistCode, coverCode);
+        // 데이터 없으면 404 반환
+        if (playlistCover == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // coverIndex 값 저장해두기
+        int coverIndex = playlistCover.getCoverIndex();
+        // 커버 삭제
+        playlistCoverRepository.delete(playlistCover);
+        // 삭제한 데이터의 인덱스보다 인덱스가 큰 커버들을 가져옴
+        List<PlaylistCover> playlistCovers = playlistCoverRepository.findPlaylistCoversToUpdate(playlistCode, coverIndex);
+        // 순회하면서 index 감소 시키기
+        for (PlaylistCover cover : playlistCovers) {
+            if (cover.getCoverIndex() > coverIndex) {
+                cover.setCoverIndex(cover.getCoverIndex() - 1);
+            }
+        }
+        // 바뀐 인덱스 모두 저장
+        playlistCoverRepository.saveAll(playlistCovers);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+    }
+
 }

@@ -46,11 +46,22 @@ public class PlaylistController {
 
     @Operation(summary = "플레이리스트 - AI 커버 추가", description = "플레이리스트에 AI 커버를 추가한다.")
     @ApiResponse(responseCode = "200", description = "플레이리스트에 AI 커버 추가 성공")
-    @GetMapping("/{playlistCode}/{coverCode}")
+    @PostMapping("/{playlistCode}/{coverCode}")
     public ResponseEntity<?> addPlaylistCover(@RequestHeader(name = "Authorization") String token,
                                             @PathVariable int playlistCode,
                                             @PathVariable int coverCode  ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return playlistService.addPlaylistCover(userCode, playlistCode, coverCode);
+    }
+
+
+    @Operation(summary = "플레이리스트 - AI 커버 삭제", description = "플레이리스트의 AI 커버를 삭제한다.")
+    @ApiResponse(responseCode = "200", description = "플레이리스트의 AI 커버 삭제 성공")
+    @DeleteMapping("/{playlistCode}/{coverCode}")
+    public ResponseEntity<?> deletePlaylistCover(@RequestHeader(name = "Authorization") String token,
+                                              @PathVariable int playlistCode,
+                                              @PathVariable int coverCode  ) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return playlistService.deletePlaylistCover(userCode, playlistCode, coverCode);
     }
 }

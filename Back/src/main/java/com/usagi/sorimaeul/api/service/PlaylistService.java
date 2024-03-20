@@ -12,4 +12,6 @@ public interface PlaylistService {
 
     ResponseEntity<?> addPlaylistCover(long userCode, int playlistCode, int coverCode);
 
+    ResponseEntity<?> deletePlaylistCover(long userCode, int playlistCode, int coverCode);
+
 }
