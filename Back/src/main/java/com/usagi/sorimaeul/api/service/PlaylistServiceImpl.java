@@ -42,7 +42,8 @@ public class PlaylistServiceImpl implements PlaylistService {
         // 플레이리스트들을 순회하며
         for (Playlist playlist : playlists) {
             // 플레이리스트코드를 이용해서 AI 커버 목록 조회
-            List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlist.getPlaylistCode());
+            int playlistCode = playlist.getPlaylistCode();
+            List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
             // PlaylistCoverInfoDto 리스트 빈 리스트 생성
             List<PlaylistCoverInfoDto> playlistCoverInfoDtos = new ArrayList<>();
             // AI 커버 목록 순회하며
@@ -63,6 +64,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             }
             // playlistInfoDto 생성
             PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
+                    .playlistCode(playlistCode)
                     .playlistName(playlist.getPlaylistName())
                     .createTime(playlist.getCreateTime())
                     .playlist(playlistCoverInfoDtos)
@@ -80,5 +82,23 @@ public class PlaylistServiceImpl implements PlaylistService {
         return ResponseEntity.status(HttpStatus.OK).body(playlistListResponse);
 
     }
+
+//
+//    // 플레이리스트 상세 조회 - AI 커버 리스트 조회
+//    public ResponseEntity<PlaylistInfoDto> getPlaylistCoverList(long userCode, int playlistCode) {
+//        // 사용자 정보 확인
+//        User user = userRepository.getUser(userCode);
+//        if (user == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//
+//        // PlaylistCode 로 플레이리스트 조회하기
+//        List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
+//
+//        // 비어있으면 204 반환
+//        if (playlistCovers.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+//        }
+//    }
 
 }

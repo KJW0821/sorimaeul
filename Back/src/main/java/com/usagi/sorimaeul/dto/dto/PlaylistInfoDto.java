@@ -8,6 +8,7 @@ import java.util.List;
 @Builder
 public class PlaylistInfoDto {
 
+    private int playlistCode;
     private String playlistName;
     private LocalDateTime createTime;
     private List<PlaylistCoverInfoDto> playlist;
