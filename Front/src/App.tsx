@@ -12,8 +12,9 @@ import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
-import SideBar from './components/common/SideBar'
-import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
+import SideBar from './components/common/SideBar';
+import ModelCreatePage from './pages/voiceModel/ModelCreatePage';
+import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
 
 function Layout() {
   return (
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
           {
             path: "create",
             element: <ModelCreatePage />
+          },
+          {
+            path: ":code",
+            element: <ModelDetailPage />
           }
         ]
       }
