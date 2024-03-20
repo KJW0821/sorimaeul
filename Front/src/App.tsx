@@ -1,5 +1,5 @@
 
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { CookiesProvider } from 'react-cookie'
 import './App.css'
 import LandingPage from './pages/home/LandingPage'
@@ -11,6 +11,18 @@ import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
+import SideBar from './components/common/SideBar'
+
+function Layout() {
+  return (
+    <div className="flex">
+      <SideBar />
+      <div className="w-full">
+        <Outlet />
+      </div>
+    </div>
+  );
+}
 
 const router = createBrowserRouter([
   {
@@ -22,38 +34,44 @@ const router = createBrowserRouter([
     element: <LoginCallbackPage />
   },
   {
-    path: "/",
-    element: <HomePage />
-  },
-  {
     path: "/signup",
     element: <SignUpPage /> 
   },
   {
-    path: "/FAQ",
-    element: <FAQPage />
-  },
-  {
-    path: "/request",
+    path: "/",
+    element: <Layout />,
     children: [
       {
         index: true,
-        element: <RequestListPage />
+        element: <HomePage />,
       },
       {
-        path: "create",
-        element: <RequestCreatePage />
+        path: "request",
+        children: [
+          {
+            index: true,
+            element: <RequestListPage />,
+          },
+          {
+            path: "create",
+            element: <RequestCreatePage />,
+          },
+          {
+            path: ":id",
+            element: <RequestDetailPage />,
+          },
+          {
+            path: ":id/edit",
+            element: <RequestEditPage />,
+          }
+        ]
       },
       {
-        path: ":id",
-        element: <RequestDetailPage />
+        path: "/FAQ",
+        element: <FAQPage />
       },
-      {
-        path: ":id/edit",
-        element: <RequestEditPage />
-      }
     ]
-  }
+  },
 ]);
 
 
