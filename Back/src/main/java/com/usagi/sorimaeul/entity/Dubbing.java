@@ -47,7 +47,6 @@ public class Dubbing {
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @CreationTimestamp
     @UpdateTimestamp
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
