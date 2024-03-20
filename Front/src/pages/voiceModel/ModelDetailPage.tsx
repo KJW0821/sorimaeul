@@ -32,9 +32,12 @@ const Box = styled.div`
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    width: 65%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 
     .subtitle {
+      width: 65%;
       font-size: 1.3rem;
       color: white;
       padding-top: 0.4rem;
@@ -51,6 +54,7 @@ function ModelDetailPage() {
         <hr className="w-5/6" />
         <div className="step">
           <h3 className="subtitle">Step 3. 음성 업로드 방법 선택</h3>
+          <SelectMethod />
         </div>
       </Box>
     </Container>
