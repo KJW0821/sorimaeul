@@ -28,8 +28,8 @@ export const signUp = async ( nickname: string, profileImage: string ) => {
 export const logout = () => {
   return API.get("oauth/logout", { params: { accessToken, refreshToken } })
   .then(() => {
-    removeCookie("accessToken");
-    removeCookie("refreshToken");
+    removeCookie("accessToken", { path: "/" });
+    removeCookie("refreshToken", { path: "/" });
   })
   .catch((err) => {
     console.error("로그아웃 중 오류 발생", err);
