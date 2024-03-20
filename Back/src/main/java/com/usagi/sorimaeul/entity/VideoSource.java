@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +28,7 @@ public class VideoSource {
     @Column(name = "source_name")
     private String sourceName;
 
+    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 

@@ -1,19 +1,15 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
+import com.usagi.sorimaeul.dto.dto.ScriptInfoDto;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
 import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
+import com.usagi.sorimaeul.dto.response.GetScriptResponse;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
-import com.usagi.sorimaeul.entity.User;
-import com.usagi.sorimaeul.entity.VideoSource;
-import com.usagi.sorimaeul.entity.VoiceModel;
-import com.usagi.sorimaeul.entity.VoiceSource;
-import com.usagi.sorimaeul.repository.UserRepository;
-import com.usagi.sorimaeul.repository.VideoSourceRepository;
-import com.usagi.sorimaeul.repository.VoiceModelRepository;
-import com.usagi.sorimaeul.repository.VoiceSourceRepository;
+import com.usagi.sorimaeul.entity.*;
+import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +33,7 @@ public class ModelServiceImpl implements ModelService {
     private final UserRepository userRepository;
     private final VoiceModelRepository voiceModelRepository;
     private final VideoSourceRepository videoSourceRepository;
+    private final ScriptRepository scriptRepository;
     private static final String BASE_PATH = "/path/to/base/directory";
 
     // 모델 테이블 생성
@@ -298,6 +295,37 @@ public class ModelServiceImpl implements ModelService {
         voiceModel.setImagePath(request.getImagePath());
         voiceModelRepository.save(voiceModel);
         return HttpStatus.OK;
+    }
+
+
+    // 스크립트 조회
+    public ResponseEntity<GetScriptResponse> getScript(long userCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 모든 스크립트 조회
+        List<Script> scriptList = scriptRepository.findAll();
+        // Dto 형태로 스크립트를 담을 빈 리스트 생성
+        List<ScriptInfoDto> scripts = new ArrayList<>();
+        // 스크립트 순회
+        for (Script script : scriptList) {
+            // Dto 에 담기
+            ScriptInfoDto scriptInfoDto = ScriptInfoDto.builder()
+                    .no(script.getScriptCode())
+                    .script(script.getScript())
+                    .build();
+            // 리스트에 하나씩 추가
+            scripts.add(scriptInfoDto);
+        }
+        // 리스폰스 생성
+        GetScriptResponse response = GetScriptResponse.builder()
+                .scripts(scripts)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 

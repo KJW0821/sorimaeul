@@ -2,6 +2,8 @@ package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -41,19 +43,23 @@ public class Cover {
     @Column(name = "storage_path")
     private String storagePath;
 
+    @Builder.Default
     @Column(name = "is_public")
-    private boolean isPublic;
+    private boolean isPublic = false;
 
+    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
+    @UpdateTimestamp
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
 
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
 
+    @Builder.Default
     @Column(name = "like_count")
-    private int likeCount;
+    private int likeCount = 0;
 
 }
