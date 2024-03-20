@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Button } from "../../common/Button";
 import { createModel, modelCreationData } from "../../../utils/voiceModelAPI";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -68,6 +69,8 @@ const Container = styled.div`
 `
 
 function ModelForm() {
+  const navigate = useNavigate();
+
   const [modelName, setModelName] = useState('');
   const [imagePath, setImagePath] = useState('../../assets/voice.png');
 
@@ -87,7 +90,12 @@ function ModelForm() {
 
   const submitHandler = async () => {
     const res = await createModel(data);
-    console.log(res, '모델 생성 완료');
+    if (res?.status === 201) {
+      console.log(res.data, '모델 생성 완료');
+      navigate(`/model/${res.data.modelCode}`);
+    } else {
+      console.log(res);
+    }
   };
 
   return(
