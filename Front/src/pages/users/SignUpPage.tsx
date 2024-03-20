@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { set } from "../../stores/user";
+import { set, login } from "../../stores/user";
 import { checkNickname, signUp } from "../../utils/userAPI";
 import { useNavigate } from "react-router-dom";
 
@@ -26,11 +26,9 @@ function SignUpPage() {
 
   const onClickCheckNickname = async () => {
     const response = await checkNickname(inputNickname);
-    console.log(response);
 
     if (response === 0) {
       setIsValidNickname(true);
-      console.log("닉네임 체크 결과: o")
     } else if (response === 1) {
       setIsValidNickname(false);
     }
@@ -42,7 +40,8 @@ function SignUpPage() {
       try {
         await signUp(inputNickname, selectedImage);
         // 회원 가입 성공 시 redux store 로그인 상태 반영 후 홈페이지로 이동
-        dispatch(set({ nickname: inputNickname, profileImage: selectedImage, loggedIn: true  }));
+        dispatch(set({ nickname: inputNickname, profileImage: selectedImage }));
+        dispatch(login());
         navigate('/home');
       } catch (error){
         console.error("회원 가입 실패", error);

@@ -12,7 +12,6 @@ export const checkNickname = ( nickname: string ) => {
     return res.data.result;
   })
   .catch((err) => {
-    console.log("err", err);
     return err;
   });
 }
