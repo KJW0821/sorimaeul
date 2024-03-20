@@ -1,8 +1,8 @@
 import React from "react";
-import { logout } from "../../utils/userAPI";
+import { logout as logoutAPI } from "../../utils/userAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { set } from "../../stores/user";
+import { logout } from "../../stores/user";
 
 // 메인페이지
 const HomePage: React.FC = () => {
@@ -10,9 +10,9 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout()
+    logoutAPI()
     .then(() => {
-      dispatch(set({ loggedIn: false }));
+      dispatch(logout());
       console.log("로그아웃 성공");
       navigate("/");
     })
