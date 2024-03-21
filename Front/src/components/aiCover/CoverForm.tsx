@@ -4,9 +4,10 @@ import { CoverUpdateInterface } from "./CoverInterface";
 
 interface Props {
   isEdit: boolean;
+  onSubmit: (data: CoverUpdateInterface) => void; 
 }
 
-const CoverForm: React.FC<Props> = ({ isEdit }) => { 
+const CoverForm: React.FC<Props> = ({ isEdit, onSubmit }) => { 
   const [data, setData] = useState<CoverUpdateInterface>({    
     coverName: "",
     coverDetail: "",
@@ -23,6 +24,7 @@ const CoverForm: React.FC<Props> = ({ isEdit }) => {
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
+    onSubmit(data); 
   }
 
   return (
