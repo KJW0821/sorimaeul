@@ -14,9 +14,11 @@ import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
 import SideBar from './components/common/SideBar'
 import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
-import CoverListPage from './pages/aiCover/CoverListPage'
+import CoverPostListPage from './pages/aiCover/CoverPostListPage'
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
-import CoverDetailPage from './pages/aiCover/CoverDetailPage'
+import CoverPostDetailPage from './pages/aiCover/CoverPostDetailPage'
+import CoverPostUpdatePage from './pages/aiCover/CoverPostUpdatePage'
+import CoverPostCreatePage from './pages/aiCover/CoverPostCreatePage'
 
 function Layout() {
   return (
@@ -94,11 +96,19 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <CoverListPage />
+            element: <CoverPostListPage />
           },
           {
             path: ":id",
-            element: <CoverDetailPage />
+            element: <CoverPostDetailPage />
+          },
+          { 
+            path: "/register/:id",
+            element: <CoverPostCreatePage />
+          },
+          {
+            path: "/edit/:id",
+            element: <CoverPostUpdatePage />
           }
         ]
       }

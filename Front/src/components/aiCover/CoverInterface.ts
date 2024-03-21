@@ -30,3 +30,10 @@ export interface CoverDetailInterface {
   title: string;
   isLiked: number;
 }
+
+export interface CoverUpdateInterface {
+  coverName: string;
+  coverDetail: string;
+  thumbnailPath: string;
+  isPublic: boolean;
+}

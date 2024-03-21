@@ -1,4 +1,6 @@
 import API from "./axios";
+import { CoverUpdateInterface } from "../components/aiCover/CoverInterface";
+
 
 // AI 전체 목록 조회 
 interface ListParams {
@@ -30,5 +32,16 @@ export const getCover = async (coverCode: string) => {
   }) 
   .catch((err) => {
     return err;
+  })
+}
+
+// AI 커버 게시(수정)
+export const updateCover =async (coverCode: string, edit: CoverUpdateInterface) => {
+  return API.patch(`cover/${coverCode}`, edit)
+  .then((res) => {
+    return res.data;
+  }) 
+  .catch((err) => {
+    return err
   })
 }
