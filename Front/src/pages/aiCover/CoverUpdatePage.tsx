@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
 
 
-const CoverPostUpdatePage: React.FC = () => {
+const CoverUpdatePage: React.FC = () => {
   const params = useParams();
   const [data, setData] = useState<CoverUpdateInterface>({
     coverName: "",
@@ -30,4 +30,4 @@ const CoverPostUpdatePage: React.FC = () => {
   )
 }
 
-export default CoverPostUpdatePage;
+export default CoverUpdatePage;
