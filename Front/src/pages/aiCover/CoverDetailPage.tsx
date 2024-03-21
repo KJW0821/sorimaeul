@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCover } from "../../utils/coverAPI";
 import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
+import { Button } from "../../components/common/Button";
+import { useSelector } from "react-redux";
+import { UserState } from "../../stores/user";
+import { RootState } from "../../stores/store";
 
 const CoverDetailPage: React.FC = () => {
-
+  const navigate = useNavigate();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
+  const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
 
   useEffect(() => {
     (async () => {
@@ -15,11 +20,13 @@ const CoverDetailPage: React.FC = () => {
           const data = await getCover(params.id);
           setData(data);
         }
+
       } catch (err) {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
     })();
   }, [params.id]);
+
   return (
     <>
       {data &&
@@ -37,6 +44,11 @@ const CoverDetailPage: React.FC = () => {
         </div>
       }
 
+      {data && data.nickname === loggedInUserNickname &&
+        <Button onClick={() => navigate(`/cover/edit/${params.id}`) } $marginLeft={0} $marginTop={0}>수정</Button>}
+
+      {data && data.nickname === loggedInUserNickname &&
+        <Button $marginLeft={0} $marginTop={0}>삭제</Button>}
     </>
   );
 };
