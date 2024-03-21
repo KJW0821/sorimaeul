@@ -34,9 +34,12 @@ const voiceModelSlice = createSlice({
       state.imagePath = action.payload.imagePath;
       state.recordCount = action.payload.recordCount;
       state.learnState = action.payload.state;
+    },
+    selectMethod(state, action) {
+      state.method = action.payload;
     }
   }
 });
 
-export const { initModelInfo, setModelInfo } = voiceModelSlice.actions;
+export const { initModelInfo, setModelInfo, selectMethod } = voiceModelSlice.actions;
 export default voiceModelSlice.reducer;
