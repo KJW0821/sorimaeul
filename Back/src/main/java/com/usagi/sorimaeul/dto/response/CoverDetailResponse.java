@@ -9,10 +9,14 @@ import lombok.*;
 @AllArgsConstructor
 public class CoverDetailResponse {
 
-    private int coverCode;
     private String coverName;
     private String storagePath;
+    private int likeCount;
     private String thumbnailPath;
+    private String nickName;
+    private String coverSinger;
+    private String singer;
+    private String title;
     private boolean isLiked;
 
 }

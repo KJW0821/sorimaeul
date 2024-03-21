@@ -142,10 +142,14 @@ public class CoverServiceImpl implements CoverService {
             else isLiked = false;
         // 리스폰스 생성
         CoverDetailResponse response = CoverDetailResponse.builder()
-                .coverCode(coverCode)
                 .coverName(cover.getCoverName())
                 .storagePath(cover.getStoragePath())
+                .likeCount(cover.getLikeCount())
                 .thumbnailPath(cover.getThumbnailPath())
+                .nickName(cover.getUser().getNickname())
+                .coverSinger(cover.getCoverSinger())
+                .singer(cover.getSinger())
+                .title(cover.getTitle())
                 .isLiked(isLiked)
                 .build();
 
