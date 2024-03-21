@@ -21,6 +21,7 @@ API.interceptors.request.use(config => {
     const accessToken = getCookie("accessToken");
     if (accessToken && requiresToken)  {
         config.headers["Authorization"] = accessToken;
+        config.headers["Content-Type"] = "application/json";
     }
     return config;
 }, err => {

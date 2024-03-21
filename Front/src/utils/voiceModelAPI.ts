@@ -19,3 +19,9 @@ export const getModelInfo = (modelCode: string) => {
     .then(res => res.data)
     .catch(err => console.log(err))
 }
+
+export const getScripts = () => {
+  return API.get(URL + '/script')
+    .then(res => res.data)
+    .catch(err => console.log(err))
+}
