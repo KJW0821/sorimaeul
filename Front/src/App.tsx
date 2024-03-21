@@ -1,8 +1,8 @@
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { CookiesProvider } from 'react-cookie'
-import './App.css'
-import LandingPage from './pages/home/LandingPage'
-import HomePage from './pages/home/HomePage'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
+import './App.css';
+import LandingPage from './pages/home/LandingPage';
+import HomePage from './pages/home/HomePage';
 import LoginCallbackPage from './pages/users/LoginCallbackPage';
 import { Provider } from "react-redux";
 import store from "./stores/store";
@@ -12,11 +12,12 @@ import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
-import SideBar from './components/common/SideBar'
-import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
-import CoverListPage from './pages/aiCover/CoverListPage'
+import SideBar from './components/common/SideBar';
+import ModelCreatePage from './pages/voiceModel/ModelCreatePage';
+import CoverListPage from './pages/aiCover/CoverListPage';
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
-import RecordingPage from './pages/voiceModel/RecordingPage'
+import RecordingPage from './pages/voiceModel/RecordingPage';
+import DubbingListPage from './pages/dubbing/DubbingListPage';
 
 function Layout() {
   return (
@@ -99,6 +100,15 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <CoverListPage />
+          }
+        ]
+      },
+      {
+        path: "dubbing",
+        children: [
+          {
+            index: true,
+            element: <DubbingListPage />
           }
         ]
       }
