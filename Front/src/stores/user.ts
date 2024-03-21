@@ -3,13 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface UserState {
   nickname: string,
   profileImage: string,
-  loggedIn: boolean
+  loggedIn: boolean,
+  learnCount: number
 }
 
 const initialState: UserState = {
   nickname: "",
   profileImage: "",
-  loggedIn: false
+  loggedIn: false,
+  learnCount: 0
 }
 
 export const userSlice = createSlice({
@@ -17,9 +19,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     set(state, action) {
-      const { nickname, profileImage } = action.payload;
+      const { nickname, profileImage, learnCount } = action.payload;
       state.nickname = nickname;
       state.profileImage = profileImage;
+      state.learnCount = learnCount;
     },
     login(state) {
       state.loggedIn = true;
@@ -28,6 +31,7 @@ export const userSlice = createSlice({
       state.loggedIn = false;
       state.nickname = "";
       state.profileImage = "";
+      state.learnCount = 0;
     }
   }
 });
