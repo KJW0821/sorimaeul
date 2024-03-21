@@ -41,10 +41,8 @@ public class S3ServiceImpl implements S3Service {
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
         expiration.setTime(expiration.getTime() + timeZone.getRawOffset());
 
-        // 경로 구성
-        String filePath = userCode + "/" + fileName;
-
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, filePath)
+        // 경로 구성 => filename ( Front에서 파일명 생성 날짜 + 파일명 + 난수 )
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(expiration);
 

@@ -9,4 +9,6 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
 
     List<Like> findByUser_userCode(long userCode);
 
+    Like findByUser_userCodeAndDubbing_dubCode(long userCode, int dubCode);
+
 }

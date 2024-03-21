@@ -32,8 +32,7 @@ public class Like {
     @JoinColumn(name = "user_code", referencedColumnName = "user_code")
     private User user;
 
-    @CreationTimestamp
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
+    @Column(name = "created_time")
+    private LocalDateTime createdTime;
 
 }
