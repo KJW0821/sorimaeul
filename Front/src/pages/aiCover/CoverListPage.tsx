@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CoverListInterface } from "../../components/aiCover/CoverInterface";
 import { getCovers } from "../../utils/coverAPI";
 import CoverList from "../../components/aiCover/CoverList";
+import ColorLine from "../../components/aiCover/ColorLine";
 
 const CoverListPage: React.FC = () => {
   const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
@@ -22,6 +23,7 @@ const CoverListPage: React.FC = () => {
 
   return (
     <>
+    <ColorLine />
     <CoverList data={ dataList } />
     </>
   );
