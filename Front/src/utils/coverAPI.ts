@@ -37,7 +37,7 @@ export const getCover = async (coverCode: string) => {
 
 // AI 커버 게시(수정)
 export const updateCover =async (coverCode: string, edit: CoverUpdateInterface) => {
-  return API.patch(`cover/${coverCode}`, edit)
+  return API.patch(`cover/board/${coverCode}`, edit)
   .then((res) => {
     return res.data;
   }) 
