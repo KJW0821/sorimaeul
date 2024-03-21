@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { initModelInfo } from "../../../stores/voiceModel";
+import { requestS3 } from "../../../utils/s3";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -43,6 +44,10 @@ const Container = styled.div`
       height: 2.75rem;
       padding: 0 1rem;
       outline: none;
+      background-color: white;
+      color: #9F9F9F;
+      display: flex;
+      align-items: center;
     }
 
     label {
@@ -75,7 +80,8 @@ function ModelForm() {
   const dispatch = useDispatch();
 
   const [modelName, setModelName] = useState('');
-  const [imagePath, setImagePath] = useState('../../assets/voice.png');
+  const [imagePath, setImagePath] = useState('');
+  const [selectedImagePath, setSelectedImagePath] = useState('');
 
   const data: voiceModelAPI.modelCreationData = {
     modelName,
@@ -86,9 +92,28 @@ function ModelForm() {
     setModelName(() => e.target.value);
   };
 
-  const handleImagePath = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const file = e.target.files?.[0];
-    setImagePath(() => "../../assets/voice.png");
+  const handleImagePath = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImagePath((reader.result as string));
+      };
+      reader.readAsDataURL(file);
+      try {
+        const uploadedImageUrl = await requestS3({
+          filename: file.name.replace(/\.[^/.]+$/, ''), 
+          file: file,
+        })
+        if (uploadedImageUrl) {
+          setImagePath(uploadedImageUrl);
+        } else {
+          console.error("Error: Uploaded image URL is undefined");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    }
   };
 
   const submitHandler = async () => {
@@ -115,7 +140,7 @@ function ModelForm() {
       <div className="step">
         <h3 className="subtitle">Step 2. 썹네일 업로드</h3>
         <div className="flex items-center gap-2">
-          <input className="input" placeholder="음성 모델 썸네일을 업로드해주세요" />
+          <p className="input">{ imagePath ? imagePath : '음성 모델 썸네일을 업로드해주세요' }</p>
           <label htmlFor="file">업로드</label>
           <input onChange={handleImagePath} type="file" id="file" />
         </div>
