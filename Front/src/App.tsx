@@ -16,6 +16,7 @@ import SideBar from './components/common/SideBar'
 import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
 import CoverListPage from './pages/aiCover/CoverListPage'
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
+import CoverDetailPage from './pages/aiCover/CoverDetailPage'
 
 function Layout() {
   return (
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <CoverListPage />
+          },
+          {
+            path: ":id",
+            element: <CoverDetailPage />
           }
         ]
       }

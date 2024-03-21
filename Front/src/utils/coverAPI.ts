@@ -21,3 +21,14 @@ export const getCovers = (keyword: string | null = null) => {
     return err;
   })
 }
+
+// AI 상세 목록 조회
+export const getCover = async (coverCode: string) => {
+  return API.get(`cover/${coverCode}`)
+  .then((res) => { 
+    return res.data;
+  }) 
+  .catch((err) => {
+    return err;
+  })
+}

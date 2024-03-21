@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Cover } from "./CoverInterface"
 import styled from 'styled-components';
 
@@ -15,10 +16,11 @@ interface Props {
 const CoverCard: React.FC<Props> = ({
   cover
 }) => {
-  const { coverName, thumbnailPath, nickname, likeCount, coverSinger, singer, title } = cover;
+  const { coverCode, coverName, thumbnailPath, nickname, likeCount, coverSinger, singer, title } = cover;
+  const navigate = useNavigate();
 
   return (
-    <CardContainer>
+    <CardContainer onClick={()=> navigate(`/cover/${coverCode}`)}>
       <img src={thumbnailPath} alt={title} />
       <h2>{title}</h2>
       <p>원곡 가수: {singer}</p>
