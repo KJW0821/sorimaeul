@@ -26,9 +26,17 @@ const voiceModelSlice = createSlice({
   reducers: {
     initModelInfo(state, action) {
       state.modelCode = action.payload;
+    },
+    setModelInfo(state, action) {
+      state.modelCode = action.payload.modelCode;
+      state.modelName = action.payload.modelName;
+      state.storagePath = action.payload.storagePath;
+      state.imagePath = action.payload.imagePath;
+      state.recordCount = action.payload.recordCount;
+      state.learnState = action.payload.state;
     }
   }
 });
 
-export const { initModelInfo } = voiceModelSlice.actions;
+export const { initModelInfo, setModelInfo } = voiceModelSlice.actions;
 export default voiceModelSlice.reducer;

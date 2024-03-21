@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import modelBg from "../../assets/modelBg.png";
 import SelectMethod from "../../components/voiceModel/beforeTrain/SelectMethod";
+import { useDispatch, useSelector } from "react-redux";
+import { getModelInfo } from "../../utils/voiceModelAPI";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { setModelInfo } from "../../stores/voiceModel";
+import { RootState } from "../../stores/store";
 
 const Container = styled.div`
   background: url(${modelBg});
@@ -47,16 +53,47 @@ const Box = styled.div`
 `
 
 function ModelDetailPage() {
+  const dispatch = useDispatch();
+  const params = useParams();
+  const modelInfo = useSelector((state: RootState) => state.voiceModel);
+
+  const getData = async () => {
+    if (params.code) {
+      const response = await getModelInfo(params.code);
+      dispatch(setModelInfo(response));
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, [params.code])
+
+
   return (
     <Container>
-      <Box>
-        <h2 className="title">나만의 음성 모델 만들기</h2>
-        <hr className="w-5/6" />
-        <div className="step">
-          <h3 className="subtitle">Step 3. 음성 업로드 방법 선택</h3>
-          <SelectMethod />
+      {
+        (modelInfo.learnState === 0 || modelInfo.learnState === 1) &&
+        <Box>
+          <h2 className="title">나만의 음성 모델 만들기</h2>
+          <hr className="w-5/6" />
+          <div className="step">
+            <h3 className="subtitle">Step 3. 음성 업로드 방법 선택</h3>
+            <SelectMethod />
+          </div>
+        </Box>
+      }
+      {
+        modelInfo.learnState === 2 &&
+        <div>
+          학습 중임
         </div>
-      </Box>
+      }
+      {
+        modelInfo.learnState === 3 &&
+        <div>
+          학습 완료
+        </div>
+      }
     </Container>
   )
 }
