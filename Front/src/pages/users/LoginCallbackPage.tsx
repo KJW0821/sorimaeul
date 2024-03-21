@@ -32,7 +32,7 @@ const LoginCallbackPage: React.FC = () => {
               }
               
               setCookie("accessToken",`Bearer ${access}`, { path: "/"}); // Https 적용하면 option 설정 하자!
-              setCookie("refreshToken", `${refresh}`, { path: "/"});
+              setCookie("refreshToken", `Bearer ${refresh}`, { path: "/"});
               const accessToken = getCookie("accessToken");
 
 

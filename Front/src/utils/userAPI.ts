@@ -2,8 +2,9 @@ import API from "./axios";
 import { getCookie, removeCookie } from "./cookie";
 
 const access = getCookie("accessToken");
-const refreshToken = getCookie("refreshToken");
+const refresh = getCookie("refreshToken");
 const accessToken = access ? access.replace(/Bearer\s/, "") : undefined; // 접두사와 그 뒤의 공백 제거 -> base64 decoding error 해결
+const refreshToken = refresh ? refresh .replace(/Bearer\s/, "") : undefined; 
 
 export const checkNickname = ( nickname: string ) => {
   return API.get(`user/nickname/${nickname}`)
