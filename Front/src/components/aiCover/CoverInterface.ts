@@ -21,6 +21,7 @@ export interface CoverListInterface {
 
 export interface CoverDetailInterface {
   coverName: string;
+  coverDetail: string;
   storagePath: string;
   likeCount: number;
   thumbnailPath: string;

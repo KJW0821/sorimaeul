@@ -25,6 +25,7 @@ const CoverDetailPage: React.FC = () => {
       {data &&
         <div>
           <h2> 커버 제목(게시물) {data.coverName} </h2>
+          <h2> 커버 내용(게시물) {data.coverDetail} </h2>
           <h2> 음원 저장 경로 {data.storagePath} </h2>
           <h2> 원곡명 {data.title} </h2>
           <h2> 좋아여 수{data.likeCount}</h2>
