@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.controller;
 import com.usagi.sorimaeul.api.service.DubbingService;
 import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
+import com.usagi.sorimaeul.dto.response.DubbingListResponse;
 import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +42,17 @@ public class DubbingController {
                                                                       @RequestParam(required = false) int page){
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getVideoSourceList(userCode, page);
+    }
+
+    @Operation(summary = "더빙 영상 목록 조회", description = "더빙 영상 목록을 조회한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 목록 조회 성공")
+    @GetMapping
+    public ResponseEntity<DubbingListResponse> getDubbingList(@RequestHeader("Authorization") String token,
+                                                              @RequestParam String target,
+                                                              @RequestParam(required = false) String keyword,
+                                                              @RequestParam(required = false) int page) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.getDubbingList(userCode, target, keyword, page);
     }
 
 }
