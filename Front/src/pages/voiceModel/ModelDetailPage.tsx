@@ -7,9 +7,16 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { setModelInfo } from "../../stores/voiceModel";
 import { RootState } from "../../stores/store";
+import SoundWave from "../../components/voiceModel/training/SoundWave";
 
-const Container = styled.div`
-  background: url(${modelBg});
+const Container = styled.div<{ $learnState: number }>`
+  background: ${(props) => {
+    if (props.$learnState === 0 || props.$learnState === 1) {
+      return `url(${modelBg})`;
+    } else {
+      return 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(180deg, rgba(211, 123, 255, 0) 0%, rgba(211, 123, 255, 0.8) 100%), #000000'
+    }
+  }};
   height: 100vh;
   background-size: cover;
   display: flex;
@@ -70,7 +77,7 @@ function ModelDetailPage() {
 
 
   return (
-    <Container>
+    <Container $learnState={modelInfo.learnState}>
       {
         (modelInfo.learnState === 0 || modelInfo.learnState === 1) &&
         <Box>
@@ -85,13 +92,15 @@ function ModelDetailPage() {
       {
         modelInfo.learnState === 2 &&
         <div>
-          학습 중임
+          <p className="text-white">음성 학습이 진행중입니다.</p>
+          <hr className="border-white" />
+          <SoundWave />
         </div>
       }
       {
         modelInfo.learnState === 3 &&
         <div>
-          학습 완료
+          <p className="text-white">음성 학습이 완료되었습니다.</p>
         </div>
       }
     </Container>
