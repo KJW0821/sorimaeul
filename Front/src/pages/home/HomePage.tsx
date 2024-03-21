@@ -13,7 +13,6 @@ const HomePage: React.FC = () => {
     logoutAPI()
     .then(() => {
       dispatch(logout());
-      console.log("로그아웃 성공");
       navigate("/landing");
     })
     .catch((err) => {
