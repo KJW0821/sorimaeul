@@ -25,7 +25,7 @@ function RecordingPage() {
   return (
     <div>
       <p>이것은 {recordCount + 1}번째 문장</p>
-
+      <p>{scripts[recordCount + 1].script}</p>
     </div>
   )
 }
