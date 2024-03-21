@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.DubbingInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
+import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
 import com.usagi.sorimaeul.dto.response.DubbingListResponse;
 import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
 import com.usagi.sorimaeul.entity.Dubbing;
@@ -152,7 +153,34 @@ public class DubbingServiceImpl implements DubbingService {
 
         return ResponseEntity.ok(dubbingListResponse);
     }
-    
+
+    // 더빙 영상 상세 조회
+    public ResponseEntity<DubbingDetailResponse> getDubbingDetail(long userCode, int dubCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+
+        boolean isLiked;
+        if (likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode) == null) isLiked = false;
+        else isLiked = true;
+        // response 생성
+        DubbingDetailResponse response = DubbingDetailResponse.builder()
+                .dubCode(dubCode)
+                .dubName(dubbing.getDubName())
+                .storagePath(dubbing.getStoragePath())
+                .dubDetail(dubbing.getDubDetail())
+                .createdTime(dubbing.getCreatedTime())
+                .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
+                .isLiked(isLiked)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+
     public HttpStatus createDub (long userCode, DubCreateRequest request){
         User user = userRepository.getUser(userCode);
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(request.getSourceCode());
@@ -168,3 +196,4 @@ public class DubbingServiceImpl implements DubbingService {
         return HttpStatus.OK;
     }
 }
+
