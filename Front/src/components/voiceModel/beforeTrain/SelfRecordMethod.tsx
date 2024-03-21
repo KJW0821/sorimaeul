@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
+import { Button } from "../../common/Button";
 
 const Container = styled.div`
   width: 100%;
@@ -30,7 +31,7 @@ function SelfRecordMethod() {
 
   const startRecord = () => {
     if (modelInfo.learnState === 0) {
-      
+      console.log('녹음 페이지로 가기');
     }
   }
 
@@ -44,9 +45,14 @@ function SelfRecordMethod() {
       <div onClick={startRecord} className="record-controller">
         {
           modelInfo.recordCount > 0 ?
-          <div>
-            이미 녹음 진행 중
-          </div>
+          <>
+            <p>모델명: {modelInfo.modelName}</p>
+            <p>녹음 진행률: {modelInfo.recordCount}/200</p>
+            <div>
+              <Button>이어하기</Button>
+              <Button>새로 하기</Button>
+            </div>
+          </>
           :
          <p className="start">녹음 시작하기</p>
         }
