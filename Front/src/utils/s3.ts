@@ -1,0 +1,78 @@
+import { Cookies } from "react-cookie";
+import Resizer from "react-image-file-resizer";
+import API from "./axios";
+import axios from "axios";
+
+export const resizeFile = async (file: File) =>
+  new Promise<File>((res) => {
+    Resizer.imageFileResizer(
+      file, // target file
+      500, // maxWidth
+      500, // maxHeight
+      "JPEG", // compressFormat : Can be either JPEG, PNG or WEBP.
+      80, // quality : 0 and 100. Used for the JPEG compression
+      0, // rotation
+      (uri) => res(uri as File), // responseUriFunc
+      "file" // outputType : Can be either base64, blob or file.(Default type is base64)
+    );
+  });
+
+const getPresignedURL = async (filename: string) => {
+  const cookie = new Cookies();
+  const token = cookie.get("U_ID");
+
+  const URL = "/images/presigned/upload";
+  const response = await API.get(URL, {
+    method: "GET",
+    params: { filename },
+    headers: {
+      Authorization: token,
+    },
+  });
+  return response.data.url as string;
+};
+
+const getFileName = (nickname: string) => {
+  const date = new Date();
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const YYMMDD = year + month + day;
+  const randomNumber = Math.ceil(Math.random() * 10000);
+
+  return YYMMDD + nickname + randomNumber + ".jpeg";
+};
+
+
+interface RequestS3 {
+  filename: string;
+  file: File;
+}
+
+export const requestS3 = async ({ filename, file }: RequestS3) => {
+  const fileName = getFileName(filename);
+  const [uploadURLResult, resizedFileResult] = await Promise.allSettled([
+    getPresignedURL(fileName),
+    resizeFile(file),
+  ]);
+
+  if (
+    uploadURLResult.status === "fulfilled" &&
+    resizedFileResult.status === "fulfilled"
+  ) {
+    axios.put(uploadURLResult.value, resizedFileResult.value, {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+    return `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${fileName}`;
+  } else {
+    const error = new Error();
+    error.name = "이미지 처리중 에러가 발생하였습니다.";
+    error.message =
+      uploadURLResult.status === "rejected"
+        ? "업로드 요청 실패"
+        : "올바르지 않은 파일";
+    throw error;
+  }
+};
