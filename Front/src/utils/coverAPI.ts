@@ -24,6 +24,19 @@ export const getCovers = (keyword: string | null = null) => {
   })
 }
 
+// AI 인기 목록 조회
+export const getPopularCovers = () => {
+  const params: ListParams = { target: "popular", page: 1 };
+
+  return API.get("cover", { params })
+  .then((res) => {
+    return res.data;
+  })
+  .catch((err) => {
+    return err;
+  })
+}
+
 // AI 상세 목록 조회
 export const getCover = async (coverCode: string) => {
   return API.get(`cover/${coverCode}`)
