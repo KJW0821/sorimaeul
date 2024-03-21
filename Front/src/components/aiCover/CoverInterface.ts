@@ -18,3 +18,23 @@ export interface CoverListInterface {
     totalPages: number;
   }
 }
+
+export interface CoverDetailInterface {
+  coverName: string;
+  coverDetail: string;
+  storagePath: string;
+  likeCount: number;
+  thumbnailPath: string;
+  nickname: string;
+  coverSinger: string;
+  singer: string;
+  title: string;
+  isLiked: number;
+}
+
+export interface CoverUpdateInterface {
+  coverName: string;
+  coverDetail: string;
+  thumbnailPath: string;
+  isPublic: boolean;
+}
