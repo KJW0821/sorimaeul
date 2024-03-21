@@ -36,12 +36,23 @@ export const getCover = async (coverCode: string) => {
 }
 
 // AI 커버 게시(수정)
-export const updateCover =async (coverCode: string, edit: CoverUpdateInterface) => {
+export const updateCover = async (coverCode: string, edit: CoverUpdateInterface) => {
   return API.patch(`cover/board/${coverCode}`, edit)
   .then((res) => {
     return res.data;
   }) 
   .catch((err) => {
     return err
+  })
+}
+
+// AI 커버 삭제
+export const deleteCover = async (coverCode: string) => {
+  return API.delete(`cover/board/${coverCode}`)
+  .then((res) => {
+    return res.data;
+  })
+  .catch((err) => {
+    return err;
   })
 }

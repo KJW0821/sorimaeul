@@ -26,14 +26,14 @@ const CoverUpdatePage: React.FC = () => {
 
   const handleSubmit = async (formData: CoverUpdateInterface) => {
     try {
-      // API 호출
       if (params.id) {
+        // 수정 요청
         const data = await updateCover(params.id, formData);
         setData(data);
         navigate(`/cover/${params.id}`);
       }
-    } catch (error) {
-      console.error(error); // 에러 처리
+    } catch (err) {
+      console.error(err); 
     }
   };
 

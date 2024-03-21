@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCover } from "../../utils/coverAPI";
+import { deleteCover, getCover } from "../../utils/coverAPI";
 import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
 import { Button } from "../../components/common/Button";
 import { useSelector } from "react-redux";
@@ -27,6 +27,18 @@ const CoverDetailPage: React.FC = () => {
     })();
   }, [params.id]);
 
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement> ) => {
+    e.preventDefault();
+    try {
+      if (params.id) {
+        await deleteCover(params.id);
+        navigate(`/cover`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       {data &&
@@ -48,7 +60,7 @@ const CoverDetailPage: React.FC = () => {
         <Button onClick={() => navigate(`/cover/edit/${params.id}`) } $marginLeft={0} $marginTop={0}>수정</Button>}
 
       {data && data.nickname === loggedInUserNickname &&
-        <Button $marginLeft={0} $marginTop={0}>삭제</Button>}
+        <Button onClick={handleDelete} $marginLeft={0} $marginTop={0}>삭제</Button>}
     </>
   );
 };
