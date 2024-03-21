@@ -37,7 +37,7 @@ API.interceptors.response.use(res => {
             const refreshToken = getCookie("refreshToken");
             const headers = { Authorization: refreshToken };
             console.log(err.config);
-            reissueAPI.get("/oauth/reissue", { headers })
+            return reissueAPI.get("/oauth/reissue", { headers })
             .then((res) => {
                 console.log(res);
                 console.log("재발급 성공!");
@@ -47,8 +47,7 @@ API.interceptors.response.use(res => {
                 setCookie("refreshToken", `Bearer ${refresh}`, { path: "/" });
                 // token 재발급 요청 이전에 행한(실패한) 요청을 재실행
                 const originalRequest = err.config;
-                console.log(originalRequest);
-                originalRequest.headers.Authorization = `Bearer ${access}`;
+                originalRequest.headers["Authorization"]= `Bearer ${access}`;
                 return API(originalRequest);
             })
             .catch((err) => {
@@ -59,7 +58,7 @@ API.interceptors.response.use(res => {
                 handleLogout();
                 }
                 return err;
-            })
+            });
     }
     return Promise.reject(err);
 });
