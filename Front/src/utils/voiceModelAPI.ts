@@ -14,7 +14,7 @@ export const createModel = (data: modelCreationData) => {
     .catch((err) => console.log(err))
 }
 
-export const getModelInfo = (modelCode: number) => {
+export const getModelInfo = (modelCode: string) => {
   return API.get(URL + `/detail/${modelCode}`)
     .then(res => res.data)
     .catch(err => console.log(err))
