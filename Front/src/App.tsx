@@ -16,6 +16,7 @@ import SideBar from './components/common/SideBar'
 import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
 import CoverListPage from './pages/aiCover/CoverListPage'
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
+import RecordingPage from './pages/voiceModel/RecordingPage'
 
 function Layout() {
   return (
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
           {
             path: ":code",
             element: <ModelDetailPage />
+          },
+          {
+            path: "record",
+            element: <RecordingPage />
           }
         ]
       },

@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../stores/store";
+import { Button } from "../../common/Button";
 
 const Container = styled.div`
   width: 100%;
@@ -24,6 +27,14 @@ const Container = styled.div`
 `
 
 function SelfRecordMethod() {
+  const modelInfo = useSelector((state: RootState) => state.voiceModel);
+
+  const startRecord = () => {
+    if (modelInfo.learnState === 0) {
+      console.log('녹음 페이지로 가기');
+    }
+  }
+
   return (
     <Container>
       <div className="guide">
@@ -31,8 +42,20 @@ function SelfRecordMethod() {
         <p>진행률이 80% 이상이어야 학습 진행이 가능합니다.</p>
         <p>(최소 30분 이상의 시간이 소요되며, 중간 저장이 가능합니다.)</p>
       </div>
-      <div className="record-controller">
-        <p className="start">녹음 시작하기</p>
+      <div onClick={startRecord} className="record-controller">
+        {
+          modelInfo.recordCount > 0 ?
+          <>
+            <p>모델명: {modelInfo.modelName}</p>
+            <p>녹음 진행률: {modelInfo.recordCount}/200</p>
+            <div>
+              <Button>이어하기</Button>
+              <Button>새로 하기</Button>
+            </div>
+          </>
+          :
+         <p className="start">녹음 시작하기</p>
+        }
       </div>
     </Container>
   )

@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { selectMethod } from "../../../stores/voiceModel";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -27,18 +29,24 @@ const Container = styled.div`
 `
 
 function SelectBox() {
+  const dispatch = useDispatch();
+
+  const methodChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(selectMethod(e.target.id));
+  };
+
   return (
     <Container>
       <div className="flex items-center gap-1">
-        <input type="radio" id="self" name="method" />
+        <input onChange={methodChangeHandler} type="radio" id="self" name="method" defaultChecked />
         <label>직접 녹음하기</label>
       </div>
       <div className="flex items-center gap-1">
-        <input type="radio" id="file" name="method" />
+        <input onChange={methodChangeHandler} type="radio" id="file" name="method" />
         <label>녹음본 업로드</label>
       </div>
       <div className="flex items-center gap-1">
-        <input type="radio" id="model" name="method" />
+        <input onChange={methodChangeHandler} type="radio" id="model" name="method" />
         <label>외부 학습 모델</label>
       </div>
     </Container>

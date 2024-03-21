@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { Button } from "../../common/Button";
-import { createModel, modelCreationData } from "../../../utils/voiceModelAPI";
+import * as voiceModelAPI from "../../../utils/voiceModelAPI";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { initModelInfo } from "../../../stores/voiceModel";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -70,11 +72,12 @@ const Container = styled.div`
 
 function ModelForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [modelName, setModelName] = useState('');
   const [imagePath, setImagePath] = useState('../../assets/voice.png');
 
-  const data: modelCreationData = {
+  const data: voiceModelAPI.modelCreationData = {
     modelName,
     imagePath
   };
@@ -89,9 +92,10 @@ function ModelForm() {
   };
 
   const submitHandler = async () => {
-    const res = await createModel(data);
+    const res = await voiceModelAPI.createModel(data);
     if (res?.status === 201) {
       console.log(res.data, '모델 생성 완료');
+      dispatch(initModelInfo(res.data.modelCode));
       navigate(`/model/${res.data.modelCode}`);
     } else {
       console.log(res);
