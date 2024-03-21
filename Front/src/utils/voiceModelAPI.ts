@@ -10,10 +10,12 @@ export interface modelCreationData {
 
 export const createModel = (data: modelCreationData) => {
   return API.post(URL, data)
-    .then((res) => {
-      return res
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    .then(res => res)
+    .catch((err) => console.log(err))
+}
+
+export const getModelInfo = (modelCode: number) => {
+  return API.get(URL + `/detail/${modelCode}`)
+    .then(res => res.data)
+    .catch(err => console.log(err))
 }
