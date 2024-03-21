@@ -68,7 +68,17 @@ public class CoverServiceImpl implements CoverService {
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, covers.size());
             // // 총 페이지 수 계산
-            totalPages = (int) Math.ceil(covers.size()/6);
+            totalPages = (int) Math.ceil(covers.size() / 6);
+        // 인기 게시글 조회
+        } else if (target.equals("popular")) {
+            // 커버 게시글 좋아요 순, 최신 순으로 5개 조회
+            covers = coverRepository.findTop5ByOrderByLikeCountDescUpdatedTimeDesc();
+            // 인덱스 0 ~ covers.size() 로 정의
+            startIdx = 0;
+            endIdx = covers.size();
+            // // 총 페이지 수 계산
+            totalPages = 1;
+
         // 마이 페이지 - 관심 컨텐츠 - 좋아요 누른 게시물 조회
         } else {
             // 나의 유저 코드와 일치하는 like 리스트를 가져온다.
