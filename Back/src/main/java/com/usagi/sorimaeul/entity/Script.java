@@ -19,7 +19,7 @@ public class Script {
     @Column(name = "script_code")
     private int scriptCode;
 
-    @Column(name = "nickname")
+    @Column(name = "script")
     private String script;
 
 }
