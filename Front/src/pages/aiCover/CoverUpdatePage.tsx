@@ -1,16 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom"
-import { CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
 
 
 const CoverUpdatePage: React.FC = () => {
   const params = useParams();
-  const [data, setData] = useState<CoverUpdateInterface>({
-    coverName: "",
-    coverDetail: "",
-    thumbnailPath: "",
-    isPublic: false,
-  });
 
   useEffect(() => {
     (async () => {
