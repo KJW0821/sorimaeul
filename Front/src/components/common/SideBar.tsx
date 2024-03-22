@@ -13,6 +13,9 @@ import foldBtn from '../../assets/foldBtn.png';
 import { Line } from "./Line";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logout as logoutAPI } from "../../utils/userAPI";
+import { logout as logoutState } from "../../stores/user";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div<{$isOpen: boolean}>`
   height: 100vh;
@@ -48,12 +51,23 @@ const Container = styled.div<{$isOpen: boolean}>`
 
 function SideBar() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSideBar = () => {
     setIsOpen(pre => !pre);
   };
+
+  const handleLogout = () => {
+    logoutAPI()
+    .then(() => {
+      dispatch(logoutState());
+      navigate("/landing");
+    })
+    .catch((err) => {
+      console.error("로그아웃 실패;", err);
+    })
+  }
 
   return (
     <Container $isOpen={isOpen}>
@@ -98,7 +112,7 @@ function SideBar() {
           </div>
           <div className="content">
             <div className="flex flex-col gap-2 items-center w-full">
-              <div className="col">
+              <div onClick={handleLogout} className="col">
                 <img src={logout} alt="logout" />
                 <p>로그아웃</p>
               </div>
@@ -128,7 +142,7 @@ function SideBar() {
           </div>
           <div className="content">
             <div className="flex flex-col gap-2 items-center">
-              <img src={logout} alt="logout" />
+              <img onClick={handleLogout} src={logout} alt="logout" />
               <img onClick={() => navigate('/')} src={home} alt="home" />
             </div>
           </div>
