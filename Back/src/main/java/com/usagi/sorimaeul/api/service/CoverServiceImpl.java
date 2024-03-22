@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
+import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
 import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
 import com.usagi.sorimaeul.entity.Cover;
@@ -158,7 +159,7 @@ public class CoverServiceImpl implements CoverService {
 
 
     // AI 커버 생성
-    public ResponseEntity<?> createCover(long userCode, CoverCreateRequest request) {
+    public ResponseEntity<CoverCreateResponse> createCover(long userCode, CoverCreateRequest request) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -181,7 +182,11 @@ public class CoverServiceImpl implements CoverService {
                 .build();
         coverRepository.save(cover);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("생성 성공");
+        CoverCreateResponse response = CoverCreateResponse.builder()
+                .coverCode(cover.getCoverCode())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
