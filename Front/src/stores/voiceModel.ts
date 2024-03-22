@@ -7,7 +7,8 @@ export interface VoiceModelState {
   imagePath: string,
   recordCount: number,
   learnState: number,
-  method: string
+  method: string,
+  isFileUploaded: boolean
 }
 
 const initialState: VoiceModelState = {
@@ -17,7 +18,8 @@ const initialState: VoiceModelState = {
   imagePath: "",
   recordCount: 0,
   learnState: 1,
-  method: "self"
+  method: "self",
+  isFileUploaded: false
 }
 
 const voiceModelSlice = createSlice({
@@ -37,9 +39,12 @@ const voiceModelSlice = createSlice({
     },
     selectMethod(state, action) {
       state.method = action.payload;
+    },
+    setIsFileUploaded(state, action) {
+      state.isFileUploaded = action.payload;
     }
   }
 });
 
-export const { initModelInfo, setModelInfo, selectMethod } = voiceModelSlice.actions;
+export const { initModelInfo, setModelInfo, selectMethod, setIsFileUploaded } = voiceModelSlice.actions;
 export default voiceModelSlice.reducer;
