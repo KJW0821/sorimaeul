@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getModelInfo } from "../../utils/voiceModelAPI";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { setModelInfo } from "../../stores/voiceModel";
+import { setModelInfo, setIsStart } from "../../stores/voiceModel";
 import { RootState } from "../../stores/store";
 import SoundWave from "../../components/voiceModel/training/SoundWave";
 import { Button } from "../../components/common/Button";
@@ -76,6 +76,9 @@ function ModelDetailPage() {
     getData();
   }, [params.code])
 
+  const startLearning = async () => {
+    dispatch(setIsStart(true));
+  }
 
   return (
     <Container $learnState={modelInfo.learnState}>
@@ -89,6 +92,7 @@ function ModelDetailPage() {
             <SelectMethod />
             <div className="flex w-8/12">
               <Button 
+                onClick={startLearning}
                 $marginTop={0} 
                 $width={6.25} 
                 $height={3.125} 
