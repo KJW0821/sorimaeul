@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class CommentInfoDto {
 
+    private String nickname;
+    private String profileImage;
     private String content;
     private String time;
 
