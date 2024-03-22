@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CommentInfoDto;
+import com.usagi.sorimaeul.dto.request.CommentCreateRequest;
 import com.usagi.sorimaeul.dto.response.CommentListResponse;
 import com.usagi.sorimaeul.entity.Comment;
 import com.usagi.sorimaeul.entity.User;
@@ -48,13 +49,16 @@ public class CommentServiceImpl implements CommentService {
         for (Comment comment : commentList) {
             // Dto 생성
             CommentInfoDto commentInfoDto = CommentInfoDto.builder()
+                    .nickname(comment.getUser().getNickname())
+                    .profileImage(comment.getUser().getProfileImage())
                     .content(comment.getContent())
                     .time(formatElapsedTime(comment.getCreatedTime()))
                     .build();
             // comments 에 담기
             comments.add(commentInfoDto);
         }
-
+        
+        // 리스폰스 생성
         CommentListResponse response = CommentListResponse.builder()
                 .comments(comments)
                 .build();
@@ -80,13 +84,16 @@ public class CommentServiceImpl implements CommentService {
         for (Comment comment : commentList) {
             // Dto 생성
             CommentInfoDto commentInfoDto = CommentInfoDto.builder()
+                    .nickname(comment.getUser().getNickname())
+                    .profileImage(comment.getUser().getProfileImage())
                     .content(comment.getContent())
                     .time(formatElapsedTime(comment.getCreatedTime()))
                     .build();
             // comments 에 담기
             comments.add(commentInfoDto);
         }
-
+        
+        // 리스폰스 생성
         CommentListResponse response = CommentListResponse.builder()
                 .comments(comments)
                 .build();
@@ -94,6 +101,45 @@ public class CommentServiceImpl implements CommentService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+
+    // AI 커버 댓글 등록
+    public ResponseEntity<?> createCoverComment(long userCode, int coverCode, CommentCreateRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        
+        // 댓글 생성
+        Comment comment = Comment.builder()
+                .cover(coverRepository.findByCoverCode(coverCode))
+                .user(user)
+                .content(request.getContent())
+                .build();
+        commentRepository.save(comment);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+
+    // 더빙 댓글 등록
+    public ResponseEntity<?> createDubComment(long userCode, int dubCode, CommentCreateRequest request) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 댓글 생성
+        Comment comment = Comment.builder()
+                .dubbing(dubbingRepository.findByDubCode(dubCode))
+                .user(user)
+                .content(request.getContent())
+                .build();
+        commentRepository.save(comment);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
     
 
     // LocalDateTime 을 "방금 전", "5분 전", "1시간 전", "30일 전" 의 형태로 변환
