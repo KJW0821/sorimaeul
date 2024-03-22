@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
-import { CoverDetailInterface, CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
+import { CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
 import { getCover, updateCover } from "../../utils/coverAPI";
-import CoverForm from "../../components/aiCover/CoverForm";
+import CoverPostForm from "../../components/aiCover/CoverPostForm";
 
 
 const CoverUpdatePage: React.FC = () => {
@@ -39,7 +39,7 @@ const CoverUpdatePage: React.FC = () => {
 
   return (
     <>
-      {data && <CoverForm isEdit={true} initialData={data} onSubmit={handleSubmit}></CoverForm>}
+      {data && <CoverPostForm isEdit={true} initialData={data} onSubmit={handleSubmit}></CoverPostForm>}
     </>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CoverForm from "../../components/aiCover/CoverForm";
+import CoverPostForm from "../../components/aiCover/CoverPostForm";
 import { CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
 import { updateCover } from "../../utils/coverAPI";
 
@@ -26,7 +26,7 @@ const CoverResultPage: React.FC = () => {
 
   return (
     <>
-      <CoverForm isEdit={false} onSubmit={handleSubmit} />
+      <CoverPostForm isEdit={false} onSubmit={handleSubmit} />
     </>
   );
 };

@@ -7,8 +7,8 @@ interface Props {
   initialData?: CoverUpdateInterface; 
   onSubmit: (data: CoverUpdateInterface) => void; 
 }
-
-const CoverForm: React.FC<Props> = ({ isEdit, initialData, onSubmit }) => { 
+// 커버 게시 정보 설정 폼 
+const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, onSubmit }) => { 
   const [data, setData] = useState<CoverUpdateInterface>({    
     coverName: "",
     coverDetail: "",
@@ -54,4 +54,4 @@ const CoverForm: React.FC<Props> = ({ isEdit, initialData, onSubmit }) => {
   );
 }
 
-export default CoverForm;
+export default CoverPostForm ;
