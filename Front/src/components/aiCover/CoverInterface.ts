@@ -11,8 +11,18 @@ export interface Cover {
   title: string; // "String, 원곡명"
 }
 
+interface ModelInfo {
+  userCode: number,
+  modelCode: number, 
+  modelName: string,
+}
+
+export interface CoverModelInterface {
+  voiceModels: ModelInfo[];
+}
+
 export interface CoverCreateInterface {
-  youtubeLink : string;
+  youtubeLink: string;
   singer: string;
   title: string;
   modelCode: number;

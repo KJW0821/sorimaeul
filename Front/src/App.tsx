@@ -21,6 +21,7 @@ import CoverDetailPage from './pages/aiCover/CoverDetailPage'
 import CoverListPage from './pages/aiCover/CoverListPage'
 import CoverResultPage from './pages/aiCover/CoverResultPage'
 import PrivateRoute from './components/common/PrivateRoute'
+import CoverCreatePage from './pages/aiCover/CoverCreatePage'
 
 function Layout() {
   return (
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <CoverListPage />
+              },
+              {
+                path: "create",
+                element: <CoverCreatePage />
               },
               {
                 path: ":id",

@@ -4,8 +4,11 @@ import { getCovers, getPopularCovers } from "../../utils/coverAPI";
 import CoverList from "../../components/aiCover/CoverList";
 import ColorLine from "../../components/aiCover/ColorLine";
 import PopularCoverList from "../../components/aiCover/PopularCoverList";
+import { useNavigate } from "react-router";
+import { Button } from "../../components/common/Button";
 
 const CoverListPage: React.FC = () => {
+  const navigate = useNavigate();
   const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
   const [popularDataList, setPopularDataList ] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
 
@@ -32,6 +35,7 @@ const CoverListPage: React.FC = () => {
   return (
     <>
     <ColorLine />
+    <Button onClick={() => navigate("/cover/create") } $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
     <PopularCoverList data={ popularDataList }/>
     <CoverList data={ dataList } />
     </>

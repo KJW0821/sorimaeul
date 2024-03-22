@@ -1,6 +1,27 @@
 import API from "./axios";
 import { CoverCreateInterface, CoverUpdateInterface } from "../components/aiCover/CoverInterface";
 
+// AI 커버 생성을 위한 음성 모델 조회 - videoSourceCode 와 page 모두 null로 전달
+export const getCoverModels = async () => {
+  return API.get("model")
+  .then((res) => {
+    return res.data;
+  })
+  .catch((err) => {
+    return err;
+  })
+}
+
+// AI 커버 생성
+export const createCover = async (data: CoverCreateInterface) => {
+  return API.post("cover/create", data)
+  .then((res) => {
+    return res.data;
+  })
+  .catch((err) => {
+    return err;
+  })
+}
 
 // AI 전체 목록 조회 
 interface ListParams {
@@ -43,17 +64,6 @@ export const getCover = async (coverCode: string) => {
   .then((res) => { 
     return res.data;
   }) 
-  .catch((err) => {
-    return err;
-  })
-}
-
-// AI 커버 생성
-export const createCover =async (data: CoverCreateInterface) => {
-  return API.post("cover/create", data)
-  .then((res) => {
-    return res.data;
-  })
   .catch((err) => {
     return err;
   })
