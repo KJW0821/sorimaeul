@@ -9,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class ModelInfoDto {
 
+    private long userCode;
+    private int videoSourceCode;
     private int modelCode;
     private String modelName;
     private String imagePath;

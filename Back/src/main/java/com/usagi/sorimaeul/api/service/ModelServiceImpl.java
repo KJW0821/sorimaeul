@@ -240,12 +240,14 @@ public class ModelServiceImpl implements ModelService {
             mergedModelList = myModelList.subList(startIdx, endIdx);
             end = endIdx >= myModelList.size();
 
-        // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델)
+        // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
         } else if (page == null) {
             List<ModelInfoDto> videoSourceModelList = voiceModelRepository.videoSourceModelList(videoSource);
             List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, 3);
+            List<ModelInfoDto> commonModelList = voiceModelRepository.commonModelList();
             mergedModelList = new ArrayList<>(videoSourceModelList);
             mergedModelList.addAll(myModelList);
+            mergedModelList.addAll(commonModelList);
         } else {
             // 잘못된 요청
             return ResponseEntity.badRequest().build();

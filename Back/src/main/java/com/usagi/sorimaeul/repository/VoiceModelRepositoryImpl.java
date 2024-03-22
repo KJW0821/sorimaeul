@@ -4,10 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
-import com.usagi.sorimaeul.entity.QVoiceModel;
-import com.usagi.sorimaeul.entity.User;
-import com.usagi.sorimaeul.entity.VideoSource;
-import com.usagi.sorimaeul.entity.VoiceModel;
+import com.usagi.sorimaeul.entity.*;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,6 +17,8 @@ public class VoiceModelRepositoryImpl implements VoiceModelRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final QVoiceModel qVoiceModel = QVoiceModel.voiceModel;
+    private final QUser qUser = QUser.user;
+    private final QVideoSource qVideoSource = QVideoSource.videoSource;
 
     // 유저가 학습 시킨 모델 가져오기(userCode 일치하는 모델)
     public List<ModelInfoDto> userModelList(User user, int state) {
@@ -31,7 +30,7 @@ public class VoiceModelRepositoryImpl implements VoiceModelRepositoryCustom {
         }
 
         return queryFactory
-                .select(Projections.constructor(ModelInfoDto.class, qVoiceModel.modelCode, qVoiceModel.modelName, qVoiceModel.imagePath, qVoiceModel.recordCount, qVoiceModel.state))
+                .select(Projections.constructor(ModelInfoDto.class, qUser.userCode, qVoiceModel.modelCode, qVoiceModel.modelName, qVoiceModel.imagePath, qVoiceModel.recordCount, qVoiceModel.state))
                 .from(qVoiceModel)
                 .where(qVoiceModel.user.eq(user)
                         .and(stateCondition))
@@ -40,13 +39,15 @@ public class VoiceModelRepositoryImpl implements VoiceModelRepositoryCustom {
     // 영상 소스 제공 모델 가져오기(videoSourceCode 일치하는 모델)
     public List<ModelInfoDto> videoSourceModelList(VideoSource videoSource) {
         return queryFactory
-                .select(Projections.constructor(ModelInfoDto.class, qVoiceModel.modelCode, qVoiceModel.modelName, qVoiceModel.imagePath, qVoiceModel.recordCount, qVoiceModel.state))
+                .select(Projections.constructor(ModelInfoDto.class, qVideoSource.videoSourceCode, qVoiceModel.modelCode, qVoiceModel.modelName, qVoiceModel.imagePath, qVoiceModel.recordCount, qVoiceModel.state))
                 .from(qVoiceModel)
                 .where(qVoiceModel.videoSource.eq(videoSource)
                         .and(qVoiceModel.state.eq(3)))
                 .fetch();
     }
 
+
+    // 기본 모델 가져오기(videoSourceCode = null, userCode = null)
     public List<ModelInfoDto> commonModelList() {
         return queryFactory
                 .select(Projections.constructor(ModelInfoDto.class, qVoiceModel.modelCode, qVoiceModel.modelName, qVoiceModel.imagePath, qVoiceModel.recordCount, qVoiceModel.state))
