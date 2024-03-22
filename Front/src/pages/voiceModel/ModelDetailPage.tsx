@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { setModelInfo } from "../../stores/voiceModel";
 import { RootState } from "../../stores/store";
 import SoundWave from "../../components/voiceModel/training/SoundWave";
+import { Button } from "../../components/common/Button";
 
 const Container = styled.div<{ $learnState: number }>`
   background: ${(props) => {
@@ -86,6 +87,20 @@ function ModelDetailPage() {
           <div className="step">
             <h3 className="subtitle">Step 3. 음성 업로드 방법 선택</h3>
             <SelectMethod />
+            <div className="flex w-8/12">
+              <Button 
+                $marginTop={0} 
+                $width={6.25} 
+                $height={3.125} 
+                $fontSize={1} 
+                $color="#7C87E3" 
+                disabled={(modelInfo.method === "self" && modelInfo.learnState === 0) || (modelInfo.method === "file" && !modelInfo.isFileUploaded)}
+              >
+                {
+                  modelInfo.method === 'model' ? '등록하기' : '학습시작'
+                }
+              </Button>
+            </div>
           </div>
         </Box>
       }
