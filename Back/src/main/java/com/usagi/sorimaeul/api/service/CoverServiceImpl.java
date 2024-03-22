@@ -152,6 +152,7 @@ public class CoverServiceImpl implements CoverService {
                 .likeCount(cover.getLikeCount())
                 .thumbnailPath(cover.getThumbnailPath())
                 .nickname(cover.getUser().getNickname())
+                .profileImage(cover.getUser().getProfileImage())
                 .coverSinger(cover.getCoverSinger())
                 .singer(cover.getSinger())
                 .title(cover.getTitle())
