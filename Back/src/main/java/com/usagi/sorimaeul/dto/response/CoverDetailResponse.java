@@ -10,6 +10,7 @@ import lombok.*;
 public class CoverDetailResponse {
 
     private String coverName;
+    private String coverDetail;
     private String storagePath;
     private int likeCount;
     private String thumbnailPath;

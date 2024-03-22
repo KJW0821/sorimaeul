@@ -148,6 +148,7 @@ public class CoverServiceImpl implements CoverService {
         // 리스폰스 생성
         CoverDetailResponse response = CoverDetailResponse.builder()
                 .coverName(cover.getCoverName())
+                .coverDetail(cover.getCoverDetail())
                 .storagePath(cover.getStoragePath())
                 .likeCount(cover.getLikeCount())
                 .thumbnailPath(cover.getThumbnailPath())
