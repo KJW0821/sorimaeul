@@ -51,7 +51,8 @@ export const Button = styled.button<buttonInterface>`
   opacity: ${(props) => props.$selected === undefined ? 'none' : props.$selected ? 'none' : '0.6' };
 
   &:disabled {
-    opacity: .6;
+    background-color: #D9D9D9;
     cursor: not-allowed;
+    color: white;
   }
 `;
