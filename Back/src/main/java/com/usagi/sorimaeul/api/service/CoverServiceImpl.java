@@ -53,7 +53,7 @@ public class CoverServiceImpl implements CoverService {
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회, isComplete = true : 제작 완료된 게시물만
-            if (keyword == null) covers = coverRepository.findByIsComplete(true);
+            if (keyword == null) covers = coverRepository.findByIsCompleteAndIsPublic(true, true);
             // keyword 가 null 이 아니면 CoverName = keyword 인 데이터 조회, isComplete = true : 제작 완료된 게시물만
             else covers = coverRepository.findByCoverNameAndIsComplete(keyword, true);
             // 한 페이지 당 10개씩 조회
