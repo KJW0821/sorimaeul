@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +151,7 @@ public class CoverServiceImpl implements CoverService {
                 .storagePath(cover.getStoragePath())
                 .likeCount(cover.getLikeCount())
                 .thumbnailPath(cover.getThumbnailPath())
-                .nickName(cover.getUser().getNickname())
+                .nickname(cover.getUser().getNickname())
                 .coverSinger(cover.getCoverSinger())
                 .singer(cover.getSinger())
                 .title(cover.getTitle())

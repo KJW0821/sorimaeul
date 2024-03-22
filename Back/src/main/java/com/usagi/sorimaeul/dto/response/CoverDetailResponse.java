@@ -14,7 +14,7 @@ public class CoverDetailResponse {
     private String storagePath;
     private int likeCount;
     private String thumbnailPath;
-    private String nickName;
+    private String nickname;
     private String coverSinger;
     private String singer;
     private String title;
