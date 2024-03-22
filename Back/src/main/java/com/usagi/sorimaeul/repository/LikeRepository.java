@@ -11,4 +11,6 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
 
     Like findByUser_userCodeAndDubbing_dubCode(long userCode, int dubCode);
 
+    Like findByUser_userCodeAndCover_coverCode(long useCode, int coverCode);
+
 }

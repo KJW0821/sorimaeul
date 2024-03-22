@@ -163,7 +163,7 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
-
+        // 좋아요 여부 확인
         boolean isLiked;
         if (likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode) == null) isLiked = false;
         else isLiked = true;

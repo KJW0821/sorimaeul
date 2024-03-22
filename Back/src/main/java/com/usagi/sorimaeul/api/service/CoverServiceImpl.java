@@ -116,11 +116,10 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         Cover cover = coverRepository.findByCoverCode(coverCode);
+        // 좋아요 여부 확인
         boolean isLiked;
-//            // LikeCount 가 1 이상이면 isLiked = true
-            if (cover.getLikeCount() > 0) isLiked = true;
-//            // 0이면 isLiked = false
-            else isLiked = false;
+        if (likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode) == null) isLiked = false;
+        else isLiked = true;
         // 리스폰스 생성
         CoverDetailResponse response = CoverDetailResponse.builder()
                 .coverCode(coverCode)
