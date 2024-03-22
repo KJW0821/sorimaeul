@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.api.service.CoverService;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
 import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
@@ -49,8 +50,8 @@ public class CoverController {
     @Operation(summary = "AI 커버 생성", description = "AI 커버를 생성한다.")
     @ApiResponse(responseCode = "201", description = "AI 커버 생성 성공")
     @PostMapping("/create")
-    public ResponseEntity<?> createCover(@RequestHeader("Authorization") String token,
-                                                              @RequestBody CoverCreateRequest request) {
+    public ResponseEntity<CoverCreateResponse> createCover(@RequestHeader("Authorization") String token,
+                                                           @RequestBody CoverCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.createCover(userCode, request);
     }
