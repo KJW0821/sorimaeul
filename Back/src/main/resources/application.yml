@@ -21,6 +21,15 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
       auto-commit: true
+    tomcat:
+      max-active: 10
+      initial-size: 2
+      max-idle: 2
+      min-idle: 1
+      test-while-idle: true
+      time-between-eviction-runs-millis: 3600000
+      min-evictable-idle-time-millis: 7200000
+      test-on-borrow: true
   security:
     user:
       name: admin
@@ -44,6 +53,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
 
 
 jwt:
