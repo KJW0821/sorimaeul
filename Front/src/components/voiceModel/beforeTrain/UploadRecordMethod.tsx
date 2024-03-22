@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import uploadFile from "../../../assets/uploadFile.png";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setIsFileUploaded } from "../../../stores/voiceModel";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsFileUploaded, setIsStart } from "../../../stores/voiceModel";
+import { RootState } from "../../../stores/store";
+import { uploadExVoiceFiles } from "../../../utils/voiceModelAPI";
 
 const Container = styled.div<{ $isUploaded: boolean }>`
   width: 100%;
@@ -52,43 +54,71 @@ const Container = styled.div<{ $isUploaded: boolean }>`
   }
 `
 
-interface FileData {
-  file: File
-}
-
 function UploadRecordMethod() {
   const dispatch = useDispatch();
-  const [files, setFiles] = useState<FileData[]>([]);
+  const isStart = useSelector((state: RootState) => state.voiceModel.isStart);
+  const modelCode = useSelector((state: RootState) => state.voiceModel.modelCode);
+  const [files, setFiles] = useState<FormData>(new FormData());
+
+  const getFormDataSize = (formData: FormData) => [...formData].reduce((size, el) => size + 1, 0);
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploadFiles = Array.from(e.target.files);
-      const changedFiles = uploadFiles.map(el => {
-        return {file: el}
-      })
       setFiles((prevFiles) => {
-        const newFiles = [...prevFiles, ...changedFiles];
-        return newFiles;
+        const formData = new FormData();
+        for (const value of prevFiles.values()) {
+          formData.append("files", value);
+        }
+        for (let i = 0; i < uploadFiles.length; i++) {
+          formData.append("files", uploadFiles[i]);
+        }
+        return formData
       });
     }
   }
 
   const deleteFile = (idx: number) => {
-    const changedFiles = [...files];
-    changedFiles.splice(idx, 1);
-    setFiles(changedFiles);
+    setFiles((pre) => {
+      const formData = new FormData();
+      let i = 0;
+      for (const value of pre.values()) {
+        if (i !== idx) {
+          formData.append("files", value);
+        }
+        i += 1
+      }
+      return formData;
+    })
   };
 
   useEffect(() => {
-    if (files.length) {
+    if (getFormDataSize(files)) {
       dispatch(setIsFileUploaded(true));
     } else {
       dispatch(setIsFileUploaded(false));
     }
+    for (const x of files.entries()) {
+      console.log(x);
+     };
   }, [files])
 
+  const startLearning = async () => {
+    const res = await uploadExVoiceFiles(modelCode, files);
+    if (res?.status === 200) {
+      console.log('파일 업로드 성공');
+      dispatch(setIsStart(false));
+    }
+  }
+
+  useEffect(() => {
+    if (isStart) {
+      startLearning();
+    }
+  }, [isStart])
+
   return(
-    <Container $isUploaded={files.length > 0}>
+    <Container $isUploaded={getFormDataSize(files) > 0}>
       <div className="guide">
         <p>이미 녹음된 음성 파일을 모델 학습에 이용합니다.</p>
         <p>최소 1시간 이상의 분량이 권장됩니다.</p>
@@ -96,13 +126,16 @@ function UploadRecordMethod() {
       </div>
       <div className="file-controller">
         {
-          files.length > 0 ?
+          getFormDataSize(files) > 0 ?
           <div className="w-full h-full flex flex-col p-4 gap-2">
             <div className="flex flex-col h-3/4 overflow-auto gap-2">
               {
-                files.map((el, idx) => (
+                [...files.values()].map((el, idx) => (
                   <div key={idx} className="flex items-center gap-2">
-                    <p className="name">{el.file.name}</p>
+                    {
+                      el instanceof File &&
+                      <p className="name">{el.name}</p>
+                    }
                     <p className="delete-btn" onClick={() => deleteFile(idx)}>x</p>
                   </div>
                 ))
