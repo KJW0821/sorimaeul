@@ -74,7 +74,7 @@ function ModelDetailPage() {
 
   useEffect(() => {
     getData();
-  }, [params.code])
+  }, [params.code, modelInfo.learnState])
 
   const startLearning = async () => {
     dispatch(setIsStart(true));
