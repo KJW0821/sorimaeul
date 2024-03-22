@@ -16,6 +16,9 @@ public class DubbingDetailResponse {
     private String dubName;
     private String storagePath;
     private String dubDetail;
+    private String nickname;
+    private String profileImage;
+    private int likeCount;
     private LocalDateTime createdTime;
     private String thumbnailPath;
     private boolean isLiked;
