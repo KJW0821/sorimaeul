@@ -20,6 +20,7 @@ import CoverUpdatePage from './pages/aiCover/CoverUpdatePage'
 import CoverDetailPage from './pages/aiCover/CoverDetailPage'
 import CoverListPage from './pages/aiCover/CoverListPage'
 import CoverResultPage from './pages/aiCover/CoverResultPage'
+import PrivateRoute from './components/common/PrivateRoute'
 
 function Layout() {
   return (
@@ -50,73 +51,77 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: "request",
+      { element: <PrivateRoute />,
         children: [
           {
             index: true,
-            element: <RequestListPage />,
+            element: <HomePage />,
           },
           {
-            path: "create",
-            element: <RequestCreatePage />,
+            path: "request",
+            children: [
+              {
+                index: true,
+                element: <RequestListPage />,
+              },
+              {
+                path: "create",
+                element: <RequestCreatePage />,
+              },
+              {
+                path: ":id",
+                element: <RequestDetailPage />,
+              },
+              {
+                path: ":id/edit",
+                element: <RequestEditPage />,
+              }
+            ]
           },
           {
-            path: ":id",
-            element: <RequestDetailPage />,
+            path: "FAQ",
+            element: <FAQPage />
           },
           {
-            path: ":id/edit",
-            element: <RequestEditPage />,
+            path: "model",
+            children: [
+              {
+                path: "create",
+                element: <ModelCreatePage />
+              },
+              {
+                path: ":code",
+                element: <ModelDetailPage />
+              },
+              {
+                path: "record",
+                element: <RecordingPage />
+              }
+            ]
+          },
+          {
+            path: "cover",
+            children: [
+              {
+                index: true,
+                element: <CoverListPage />
+              },
+              {
+                path: ":id",
+                element: <CoverDetailPage />
+              },
+              { 
+                path: "register/:id",
+                element: <CoverResultPage />
+              },
+              {
+                path: "edit/:id",
+                element: <CoverUpdatePage />
+              }
+            ]
           }
         ]
-      },
-      {
-        path: "FAQ",
-        element: <FAQPage />
-      },
-      {
-        path: "model",
-        children: [
-          {
-            path: "create",
-            element: <ModelCreatePage />
-          },
-          {
-            path: ":code",
-            element: <ModelDetailPage />
-          },
-          {
-            path: "record",
-            element: <RecordingPage />
-          }
-        ]
-      },
-      {
-        path: "cover",
-        children: [
-          {
-            index: true,
-            element: <CoverListPage />
-          },
-          {
-            path: ":id",
-            element: <CoverDetailPage />
-          },
-          { 
-            path: "register/:id",
-            element: <CoverResultPage />
-          },
-          {
-            path: "edit/:id",
-            element: <CoverUpdatePage />
-          }
-        ]
-      }
+      }   
     ]
   },
 ]);

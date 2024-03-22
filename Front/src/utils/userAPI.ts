@@ -1,7 +1,15 @@
 import API from "./axios";
 import { getCookie, removeCookie } from "./cookie";
 
-
+export const checkLogin = () => {
+  const access = getCookie("accessToken");
+  const refresh = getCookie("refreshToken");
+  let isUserLoggedIn = false;
+  if (access && refresh) {
+    isUserLoggedIn = true
+  } 
+  return isUserLoggedIn;
+}
 
 export const checkNickname = ( nickname: string ) => {
   return API.get(`user/nickname/${nickname}`)
