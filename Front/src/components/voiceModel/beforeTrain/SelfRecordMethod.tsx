@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
 import { Button } from "../../common/Button";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -43,14 +44,15 @@ const Container = styled.div`
   }
 `
 
-const ProgressBar = styled.div`
+const ProgressBar = styled.div<{ $percentage: number }>`
   flex-grow: 1;
   border-radius: 50px;
   height: 1rem;
   background-color: white;
+  overflow: hidden;
 
   .complete {
-    width: 20%;
+    width: ${(props) => `${props.$percentage}%`};
     height: 100%;
     background: linear-gradient(0deg, rgba(255, 46, 234, 0.3), rgba(255, 46, 234, 0.3)), #7C87E3;;
     border-radius: 50px;
@@ -59,6 +61,7 @@ const ProgressBar = styled.div`
 
 function SelfRecordMethod() {
   const modelInfo = useSelector((state: RootState) => state.voiceModel);
+  const [percentage, setPercentage] = useState(0);
 
   const startRecord = () => {
     if (modelInfo.learnState === 0) {
@@ -66,11 +69,15 @@ function SelfRecordMethod() {
     }
   }
 
+  useEffect(() => {
+    setPercentage(((Math.round((modelInfo.recordCount/200)*1000))/1000)*100);
+  }, [modelInfo])
+
   return (
     <Container>
       <div className="guide">
         <p>음성 학습에 필요한 목소리를 직접 녹음합니다.</p>
-        <p>진행률이 80% 이상이어야 학습 진행이 가능합니다.</p>
+        <p>최소 200문장 이상 녹음해야만 학습 진행이 가능합니다.</p>
         <p>(최소 30분 이상의 시간이 소요되며, 중간 저장이 가능합니다.)</p>
       </div>
       <div onClick={startRecord} className="record-controller">
@@ -80,10 +87,10 @@ function SelfRecordMethod() {
             <p className="light">모델명: {modelInfo.modelName}</p>
             <div className="flex gap-2">
               <p className="md-font">녹음 진행률:</p>
-              <ProgressBar>
+              <ProgressBar $percentage={percentage}>
                 <div className="complete"></div>
               </ProgressBar>
-              <p className="sm-font">{((Math.round((modelInfo.recordCount/200)*1000))/1000)*100}%({modelInfo.recordCount}/200문장)</p>
+              <p className="sm-font">{percentage}% ({modelInfo.recordCount}/200문장)</p>
             </div>
             <div className="flex gap-4 justify-center">
               <Button $marginLeft={0} $marginTop={0} $width={4.5}>이어하기</Button>
