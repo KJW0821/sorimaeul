@@ -140,6 +140,22 @@ public class CommentServiceImpl implements CommentService {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
+
+
+    // 댓글 삭제
+    public ResponseEntity<?> deleteComment(long userCode, int commentCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // commentCode 로 댓글 조회하여 삭제
+        Comment comment = commentRepository.findByCommentCode(commentCode);
+        commentRepository.delete(comment);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
     
 
     // LocalDateTime 을 "방금 전", "5분 전", "1시간 전", "30일 전" 의 형태로 변환

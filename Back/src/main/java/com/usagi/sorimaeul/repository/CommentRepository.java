@@ -12,8 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findByDubbing_DubCode(int dubCode);
 
-    List<Comment> findByCover_CoverCodeAndCommentCode(int coverCode, int commentCode);
-
-    List<Comment> findByDubbing_DubCodeAndCommentCode(int dubCode, int commentCode);
+    Comment findByCommentCode(int commentCode);
 
 }
