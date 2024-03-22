@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.DubbingInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
+import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
 import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
 import com.usagi.sorimaeul.dto.response.DubbingListResponse;
 import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
@@ -180,6 +181,38 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.ok(response);
     }
 
+    // 더빙 영상 등록/수정
+    public ResponseEntity<?> patchDubbingBoard(long userCode, int dubCode, DubbingBoardRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 더빙 영상 수정
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+        dubbing.setDubName(request.getDubName());
+        dubbing.setDubDetail(request.getDubDetail());
+        dubbing.setVideoSource(videoSourceRepository.findByVideoSourceCode(request.getSourceCode()));
+        dubbing.setIsPublic(request.isPublic());
+        dubbingRepository.save(dubbing);
+        
+        return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
+    }
+
+    // 더빙 영상 삭제
+    public ResponseEntity<?> deleteDubbing(long userCode, int dubCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        
+        // 더빙 삭제
+        dubbingRepository.deleteById(dubCode);
+        
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
+    }
 
     public HttpStatus createDub (long userCode, DubCreateRequest request){
         User user = userRepository.getUser(userCode);

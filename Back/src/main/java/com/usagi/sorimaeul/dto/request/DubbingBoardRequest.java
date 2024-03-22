@@ -8,4 +8,5 @@ public class DubbingBoardRequest {
     private String dubName;
     private String dubDetail;
     private int sourceCode;
+    private boolean isPublic;
 }

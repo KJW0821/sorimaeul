@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.controller;
 import com.usagi.sorimaeul.api.service.DubbingService;
 import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
+import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
 import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
 import com.usagi.sorimaeul.dto.response.DubbingListResponse;
 import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
@@ -63,5 +64,24 @@ public class DubbingController {
                                                                   @PathVariable int dubCode){
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingDetail(userCode, dubCode);
+    }
+    
+    @Operation(summary = "더빙 영상 게시글 등록/수정", description = "더빙 영상 게시글을 등록하거나 수정한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 등록/수정 성공")
+    @PatchMapping("/{dubCode}")
+    public ResponseEntity<?> patchDubbingBoard(@RequestHeader("Authorization") String token,
+                                               @PathVariable int dubCode,
+                                               @RequestBody DubbingBoardRequest request){
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.patchDubbingBoard(userCode, dubCode, request);
+    }
+
+    @Operation(summary = "더빙 영상 삭제", description = "더빙 영상을 삭제한다.")
+    @ApiResponse(responseCode = "204", description = "더빙 영상 삭제 성공")
+    @DeleteMapping("/{dubCode}")
+    public ResponseEntity<?> deleteDubbing(@RequestHeader("Authorization") String token,
+                                               @PathVariable int dubCode){
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.deleteDubbing(userCode, dubCode);
     }
 }
