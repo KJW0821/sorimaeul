@@ -18,11 +18,42 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 6rem;
+    height: 8rem;
     background-color: #8F8F8F;
     .start {
       font-size: 1.5rem;
     }
+    .recording {
+      width: 90%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+      .light {
+        font-size: 1.15rem;
+        font-family: 'GmarketSansLight';
+      }
+      .sm-font {
+        font-size: .75rem;
+      }
+      .md-font {
+        font-size: 1rem;
+      }
+    }
+  }
+`
+
+const ProgressBar = styled.div`
+  flex-grow: 1;
+  border-radius: 50px;
+  height: 1rem;
+  background-color: white;
+
+  .complete {
+    width: 20%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(255, 46, 234, 0.3), rgba(255, 46, 234, 0.3)), #7C87E3;;
+    border-radius: 50px;
   }
 `
 
@@ -45,14 +76,20 @@ function SelfRecordMethod() {
       <div onClick={startRecord} className="record-controller">
         {
           modelInfo.recordCount > 0 ?
-          <>
-            <p>모델명: {modelInfo.modelName}</p>
-            <p>녹음 진행률: {modelInfo.recordCount}/200</p>
-            <div>
-              <Button>이어하기</Button>
-              <Button>새로 하기</Button>
+          <div className="recording">
+            <p className="light">모델명: {modelInfo.modelName}</p>
+            <div className="flex gap-2">
+              <p className="md-font">녹음 진행률:</p>
+              <ProgressBar>
+                <div className="complete"></div>
+              </ProgressBar>
+              <p className="sm-font">{((Math.round((modelInfo.recordCount/200)*1000))/1000)*100}%({modelInfo.recordCount}/200문장)</p>
             </div>
-          </>
+            <div className="flex gap-4 justify-center">
+              <Button $marginLeft={0} $marginTop={0} $width={4.5}>이어하기</Button>
+              <Button $marginLeft={0} $marginTop={0} $width={4.5} $color="black" $background="#7C87E3">새로 하기</Button>
+            </div>
+          </div>
           :
          <p className="start">녹음 시작하기</p>
         }
