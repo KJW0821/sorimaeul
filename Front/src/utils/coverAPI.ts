@@ -1,5 +1,5 @@
 import API from "./axios";
-import { CoverUpdateInterface } from "../components/aiCover/CoverInterface";
+import { CoverCreateInterface, CoverUpdateInterface } from "../components/aiCover/CoverInterface";
 
 
 // AI 전체 목록 조회 
@@ -43,6 +43,17 @@ export const getCover = async (coverCode: string) => {
   .then((res) => { 
     return res.data;
   }) 
+  .catch((err) => {
+    return err;
+  })
+}
+
+// AI 커버 생성
+export const createCover =async (data: CoverCreateInterface) => {
+  return API.post("cover/create", data)
+  .then((res) => {
+    return res.data;
+  })
   .catch((err) => {
     return err;
   })

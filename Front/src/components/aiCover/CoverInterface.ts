@@ -1,4 +1,3 @@
-
 export interface Cover {
   coverCode: number; // "Integer, AI 커버 코드"
   coverName: string; // "String, AI 커버 제목"
@@ -10,6 +9,15 @@ export interface Cover {
   coverSinger: string; // "String, 커버 가수명"
   singer: string; // "String, 원곡 가수명"
   title: string; // "String, 원곡명"
+}
+
+export interface CoverCreateInterface {
+  youtubeLink : string;
+  singer: string;
+  title: string;
+  modelCode: number;
+  pitch: number;
+  coverName: string;
 }
 
 export interface CoverListInterface {
