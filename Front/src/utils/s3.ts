@@ -1,4 +1,3 @@
-import { Cookies } from "react-cookie";
 import Resizer from "react-image-file-resizer";
 import API from "./axios";
 import axios from "axios";
@@ -18,16 +17,10 @@ export const resizeFile = async (file: File) =>
   });
 
 const getPresignedURL = async (filename: string) => {
-  const cookie = new Cookies();
-  const token = cookie.get("U_ID");
-
   const URL = "/images/presigned/upload";
   const response = await API.get(URL, {
     method: "GET",
     params: { filename },
-    headers: {
-      Authorization: token,
-    },
   });
   return response.data.url as string;
 };
