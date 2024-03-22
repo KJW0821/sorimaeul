@@ -3,10 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.amazonaws.Response;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
-import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
-import com.usagi.sorimaeul.dto.response.DubbingListResponse;
-import com.usagi.sorimaeul.dto.response.VideoSourceDetailResponse;
-import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
+import com.usagi.sorimaeul.dto.response.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,4 +21,6 @@ public interface DubbingService {
     ResponseEntity<?> patchDubbingBoard(long userCode, int dubCode, DubbingBoardRequest request);
 
     ResponseEntity<?> deleteDubbing(long userCode, int dubCode);
+
+    ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode);
 }

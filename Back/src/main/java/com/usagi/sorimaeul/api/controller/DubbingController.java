@@ -4,10 +4,7 @@ import com.usagi.sorimaeul.api.service.DubbingService;
 import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
-import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
-import com.usagi.sorimaeul.dto.response.DubbingListResponse;
-import com.usagi.sorimaeul.dto.response.VideoSourceDetailResponse;
-import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
+import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -94,4 +91,15 @@ public class DubbingController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.deleteDubbing(userCode, dubCode);
     }
+
+    @Operation(summary = "더빙 영상 분리된 음성 조회", description = "더빙 영상 분리된 음성을 조회한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 분리된 음성 조회 성공")
+    @GetMapping("/audio/{sourceCode}")
+    public ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(@RequestHeader("Authorization") String token,
+                                                                        @PathVariable int sourceCode){
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.getVideoSourceVoice(userCode, sourceCode);
+
+    }
+
 }

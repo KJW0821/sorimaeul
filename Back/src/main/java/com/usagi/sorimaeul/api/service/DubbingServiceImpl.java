@@ -2,20 +2,12 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.DubbingInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
+import com.usagi.sorimaeul.dto.dto.VideoSourceVoiceInfoDto;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
-import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
-import com.usagi.sorimaeul.dto.response.DubbingListResponse;
-import com.usagi.sorimaeul.dto.response.VideoSourceDetailResponse;
-import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
-import com.usagi.sorimaeul.entity.Dubbing;
-import com.usagi.sorimaeul.entity.Like;
-import com.usagi.sorimaeul.entity.User;
-import com.usagi.sorimaeul.entity.VideoSource;
-import com.usagi.sorimaeul.repository.DubbingRepository;
-import com.usagi.sorimaeul.repository.LikeRepository;
-import com.usagi.sorimaeul.repository.UserRepository;
-import com.usagi.sorimaeul.repository.VideoSourceRepository;
+import com.usagi.sorimaeul.dto.response.*;
+import com.usagi.sorimaeul.entity.*;
+import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +27,7 @@ public class DubbingServiceImpl implements DubbingService {
     private final DubbingRepository dubbingRepository;
     private final LikeRepository likeRepository;
     private final VideoSourceRepository videoSourceRepository;
+    private final VoiceSourceRepository voiceSourceRepository;
 
     // 원본 영상 목록 조회
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, int page){
@@ -237,6 +230,34 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
     }
 
+    // 더빙 영상 분리된 음성 조회
+    public ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 음성 조회
+        List<VoiceSource> voiceSources = voiceSourceRepository.findByVideoSource_VideoSourceCodeAndVoiceModelIsNull(sourceCode);
+        List<VideoSourceVoiceInfoDto> videoSourceVoiceInfoDtos = new ArrayList<>();
+        for (VoiceSource voiceSource : voiceSources){
+            // Dto에 담기
+            VideoSourceVoiceInfoDto videoSourceVoiceInfoDto = VideoSourceVoiceInfoDto.builder()
+                    .videoSourceCode(voiceSource.getVoiceSourceCode())
+                    .voicePath(voiceSource.getVoicePath())
+                    .build();
+            videoSourceVoiceInfoDtos.add(videoSourceVoiceInfoDto);
+        }
+        // 리스폰스 생성
+        VideoSourceVoiceResponse response = VideoSourceVoiceResponse.builder()
+                .voiceSources(videoSourceVoiceInfoDtos)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+        
+
+    }
+
     public HttpStatus createDub (long userCode, DubCreateRequest request){
         User user = userRepository.getUser(userCode);
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(request.getSourceCode());
@@ -252,4 +273,3 @@ public class DubbingServiceImpl implements DubbingService {
         return HttpStatus.OK;
     }
 }
-
