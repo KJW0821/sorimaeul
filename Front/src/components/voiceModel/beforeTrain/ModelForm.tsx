@@ -50,6 +50,12 @@ const Container = styled.div`
       align-items: center;
     }
 
+    .over-text {
+      white-space: nowrap;
+      overflow: hidden;
+      width: 80%;
+    }
+
     label {
       display: inline-block;
       color: white;
@@ -62,6 +68,7 @@ const Container = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
+      white-space: nowrap;
     }
 
     input[type="file"] {
@@ -140,7 +147,7 @@ function ModelForm() {
       <div className="step">
         <h3 className="subtitle">Step 2. 썹네일 업로드</h3>
         <div className="flex items-center gap-2">
-          <p className="input">{ imagePath ? imagePath : '음성 모델 썸네일을 업로드해주세요' }</p>
+          <p className="input over-text">{ imagePath ? imagePath : '음성 모델 썸네일을 업로드해주세요' }</p>
           <label htmlFor="file">업로드</label>
           <input onChange={handleImagePath} type="file" id="file" />
         </div>
