@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import SelectBox from "./SelectBox";
 import SelfRecordMethod from "./SelfRecordMethod";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
+import UploadRecordMethod from "./UploadRecordMethod";
+import { useEffect } from "react";
+import { setIsFileUploaded } from "../../../stores/voiceModel";
 
 const Container = styled.div`
   border-radius: 35px;
@@ -20,6 +23,11 @@ const Container = styled.div`
 
 function SelectMethod() {
   const method = useSelector((state: RootState) => state.voiceModel.method);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setIsFileUploaded(false));
+  }, [method])
 
   return (
     <Container>
@@ -28,6 +36,10 @@ function SelectMethod() {
       {
         method === "self" &&
         <SelfRecordMethod />
+      }
+      {
+        method === "file" &&
+        <UploadRecordMethod />
       }
     </Container>  
   )
