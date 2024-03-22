@@ -5,6 +5,7 @@ import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceVoiceInfoDto;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
+import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
@@ -254,8 +255,16 @@ public class DubbingServiceImpl implements DubbingService {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
-        
+    }
 
+    // 더빙 음성 녹음 업로드
+    public ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(long userCode, DubbingRecordRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     public HttpStatus createDub (long userCode, DubCreateRequest request){

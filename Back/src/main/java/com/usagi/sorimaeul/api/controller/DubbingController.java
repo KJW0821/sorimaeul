@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.api.service.DubbingService;
 import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
+import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -99,7 +100,14 @@ public class DubbingController {
                                                                         @PathVariable int sourceCode){
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getVideoSourceVoice(userCode, sourceCode);
-
     }
 
+    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
+    @GetMapping("/record")
+    public ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(@RequestHeader("Authorization") String token,
+                                                                     @RequestBody DubbingRecordRequest request){
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.uploadDubbingRecord(userCode, request);
+    }
 }

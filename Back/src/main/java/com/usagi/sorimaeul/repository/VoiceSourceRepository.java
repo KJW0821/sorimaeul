@@ -10,4 +10,7 @@ import java.util.List;
 public interface VoiceSourceRepository extends JpaRepository<VoiceSource, Integer> {
 
     List<VoiceSource> findByVideoSource_VideoSourceCodeAndVoiceModelIsNull(int videoSourceCode);
+
+    VoiceSource findByVideoSourceIsNullAndVoiceModelIsNull();
+
 }
