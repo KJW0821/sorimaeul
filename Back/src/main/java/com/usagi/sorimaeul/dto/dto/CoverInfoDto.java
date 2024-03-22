@@ -16,6 +16,7 @@ public class CoverInfoDto {
     private int likeCount;
     private String thumbnailPath;
     private String nickname;
+    private String profileImage;
     private String coverSinger;
     private String singer;
     private String title;
