@@ -6,6 +6,7 @@ import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
 import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
 import com.usagi.sorimaeul.dto.response.DubbingListResponse;
+import com.usagi.sorimaeul.dto.response.VideoSourceDetailResponse;
 import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
 import com.usagi.sorimaeul.entity.Dubbing;
 import com.usagi.sorimaeul.entity.Like;
@@ -75,7 +76,29 @@ public class DubbingServiceImpl implements DubbingService {
 
         return ResponseEntity.ok(videoSourceListResponse);
     }
-    
+
+    // 원본 영상 상세 조회
+    public ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(long userCode, int sourceCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(sourceCode);
+        // 리스폰스 생성
+        VideoSourceDetailResponse response = VideoSourceDetailResponse.builder()
+                .videoSourceCode(sourceCode)
+                .sourceName(videoSource.getSourceName())
+                .sourceDetail(videoSource.getSourceDetail())
+                .videoPlaytime(videoSource.getVideoPlaytime())
+                .storagePath(videoSource.getStoragePath())
+                .thumbnailPath(videoSource.getThumbnailPath())
+                .createdTime(videoSource.getCreatedTime())
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
     // 더빙 영상 목록 조회
     public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page){
         // 사용자 정보 확인
