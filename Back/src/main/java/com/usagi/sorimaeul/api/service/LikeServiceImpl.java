@@ -38,7 +38,7 @@ public class LikeServiceImpl implements LikeService {
                 .build();
         likeRepository.save(like);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
 
@@ -56,7 +56,7 @@ public class LikeServiceImpl implements LikeService {
                 .build();
         likeRepository.save(like);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
 
