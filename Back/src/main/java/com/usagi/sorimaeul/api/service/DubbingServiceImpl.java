@@ -152,6 +152,7 @@ public class DubbingServiceImpl implements DubbingService {
                     .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
                     .likeCount(dubbing.getLikeCount())
                     .nickname(dubbing.getUser().getNickname())
+                    .profileImage(dubbing.getUser().getProfileImage())
                     .build();
 
         // customDubbings에 담기

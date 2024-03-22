@@ -19,6 +19,7 @@ public class DubbingInfoDto {
     private String dubDetail;
     private boolean isPublic;
     private String nickname;
+    private String profileImage;
     private int likeCount;
     private LocalDateTime createdTime;
     private int isLiked;
