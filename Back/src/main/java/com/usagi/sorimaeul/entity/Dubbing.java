@@ -52,4 +52,9 @@ public class Dubbing {
     @Builder.Default
     @Column(name = "like_count")
     private int likeCount = 0;
+
+    @Builder.Default
+    @Column(name = "is_complete")
+    private boolean isComplete = false;
+
 }
