@@ -6,10 +6,7 @@ import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
 import com.usagi.sorimaeul.dto.response.DubbingListResponse;
 import com.usagi.sorimaeul.dto.response.VideoSourceListResponse;
-import com.usagi.sorimaeul.entity.Dubbing;
-import com.usagi.sorimaeul.entity.Like;
-import com.usagi.sorimaeul.entity.User;
-import com.usagi.sorimaeul.entity.VideoSource;
+import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.DubbingRepository;
 import com.usagi.sorimaeul.repository.LikeRepository;
 import com.usagi.sorimaeul.repository.UserRepository;
@@ -88,23 +85,31 @@ public class DubbingServiceImpl implements DubbingService {
         // 인덱스 선언
         int startIdx = 0;
         int endIdx = 0;
+        // 총 페이지 수 선언
+        int totalPages = 0;
 
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회
-            if (keyword == null) dubbings = dubbingRepository.findAll();
+            if (keyword == null) dubbings = dubbingRepository.findByIsComplete(true);
             // keyword 가 null 이 아니면 dubName = keyword 인 데이터 조회
-            else dubbings = dubbingRepository.findByDubName(keyword);
+            else dubbings = dubbingRepository.findByDubNameAndIsComplete(keyword, true);
             // 한 페이지 당 8개씩 조회
             startIdx = (page - 1) * 8;
             endIdx = Math.min(startIdx + 8, dubbings.size());
+            // // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) dubbings.size() / 10);
         }
+
         // 마이 페이지 - 나의 게시물 조회
          else if (target.equals("mine")) {
             dubbings = dubbingRepository.findByUser_userCode(userCode);
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, dubbings.size());
+            // // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) dubbings.size() / 6);
         }
+
         // 마이 페이지 - 관심 컨텐츠 - 좋아요 누른 게시물 조회
          else if (target.equals("like")){
             // 나의 유저 코드와 일치하는 like 리스트를 가져온다.
@@ -119,7 +124,10 @@ public class DubbingServiceImpl implements DubbingService {
             // 한 페이지 당 6개 조회
             startIdx = (page - 1) * 9;
             endIdx = Math.min(startIdx + 6, dubbings.size());
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) dubbings.size() / 6);
         }
+
         // 인기 더빙 영상 목록 조회
          else if (target.equals("popular")) {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
@@ -127,8 +135,11 @@ public class DubbingServiceImpl implements DubbingService {
             dubbings = dubbingRepository.findTop5ByOrderByLikeCountDesc();
             startIdx = 0;
             endIdx = 4;
+            // // 총 페이지 수 계산
+            totalPages = 1;
         }
-
+        // 최신순으로 보여주기 위해 covers 뒤집기
+        reverseList(dubbings);
         // dubbing 리스트 페이지네이션
         List<Dubbing> pageDubbings = dubbings.subList(startIdx, endIdx);
         // dubbing 리스트를 순회
@@ -149,6 +160,7 @@ public class DubbingServiceImpl implements DubbingService {
         // 리스폰스 생성
         DubbingListResponse dubbingListResponse = DubbingListResponse.builder()
                 .dubbings(customDubbings)
+                .totalPages(totalPages)
                 .build();
 
         return ResponseEntity.ok(dubbingListResponse);
@@ -194,6 +206,24 @@ public class DubbingServiceImpl implements DubbingService {
         dubbingRepository.save(dubbing);
 
         return HttpStatus.OK;
+    }
+
+
+    // 리스트 뒤집기
+    public void reverseList(List<Dubbing> list) {
+        int start = 0;
+        int end = list.size() - 1;
+
+        while (start < end) {
+            // 리스트의 앞과 뒤 요소를 교환
+            Dubbing temp = list.get(start);
+            list.set(start, list.get(end));
+            list.set(end, temp);
+
+            // 다음 요소로 이동
+            start++;
+            end--;
+        }
     }
 }
 

@@ -14,4 +14,6 @@ import java.util.List;
 public class DubbingListResponse {
 
     private List<DubbingInfoDto> dubbings;
+    private int totalPages;
+
 }

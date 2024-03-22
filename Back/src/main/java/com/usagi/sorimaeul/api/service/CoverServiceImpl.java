@@ -46,22 +46,23 @@ public class CoverServiceImpl implements CoverService {
         List<Cover> covers = new ArrayList<>();
         List<CoverInfoDto> customCovers = new ArrayList<>();
         // 인덱스 선언
-        int startIdx;
-        int endIdx;
+        int startIdx = 0;
+        int endIdx = 0;
         // 총 페이지 수 선언
-        int totalPages;
+        int totalPages = 0;
 
         // 모든 게시물 조회
         if (target.equals("all")) {
-            // keyword 가 null 이면 전체 조회
-            if (keyword == null) covers = coverRepository.findAll();
-            // keyword 가 null 이 아니면 CoverName = keyword 인 데이터 조회
-            else covers = coverRepository.findByCoverName(keyword);
+            // keyword 가 null 이면 전체 조회, isComplete = true : 제작 완료된 게시물만
+            if (keyword == null) covers = coverRepository.findByIsComplete(true);
+            // keyword 가 null 이 아니면 CoverName = keyword 인 데이터 조회, isComplete = true : 제작 완료된 게시물만
+            else covers = coverRepository.findByCoverNameAndIsComplete(keyword, true);
             // 한 페이지 당 10개씩 조회
             startIdx = (page - 1) * 10;
             endIdx = Math.min(startIdx + 10, covers.size());
             // 총 페이지 수 계산
-            totalPages = (int) Math.ceil(covers.size()/10);
+            totalPages = (int) Math.ceil((double) covers.size() / 10);
+
         // 마이 페이지 - 나의 게시물 조회
         } else if (target.equals("mine")) {
             covers = coverRepository.findByUser_userCode(userCode);
@@ -69,19 +70,10 @@ public class CoverServiceImpl implements CoverService {
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, covers.size());
             // // 총 페이지 수 계산
-            totalPages = (int) Math.ceil(covers.size() / 6);
-        // 인기 게시글 조회
-        } else if (target.equals("popular")) {
-            // 커버 게시글 좋아요 순, 최신 순으로 5개 조회
-            covers = coverRepository.findTop5ByOrderByLikeCountDescUpdatedTimeDesc();
-            // 인덱스 0 ~ covers.size() 로 정의
-            startIdx = 0;
-            endIdx = covers.size();
-            // // 총 페이지 수 계산
-            totalPages = 1;
+            totalPages = (int) Math.ceil((double) covers.size() / 6);
 
         // 마이 페이지 - 관심 컨텐츠 - 좋아요 누른 게시물 조회
-        } else {
+        } else if (target.equals("like")){
             // 나의 유저 코드와 일치하는 like 리스트를 가져온다.
             List<Like> likes = likeRepository.findByUser_userCode(userCode);
             // like 와 매핑되는 Cover 들을 covers 에 넣는다.
@@ -95,8 +87,20 @@ public class CoverServiceImpl implements CoverService {
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, covers.size());
             // 총 페이지 수 계산
-            totalPages = (int) Math.ceil(covers.size()/6);
+            totalPages = (int) Math.ceil((double) covers.size() / 6);
+
+        // 인기 게시글 조회
+        } else if (target.equals("popular")) {
+            // 커버 게시글 좋아요 순, 최신 순으로 5개 조회
+            covers = coverRepository.findTop5ByOrderByLikeCountDescUpdatedTimeDesc();
+            // 인덱스 0 ~ covers.size() 로 정의
+            startIdx = 0;
+            endIdx = covers.size();
+            // // 총 페이지 수 계산
+            totalPages = 1;
         }
+        // 최신순으로 보여주기 위해 covers 뒤집기
+        reverseList(covers);
         // cover 리스트 페이지네이션
         List<Cover> pageCovers = covers.subList(startIdx, endIdx);
         // cover 리스트를 순회
@@ -235,6 +239,22 @@ public class CoverServiceImpl implements CoverService {
         coverRepository.deleteById(coverCode);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
+    }
+
+    public void reverseList(List<Cover> list) {
+        int start = 0;
+        int end = list.size() - 1;
+
+        while (start < end) {
+            // 리스트의 앞과 뒤 요소를 교환
+            Cover temp = list.get(start);
+            list.set(start, list.get(end));
+            list.set(end, temp);
+
+            // 다음 요소로 이동
+            start++;
+            end--;
+        }
     }
 
 }

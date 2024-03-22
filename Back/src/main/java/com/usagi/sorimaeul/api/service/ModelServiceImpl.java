@@ -235,6 +235,8 @@ public class ModelServiceImpl implements ModelService {
         // videoSourceCode 만 null 이면 마이페이지 음성 모델 조회(페이지 네이션, 내가 학습 시킨 모델)
         } else if (videoSourceCode == null) {
             List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, -1);
+            // 최신순 조회를 위해 뒤집기
+            reverseList(myModelList);
             int startIdx = (page - 1) * 4;
             int endIdx = Math.min(startIdx + 4, myModelList.size());
             mergedModelList = myModelList.subList(startIdx, endIdx);
@@ -362,6 +364,24 @@ public class ModelServiceImpl implements ModelService {
         // 녹음 문장 개수가 200개가 되면 state = 1: '학습전'으로 DB 갱신
         if (num == 200) voiceModel.setState(1);
         voiceModelRepository.save(voiceModel);
+    }
+
+
+    // 리스트 뒤집기
+    public void reverseList(List<ModelInfoDto> list) {
+        int start = 0;
+        int end = list.size() - 1;
+
+        while (start < end) {
+            // 리스트의 앞과 뒤 요소를 교환
+            ModelInfoDto temp = list.get(start);
+            list.set(start, list.get(end));
+            list.set(end, temp);
+
+            // 다음 요소로 이동
+            start++;
+            end--;
+        }
     }
 
 }
