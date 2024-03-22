@@ -3,6 +3,7 @@ import SelectBox from "./SelectBox";
 import SelfRecordMethod from "./SelfRecordMethod";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
+import UploadModelMethod from "./UploadModelMethod";
 
 const Container = styled.div`
   border-radius: 35px;
@@ -28,6 +29,10 @@ function SelectMethod() {
       {
         method === "self" &&
         <SelfRecordMethod />
+      }
+      {
+        method === "file" &&
+        <UploadModelMethod />
       }
     </Container>  
   )
