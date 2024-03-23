@@ -131,7 +131,7 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 파일 업로드 확인
         if (files == null || files.length == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 올바르게 업로드되지 않았습니다.");
         }
 
 
@@ -182,7 +182,10 @@ public class ModelServiceImpl implements ModelService {
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1)
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
-
+        // 파일 업로드 확인
+        if (modelFiles == null || modelFiles.length == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델 파일이 올바르게 업로드되지 않았습니다.");
+        }
 
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/model/";
@@ -230,7 +233,7 @@ public class ModelServiceImpl implements ModelService {
         if (voiceModel.getUser() != user)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
         // 학습 상태가 '학습전'일 때만 학습 가능
-        if (voiceModel.getState() == 1) {
+        if (voiceModel.getState() != 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("학습전 단계일 때만 학습을 시작할 수 있습니다.");
         }
         // 모델 학습 가능 횟수 검사
