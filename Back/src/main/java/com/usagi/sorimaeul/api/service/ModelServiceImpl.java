@@ -113,6 +113,10 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 모델 소유자와 클라이언트가 일치하지 않으면 BAD_REQUEST 반환
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        if (voiceModel.getUser() != user)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 파일 업로드 확인
@@ -154,6 +158,10 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        // 모델 소유자와 클라이언트가 일치하지 않으면 BAD_REQUEST 반환
+        if (voiceModel.getUser() != user)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 폴더 경로 설정
@@ -170,7 +178,6 @@ public class ModelServiceImpl implements ModelService {
                 // 파일 저장
                 saveFile(folderPath + fileName, modelFiles[i].getBytes());
             }
-            VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
             // 해당 모델의 유저 코드와 모델 파일 경로, 생성시간, 학습상태 DB에 저장
             voiceModel.setStoragePath(folderPath);
             voiceModel.setCreatedTime(LocalDateTime.now());
@@ -196,9 +203,12 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+        // 모델 소유자와 클라이언트가 일치하지 않으면 BAD_REQUEST 반환
+        if (voiceModel.getUser() != user)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
-        VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         // 녹음 파일 저장 경로
         String recordFolderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
         // 모델 학습 로직 작성
