@@ -161,6 +161,10 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         Cover cover = coverRepository.findByCoverCode(coverCode);
+        // 비공개인데 작성자가 아닌 경우 BadRequest 반환
+        if (!cover.isPublic() && cover.getUser() != user)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
         boolean isLiked;
 //            // LikeCount 가 1 이상이면 isLiked = true
             if (cover.getLikeCount() > 0) isLiked = true;
