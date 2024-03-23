@@ -256,7 +256,7 @@ public class ModelServiceImpl implements ModelService {
 
         // 생성된 모델을 서버에 저장
 //        uploadModelFile(modelCode, userCode, modelFiles);
-        return ResponseEntity.badRequest().body("실패");
+        return ResponseEntity.badRequest().body("모델 학습 성공");
     }
 
 
@@ -301,7 +301,6 @@ public class ModelServiceImpl implements ModelService {
 
         // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
         } else if (page == null) {
-            System.out.println("여긴 더빙 음성 모델 조회 입니다.");
             // 영상 제공 모델
             List<VoiceModel> videoSourceModelList = voiceModelRepository.videoSourceModelList(videoSource);
             // dto 로 변환
@@ -341,11 +340,20 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
-        long modelUserCode = voiceModel.getUser().getUserCode();
-        // 유저 코드가 일치하지 않을 경우 400 반환
-        if (modelUserCode != userCode) {
-            return ResponseEntity.badRequest().build();
+        User modelUser = voiceModel.getUser();
+        
+        // 예외 처리
+        // 기본 제공 모델, 영상 제공 모델에 접근시 BAD_REQUEST 반환
+        if (modelUser==null) {
+            return ResponseEntity.badRequest().body(ModelInfoResponse.withError("플랫폼에서 제공하는 모델에는 접근할 수 없습니다."));
         }
+        long modelUserCode = modelUser.getUserCode();
+        // 모델 소유자와 클라이언트가 일치하지 않으면 BAD_REQUEST 반환
+        if (modelUserCode != userCode) {
+            return ResponseEntity.badRequest().body(ModelInfoResponse.withError("타인의 모델에는 접근할 수 없습니다."));
+        }
+
+
         // 리스폰스 생성
         ModelInfoResponse response = ModelInfoResponse.builder()
                 .modelCode(voiceModel.getModelCode())
