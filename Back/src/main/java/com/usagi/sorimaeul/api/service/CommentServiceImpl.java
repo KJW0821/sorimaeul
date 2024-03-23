@@ -49,6 +49,7 @@ public class CommentServiceImpl implements CommentService {
         for (Comment comment : commentList) {
             // Dto 생성
             CommentInfoDto commentInfoDto = CommentInfoDto.builder()
+                    .commentCode(comment.getCommentCode())
                     .nickname(comment.getUser().getNickname())
                     .profileImage(comment.getUser().getProfileImage())
                     .content(comment.getContent())
@@ -84,6 +85,7 @@ public class CommentServiceImpl implements CommentService {
         for (Comment comment : commentList) {
             // Dto 생성
             CommentInfoDto commentInfoDto = CommentInfoDto.builder()
+                    .commentCode(comment.getCommentCode())
                     .nickname(comment.getUser().getNickname())
                     .profileImage(comment.getUser().getProfileImage())
                     .content(comment.getContent())
@@ -118,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body("댓글 생성 성공!");
     }
 
 
@@ -138,7 +140,7 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body("댓글 생성 성공!");
     }
 
 
@@ -154,7 +156,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByCommentCode(commentCode);
         commentRepository.delete(comment);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 성공!");
     }
     
 
