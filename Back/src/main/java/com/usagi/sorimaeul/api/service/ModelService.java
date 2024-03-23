@@ -28,6 +28,8 @@ public interface ModelService {
 
     ResponseEntity<String> updateModel(int modelCode, long userCode, ModelUpdateRequest request);
 
+    ResponseEntity<String> deleteModel(long userCode, int modelCode);
+
     ResponseEntity<GetScriptResponse> getScript(long userCode);
 
 }
