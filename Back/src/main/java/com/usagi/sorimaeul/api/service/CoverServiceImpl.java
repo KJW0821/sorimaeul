@@ -120,7 +120,7 @@ public class CoverServiceImpl implements CoverService {
             totalPages = 1;
         }
         // 최신순으로 보여주기 위해 covers 뒤집기
-        reverseList(covers);
+        if (!target.equals("popular")) reverseList(covers);
         // cover 리스트 페이지네이션
         List<Cover> pageCovers = covers.subList(startIdx, endIdx);
         // cover 리스트를 순회
