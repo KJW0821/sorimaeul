@@ -12,6 +12,7 @@ import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import net.sf.jsqlparser.Model;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -126,7 +127,7 @@ public class ModelServiceImpl implements ModelService {
                 // 파일 저장
                 saveFile(folderPath + fileName, files[i].getBytes());
             }
-            
+
             // state = 1 : '학습전'으로 DB 갱신
             VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
             voiceModel.setState(1);
@@ -220,44 +221,65 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        List<ModelInfoDto> mergedModelList;
+        List<ModelInfoDto> mergedModelDtos = new ArrayList<>();
         boolean end = false;
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
 
-
         // videoSourceCode 와 page 가 모두 null 이면 AI 커버 음성 모델 조회(기본 제공 모델, 내가 학습 시킨 모델)
         if (page == null && videoSourceCode == null) {
-            List<ModelInfoDto> commonModelList = voiceModelRepository.commonModelList();
-            List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, 3);
-            mergedModelList = new ArrayList<>(commonModelList);
-            mergedModelList.addAll(myModelList);
+            // 기본 제공 모델
+            List<VoiceModel> commonModelList = voiceModelRepository.commonModelList();
+            // dto 로 변환
+            List<ModelInfoDto> commonModelDtos = modelListToDto(commonModelList, false, false);
+            // 나의 모델
+            List<VoiceModel> myModelList = voiceModelRepository.userModelList(user, 3);
+            // dto 로 변환
+            List<ModelInfoDto> myModelDtos = modelListToDto(myModelList, true, false);
+            // 합치기
+            mergedModelDtos = new ArrayList<>(commonModelDtos);
+            mergedModelDtos.addAll(myModelDtos);
 
         // videoSourceCode 만 null 이면 마이페이지 음성 모델 조회(페이지 네이션, 내가 학습 시킨 모델)
         } else if (videoSourceCode == null) {
-            List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, -1);
+            // 나의 모델
+            List<VoiceModel> myModelList = voiceModelRepository.userModelList(user, -1);
             // 최신순 조회를 위해 뒤집기
             reverseList(myModelList);
+            // dto 로 변환
+            List<ModelInfoDto> myModelDtos = modelListToDto(myModelList, true, false);
+            // 페이지네이션
             int startIdx = (page - 1) * 4;
             int endIdx = Math.min(startIdx + 4, myModelList.size());
-            mergedModelList = myModelList.subList(startIdx, endIdx);
+            mergedModelDtos = myModelDtos.subList(startIdx, endIdx);
             end = endIdx >= myModelList.size();
 
         // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
         } else if (page == null) {
-            List<ModelInfoDto> videoSourceModelList = voiceModelRepository.videoSourceModelList(videoSource);
-            List<ModelInfoDto> myModelList = voiceModelRepository.userModelList(user, 3);
-            List<ModelInfoDto> commonModelList = voiceModelRepository.commonModelList();
-            mergedModelList = new ArrayList<>(videoSourceModelList);
-            mergedModelList.addAll(myModelList);
-            mergedModelList.addAll(commonModelList);
+            System.out.println("여긴 더빙 음성 모델 조회 입니다.");
+            // 영상 제공 모델
+            List<VoiceModel> videoSourceModelList = voiceModelRepository.videoSourceModelList(videoSource);
+            // dto 로 변환
+            List<ModelInfoDto> videoSourceModelDtos = modelListToDto(videoSourceModelList, false, true);
+            // 나의 모델
+            List<VoiceModel> myModelList = voiceModelRepository.userModelList(user, 3);
+            // dto 로 변환
+            List<ModelInfoDto> myModelDtos = modelListToDto(myModelList, true, false);
+            // 기본 제공 모델
+            List<VoiceModel> commonModelList = voiceModelRepository.commonModelList();
+            // dto 로 변환
+            List<ModelInfoDto> commonModelDtos = modelListToDto(commonModelList, false, false);
+            // 합치기
+            mergedModelDtos = new ArrayList<>(videoSourceModelDtos);
+            mergedModelDtos.addAll(myModelDtos);
+            mergedModelDtos.addAll(commonModelDtos);
         } else {
             // 잘못된 요청
             return ResponseEntity.badRequest().build();
         }
-        
+
         // 리스폰스 생성
         ModelListResponse modelListResponse = ModelListResponse.builder()
-                .voiceModels(mergedModelList)
+                .voiceModels(mergedModelDtos)
                 .end(end)
                 .build();
 
@@ -368,13 +390,13 @@ public class ModelServiceImpl implements ModelService {
 
 
     // 리스트 뒤집기
-    public void reverseList(List<ModelInfoDto> list) {
+    public void reverseList(List<VoiceModel> list) {
         int start = 0;
         int end = list.size() - 1;
 
         while (start < end) {
             // 리스트의 앞과 뒤 요소를 교환
-            ModelInfoDto temp = list.get(start);
+            VoiceModel temp = list.get(start);
             list.set(start, list.get(end));
             list.set(end, temp);
 
@@ -382,6 +404,27 @@ public class ModelServiceImpl implements ModelService {
             start++;
             end--;
         }
+    }
+
+
+    // 리스트를 dto 로 바꿔주기
+    public List<ModelInfoDto> modelListToDto(List<VoiceModel> list, boolean isMine, boolean isExistSource) {
+        List<ModelInfoDto> changedList = new ArrayList<>();
+        for (VoiceModel model : list) {
+            // dto 에 필요한 값 넣기
+            ModelInfoDto modelInfoDto = ModelInfoDto.builder()
+                    .isMine(isMine)
+                    .isExistSource(isExistSource)
+                    .modelCode(model.getModelCode())
+                    .modelName(model.getModelName())
+                    .imagePath(model.getImagePath())
+                    .recordCount(model.getRecordCount())
+                    .state(model.getState())
+                    .build();
+            // 합치기
+            changedList.add(modelInfoDto);
+        }
+        return changedList;
     }
 
 }

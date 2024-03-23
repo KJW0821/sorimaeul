@@ -49,4 +49,13 @@ public class VoiceModel {
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
+    // 해당 매개변수를 받는 생성자 추가
+    public VoiceModel(int modelCode, String modelName, String imagePath, int recordCount, int state) {
+        this.modelCode = modelCode;
+        this.modelName = modelName;
+        this.imagePath = imagePath;
+        this.recordCount = recordCount;
+        this.state = state;
+    }
+
 }
