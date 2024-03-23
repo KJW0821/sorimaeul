@@ -64,8 +64,8 @@ public class CommentController {
 
 
     @Operation(summary = "댓글 삭제", description = "댓글을 삭제한다.")
-    @ApiResponse(responseCode = "204", description = "댓글 삭제 성공")
-    @PostMapping("/{commentCode}")
+    @ApiResponse(responseCode = "200", description = "댓글 삭제 성공")
+    @DeleteMapping("/{commentCode}")
     public ResponseEntity<?> deleteComment(@RequestHeader("Authorization") String token,
                                                 @PathVariable int commentCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
