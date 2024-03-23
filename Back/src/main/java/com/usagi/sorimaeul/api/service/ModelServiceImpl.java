@@ -74,11 +74,12 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
 
         // 예외 처리
-        // 모델 소유자와 클라이언트가 일치하지 않거나 모델 학습 상태가 0(녹음중)이 아니면 BAD_REQUEST 반환
-        if (voiceModel.getUser() != user || voiceModel.getState() != 0)
+        // 모델 소유자와 클라이언트가 일치하지 않거나 모델 학습 상태가 녹음중 또는 학습전이 아니면 BAD_REQUEST 반환
+        if (voiceModel.getUser() != user || voiceModel.getState() <= 1)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         // 모델 학습 가능 횟수 검사
-        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+        if (user.getLearnCount() < 1)
+            return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 파일 업로드 확인
         if (recordingFile == null || recordingFile.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
@@ -126,7 +127,8 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("녹음중 단계일 때만 업로드 가능합니다.");
         }
         // 모델 학습 가능 횟수 검사
-        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+        if (user.getLearnCount() < 1)
+            return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 파일 업로드 확인
         if (files == null || files.length == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
@@ -147,7 +149,6 @@ public class ModelServiceImpl implements ModelService {
             }
 
             // state = 1 : '학습전'으로 DB 갱신
-            VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
             voiceModel.setState(1);
             voiceModelRepository.save(voiceModel);
             return ResponseEntity.ok("외부 녹음 파일 업로드 성공!");
@@ -179,7 +180,8 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("녹음중 단계일 때만 업로드 가능합니다.");
         }
         // 모델 학습 가능 횟수 검사
-        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+        if (user.getLearnCount() < 1)
+            return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
 
         // 폴더 경로 설정
@@ -221,12 +223,21 @@ public class ModelServiceImpl implements ModelService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 예외 처리
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         // 모델 소유자와 클라이언트가 일치하지 않으면 BAD_REQUEST 반환
         if (voiceModel.getUser() != user)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
+        // 학습 상태가 '학습전'일 때만 학습 가능
+        if (voiceModel.getState() == 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("학습전 단계일 때만 학습을 시작할 수 있습니다.");
+        }
         // 모델 학습 가능 횟수 검사
-        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+        if (user.getLearnCount() < 1)
+            return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+
+
         // 녹음 파일 저장 경로
         String recordFolderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
         // 모델 학습 로직 작성
