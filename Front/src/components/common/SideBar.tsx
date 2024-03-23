@@ -101,7 +101,7 @@ function SideBar() {
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center w-full">
               <div className="col">
-                <img src={user} alt="profile" />
+                <img onClick={() => navigate('/profile')} src={user} alt="profile" />
                 <p>마이페이지</p>
               </div>
               <div className="col">
@@ -136,7 +136,7 @@ function SideBar() {
             </div>
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
-              <img src={user} alt="profile" />
+              <img onClick={() => navigate('/profile')} src={user} alt="profile" />
               <img src={bell} alt="alarm" />
             </div>
           </div>
