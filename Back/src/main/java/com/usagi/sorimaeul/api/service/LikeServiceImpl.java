@@ -31,6 +31,13 @@ public class LikeServiceImpl implements LikeService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 자기 게시글에 좋아요 추가 가능
+        // 이미 해당 사용자가 해당 더빙에 대해 좋아요를 했는지 확인
+        Like existingLike = likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode);
+        if (existingLike != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 좋아요 누른 게시글입니다.");
+        }
+
         // Like 생성
         Like like = Like.builder()
                 .user(user)
@@ -38,7 +45,7 @@ public class LikeServiceImpl implements LikeService {
                 .build();
         likeRepository.save(like);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body("성공!");
     }
 
 
@@ -49,6 +56,12 @@ public class LikeServiceImpl implements LikeService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 자기 게시글에 좋아요 추가 가능
+        // 이미 해당 사용자가 해당 더빙에 대해 좋아요를 했는지 확인
+        Like existingLike = likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode);
+        if (existingLike != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 좋아요 누른 게시글입니다.");
+        }
         // Like 생성
         Like like = Like.builder()
                 .user(user)
@@ -56,7 +69,7 @@ public class LikeServiceImpl implements LikeService {
                 .build();
         likeRepository.save(like);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body("성공!");
     }
 
 
@@ -67,10 +80,17 @@ public class LikeServiceImpl implements LikeService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 해당 사용자가 좋아요 누른 게시글인지 확인
+        Like existingLike = likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode);
+        if (existingLike == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("좋아요를 누른 적이 없는 게시글입니다.");
+        }
+
         Like like = likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode);
         likeRepository.delete(like);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("취소 성공!");
     }
 
 
@@ -81,10 +101,17 @@ public class LikeServiceImpl implements LikeService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 해당 사용자가 좋아요 누른 게시글인지 확인
+        Like existingLike = likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode);
+        if (existingLike == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("좋아요를 누른 적이 없는 게시글입니다.");
+        }
+
         Like like = likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode);
         likeRepository.delete(like);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("취소 성공!");
     }
 
 }
