@@ -15,8 +15,6 @@ function SignUpForm() {
   const [imagePath, setImagePath] = useState('');
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const [isValidNickname, setIsValidNickname] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // 제출 상태 관리를 위한 상태 변수 추가
-
 
   const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
@@ -59,25 +57,20 @@ function SignUpForm() {
   };
   
   // 회원 정보 등록 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const submitHandler = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    if (!isSubmitting && isValidNickname) { // 중복 제출 방지 조건 추가
-      setIsSubmitting(true); // 제출 시작 시 isSubmitting 상태를 true로 설정
+    if (isValidNickname) { // 중복 제출 방지 조건 추가
       try {
-        console.log("회원가입중?");
         const res = await signUp(inputNickname, imagePath);
         // 회원 가입 성공 시 redux store 로그인 상태 반영 후 홈페이지로 이동
         if (res?.status === 201) {
-          console.log("회원가입 성공");
           dispatch(login());
           dispatch(set({ nickname: inputNickname, profileImage: imagePath }));
           navigate('/');
         }
       } catch (error) {
         console.error("회원 가입 실패", error);
-      } finally {
-        setIsSubmitting(false); // 제출 완료 후 false로 재설정
-      }
+      } 
     } else {
       console.log("중복된 닉네임입니다.");
     }
@@ -87,7 +80,7 @@ function SignUpForm() {
   return (
     <div>
       <h2>회원 정보 기입</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submitHandler}>
         <div>
           <label>프로필 이미지 업로드</label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} />
@@ -98,7 +91,7 @@ function SignUpForm() {
           <input type="text" value={inputNickname} onChange={handleNickname} />
           <button onClick={onClickCheckNickname}>중복 확인</button>
         </div>
-        <button type="submit" onClick={handleSubmit}>등록</button>
+        <button type="submit">등록</button>
       </form>
     </div>
   )
