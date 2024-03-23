@@ -3,10 +3,10 @@ import { CookiesProvider } from 'react-cookie'
 import './App.css'
 import LandingPage from './pages/home/LandingPage'
 import HomePage from './pages/home/HomePage'
-import LoginCallbackPage from './pages/users/LoginCallbackPage';
+import LoginCallbackPage from './pages/user/LoginCallbackPage';
 import { Provider } from "react-redux";
 import store from "./stores/store";
-import SignUpPage from "./pages/users/SignUpPage";
+import SignUpPage from "./pages/user/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
