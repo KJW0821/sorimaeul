@@ -58,7 +58,7 @@ public class CoverServiceImpl implements CoverService {
             // page 가 null 이 아니면
             if (page != null) {
                 // 한 페이지 당 10개씩 조회
-                startIdx = (page - 1) * 10;
+                startIdx = Math.min((page - 1) * 10, covers.size()) / 10 * 10;
                 endIdx = Math.min(startIdx + 10, covers.size());
             }
             // page 가 null 이면 전체 조회
@@ -74,8 +74,8 @@ public class CoverServiceImpl implements CoverService {
             // page 가 null 이 아니면
             if (page != null) {
             // 한 페이지 당 6개씩 조회
-            startIdx = (page - 1) * 6;
-            endIdx = Math.min(startIdx + 6, covers.size());
+                startIdx = Math.min((page - 1) * 6, covers.size()) / 6 * 6;
+                endIdx = Math.min(startIdx + 6, covers.size());
             }
             // page 가 null 이면 전체 조회
             else {
@@ -99,7 +99,7 @@ public class CoverServiceImpl implements CoverService {
             // page 가 null 이 아니면
             if (page != null) {
                 // 한 페이지 당 6개씩 조회
-                startIdx = (page - 1) * 6;
+                startIdx = Math.min((page - 1) * 6, covers.size()) / 6 * 6;
                 endIdx = Math.min(startIdx + 6, covers.size());
             }
             // page 가 null 이면 전체 조회
@@ -115,7 +115,6 @@ public class CoverServiceImpl implements CoverService {
             // 커버 게시글 좋아요 순, 최신 순으로 5개 조회
             covers = coverRepository.findTop5ByOrderByLikeCountDescUpdatedTimeDesc();
             // 인덱스 0 ~ covers.size() 로 정의
-            startIdx = 0;
             endIdx = covers.size();
             // // 총 페이지 수 계산
             totalPages = 1;
