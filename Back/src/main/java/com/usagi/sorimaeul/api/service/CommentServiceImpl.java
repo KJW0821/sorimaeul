@@ -4,6 +4,8 @@ import com.usagi.sorimaeul.dto.dto.CommentInfoDto;
 import com.usagi.sorimaeul.dto.request.CommentCreateRequest;
 import com.usagi.sorimaeul.dto.response.CommentListResponse;
 import com.usagi.sorimaeul.entity.Comment;
+import com.usagi.sorimaeul.entity.Cover;
+import com.usagi.sorimaeul.entity.Dubbing;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.repository.CommentRepository;
 import com.usagi.sorimaeul.repository.CoverRepository;
@@ -39,6 +41,13 @@ public class CommentServiceImpl implements CommentService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 예외 처리
+        Cover cover = coverRepository.findByCoverCode(coverCode);
+        // 요청한 게시글이 없으면 404 반환
+        if (cover == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        // 비공개 글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
+        if (!cover.isPublic() || !cover.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         // coverCode 일치하는 댓글 가져오기
         List<Comment> commentList = commentRepository.findByCover_CoverCode(coverCode);
@@ -76,6 +85,13 @@ public class CommentServiceImpl implements CommentService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
+        // 예외 처리
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+        // 요청한 게시글이 없으면 404 반환
+        if (dubbing == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        // 비공개 글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
+        if (!dubbing.getIsPublic() || !dubbing.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
         // dubCode 일치하는 댓글 가져오기
         List<Comment> commentList = commentRepository.findByDubbing_DubCode(dubCode);
         // 빈 CommentInfoDto 리스트 생성
@@ -111,7 +127,14 @@ public class CommentServiceImpl implements CommentService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        
+
+        // 예외 처리
+        Cover cover = coverRepository.findByCoverCode(coverCode);
+        // 요청한 게시글이 없으면 404 반환
+        if (cover == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        // 비공개 글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
+        if (!cover.isPublic() || !cover.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
         // 댓글 생성
         Comment comment = Comment.builder()
                 .cover(coverRepository.findByCoverCode(coverCode))
@@ -131,6 +154,13 @@ public class CommentServiceImpl implements CommentService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 예외 처리
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+        // 요청한 게시글이 없으면 404 반환
+        if (dubbing == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        // 비공개 글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
+        if (!dubbing.getIsPublic() || !dubbing.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         // 댓글 생성
         Comment comment = Comment.builder()
@@ -152,8 +182,12 @@ public class CommentServiceImpl implements CommentService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // commentCode 로 댓글 조회하여 삭제
+        // 예외 처리
         Comment comment = commentRepository.findByCommentCode(commentCode);
+        // 요청한 댓글이 없으면 404 반환
+        if (comment == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+        // 댓글 삭제
         commentRepository.delete(comment);
 
         return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 성공!");
