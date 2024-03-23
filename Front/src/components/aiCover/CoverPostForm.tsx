@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../common/Button";
 import { CoverUpdateInterface } from "./CoverInterface";
+import { requestS3 } from "../../utils/s3";
 
 interface Props {
   isEdit: boolean;
@@ -23,6 +24,26 @@ const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, onSubmit }) => {
     }
   }, [initialData]);
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const uploadedImageUrl = await requestS3({
+          filename: file.name.replace(/\.[^/.]+$/, ''),
+          file: file,
+        });
+        if (uploadedImageUrl) {
+          setData({ ...data, thumbnailPath: uploadedImageUrl });
+        } else {
+          console.error("Error: Uploaded image URL is undefined");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    }
+  };
+
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement  | HTMLSelectElement>
   ) => {
@@ -41,8 +62,8 @@ const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, onSubmit }) => {
       <input type="text" id="coverName" name="coverName" value={data.coverName} onChange={handleChange} />
       <label htmlFor="coverDetail">내용</label>
       <textarea id="coverDetail" name="coverDetail" value={data.coverDetail} onChange={handleChange} cols={30} rows={10}></textarea>
-      <label htmlFor="thumbnailPath">이미지 파일 경로</label>
-      <input type="text" id="thumbnailPath" name="thumbnailPath" value={data.thumbnailPath} onChange={handleChange}/>
+      <label htmlFor="thumbnailPath">이미지 파일 업로드</label>
+      <input type="file" onChange={handleImageUpload} />
       <label htmlFor="isPublic">공개 여부</label>
       <select id="isPublic" name="isPublic" value={data.isPublic?.toString()} onChange={handleChange}>
         <option value="true">공개</option>
