@@ -113,7 +113,7 @@ public class CoverServiceImpl implements CoverService {
         // 인기 게시글 조회
         } else if (target.equals("popular")) {
             // 커버 게시글 좋아요 순, 최신 순으로 5개 조회
-            covers = coverRepository.findTop5ByOrderByLikeCountDescUpdatedTimeDesc();
+            covers = coverRepository.findTop5ByOrderByLikeCountDescCoverCodeDesc();
             // 인덱스 0 ~ covers.size() 로 정의
             endIdx = covers.size();
             // // 총 페이지 수 계산

@@ -15,7 +15,7 @@ public interface CoverRepository extends JpaRepository<Cover, Integer> {
 
     Cover findByCoverCode(int coverCode);
 
-    List<Cover> findTop5ByOrderByLikeCountDescUpdatedTimeDesc();
+    List<Cover> findTop5ByOrderByLikeCountDescCoverCodeDesc();
 
     List<Cover> findByIsCompleteAndIsPublic(boolean isComplete, boolean isPublic);
 
