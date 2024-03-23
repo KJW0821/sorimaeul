@@ -340,10 +340,10 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
-        User modelUser = voiceModel.getUser();
         
         // 예외 처리
         // 기본 제공 모델, 영상 제공 모델에 접근시 BAD_REQUEST 반환
+        User modelUser = voiceModel.getUser();
         if (modelUser==null) {
             return ResponseEntity.badRequest().body(ModelInfoResponse.withError("플랫폼에서 제공하는 모델에는 접근할 수 없습니다."));
         }
@@ -369,23 +369,31 @@ public class ModelServiceImpl implements ModelService {
 
 
     // 모델 수정(모델 이름, 대표 이미지)
-    public HttpStatus updateModel(int modelCode, long userCode, ModelUpdateRequest request) {
+    public ResponseEntity<String> updateModel(int modelCode, long userCode, ModelUpdateRequest request) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
-            return HttpStatus.NOT_FOUND;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
-        long modelUserCode = voiceModel.getUser().getUserCode();
-        // 유저 코드가 일치하지 않을 경우 400 반환
-        if (modelUserCode != userCode) {
-            return HttpStatus.BAD_REQUEST;
+
+        // 예외 처리
+        // 기본 제공 모델, 영상 제공 모델에 접근시 BAD_REQUEST 반환
+        User modelUser = voiceModel.getUser();
+        if (modelUser==null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("플랫폼에서 제공하는 모델에는 접근할 수 없습니다.");
         }
+        long modelUserCode = modelUser.getUserCode();
+        // 모델 소유자와 클라이언트가 일치하지 않으면 BAD_REQUEST 반환
+        if (modelUserCode != userCode) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
+        }
+
         // 모델 이름과 대표 이미지 경로 DB 수정
         voiceModel.setModelName(request.getModelName());
         voiceModel.setImagePath(request.getImagePath());
         voiceModelRepository.save(voiceModel);
-        return HttpStatus.OK;
+        return ResponseEntity.status(HttpStatus.OK).body("모델 수정 성공!");
     }
 
 

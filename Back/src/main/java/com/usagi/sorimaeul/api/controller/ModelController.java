@@ -121,9 +121,9 @@ public class ModelController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
     })
     @PatchMapping("/detail/{modelCode}")
-    public HttpStatus updateModel(@RequestHeader("Authorization") String token,
-                                  @PathVariable int modelCode,
-                                  @RequestBody ModelUpdateRequest request) {
+    public ResponseEntity<String> updateModel(@RequestHeader("Authorization") String token,
+                                              @PathVariable int modelCode,
+                                              @RequestBody ModelUpdateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.updateModel(modelCode, userCode, request);
     }

@@ -26,7 +26,7 @@ public interface ModelService {
 
     ResponseEntity<ModelInfoResponse> getModelInfo(int modelCode, long userCode);
 
-    HttpStatus updateModel(int modelCode, long userCode, ModelUpdateRequest request);
+    ResponseEntity<String> updateModel(int modelCode, long userCode, ModelUpdateRequest request);
 
     ResponseEntity<GetScriptResponse> getScript(long userCode);
 
