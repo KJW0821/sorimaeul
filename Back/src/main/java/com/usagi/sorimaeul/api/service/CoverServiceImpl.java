@@ -35,7 +35,7 @@ public class CoverServiceImpl implements CoverService {
 
 
     // AI 커버 리스트 조회
-    public ResponseEntity<CoverListResponse> getCoverList(long userCode, String target, String keyword, int page) {
+    public ResponseEntity<CoverListResponse> getCoverList(long userCode, String target, String keyword, Integer page) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -49,42 +49,64 @@ public class CoverServiceImpl implements CoverService {
         int endIdx = 0;
         // 총 페이지 수 선언
         int totalPages = 0;
-
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회, isComplete = true : 제작 완료된 게시물만
             if (keyword == null) covers = coverRepository.findByIsCompleteAndIsPublic(true, true);
-            // keyword 가 null 이 아니면 CoverName = keyword 인 데이터 조회, isComplete = true : 제작 완료된 게시물만
-            else covers = coverRepository.findByCoverNameContainingAndIsComplete(keyword, true);
-            // 한 페이지 당 10개씩 조회
-            startIdx = (page - 1) * 10;
-            endIdx = Math.min(startIdx + 10, covers.size());
+            // keyword 가 null 이 아니면 CoverName = keyword 인 데이터 조회, isComplete = true : 제작 완료된 게시물만, isPublic = true : 공개 설정된 게시물만
+            else covers = coverRepository.findByCoverNameContainingAndIsCompleteAndIsPublic(keyword, true, true);
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 10개씩 조회
+                startIdx = (page - 1) * 10;
+                endIdx = Math.min(startIdx + 10, covers.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = covers.size();
+            }
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) covers.size() / 10);
 
         // 마이 페이지 - 나의 게시물 조회
         } else if (target.equals("mine")) {
             covers = coverRepository.findByUser_userCode(userCode);
+            // page 가 null 이 아니면
+            if (page != null) {
             // 한 페이지 당 6개씩 조회
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, covers.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = covers.size();
+            }
             // // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) covers.size() / 6);
 
         // 마이 페이지 - 관심 컨텐츠 - 좋아요 누른 게시물 조회
         } else if (target.equals("like")){
-            // 나의 유저 코드와 일치하는 like 리스트를 가져온다.
+            // 나의 유저 코드와 일치하는 like 리스트를 가져온다. (isComplete 처리를 하지 않은 이유 : 제작 완료되지 않은 게시물에 좋아요를 누를 수 없다.)
             List<Like> likes = likeRepository.findByUser_userCode(userCode);
             // like 와 매핑되는 Cover 들을 covers 에 넣는다.
             for (Like like : likes) {
                 Cover cover = like.getCover();
-                if (cover != null) {
+                // 공개 설정, 제작 완료된 것만 추가
+                if (cover != null && cover.isPublic() && cover.isComplete()) {
                     covers.add(cover);
                 }
             }
-            // 한 페이지 당 6개씩 조회
-            startIdx = (page - 1) * 6;
-            endIdx = Math.min(startIdx + 6, covers.size());
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 6개씩 조회
+                startIdx = (page - 1) * 6;
+                endIdx = Math.min(startIdx + 6, covers.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = covers.size();
+            }
+
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) covers.size() / 6);
 

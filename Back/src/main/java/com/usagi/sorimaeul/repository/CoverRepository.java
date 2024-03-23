@@ -19,6 +19,6 @@ public interface CoverRepository extends JpaRepository<Cover, Integer> {
 
     List<Cover> findByIsCompleteAndIsPublic(boolean isComplete, boolean isPublic);
 
-    List<Cover> findByCoverNameContainingAndIsComplete(String coverName, boolean isComplete);
+    List<Cover> findByCoverNameContainingAndIsCompleteAndIsPublic(String coverName, boolean isComplete, boolean isPublic);
 
 }

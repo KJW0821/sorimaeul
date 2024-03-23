@@ -31,7 +31,7 @@ public class CoverController {
     public ResponseEntity<CoverListResponse> getCoverList(@RequestHeader("Authorization") String token,
                                                           @RequestParam String target,
                                                           @RequestParam(required = false) String keyword,
-                                                          @RequestParam(required = false) int page) {
+                                                          @RequestParam(required = false) Integer page) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.getCoverList(userCode, target, keyword, page);
     }

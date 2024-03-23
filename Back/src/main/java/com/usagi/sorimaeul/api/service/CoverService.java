@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface CoverService {
 
-    ResponseEntity<CoverListResponse> getCoverList(long userCode, String target, String keyword, int page);
+    ResponseEntity<CoverListResponse> getCoverList(long userCode, String target, String keyword, Integer page);
 
     ResponseEntity<CoverDetailResponse> getCoverDetail(long userCode, int coverCode);
 
