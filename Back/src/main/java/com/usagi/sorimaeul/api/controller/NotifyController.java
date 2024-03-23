@@ -25,7 +25,7 @@ public class NotifyController {
 	@ApiResponse(responseCode = "200", description = "알림 리스트 조회 성공")
 	@GetMapping
 	public ResponseEntity<NotifyResponse> getNotify(@RequestHeader("Authorization") String token) {
-		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token).substring(7));
+		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 		NotifyResponse response = notifyService.getNotify(userCode);
 		return ResponseEntity.ok(response);
 	}
