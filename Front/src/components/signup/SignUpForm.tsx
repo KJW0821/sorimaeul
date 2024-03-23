@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { checkNickname, signUp } from "../../utils/userAPI";
 import { login, set } from "../../stores/user";
 import { requestS3 } from "../../utils/s3";
+import { getCookie } from "../../utils/cookie";
 
 
 function SignUpForm() {
@@ -14,6 +15,8 @@ function SignUpForm() {
   const [imagePath, setImagePath] = useState('');
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const [isValidNickname, setIsValidNickname] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // 제출 상태 관리를 위한 상태 변수 추가
+
 
   const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
@@ -44,8 +47,8 @@ function SignUpForm() {
     }
   };
 
-
-  const onClickCheckNickname = async () => {
+  const onClickCheckNickname = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault(); // 폼의 제출을 방지합니다.
     const response = await checkNickname(inputNickname);
 
     if (response === 0) {
@@ -54,23 +57,30 @@ function SignUpForm() {
       setIsValidNickname(false);
     }
   };
-
+  
   // 회원 정보 등록 
-  const handleSubmit = async () => {
-    if (isValidNickname) {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    if (!isSubmitting && isValidNickname) { // 중복 제출 방지 조건 추가
+      setIsSubmitting(true); // 제출 시작 시 isSubmitting 상태를 true로 설정
       try {
-        await signUp(inputNickname, imagePath);
+        console.log("회원가입중?");
+        const res = await signUp(inputNickname, imagePath);
         // 회원 가입 성공 시 redux store 로그인 상태 반영 후 홈페이지로 이동
-        dispatch(login());
-        dispatch(set({ nickname: inputNickname, profileImage: imagePath }));
-        navigate('/');
+        if (res?.status === 201) {
+          console.log("회원가입 성공");
+          dispatch(login());
+          dispatch(set({ nickname: inputNickname, profileImage: imagePath }));
+          navigate('/');
+        }
       } catch (error) {
         console.error("회원 가입 실패", error);
+      } finally {
+        setIsSubmitting(false); // 제출 완료 후 false로 재설정
       }
     } else {
       console.log("중복된 닉네임입니다.");
     }
-
   };
 
 
