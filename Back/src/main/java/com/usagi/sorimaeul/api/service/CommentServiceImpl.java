@@ -131,9 +131,9 @@ public class CommentServiceImpl implements CommentService {
         // 예외 처리
         Cover cover = coverRepository.findByCoverCode(coverCode);
         // 요청한 게시글이 없으면 404 반환
-        if (cover == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        // 비공개 글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
-        if (!cover.isPublic() || !cover.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (cover == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 게시글입니다.");
+        // 비공개 게시글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
+        if (!cover.isPublic() || !cover.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비공개 게시글이거나 생성이 완료되지 않은 게시글입니다.");
 
         // 댓글 생성
         Comment comment = Comment.builder()
@@ -158,9 +158,9 @@ public class CommentServiceImpl implements CommentService {
         // 예외 처리
         Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
         // 요청한 게시글이 없으면 404 반환
-        if (dubbing == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        // 비공개 글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
-        if (!dubbing.getIsPublic() || !dubbing.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (dubbing == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 게시글입니다.");
+        // 비공개 게시글이거나 생성이 완료되지 않은 게시글 조회시 400 반환
+        if (!dubbing.getIsPublic() || !dubbing.isComplete()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비공개 게시글이거나 생성이 완료되지 않은 게시글입니다.");
 
         // 댓글 생성
         Comment comment = Comment.builder()
@@ -185,7 +185,7 @@ public class CommentServiceImpl implements CommentService {
         // 예외 처리
         Comment comment = commentRepository.findByCommentCode(commentCode);
         // 요청한 댓글이 없으면 404 반환
-        if (comment == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        if (comment == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 댓글입니다.");
 
         // 댓글 삭제
         commentRepository.delete(comment);
