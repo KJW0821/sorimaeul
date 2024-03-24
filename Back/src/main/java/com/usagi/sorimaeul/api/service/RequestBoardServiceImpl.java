@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.RequestInfoDto;
+import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
 import com.usagi.sorimaeul.entity.RequestBoard;
 import com.usagi.sorimaeul.entity.User;
@@ -24,7 +25,7 @@ public class RequestBoardServiceImpl implements RequestBoardService {
     private final RequestBoardRepository requestBoardRepository;
 
     // 문의 게시판 리스트 조회
-    public ResponseEntity<RequestListResponse> getRequestList(long userCode, Integer typeCode, Integer page){
+    public ResponseEntity<RequestListResponse> getRequestList(long userCode, int typeCode, int page){
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -57,6 +58,24 @@ public class RequestBoardServiceImpl implements RequestBoardService {
         RequestListResponse response = RequestListResponse.builder()
                 .requests(customRequests)
                 .totalPages(totalPages)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    // 문의 게시글 상세 조회
+    public ResponseEntity<RequestDetailResponse> getRequestDetail(long userCode, int boardCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        RequestBoard requestDetail = requestBoardRepository.findByBoardCode(boardCode);
+
+        RequestDetailResponse response = RequestDetailResponse.builder()
+                .title(requestDetail.getTitle())
+                .content((requestDetail.getContent()))
+                .createdTime(requestDetail.getCreatedTime())
                 .build();
 
         return ResponseEntity.ok(response);

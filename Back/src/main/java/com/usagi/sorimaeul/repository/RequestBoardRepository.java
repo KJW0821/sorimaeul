@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RequestBoardRepository extends JpaRepository<RequestBoard, Integer> {
 
-//    List<RequestBoard> findByUser_userCode(long userCode);
+    RequestBoard findByBoardCode(int boardCode);
 
     List<RequestBoard> findByTypeCodeOrderByCreatedTime(int typeCode);
 }
