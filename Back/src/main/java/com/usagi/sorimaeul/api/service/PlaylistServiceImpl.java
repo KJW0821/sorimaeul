@@ -133,6 +133,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
                 .playlistCode(playlistCode)
                 .playlistName(playlist.getPlaylistName())
+                .createTime(playlist.getCreateTime())
                 .playlist(playlistCoverInfoDtos)
                 .build();
 
