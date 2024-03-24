@@ -45,7 +45,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         List<PlaylistInfoDto> playlistInfoDtos = new ArrayList<>();
         // 플레이리스트들을 순회하며
         for (Playlist playlist : playlists) {
-            // 플레이리스트코드를 이용해서 AI 커버 목록 조회
+            // 플레이리스트 코드를 이용해서 AI 커버 목록 조회
             int playlistCode = playlist.getPlaylistCode();
             List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
             // PlaylistCoverInfoDto 리스트 빈 리스트 생성
@@ -127,7 +127,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .playlist(playlistCoverInfoDtos)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(playlistInfoDto);
     }
 
 
