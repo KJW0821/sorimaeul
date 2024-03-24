@@ -102,4 +102,25 @@ public class RequestBoardServiceImpl implements RequestBoardService {
         return ResponseEntity.status(HttpStatus.CREATED).body("생성 성공");
     }
 
+    // 문의 게시글 수정
+    public ResponseEntity<?> updateRequest(long userCode, int boardCode, RequestCreateRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        RequestBoard requestBoard = requestBoardRepository.findByBoardCode(boardCode);
+        User requestUser = requestBoard.getUser();
+        if (requestUser != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        // 문의 게시글 수정
+        requestBoard.setTitle(request.getTitle());
+        requestBoard.setContent(request.getContent());
+        requestBoardRepository.save(requestBoard);
+
+        return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
+    }
 }

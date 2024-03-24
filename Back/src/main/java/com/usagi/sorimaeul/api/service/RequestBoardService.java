@@ -13,4 +13,5 @@ public interface RequestBoardService {
 
     ResponseEntity<?> createRequest(long userCode, RequestCreateRequest request);
 
+    ResponseEntity<?> updateRequest(long userCode, int boardCode, RequestCreateRequest request);
 }

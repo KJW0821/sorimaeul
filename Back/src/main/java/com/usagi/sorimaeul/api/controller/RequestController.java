@@ -45,8 +45,18 @@ public class RequestController {
     @ApiResponse(responseCode = "201", description = "문의 게시글 생성 성공")
     @PostMapping
     public ResponseEntity<?> createRequest(@RequestHeader("Authorization") String token,
-                                                           @RequestBody RequestCreateRequest request) {
+                                           @RequestBody RequestCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return requestBoardService.createRequest(userCode, request);
+    }
+
+    @Operation(summary = "문의 게시글 수정", description = "문의 게시글을 수정한다.")
+    @ApiResponse(responseCode = "200", description = "문의 게시글 수정 성공")
+    @PutMapping("/{boardCode}")
+    public ResponseEntity<?> updateRequest(@RequestHeader("Authorization") String token,
+                                           @PathVariable int boardCode,
+                                           @RequestBody RequestCreateRequest request) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return requestBoardService.updateRequest(userCode, boardCode, request);
     }
 }
