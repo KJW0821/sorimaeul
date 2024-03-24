@@ -1,6 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.RequestInfoDto;
+import com.usagi.sorimaeul.dto.request.RequestCreateRequest;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
 import com.usagi.sorimaeul.entity.RequestBoard;
@@ -10,6 +11,7 @@ import com.usagi.sorimaeul.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -80,4 +82,24 @@ public class RequestBoardServiceImpl implements RequestBoardService {
 
         return ResponseEntity.ok(response);
     }
+
+    // 문의 게시글 등록
+    public ResponseEntity<?> createRequest(long userCode, RequestCreateRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 문의 게시글 등록
+        RequestBoard newRequest = RequestBoard.builder()
+                .user(user)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        requestBoardRepository.save(newRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("생성 성공");
+    }
+
 }

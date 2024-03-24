@@ -1,6 +1,9 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.RequestBoardService;
+import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
+import com.usagi.sorimaeul.dto.request.RequestCreateRequest;
+import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -36,5 +39,14 @@ public class RequestController {
                                                                             @PathVariable int boardCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return requestBoardService.getRequestDetail(userCode, boardCode);
+    }
+
+    @Operation(summary = "문의 게시글 생성", description = "문의 게시글을 생성한다.")
+    @ApiResponse(responseCode = "201", description = "문의 게시글 생성 성공")
+    @PostMapping
+    public ResponseEntity<?> createRequest(@RequestHeader("Authorization") String token,
+                                                           @RequestBody RequestCreateRequest request) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return requestBoardService.createRequest(userCode, request);
     }
 }
