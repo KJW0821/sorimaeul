@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -137,9 +138,13 @@ public class ModelServiceImpl implements ModelService {
 
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+
         try {
             // 폴더 생성
             createFolder(folderPath);
+
+            // 폴더 권한 변경
+            changeFolderPermission(folderPath);
 
             for (int i = 0; i < files.length; i++) {
                 // record_1.wav 형식으로 저장
@@ -513,6 +518,24 @@ public class ModelServiceImpl implements ModelService {
             changedList.add(modelInfoDto);
         }
         return changedList;
+    }
+
+
+    public static void changeFolderPermission(String folderPath) {
+        try {
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                // 폴더가 존재하지 않는 경우에는 먼저 폴더를 생성합니다.
+                folder.mkdirs();
+            }
+            // 폴더의 읽기 및 쓰기 권한을 설정합니다.
+            folder.setReadable(true);
+            folder.setWritable(true);
+            System.out.println("1폴더의 권한 변경 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("2폴더의 권한 변경 실패");
+        }
     }
 
 }
