@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.RequestInfoDto;
 import com.usagi.sorimaeul.dto.request.RequestCreateRequest;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
+import com.usagi.sorimaeul.dto.response.RequestFAQListResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
 import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.RequestBoard;
@@ -142,5 +143,38 @@ public class RequestBoardServiceImpl implements RequestBoardService {
         requestBoardRepository.deleteById(boardCode);
         
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
+    }
+
+    // 자주 묻는 질문 조회
+    public ResponseEntity<RequestFAQListResponse> getFAQList(long userCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 배열 선언
+        List<RequestBoard> requests = requestBoardRepository.findByTypeCode(1);
+        List<RequestInfoDto> customRequest = new ArrayList<>();
+
+        for (RequestBoard requestBoard : requests) {
+            // Dto 에 담기
+            RequestInfoDto requestInfoDto = RequestInfoDto.builder()
+                    .boardCode(requestBoard.getBoardCode())
+                    .title(requestBoard.getTitle())
+                    .content(requestBoard.getContent())
+                    .createdTime(requestBoard.getCreatedTime())
+                    .build();
+
+            customRequest.add(requestInfoDto);
+        }
+
+        // response 생성
+        RequestFAQListResponse response = RequestFAQListResponse.builder()
+                .requests(customRequest)
+                .build();
+
+        return ResponseEntity.ok(response);
+
+
     }
 }
