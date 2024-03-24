@@ -26,10 +26,16 @@ public class VideoSource {
     @Column(name = "source_name")
     private String sourceName;
 
+    @Column(name = "source_detail")
+    private String sourceDetail;
+
     @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
+
+    @Column(name = "video_playtime")
+    private String videoPlaytime;
 }

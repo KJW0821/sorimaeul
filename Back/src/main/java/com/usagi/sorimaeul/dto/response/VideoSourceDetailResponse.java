@@ -1,4 +1,4 @@
-package com.usagi.sorimaeul.dto.dto;
+package com.usagi.sorimaeul.dto.response;
 
 import lombok.*;
 
@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoSourceInfoDto {
+public class VideoSourceDetailResponse {
 
     private int videoSourceCode;
     private String sourceName;
+    private String storagePath;
+    private LocalDateTime createdTime;
     private String thumbnailPath;
     private String videoPlaytime;
-    private LocalDateTime createdTime;
-    private String storagePath;
     private String sourceDetail;
 }

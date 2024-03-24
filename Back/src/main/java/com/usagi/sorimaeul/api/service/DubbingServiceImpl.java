@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.DubbingInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
+import com.usagi.sorimaeul.dto.dto.VideoSourceVoiceInfoDto;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.response.DubbingDetailResponse;
 import com.usagi.sorimaeul.dto.response.DubbingListResponse;
@@ -30,6 +31,7 @@ public class DubbingServiceImpl implements DubbingService {
     private final DubbingRepository dubbingRepository;
     private final LikeRepository likeRepository;
     private final VideoSourceRepository videoSourceRepository;
+    private final VoiceSourceRepository voiceSourceRepository;
 
     // 원본 영상 목록 조회
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, int page){
@@ -71,7 +73,29 @@ public class DubbingServiceImpl implements DubbingService {
 
         return ResponseEntity.ok(videoSourceListResponse);
     }
-    
+
+    // 원본 영상 상세 조회
+    public ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(long userCode, int sourceCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(sourceCode);
+        // 리스폰스 생성
+        VideoSourceDetailResponse response = VideoSourceDetailResponse.builder()
+                .videoSourceCode(sourceCode)
+                .sourceName(videoSource.getSourceName())
+                .sourceDetail(videoSource.getSourceDetail())
+                .videoPlaytime(videoSource.getVideoPlaytime())
+                .storagePath(videoSource.getStoragePath())
+                .thumbnailPath(videoSource.getThumbnailPath())
+                .createdTime(videoSource.getCreatedTime())
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
     // 더빙 영상 목록 조회
     public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page){
         // 사용자 정보 확인
@@ -175,7 +199,7 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
-
+        // 좋아요 여부 확인
         boolean isLiked;
         if (likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode) == null) isLiked = false;
         else isLiked = true;
@@ -196,6 +220,74 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.ok(response);
     }
 
+    // 더빙 영상 등록/수정
+    public ResponseEntity<?> patchDubbingBoard(long userCode, int dubCode, DubbingBoardRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 더빙 영상 수정
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+        dubbing.setDubName(request.getDubName());
+        dubbing.setDubDetail(request.getDubDetail());
+        dubbing.setVideoSource(videoSourceRepository.findByVideoSourceCode(request.getSourceCode()));
+        dubbing.setIsPublic(request.isPublic());
+        dubbingRepository.save(dubbing);
+        
+        return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
+    }
+
+    // 더빙 영상 삭제
+    public ResponseEntity<?> deleteDubbing(long userCode, int dubCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        
+        // 더빙 삭제
+        dubbingRepository.deleteById(dubCode);
+        
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
+    }
+
+    // 더빙 영상 분리된 음성 조회
+    public ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // 음성 조회
+        List<VoiceSource> voiceSources = voiceSourceRepository.findByVideoSource_VideoSourceCodeAndVoiceModelIsNull(sourceCode);
+        List<VideoSourceVoiceInfoDto> videoSourceVoiceInfoDtos = new ArrayList<>();
+        for (VoiceSource voiceSource : voiceSources){
+            // Dto에 담기
+            VideoSourceVoiceInfoDto videoSourceVoiceInfoDto = VideoSourceVoiceInfoDto.builder()
+                    .videoSourceCode(voiceSource.getVoiceSourceCode())
+                    .voicePath(voiceSource.getVoicePath())
+                    .build();
+            videoSourceVoiceInfoDtos.add(videoSourceVoiceInfoDto);
+        }
+        // 리스폰스 생성
+        VideoSourceVoiceResponse response = VideoSourceVoiceResponse.builder()
+                .voiceSources(videoSourceVoiceInfoDtos)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // 더빙 음성 녹음 업로드
+    public ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(long userCode, DubbingRecordRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
     public HttpStatus createDub (long userCode, DubCreateRequest request){
         User user = userRepository.getUser(userCode);
