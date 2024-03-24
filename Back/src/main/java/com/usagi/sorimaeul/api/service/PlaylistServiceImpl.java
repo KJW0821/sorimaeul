@@ -227,7 +227,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlistCoverRepository.delete(playlistCover);
         // 삭제한 데이터의 인덱스보다 인덱스가 큰 커버들을 가져옴
         List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
-        playlistCovers = playlistCovers.subList(coverIndex, playlistCovers.size());
         // 순회하면서 index 감소 시키기
         for (PlaylistCover cover : playlistCovers) {
             if (cover.getCoverIndex() > coverIndex) {
