@@ -14,7 +14,7 @@ const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, onSubmit }) => {
     coverName: "",
     coverDetail: "",
     thumbnailPath: "",
-    isPublic: false,
+    isPublic: true,
   });
 
   // 초기 데이터 설정
@@ -69,7 +69,8 @@ const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, onSubmit }) => {
         <option value="true">공개</option>
         <option value="false">비공개</option>
       </select>
-      <Button $marginLeft={0} $marginTop={0} type="submit">{isEdit ? "수정" : "게시하기"}</Button>
+      <Button $marginLeft={0} $marginTop={0} type="submit"
+      disabled={!data.coverName || !data.coverDetail }>{isEdit ? "수정" : "게시하기"}</Button>
       {isEdit && <button>삭제</button>}
     </form>
   );

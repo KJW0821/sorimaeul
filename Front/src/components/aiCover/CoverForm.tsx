@@ -75,6 +75,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
       <div>
         <label htmlFor="modelCode">원하는 음성 모델을 선택하고, 알맞게 피치를 조절해주세요.</label>
         <Select name="modelCode" id="modelCode" value={data.modelCode} onChange={handleChange}>
+          <option value=""> 모델을 선택해주세요. </option>
           {models.voiceModels.map((model) => (
             <option key={model.modelCode} value={model.modelCode}>
               {model.modelCode} 
@@ -94,7 +95,8 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
       <div>
         <Input type="text" id="coverName" name="coverName" value={data.coverName} onChange={handleChange} />
       </div>
-      <Button $marginLeft={0} $marginTop={0} type="submit">변환하기</Button>
+      <Button $marginLeft={0} $marginTop={0} type="submit" 
+      disabled={!data.youtubeLink || !data.singer || !data.title || data.modelCode === 0 || !data.coverName}>변환하기</Button>
     </form>
   )
 }

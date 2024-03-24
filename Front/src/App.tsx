@@ -123,6 +123,10 @@ const router = createBrowserRouter([
               {
                 path: "edit/:id",
                 element: <CoverUpdatePage />
+              },
+              {
+                path: "board/:id",
+                element: <CoverResultPage />
               }
             ]
           },
