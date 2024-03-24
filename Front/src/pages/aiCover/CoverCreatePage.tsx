@@ -17,8 +17,7 @@ const CoverCreatePage: React.FC = () => {
     try {
       // API 호출
       const response = await createCover(formData);
-      console.log("생성 성공");
-      console.log("response", response);
+      navigate(`/cover/board/${response.coverCode}`);
 
     } catch (error) {
       console.error(error); // 에러 처리
