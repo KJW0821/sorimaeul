@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.dto.dto.RequestInfoDto;
 import com.usagi.sorimaeul.dto.request.RequestCreateRequest;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
+import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.RequestBoard;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.repository.RequestBoardRepository;
@@ -122,5 +123,24 @@ public class RequestBoardServiceImpl implements RequestBoardService {
         requestBoardRepository.save(requestBoard);
 
         return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
+    }
+    
+    // 문의 게시글 삭제
+    public ResponseEntity<?> deleteRequest(long userCode, int boardCode){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        RequestBoard requestBoard = requestBoardRepository.findByBoardCode(boardCode);
+        // 클라이언트와 커버 생성자 일치하지 않으면 400 반환
+        User requestUser = requestBoard.getUser();
+        if (requestUser != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        // 문의 게시글 삭제
+        requestBoardRepository.deleteById(boardCode);
+        
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
     }
 }

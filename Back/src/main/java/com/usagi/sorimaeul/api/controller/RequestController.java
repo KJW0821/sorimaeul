@@ -59,4 +59,13 @@ public class RequestController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return requestBoardService.updateRequest(userCode, boardCode, request);
     }
+
+    @Operation(summary = "문의 게시글 삭제", description = "문의 게시글을 삭제한다.")
+    @ApiResponse(responseCode = "204", description = "문의 게시글 삭제 성공")
+    @DeleteMapping("/{boardCode}")
+    public ResponseEntity<?> deleteRequest(@RequestHeader("Authorization") String token,
+                                           @PathVariable int boardCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return requestBoardService.deleteRequest(userCode, boardCode);
+    }
 }
