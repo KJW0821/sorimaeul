@@ -96,13 +96,20 @@ public class PlaylistServiceImpl implements PlaylistService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
+        // 예외 처리
+        // 플레이리스트 존재하지 않으면 404 반환
+        Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
+        if (playlist == null) {
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        // AI 커버 비어있으면 404 반환
         // PlaylistCode 로 플레이리스트 조회하기
         List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
-
-        // 비어있으면 204 반환
         if (playlistCovers.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+
         // PlaylistCoverInfoDto 리스트 빈 리스트 생성
         List<PlaylistCoverInfoDto> playlistCoverInfoDtos = new ArrayList<>();
         // AI 커버 목록 순회하며
@@ -124,6 +131,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         // 반환할 Dto 생성
         PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
+                .playlistCode(playlistCode)
+                .playlistName(playlist.getPlaylistName())
                 .playlist(playlistCoverInfoDtos)
                 .build();
 
