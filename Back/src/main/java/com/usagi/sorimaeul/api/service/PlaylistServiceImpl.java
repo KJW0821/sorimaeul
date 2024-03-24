@@ -164,6 +164,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (user != playlistCreator) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 플레이리스트에는 접근할 수 없습니다.");
         }
+        // 이미 플레이리스트에 해당 AI 커버가 존재하면 400 반환
+        PlaylistCover tempPlaylistCover = playlistCoverRepository.findByPlaylist_PlaylistCodeAndCover_CoverCode(playlistCode, coverCode);
+        if (tempPlaylistCover != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("플레이리스트에 이미 해당 AI 커버가 존재합니다.");
+        }
         // 제작 완료 여부, 공개 여부에 따른 예외 처리
         Cover cover = coverRepository.findByCoverCode(coverCode);
         if (!cover.isComplete() || !cover.isPublic()) {
@@ -225,9 +230,9 @@ public class PlaylistServiceImpl implements PlaylistService {
         int coverIndex = playlistCover.getCoverIndex();
         // 커버 삭제
         playlistCoverRepository.delete(playlistCover);
-        // 삭제한 데이터의 인덱스보다 인덱스가 큰 커버들을 가져옴
+        // 플레이리스트의 커버들을 가져옴
         List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
-        // 순회하면서 index 감소 시키기
+        // 순회하면서 index 가 더 큰 것들 index 1씩 감소 시키기
         for (PlaylistCover cover : playlistCovers) {
             if (cover.getCoverIndex() > coverIndex) {
                 cover.setCoverIndex(cover.getCoverIndex() - 1);
