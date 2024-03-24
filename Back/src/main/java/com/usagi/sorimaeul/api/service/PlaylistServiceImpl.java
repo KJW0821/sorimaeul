@@ -102,6 +102,12 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (playlist == null) {
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        // 플레이리스트 생성자 조회
+        User playlistCreator = playlist.getUser();
+        // 클라이언트와 플레이리스트 생성자가 일치하지 않으면 400 반환
+        if (user != playlistCreator) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         // AI 커버 비어있으면 404 반환
         // PlaylistCode 로 플레이리스트 조회하기
         List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
