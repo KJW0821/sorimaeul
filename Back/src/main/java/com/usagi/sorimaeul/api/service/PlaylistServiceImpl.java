@@ -108,14 +108,10 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (user != playlistCreator) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        // AI 커버 비어있으면 204 반환
+
+
         // PlaylistCode 로 플레이리스트 조회하기
         List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
-        if (playlistCovers.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
-
-
         // PlaylistCoverInfoDto 리스트 빈 리스트 생성
         List<PlaylistCoverInfoDto> playlistCoverInfoDtos = new ArrayList<>();
         // AI 커버 목록 순회하며
