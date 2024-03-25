@@ -20,5 +20,6 @@ public class CoverDetailResponse {
     private String singer;
     private String title;
     private boolean isLiked;
+    private boolean isComplete;
 
 }

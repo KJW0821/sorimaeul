@@ -20,5 +20,6 @@ public class CoverInfoDto {
     private String coverSinger;
     private String singer;
     private String title;
+    private boolean isComplete;
 
 }

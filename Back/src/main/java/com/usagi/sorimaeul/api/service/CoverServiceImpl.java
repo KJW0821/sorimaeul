@@ -138,6 +138,7 @@ public class CoverServiceImpl implements CoverService {
                     .coverSinger(cover.getCoverSinger())
                     .singer(cover.getSinger())
                     .title(cover.getTitle())
+                    .isComplete(cover.isComplete())
                     .build();
             // customCovers 에 담기
             customCovers.add(coverInfoDto);
@@ -183,6 +184,7 @@ public class CoverServiceImpl implements CoverService {
                 .singer(cover.getSinger())
                 .title(cover.getTitle())
                 .isLiked(isLiked)
+                .isComplete(cover.isComplete())
                 .build();
 
         return ResponseEntity.ok(response);
