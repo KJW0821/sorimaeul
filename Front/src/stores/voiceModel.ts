@@ -47,9 +47,12 @@ const voiceModelSlice = createSlice({
     },
     setIsStart(state, action) {
       state.isStart = action.payload;
+    },
+    setIsLearning(state, action) {
+      state.learnState = action.payload;
     }
   }
 });
 
-export const { initModelInfo, setModelInfo, selectMethod, setIsFileUploaded, setIsStart } = voiceModelSlice.actions;
+export const { initModelInfo, setModelInfo, selectMethod, setIsFileUploaded, setIsStart, setIsLearning } = voiceModelSlice.actions;
 export default voiceModelSlice.reducer;
