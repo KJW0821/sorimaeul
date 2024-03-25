@@ -25,6 +25,7 @@ import CoverCreatePage from './pages/aiCover/CoverCreatePage'
 import ProfilePage from './pages/user/ProfilePage'
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import DubbingListPage from './pages/dubbing/DubbingListPage';
 
 const Spacer = styled.div<{ $isOpen: boolean }>`
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -142,6 +143,15 @@ const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfilePage />
+          },
+          {
+            path: "dubbing",
+            children: [
+              {
+                index: true,
+                element: <DubbingListPage />
+              }
+            ]
           }
         ]
       }   
