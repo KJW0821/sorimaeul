@@ -87,6 +87,13 @@ const Container = styled.div`
         height: 90%;
       }
     }
+
+    .button-box {
+      display: flex;
+      width: 100%;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
   }
 `
 
@@ -180,6 +187,7 @@ function RecordingPage() {
   const resetRecording = () => {
     setRecordState(0);
     setAudioURL('');
+    setAudioBlob(null);
   };
   
   const playAudio = () => {
@@ -221,13 +229,20 @@ function RecordingPage() {
     getMedia();
   }, [modelInfo.recordCount])
 
+  const quitRecording = () => {
+    if (audioBlob) {
+      uploadAudio();
+    }
+    navigate(`/model/${modelInfo.modelCode}`);
+  }
+
   const goNext = () => {
     uploadAudio();
     dispatch(getNextSentence());
     setAudioURL('');
-    setMediaRecorder(null);
     setIsPlay(false);
     setRecordState(0);
+    setAudioBlob(null);
   };
 
   return (
@@ -276,7 +291,13 @@ function RecordingPage() {
                   <img onClick={resetRecording} className="reRecordBtn" src={reRecordBtn} alt="reRecordBtn" />
                 }
               </div>
-              <Button onClick={goNext} $marginTop={0} $background="#7C87E3" $width={7.5} $height={2.5} $fontSize={1.2}>다음 문장</Button>
+              <div className="button-box">
+                <Button onClick={goNext} disabled={!audioBlob} $marginLeft={0} $marginTop={0} $background="#7C87E3" $width={7.5} $height={2.5} $fontSize={1.2}>다음 문장</Button>
+                {
+                  modelInfo.recordCount >= 199 &&
+                  <Button onClick={quitRecording} disabled={modelInfo.recordCount === 199 && !audioBlob} $marginLeft={0} $marginTop={0} $color="#7C87E3" $width={7.5} $height={2.5} $fontSize={1.2}>녹음 종료</Button>
+                }
+              </div>
             </div>
           </div>
         </Container>
