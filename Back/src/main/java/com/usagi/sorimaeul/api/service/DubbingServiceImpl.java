@@ -5,6 +5,7 @@ import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceVoiceInfoDto;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
+import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.entity.*;
@@ -12,9 +13,12 @@ import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.awt.print.Pageable;
 import java.io.File;
@@ -313,6 +317,62 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
         }
+    }
+
+    // 더빙 음성 변환
+    public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request){
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+
+        // 폴더 경로 설정
+        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
+
+//        MultipartFile convertedRecord = getConvertedFile();
+        // 파일 경로를 통해 녹음 파일과 피치 모델을 AI 서버에 보내고 받아온다
+//        try {
+//            // 폴더 생성
+//            createFolder(folderPath);
+//            // record_1.wav 형식으로 저장
+            String fileName = num + ".wav";
+//            // 파일 생성
+//            saveFile(folderPath + fileName, recordFile.getBytes());
+//
+            VoiceSource voiceSource = new VoiceSource();
+            voiceSource.setVoicePath(folderPath + fileName);
+            voiceSourceRepository.save(voiceSource);
+
+            DubbingRecordConvertResponse response = DubbingRecordConvertResponse.builder()
+                    .voiceSourceCode(voiceSource.getVoiceSourceCode())
+                    .voicePath(folderPath + fileName)
+                    .build();
+//
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(response);
+//
+//            // 서버 오류 처리
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+//        }
+        return ResponseEntity.ok(response);
+    }
+
+    private MultipartFile getConvertedFile(long userCode, int dubCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel){
+        MultipartFile a = voiceModel;
+        return WebClient.create("http://70.12.130.111:7867")
+                .post()
+                .uri("/rvc/infer/"+userCode+"/"+dubCode+"/"+voiceIndex+"/"+modelCode+"/"+pitch)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(Mono.just(
+                        org.springframework.http.client.MultipartBodyBuilder()
+                                .part("file", resource)
+                                .build()
+                ), MediaType.MULTIPART_FORM_DATA);
     }
 
     public HttpStatus createDub (long userCode, DubCreateRequest request){

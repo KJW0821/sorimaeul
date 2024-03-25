@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.api.service.DubbingService;
 import com.usagi.sorimaeul.api.service.UserService;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
+import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -113,4 +114,14 @@ public class DubbingController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
     }
+
+//    @Operation(summary = "더빙 음성 변환", description = "더빙 음성을 변환한다.")
+//    @ApiResponse(responseCode = "200", description = "더빙 음성 변환 성공")
+//    @PostMapping("/convert/{num}")
+//    public ResponseEntity<?> convertDubbingRecord(@RequestHeader("Authorization") String token,
+//                                                 @PathVariable int num,
+//                                                 @RequestBody DubbingRecordConvertRequest request){
+//        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+//        return dubbingService.convertDubbingRecord(userCode, num, request);
+//    }
 }

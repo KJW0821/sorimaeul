@@ -3,6 +3,7 @@ package com.usagi.sorimaeul.api.service;
 import com.amazonaws.Response;
 import com.usagi.sorimaeul.dto.request.DubCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
+import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
 import org.springframework.http.HttpStatus;
@@ -27,4 +28,6 @@ public interface DubbingService {
     ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode);
 
     ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
+
+    ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request);
 }
