@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/cover")
@@ -76,4 +77,13 @@ public class CoverController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.deleteCover(userCode, coverCode);
     }
+
+
+    @Operation(summary = "생성된 AI 커버 저장", description = "생성된 AI 커버를 저장한다.")
+    @ApiResponse(responseCode = "201", description = "생성된 AI 커버 저장 성공")
+    @PostMapping("/{coverCode}")
+    public ResponseEntity<?> saveCreatedCover(@PathVariable int coverCode, MultipartFile file) {
+        return coverService.saveCreatedCover(coverCode, file);
+    }
+
 }

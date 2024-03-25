@@ -19,16 +19,16 @@ import com.usagi.sorimaeul.repository.VoiceModelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static com.usagi.sorimaeul.utils.Const.*;
+import static com.usagi.sorimaeul.utils.FileUtil.*;
 
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -277,7 +277,7 @@ public class CoverServiceImpl implements CoverService {
         // 클라이언트와 커버 생성자 일치하지 않으면 400 반환
         User coverCreator = cover.getUser();
         if (coverCreator != user) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 게시글에는 접근할 수 없습니다.");
         }
 
         // 커버 삭제
@@ -285,6 +285,25 @@ public class CoverServiceImpl implements CoverService {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
     }
+
+
+    // 생성된 AI 커버 저장
+    public ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file)  {
+        try {
+            String folderPath = BASE_PATH + "/cover/";
+            String fileName = "cover_" + coverCode + ".mp3";
+            // 폴더 생성
+            createFolder(folderPath);
+            // 파일 생성
+            saveFile(folderPath + fileName, file.getBytes());
+            return ResponseEntity.status(HttpStatus.CREATED).body("저장 성공!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("생성된 AI 커버를 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+        }
+    }
+
 
     public void reverseList(List<Cover> list) {
         int start = 0;

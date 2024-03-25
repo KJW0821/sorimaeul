@@ -17,12 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import static com.usagi.sorimaeul.utils.FileUtil.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,9 +141,6 @@ public class ModelServiceImpl implements ModelService {
         try {
             // 폴더 생성
             createFolder(folderPath);
-
-            // 폴더 권한 변경
-            changeFolderPermission(folderPath);
 
             for (int i = 0; i < files.length; i++) {
                 // record_1.wav 형식으로 저장
@@ -463,20 +457,6 @@ public class ModelServiceImpl implements ModelService {
     }
 
 
-    // 폴더 생성
-    private void createFolder(String folderPath) throws IOException {
-        Path path = Paths.get(folderPath);
-        if (!Files.exists(path)) Files.createDirectories(path);
-    }
-
-
-    // 파일 저장
-    private void saveFile(String filePath, byte[] data) throws IOException {
-        Path path = Paths.get(filePath);
-        Files.write(path, data);
-    }
-
-
     // 녹음 문장 개수(record_count) 갱신
     private void countRecord(VoiceModel voiceModel, int num) {
         voiceModel.setRecordCount(num);
@@ -522,24 +502,6 @@ public class ModelServiceImpl implements ModelService {
             changedList.add(modelInfoDto);
         }
         return changedList;
-    }
-
-
-    public static void changeFolderPermission(String folderPath) {
-        try {
-            File folder = new File(folderPath);
-            if (!folder.exists()) {
-                // 폴더가 존재하지 않는 경우에는 먼저 폴더를 생성합니다.
-                folder.mkdirs();
-            }
-            // 폴더의 읽기 및 쓰기 권한을 설정합니다.
-            folder.setReadable(true);
-            folder.setWritable(true);
-            System.out.println("1폴더의 권한 변경 성공");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("2폴더의 권한 변경 실패");
-        }
     }
 
 }
