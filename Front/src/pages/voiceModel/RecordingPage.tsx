@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../stores/store";
-import { getScripts } from "../../utils/voiceModelAPI";
+import { getScripts, recordVoice } from "../../utils/voiceModelAPI";
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import backBtn from "../../assets/backBtn.png";
@@ -9,7 +9,7 @@ import reRecordBtn from "../../assets/reRecordBtn.png";
 import startRecordBtn from "../../assets/startRecordBtn.png";
 import stopRecordBtn from "../../assets/stopRecordBtn.png";
 import { Button } from "../../components/common/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getModelInfo } from "../../utils/voiceModelAPI";
 import { setModelInfo, getNextSentence } from "../../stores/voiceModel";
 
@@ -112,6 +112,7 @@ interface Script {
 
 function RecordingPage() {
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const modelInfo = useSelector((state: RootState) => state.voiceModel)
 
@@ -147,6 +148,7 @@ function RecordingPage() {
     } catch (err) {
       console.error('오디오 녹음을 위한 장치 접근에 실패했습니다.', err);
       window.alert('오디오 장치가 연결됐는지 확인해주세요');
+      navigate(`/model/${modelInfo.modelCode}`);
     }
   };
 
@@ -165,6 +167,7 @@ function RecordingPage() {
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           setAudioURL(URL.createObjectURL(e.data));
+          setAudioBlob(e.data);
         }
       };
     }
@@ -196,6 +199,15 @@ function RecordingPage() {
     setIsPlay(false);
   };
 
+  const uploadAudio = async () => {
+    if (audioBlob) {
+      const formData = new FormData();
+      formData.append("recordingFile", audioBlob, `model${modelInfo.modelCode}_recording${modelInfo.recordCount + 1}.wav`);
+      
+      await recordVoice(modelInfo.modelCode, modelInfo.recordCount + 1, formData);
+    }
+  }
+
   useEffect(() => {
     getScriptData();
   }, [])
@@ -210,6 +222,7 @@ function RecordingPage() {
   }, [modelInfo.recordCount])
 
   const goNext = () => {
+    uploadAudio();
     dispatch(getNextSentence());
     setAudioURL('');
     setMediaRecorder(null);
@@ -224,7 +237,7 @@ function RecordingPage() {
         <Container>
           <div className="box">
             <div className="title-box">
-              <img className="back-button" src={backBtn} alt="" />
+              <img onClick={() => navigate(`/model/${modelInfo.modelCode}`)} className="back-button" src={backBtn} alt="" />
               <h2 className="title">문장 녹음</h2>
             </div>
             <ProgressBar $percentage={percentage}>
