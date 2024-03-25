@@ -1,6 +1,8 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
+import com.usagi.sorimaeul.dto.dto.CoverRequestDto;
+import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
@@ -17,10 +19,16 @@ import com.usagi.sorimaeul.repository.VoiceModelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import static com.usagi.sorimaeul.utils.Const.*;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -197,7 +205,6 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // AI 커버 생성 로직 작성
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(request.getModelCode());
 
 
@@ -212,7 +219,18 @@ public class CoverServiceImpl implements CoverService {
                 .build();
         coverRepository.save(cover);
         int coverCode = cover.getCoverCode();
-        cover.setStoragePath(BASE_PATH);
+        // AI 커버 생성 로직 작성
+        String youtubeLink = request.getYoutubeLink();
+        WebClient.create("http://222.107.238.124:7866")
+                .post()
+                .uri("/rvc/cover")
+                .bodyValue(new CoverRequestDto(youtubeLink, userCode, request.getModelCode(), coverCode, request.getCoverName(), request.getPitch()))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        String folderPath = BASE_PATH + "/cover/";
+        String fileName = "cover_" + coverCode + ".mp3";
+        cover.setStoragePath(folderPath + fileName);
         CoverCreateResponse response = CoverCreateResponse.builder()
                 .coverCode(coverCode)
                 .build();
