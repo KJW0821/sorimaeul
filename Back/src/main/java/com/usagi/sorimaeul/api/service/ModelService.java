@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ModelService {
 
-    ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode);
+    ResponseEntity<?> createModelTable(ModelTableCreateRequest request, long userCode);
 
     ResponseEntity<String> uploadRecordFile(int modelCode, int num, long userCode, MultipartFile recodingFile);
 

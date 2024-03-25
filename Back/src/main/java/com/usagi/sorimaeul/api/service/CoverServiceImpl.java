@@ -1,6 +1,8 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
+import com.usagi.sorimaeul.dto.dto.CoverRequestDto;
+import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
@@ -19,7 +21,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import static com.usagi.sorimaeul.utils.Const.*;
+import static com.usagi.sorimaeul.utils.FileUtil.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +56,7 @@ public class CoverServiceImpl implements CoverService {
         int startIdx = 0;
         int endIdx = 0;
         // 총 페이지 수 선언
-        int totalPages = 0;
+        int totalPages = 1;
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회, isComplete = true : 제작 완료된 게시물만
@@ -116,8 +124,6 @@ public class CoverServiceImpl implements CoverService {
             covers = coverRepository.findTop5ByOrderByLikeCountDescCoverCodeDesc();
             // 인덱스 0 ~ covers.size() 로 정의
             endIdx = covers.size();
-            // // 총 페이지 수 계산
-            totalPages = 1;
         }
         // 최신순으로 보여주기 위해 covers 뒤집기
         if (!target.equals("popular")) reverseList(covers);
@@ -138,6 +144,7 @@ public class CoverServiceImpl implements CoverService {
                     .coverSinger(cover.getCoverSinger())
                     .singer(cover.getSinger())
                     .title(cover.getTitle())
+                    .isComplete(cover.isComplete())
                     .build();
             // customCovers 에 담기
             customCovers.add(coverInfoDto);
@@ -154,7 +161,7 @@ public class CoverServiceImpl implements CoverService {
 
 
     // AI 커버 상세 조회
-    public ResponseEntity<CoverDetailResponse> getCoverDetail(long userCode, int coverCode) {
+    public ResponseEntity<?> getCoverDetail(long userCode, int coverCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -163,7 +170,7 @@ public class CoverServiceImpl implements CoverService {
         Cover cover = coverRepository.findByCoverCode(coverCode);
         // 비공개인데 작성자가 아닌 경우 BadRequest 반환
         if (!cover.isPublic() && cover.getUser() != user)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("접근이 불가능한 AI 커버입니다.");
 
         boolean isLiked;
         if (likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode) == null) isLiked = false;
@@ -181,6 +188,7 @@ public class CoverServiceImpl implements CoverService {
                 .singer(cover.getSinger())
                 .title(cover.getTitle())
                 .isLiked(isLiked)
+                .isComplete(cover.isComplete())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -195,7 +203,6 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // AI 커버 생성 로직 작성
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(request.getModelCode());
 
 
@@ -207,12 +214,23 @@ public class CoverServiceImpl implements CoverService {
                 .coverSinger(voiceModel.getModelName())
                 .singer(request.getSinger())
                 .title(request.getTitle())
-//                .storagePath()
                 .build();
         coverRepository.save(cover);
-
+        int coverCode = cover.getCoverCode();
+        // AI 커버 생성 로직 작성
+        String youtubeLink = request.getYoutubeLink();
+        WebClient.create("http://222.107.238.124:7866")
+                .post()
+                .uri("/rvc/cover")
+                .bodyValue(new CoverRequestDto(youtubeLink, userCode, request.getModelCode(), coverCode, request.getCoverName(), request.getPitch()))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        String folderPath = BASE_PATH + "/cover/";
+        String fileName = "cover_" + coverCode + ".mp3";
+        cover.setStoragePath(folderPath + fileName);
         CoverCreateResponse response = CoverCreateResponse.builder()
-                .coverCode(cover.getCoverCode())
+                .coverCode(coverCode)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -257,7 +275,7 @@ public class CoverServiceImpl implements CoverService {
         // 클라이언트와 커버 생성자 일치하지 않으면 400 반환
         User coverCreator = cover.getUser();
         if (coverCreator != user) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 게시글에는 접근할 수 없습니다.");
         }
 
         // 커버 삭제
@@ -265,6 +283,25 @@ public class CoverServiceImpl implements CoverService {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
     }
+
+
+    // 생성된 AI 커버 저장
+    public ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file)  {
+        try {
+            String folderPath = BASE_PATH + "/cover/";
+            String fileName = "cover_" + coverCode + ".mp3";
+            // 폴더 생성
+            createFolder(folderPath);
+            // 파일 생성
+            saveFile(folderPath + fileName, file.getBytes());
+            return ResponseEntity.status(HttpStatus.CREATED).body("저장 성공!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("생성된 AI 커버를 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+        }
+    }
+
 
     public void reverseList(List<Cover> list) {
         int start = 0;

@@ -18,7 +18,8 @@ public class AuthenticatedMatchers {
             "/swagger-ui/index.html",
             "/swagger-ui/**",
             "/api-docs/**",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/cover/save/**"
     };
 
 }
