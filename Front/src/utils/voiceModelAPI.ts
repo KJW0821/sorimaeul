@@ -50,3 +50,13 @@ export const uploadExModelFile = (modelCode: number, data: FormData | undefined)
     .then(res => res)
     .catch(err => console.error(err))
 }
+
+export const recordVoice = (modelCode: number, num: number, data: FormData | undefined) => {
+  return API.post(URL + `/record/${modelCode}/${num}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  })
+    .then(res => res)
+    .catch(err => console.error(err))
+}
