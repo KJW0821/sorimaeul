@@ -2,7 +2,7 @@ import API from "./axios";
 import { CoverCreateInterface, CoverUpdateInterface } from "../components/aiCover/CoverInterface";
 
 // AI 커버 생성을 위한 음성 모델 조회 - videoSourceCode 와 page 모두 null로 전달
-export const getCoverModels = async () => {
+export const getCoverModels = () => {
   return API.get("model")
   .then((res) => {
     return res.data;
@@ -13,7 +13,7 @@ export const getCoverModels = async () => {
 }
 
 // AI 커버 생성
-export const createCover = async (data: CoverCreateInterface) => {
+export const createCover = (data: CoverCreateInterface) => {
   return API.post("cover/create", data)
   .then((res) => {
     return res.data;
@@ -59,7 +59,7 @@ export const getPopularCovers = () => {
 }
 
 // AI 상세 목록 조회
-export const getCover = async (coverCode: string) => {
+export const getCover = (coverCode: string) => {
   return API.get(`cover/${coverCode}`)
   .then((res) => { 
     return res.data;
@@ -70,7 +70,7 @@ export const getCover = async (coverCode: string) => {
 }
 
 // AI 커버 게시(수정)
-export const updateCover = async (coverCode: string, edit: CoverUpdateInterface) => {
+export const updateCover = (coverCode: string, edit: CoverUpdateInterface) => {
   return API.patch(`cover/board/${coverCode}`, edit)
   .then((res) => {
     return res.data;
@@ -81,7 +81,7 @@ export const updateCover = async (coverCode: string, edit: CoverUpdateInterface)
 }
 
 // AI 커버 삭제
-export const deleteCover = async (coverCode: string) => {
+export const deleteCover = (coverCode: string) => {
   return API.delete(`cover/board/${coverCode}`)
   .then((res) => {
     return res.data;

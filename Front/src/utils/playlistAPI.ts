@@ -26,7 +26,7 @@ export const getPlaylists = (page: number = 1) => {
 }
 
 // 플레이리스트 상세 조회 : 플레이리스트 내 커버 목록 조회
-export const getPlaylist = async (playlistCode: string) => {
+export const getPlaylist = (playlistCode: string) => {
   return API.get(URL + `/${playlistCode}`)
   .then((res) => res.data)
   .catch(err => console.log(err))
