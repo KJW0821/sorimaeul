@@ -6,11 +6,12 @@ import ColorLine from "../../components/aiCover/ColorLine";
 import PopularCoverList from "../../components/aiCover/PopularCoverList";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
+import Header from "../../components/common/Header";
 
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
   const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
-  const [popularDataList, setPopularDataList ] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
+  const [popularDataList, setPopularDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
 
   useEffect(() => {
     (async () => {
@@ -29,15 +30,16 @@ const CoverListPage: React.FC = () => {
       } catch (error) {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
-    }) ();
+    })();
   }, []);
 
   return (
     <>
-    <ColorLine />
-    <Button onClick={() => navigate("/cover/create") } $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
-    <PopularCoverList data={ popularDataList }/>
-    <CoverList data={ dataList } />
+      <Header />
+      <ColorLine />
+      <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
+      <PopularCoverList data={popularDataList} />
+      <CoverList data={dataList} />
     </>
   );
 };

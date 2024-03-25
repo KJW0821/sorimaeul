@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 import { createCover } from "../../utils/coverAPI";
 import { CoverCreateInterface } from "../../components/aiCover/CoverInterface";
 import CoverForm from "../../components/aiCover/CoverForm";
+import Header from "../../components/common/Header";
 
 
 // 커버 컨텐츠 생성 페이지
@@ -28,6 +29,7 @@ const CoverCreatePage: React.FC = () => {
 
   return (
     <>
+    <Header/>
       <CoverForm onSubmit={handleSubmit} />
     </>
   )
