@@ -2,9 +2,9 @@ import styled from "styled-components";
 import uploadFile from "../../../assets/uploadFile.png";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsFileUploaded, setIsStart } from "../../../stores/voiceModel";
+import { setIsFileUploaded, setIsStart, setIsLearning } from "../../../stores/voiceModel";
 import { RootState } from "../../../stores/store";
-import { uploadExVoiceFiles } from "../../../utils/voiceModelAPI";
+import { uploadExVoiceFiles, startModelLearning } from "../../../utils/voiceModelAPI";
 
 const Container = styled.div<{ $isUploaded: boolean }>`
   width: 100%;
@@ -107,6 +107,10 @@ function UploadRecordMethod() {
     const res = await uploadExVoiceFiles(modelCode, files);
     if (res?.status === 200) {
       console.log('파일 업로드 성공');
+
+      await startModelLearning(modelCode);
+
+      dispatch(setIsLearning(2));
       dispatch(setIsStart(false));
     }
   }
