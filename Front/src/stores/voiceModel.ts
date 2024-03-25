@@ -50,9 +50,20 @@ const voiceModelSlice = createSlice({
     },
     setIsLearning(state, action) {
       state.learnState = action.payload;
+    },
+    getNextSentence(state) {
+      state.recordCount = state.recordCount + 1;
     }
   }
 });
 
-export const { initModelInfo, setModelInfo, selectMethod, setIsFileUploaded, setIsStart, setIsLearning } = voiceModelSlice.actions;
+export const { 
+  initModelInfo, 
+  setModelInfo, 
+  selectMethod, 
+  setIsFileUploaded, 
+  setIsStart, 
+  setIsLearning, 
+  getNextSentence 
+} = voiceModelSlice.actions;
 export default voiceModelSlice.reducer;
