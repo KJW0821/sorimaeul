@@ -34,3 +34,13 @@ export const uploadExVoiceFiles = (modelCode: number, data: FormData | undefined
     .then(res => res)
     .catch(err => console.error(err))
 }
+
+export const uploadExModelFile = (modelCode: number, data: FormData | undefined) => {
+  return API.post(URL + `/external/${modelCode}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  })
+    .then(res => res)
+    .catch(err => console.error(err))
+}
