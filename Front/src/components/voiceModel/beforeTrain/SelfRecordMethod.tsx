@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../stores/store";
 import { Button } from "../../common/Button";
 import { useEffect, useState } from "react";
+import { startModelLearning } from "../../../utils/voiceModelAPI";
+import { setIsLearning, setIsStart } from "../../../stores/voiceModel";
 
 const Container = styled.div`
   width: 100%;
@@ -60,6 +62,8 @@ const ProgressBar = styled.div<{ $percentage: number }>`
 `
 
 function SelfRecordMethod() {
+  const dispatch = useDispatch();
+
   const modelInfo = useSelector((state: RootState) => state.voiceModel);
   const [percentage, setPercentage] = useState(0);
 
@@ -69,9 +73,21 @@ function SelfRecordMethod() {
     }
   }
 
+  const startLearning = async () => {
+    // await startModelLearning(modelInfo.modelCode);
+    // dispatch(setIsLearning(2));
+    // dispatch(setIsStart(false));
+  }
+
   useEffect(() => {
     setPercentage(((Math.round((modelInfo.recordCount/200)*1000))/1000)*100);
   }, [modelInfo])
+
+  useEffect(() => {
+    if (modelInfo.isStart) {
+      startLearning();
+    }
+  }, [modelInfo.isStart])
 
   return (
     <Container>
