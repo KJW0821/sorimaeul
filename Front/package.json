@@ -41,5 +41,8 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.6"
   },
-  "proxy": "http://localhost:8000/"
+  "proxy": [
+    "http://localhost:8000/",
+    "https://j10e201.p.ssafy.io/"
+  ]
 }

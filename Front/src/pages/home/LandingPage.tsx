@@ -1,8 +1,10 @@
+import { isProduction } from "../../utils/axios";
+
 const LandingPage: React.FC = () => {
   // kakao - axios 통신을 하면 CORS 에러 발생 
   // 소셜로그인 페이지로 이동하는 요청을 href 링크에 담았다 
   const handleSocialLogin = (provider: string) => {
-    let url = `http://localhost:8000/api/oauth/code/${provider}`;
+    let url = isProduction ? `https://j10e201.p.ssafy.io/api/oauth/code/${provider}` : `http://localhost:8000/api/oauth/code/${provider}`;
     window.location.href = url;
 
   };

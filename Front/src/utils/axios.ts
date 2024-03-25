@@ -2,8 +2,10 @@ import axios from "axios";
 import { getCookie, removeCookie, setCookie } from "./cookie";
 import { logout } from "../stores/user";
 
+export const isProduction = true;
+
 // 백엔드 서버 기본 url 지정
-export const URL = "http://localhost:8000/api";
+export const URL = isProduction ? "https://j10e201.p.ssafy.io/api" : "http://localhost:8000/api";
 
 // axios instance 생성 
 const API = axios.create({
