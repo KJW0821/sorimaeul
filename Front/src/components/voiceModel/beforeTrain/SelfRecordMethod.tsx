@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
 import { Button } from "../../common/Button";
 import { useEffect, useState } from "react";
-import { startModelLearning } from "../../../utils/voiceModelAPI";
-import { setIsLearning, setIsStart } from "../../../stores/voiceModel";
+import { useNavigate } from "react-router-dom";
+// import { startModelLearning } from "../../../utils/voiceModelAPI";
+// import { setIsLearning, setIsStart } from "../../../stores/voiceModel";
 
 const Container = styled.div`
   width: 100%;
@@ -62,14 +63,15 @@ const ProgressBar = styled.div<{ $percentage: number }>`
 `
 
 function SelfRecordMethod() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const modelInfo = useSelector((state: RootState) => state.voiceModel);
   const [percentage, setPercentage] = useState(0);
 
   const startRecord = () => {
     if (modelInfo.learnState === 0) {
-      console.log('녹음 페이지로 가기');
+      navigate(`/model/${modelInfo.modelCode}/record`);
     }
   }
 
