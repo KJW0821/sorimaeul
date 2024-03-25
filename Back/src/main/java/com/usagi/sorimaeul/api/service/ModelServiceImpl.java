@@ -195,7 +195,7 @@ public class ModelServiceImpl implements ModelService {
         }
 
         // 폴더 경로 설정 (GPU 서버)
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/model/";
+        String folderPath = BASE_PATH + "/user_" + userCode + "/model_" + modelCode + "/model/";
         try {
             // 폴더 생성
             createFolder(folderPath);
@@ -249,7 +249,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 녹음 파일 저장 경로
-        String recordFolderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        String recordFolderPath = BASE_PATH + "/model_" + modelCode + "/record/";
         // 모델 학습 로직 작성
 
 
@@ -275,8 +275,9 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         List<ModelInfoDto> mergedModelDtos = new ArrayList<>();
-        boolean end = false;
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
+        // 총 페이지 수 선언
+        int totalPages = 1;
 
         // videoSourceCode 와 page 가 모두 null 이면 AI 커버 음성 모델 조회(기본 제공 모델, 내가 학습 시킨 모델)
         if (page == null && videoSourceCode == null) {
@@ -304,7 +305,8 @@ public class ModelServiceImpl implements ModelService {
             int startIdx = (page - 1) * 4;
             int endIdx = Math.min(startIdx + 4, myModelList.size());
             mergedModelDtos = myModelDtos.subList(startIdx, endIdx);
-            end = endIdx >= myModelList.size();
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) myModelList.size() / 6);
 
         // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
         } else if (page == null) {
@@ -332,7 +334,7 @@ public class ModelServiceImpl implements ModelService {
         // 리스폰스 생성
         ModelListResponse modelListResponse = ModelListResponse.builder()
                 .voiceModels(mergedModelDtos)
-                .end(end)
+                .totalPages(totalPages)
                 .build();
 
         return ResponseEntity.ok(modelListResponse);

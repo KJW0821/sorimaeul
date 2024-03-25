@@ -48,7 +48,7 @@ public class CoverServiceImpl implements CoverService {
         int startIdx = 0;
         int endIdx = 0;
         // 총 페이지 수 선언
-        int totalPages = 0;
+        int totalPages = 1;
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회, isComplete = true : 제작 완료된 게시물만
@@ -116,8 +116,6 @@ public class CoverServiceImpl implements CoverService {
             covers = coverRepository.findTop5ByOrderByLikeCountDescCoverCodeDesc();
             // 인덱스 0 ~ covers.size() 로 정의
             endIdx = covers.size();
-            // // 총 페이지 수 계산
-            totalPages = 1;
         }
         // 최신순으로 보여주기 위해 covers 뒤집기
         if (!target.equals("popular")) reverseList(covers);
