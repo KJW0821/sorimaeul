@@ -13,6 +13,6 @@ import java.util.List;
 public class ModelListResponse {
 
     private List<ModelInfoDto> voiceModels;
-    private boolean end;
+    private int totalPages;
 
 }

@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.api.service.PlaylistService;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
 import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
 import com.usagi.sorimaeul.dto.request.PlaylistUpdateRequest;
+import com.usagi.sorimaeul.dto.response.PlaylistDetailResponse;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.repository.UserRepository;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
@@ -39,8 +40,8 @@ public class PlaylistController {
             @ApiResponse(responseCode = "404", description = "플레이리스트가 존재하지 않습니다.")
     })
     @GetMapping("/{playlistCode}")
-    public ResponseEntity<PlaylistInfoDto> getPlaylistCoverList(@RequestHeader(name = "Authorization") String token,
-                                                                @PathVariable int playlistCode) {
+    public ResponseEntity<?> getPlaylistCoverList(@RequestHeader(name = "Authorization") String token,
+                                                                       @PathVariable int playlistCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return playlistService.getPlaylistCoverList(userCode, playlistCode);
     }

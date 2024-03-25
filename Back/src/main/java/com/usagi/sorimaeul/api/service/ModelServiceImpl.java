@@ -10,19 +10,16 @@ import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
+import static com.usagi.sorimaeul.utils.Const.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.sf.jsqlparser.Model;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import static com.usagi.sorimaeul.utils.FileUtil.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +33,16 @@ public class ModelServiceImpl implements ModelService {
     private final VoiceModelRepository voiceModelRepository;
     private final VideoSourceRepository videoSourceRepository;
     private final ScriptRepository scriptRepository;
-    private static final String BASE_PATH = "/path/to/base/directory";
 
     // 모델 테이블 생성
-    public ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode) {
+    public ResponseEntity<?> createModelTable(ModelTableCreateRequest request, long userCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         // 학습 가능 횟수 예외 처리
-        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body(null);
+        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // 모델 테이블 생성
         // modelCode = auto_increment, video_code = null, storage_path = 임시값, image_path = null, state = 기본값 0,
@@ -76,8 +72,11 @@ public class ModelServiceImpl implements ModelService {
 
         // 예외 처리
         // 모델 소유자와 클라이언트가 일치하지 않거나 모델 학습 상태가 녹음중 또는 학습전이 아니면 BAD_REQUEST 반환
-        if (voiceModel.getUser() != user || voiceModel.getState() <= 1)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (voiceModel.getUser() != user)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
+        if (voiceModel.getState() <= 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델을 학습하기에 적절한 상태가 아닙니다.");
+        }
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1)
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
@@ -88,7 +87,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
         
         try {
             // 폴더 생성
@@ -97,7 +96,7 @@ public class ModelServiceImpl implements ModelService {
             String fileName = "record_" + num + ".wav";
             // 파일 생성
             saveFile(folderPath + fileName, recordingFile.getBytes());
-            // 녹음 문장 개수 갱신
+            // 녹음 문장 개수 갱신(200이면 state = 1 로 변경)
             countRecord(voiceModel, num);
             return ResponseEntity.ok(num + "번 녹음 파일 업로드 성공!");
 
@@ -137,14 +136,11 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
 
         try {
             // 폴더 생성
             createFolder(folderPath);
-
-            // 폴더 권한 변경
-            changeFolderPermission(folderPath);
 
             for (int i = 0; i < files.length; i++) {
                 // record_1.wav 형식으로 저장
@@ -192,8 +188,8 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델 파일이 올바르게 업로드되지 않았습니다.");
         }
 
-        // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/model/";
+        // 폴더 경로 설정 (GPU 서버)
+        String folderPath = BASE_PATH + "/user_" + userCode + "/model_" + modelCode + "/model/";
         try {
             // 폴더 생성
             createFolder(folderPath);
@@ -247,7 +243,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 녹음 파일 저장 경로
-        String recordFolderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        String recordFolderPath = BASE_PATH + "/model_" + modelCode + "/record/";
         // 모델 학습 로직 작성
 
 
@@ -273,8 +269,9 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         List<ModelInfoDto> mergedModelDtos = new ArrayList<>();
-        boolean end = false;
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
+        // 총 페이지 수 선언
+        int totalPages = 1;
 
         // videoSourceCode 와 page 가 모두 null 이면 AI 커버 음성 모델 조회(기본 제공 모델, 내가 학습 시킨 모델)
         if (page == null && videoSourceCode == null) {
@@ -302,7 +299,8 @@ public class ModelServiceImpl implements ModelService {
             int startIdx = (page - 1) * 4;
             int endIdx = Math.min(startIdx + 4, myModelList.size());
             mergedModelDtos = myModelDtos.subList(startIdx, endIdx);
-            end = endIdx >= myModelList.size();
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) myModelList.size() / 6);
 
         // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
         } else if (page == null) {
@@ -330,7 +328,7 @@ public class ModelServiceImpl implements ModelService {
         // 리스폰스 생성
         ModelListResponse modelListResponse = ModelListResponse.builder()
                 .voiceModels(mergedModelDtos)
-                .end(end)
+                .totalPages(totalPages)
                 .build();
 
         return ResponseEntity.ok(modelListResponse);
@@ -459,20 +457,6 @@ public class ModelServiceImpl implements ModelService {
     }
 
 
-    // 폴더 생성
-    private void createFolder(String folderPath) throws IOException {
-        Path path = Paths.get(folderPath);
-        if (!Files.exists(path)) Files.createDirectories(path);
-    }
-
-
-    // 파일 저장
-    private void saveFile(String filePath, byte[] data) throws IOException {
-        Path path = Paths.get(filePath);
-        Files.write(path, data);
-    }
-
-
     // 녹음 문장 개수(record_count) 갱신
     private void countRecord(VoiceModel voiceModel, int num) {
         voiceModel.setRecordCount(num);
@@ -518,24 +502,6 @@ public class ModelServiceImpl implements ModelService {
             changedList.add(modelInfoDto);
         }
         return changedList;
-    }
-
-
-    public static void changeFolderPermission(String folderPath) {
-        try {
-            File folder = new File(folderPath);
-            if (!folder.exists()) {
-                // 폴더가 존재하지 않는 경우에는 먼저 폴더를 생성합니다.
-                folder.mkdirs();
-            }
-            // 폴더의 읽기 및 쓰기 권한을 설정합니다.
-            folder.setReadable(true);
-            folder.setWritable(true);
-            System.out.println("1폴더의 권한 변경 성공");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("2폴더의 권한 변경 실패");
-        }
     }
 
 }
