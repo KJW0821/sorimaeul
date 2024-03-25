@@ -37,7 +37,7 @@ function Layout() {
     <div className="flex">
       <SideBar />
       <Spacer $isOpen={isOpen} />
-      <div className="w-full grow">
+      <div className="grow">
         <Outlet />
       </div>
     </div>
