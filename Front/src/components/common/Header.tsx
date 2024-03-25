@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Playlist from "./playlist/header/Playlist";
-import logoImage from '/src/assets/logo.png';
+import logoimage from '/src/assets/logo.png';
 
 interface HeaderProps {
   $isMainPage: boolean;
@@ -17,7 +17,7 @@ const HeaderContainer = styled.div<HeaderProps>`
 `;
 
 interface LogoProps {
-  logoImage: string;
+  logoimage: string;
   $isMainPage: boolean;
 }
 
@@ -28,7 +28,7 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.img.attrs<LogoProps>(props => ({
-  src: props.logoImage, // 로고 이미지 경로
+  src: props.logoimage, // 로고 이미지 경로
 }))`
   width: ${props => props.$isMainPage ? '800px' : '300px'}; // 메인 페이지 여부에 따른 너비 설정
   height: auto; // 높이는 자동으로 조절
@@ -44,14 +44,14 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
         <>
           <Playlist />
           <Link to="/">
-            <Logo logoImage={logoImage} $isMainPage={isMainPage}></Logo>
+            <Logo logoimage={logoimage} $isMainPage={isMainPage}></Logo>
           </Link>
         </>
       ) : (
         <>
           <LogoContainer>
             <Link to="/">
-              <Logo logoImage={logoImage} $isMainPage={isMainPage}></Logo>
+              <Logo logoimage={logoimage} $isMainPage={isMainPage}></Logo>
             </Link>
           </LogoContainer>
           <Playlist />
