@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -105,10 +106,11 @@ public class DubbingController {
     @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
     @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
     @PostMapping("/record/{num}")
-    public ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
                                                                      @PathVariable int num,
-                                                                     @RequestBody DubbingRecordRequest request){
+                                                                     @RequestBody DubbingRecordRequest request,
+                                                 @RequestParam("file") MultipartFile recordFile){
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return dubbingService.uploadDubbingRecord(userCode, num, request);
+        return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
     }
 }

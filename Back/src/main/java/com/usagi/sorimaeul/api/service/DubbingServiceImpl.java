@@ -35,7 +35,7 @@ public class DubbingServiceImpl implements DubbingService {
     private final LikeRepository likeRepository;
     private final VideoSourceRepository videoSourceRepository;
     private final VoiceSourceRepository voiceSourceRepository;
-    private static final String BASE_PATH = "/home/ubunutu/sorimaeul-data";
+    private static final String BASE_PATH = "/home/ubuntu/sorimaeul-data";
 
     // 원본 영상 목록 조회
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, int page){

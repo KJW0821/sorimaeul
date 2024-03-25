@@ -7,6 +7,7 @@ import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface DubbingService {
     HttpStatus createDub(long userCode, DubCreateRequest dubCreateRequest);
@@ -25,5 +26,5 @@ public interface DubbingService {
 
     ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode);
 
-    ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request);
+    ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
 }
