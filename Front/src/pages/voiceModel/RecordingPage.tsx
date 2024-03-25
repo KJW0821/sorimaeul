@@ -211,6 +211,10 @@ function RecordingPage() {
 
   const goNext = () => {
     dispatch(getNextSentence());
+    setAudioURL('');
+    setMediaRecorder(null);
+    setIsPlay(false);
+    setRecordState(0);
   };
 
   return (
