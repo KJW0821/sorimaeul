@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import static com.usagi.sorimaeul.utils.Const.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,7 +155,7 @@ public class CoverServiceImpl implements CoverService {
 
 
     // AI 커버 상세 조회
-    public ResponseEntity<CoverDetailResponse> getCoverDetail(long userCode, int coverCode) {
+    public ResponseEntity<?> getCoverDetail(long userCode, int coverCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -164,7 +164,7 @@ public class CoverServiceImpl implements CoverService {
         Cover cover = coverRepository.findByCoverCode(coverCode);
         // 비공개인데 작성자가 아닌 경우 BadRequest 반환
         if (!cover.isPublic() && cover.getUser() != user)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("접근이 불가능한 AI 커버입니다.");
 
         boolean isLiked;
 //            // LikeCount 가 1 이상이면 isLiked = true
@@ -211,12 +211,12 @@ public class CoverServiceImpl implements CoverService {
                 .coverSinger(voiceModel.getModelName())
                 .singer(request.getSinger())
                 .title(request.getTitle())
-//                .storagePath()
                 .build();
         coverRepository.save(cover);
-
+        int coverCode = cover.getCoverCode();
+        cover.setStoragePath(BASE_PATH);
         CoverCreateResponse response = CoverCreateResponse.builder()
-                .coverCode(cover.getCoverCode())
+                .coverCode(coverCode)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

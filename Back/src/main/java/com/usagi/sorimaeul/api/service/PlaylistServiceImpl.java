@@ -68,7 +68,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     // 플레이리스트 상세 조회 - AI 커버 리스트 조회
-    public ResponseEntity<PlaylistDetailResponse> getPlaylistCoverList(long userCode, int playlistCode) {
+    public ResponseEntity<?> getPlaylistCoverList(long userCode, int playlistCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -79,13 +79,13 @@ public class PlaylistServiceImpl implements PlaylistService {
         // 플레이리스트 존재하지 않으면 404 반환
         Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
         if (playlist == null) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("플레이리스트가 존재하지 않습니다.");
         }
         // 플레이리스트 생성자 조회
         User playlistCreator = playlist.getUser();
         // 클라이언트와 플레이리스트 생성자가 일치하지 않으면 400 반환
         if (user != playlistCreator) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 플레이리스트에는 접근할 수 없습니다.");
         }
 
 
@@ -132,7 +132,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist playlist = playlistRepository.findByPlaylistCode(playlistCode);
         // 데이터 없으면 404 반환
         if (playlist == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("플레이리스트가 존재하지 않습니다.");
         }
         // 플레이리스트 생성자 조회
         User playlistCreator = playlist.getUser();
@@ -169,7 +169,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .build();
         playlistCoverRepository.save(playlistCover);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body("추가 성공!");
     }
 
 

@@ -11,7 +11,7 @@ public interface PlaylistService {
 
     ResponseEntity<PlaylistListResponse> getPlaylistList(long userCode);
 
-    ResponseEntity<PlaylistDetailResponse> getPlaylistCoverList(long userCode, int playlistCode);
+    ResponseEntity<?> getPlaylistCoverList(long userCode, int playlistCode);
 
     ResponseEntity<?> addPlaylistCover(long userCode, int playlistCode, int coverCode);
 

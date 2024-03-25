@@ -10,9 +10,9 @@ import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
+import static com.usagi.sorimaeul.utils.Const.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.sf.jsqlparser.Model;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,17 +36,16 @@ public class ModelServiceImpl implements ModelService {
     private final VoiceModelRepository voiceModelRepository;
     private final VideoSourceRepository videoSourceRepository;
     private final ScriptRepository scriptRepository;
-    private static final String BASE_PATH = "/path/to/base/directory";
 
     // 모델 테이블 생성
-    public ResponseEntity<ModelTableCreateResponse> createModelTable(ModelTableCreateRequest request, long userCode) {
+    public ResponseEntity<?> createModelTable(ModelTableCreateRequest request, long userCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         // 학습 가능 횟수 예외 처리
-        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body(null);
+        if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // 모델 테이블 생성
         // modelCode = auto_increment, video_code = null, storage_path = 임시값, image_path = null, state = 기본값 0,
@@ -76,8 +75,11 @@ public class ModelServiceImpl implements ModelService {
 
         // 예외 처리
         // 모델 소유자와 클라이언트가 일치하지 않거나 모델 학습 상태가 녹음중 또는 학습전이 아니면 BAD_REQUEST 반환
-        if (voiceModel.getUser() != user || voiceModel.getState() <= 1)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (voiceModel.getUser() != user)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
+        if (voiceModel.getState() <= 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델을 학습하기에 적절한 상태가 아닙니다.");
+        }
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1)
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
@@ -88,7 +90,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
         
         try {
             // 폴더 생성
@@ -97,7 +99,7 @@ public class ModelServiceImpl implements ModelService {
             String fileName = "record_" + num + ".wav";
             // 파일 생성
             saveFile(folderPath + fileName, recordingFile.getBytes());
-            // 녹음 문장 개수 갱신
+            // 녹음 문장 개수 갱신(200이면 state = 1 로 변경)
             countRecord(voiceModel, num);
             return ResponseEntity.ok(num + "번 녹음 파일 업로드 성공!");
 
@@ -137,7 +139,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/record/";
+        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
 
         try {
             // 폴더 생성
@@ -192,7 +194,7 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델 파일이 올바르게 업로드되지 않았습니다.");
         }
 
-        // 폴더 경로 설정
+        // 폴더 경로 설정 (GPU 서버)
         String folderPath = BASE_PATH + "user_" + userCode + "/model_" + modelCode + "/model/";
         try {
             // 폴더 생성

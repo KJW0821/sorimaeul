@@ -40,7 +40,7 @@ public class CoverController {
     @Operation(summary = "AI 커버 상세 조회", description = "AI 커버 상세 조회한다.")
     @ApiResponse(responseCode = "200", description = "AI 커버 상세 조회 성공")
     @GetMapping("/{coverCode}")
-    public ResponseEntity<CoverDetailResponse> getCoverDetail(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> getCoverDetail(@RequestHeader("Authorization") String token,
                                                             @PathVariable int coverCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.getCoverDetail(userCode, coverCode);

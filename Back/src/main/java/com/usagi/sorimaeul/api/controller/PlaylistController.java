@@ -40,7 +40,7 @@ public class PlaylistController {
             @ApiResponse(responseCode = "404", description = "플레이리스트가 존재하지 않습니다.")
     })
     @GetMapping("/{playlistCode}")
-    public ResponseEntity<PlaylistDetailResponse> getPlaylistCoverList(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity<?> getPlaylistCoverList(@RequestHeader(name = "Authorization") String token,
                                                                        @PathVariable int playlistCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return playlistService.getPlaylistCoverList(userCode, playlistCode);

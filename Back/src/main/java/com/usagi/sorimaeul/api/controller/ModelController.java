@@ -30,7 +30,7 @@ public class ModelController {
     @Operation(summary = "음성 모델 테이블 생성", description = "음성 모델 테이블 생성")
     @ApiResponse(responseCode = "201", description = "음성 모델 테이블 생성 성공")
     @PostMapping
-    public ResponseEntity<ModelTableCreateResponse> createModelTable(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> createModelTable(@RequestHeader("Authorization") String token,
                                                                      @RequestBody ModelTableCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.createModelTable(request, userCode);
