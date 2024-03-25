@@ -48,7 +48,6 @@ const MenuItem = styled.div<MenuItemProps>`
 function MenuBar() {
   const selectedMenu = useSelector((state: RootState) => state.menu.selectedMenu);
   const dispatch = useDispatch();
-
   const menus = ["나의 음성 모델", "더빙 컨텐츠", "AI 커버", "관심 컨텐츠", "플레이리스트"];
 
 
