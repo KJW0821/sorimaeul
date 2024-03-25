@@ -105,7 +105,7 @@ const router = createBrowserRouter([
                 element: <ModelDetailPage />
               },
               {
-                path: "record",
+                path: ":code/record",
                 element: <RecordingPage />
               }
             ]
