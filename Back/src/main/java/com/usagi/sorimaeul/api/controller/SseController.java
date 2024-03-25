@@ -49,8 +49,8 @@ public class SseController {
 			description = "파라미터를 받아 알림 전송")
 	@PostMapping("/notify")
 	public ResponseEntity<Void> notify(@RequestBody SseRequest request) {
-		notifyService.createNotify(request.getUserCode(), request.getData());
-		sseService.sendToClient(request.getUserCode(), "alarm", request.getData());
+		notifyService.createNotify(request);
+		sseService.sendToClient(request.getUserCode(), request.getName(), request.getData());
 		return ResponseEntity.ok().build();
 	}
 

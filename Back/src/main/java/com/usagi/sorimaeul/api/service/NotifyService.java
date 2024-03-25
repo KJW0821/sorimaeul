@@ -1,5 +1,6 @@
 package com.usagi.sorimaeul.api.service;
 
+import com.usagi.sorimaeul.dto.request.SseRequest;
 import com.usagi.sorimaeul.dto.response.NotifyResponse;
 import com.usagi.sorimaeul.entity.Notify;
 import com.usagi.sorimaeul.repository.NotifyRepository;
@@ -31,8 +32,8 @@ public class NotifyService {
 		return notifyRepository.deleteNotify(notifyCode);
 	}
 
-	public void createNotify(long userCode, Object data) {
-		notifyRepository.insertNotify(userCode, data);
+	public void createNotify(SseRequest request) {
+		notifyRepository.insertNotify(request);
 	}
 
 }
