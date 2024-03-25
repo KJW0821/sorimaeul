@@ -81,7 +81,7 @@ public class CoverController {
 
     @Operation(summary = "생성된 AI 커버 저장", description = "생성된 AI 커버를 저장한다.")
     @ApiResponse(responseCode = "201", description = "생성된 AI 커버 저장 성공")
-    @PostMapping("/{coverCode}")
+    @PostMapping("/save/{coverCode}")
     public ResponseEntity<?> saveCreatedCover(@PathVariable int coverCode, MultipartFile file) {
         return coverService.saveCreatedCover(coverCode, file);
     }
