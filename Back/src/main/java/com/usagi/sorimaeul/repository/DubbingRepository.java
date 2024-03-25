@@ -15,7 +15,6 @@ public interface DubbingRepository extends JpaRepository<Dubbing, Integer> {
 
     List<Dubbing> findByDubName(String dubName);
 
-//    List<Dubbing> findByTop5OrderByLikeCountDESC();
     List<Dubbing> findTop5ByOrderByLikeCountDesc();
 
     Dubbing findByDubCode(int dubCode);

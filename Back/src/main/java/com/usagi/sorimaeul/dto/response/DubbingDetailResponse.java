@@ -22,5 +22,6 @@ public class DubbingDetailResponse {
     private LocalDateTime createdTime;
     private String thumbnailPath;
     private boolean isLiked;
+    private boolean isComplete;
 
 }

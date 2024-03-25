@@ -25,5 +25,5 @@ public interface DubbingService {
 
     ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode);
 
-    ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(long userCode, DubbingRecordRequest request);
+    ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request);
 }

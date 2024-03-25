@@ -14,8 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Pageable;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +35,7 @@ public class DubbingServiceImpl implements DubbingService {
     private final LikeRepository likeRepository;
     private final VideoSourceRepository videoSourceRepository;
     private final VoiceSourceRepository voiceSourceRepository;
+    private static final String BASE_PATH = "/home/ubunutu/sorimaeul-data";
 
     // 원본 영상 목록 조회
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, int page){
@@ -277,13 +284,35 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 음성 녹음 업로드
-    public ResponseEntity<DubbingRecordResponse> uploadDubbingRecord(long userCode, DubbingRecordRequest request){
+    public ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile){
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+        // 폴더 경로 설정
+        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+
+        try {
+            // 폴더 생성
+            createFolder(folderPath);
+            // record_1.wav 형식으로 저장
+            String fileName = num + ".wav";
+            // 파일 생성
+            saveFile(folderPath + fileName, recordFile.getBytes());
+
+            DubbingRecordResponse response =DubbingRecordResponse.builder()
+                    .voicePath(folderPath + fileName)
+                    .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+            // 서버 오류 처리
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+        }
     }
 
     public HttpStatus createDub (long userCode, DubCreateRequest request){
@@ -318,5 +347,36 @@ public class DubbingServiceImpl implements DubbingService {
             end--;
         }
     }
+
+    // 폴더 생성
+    private void createFolder(String folderPath) throws IOException {
+        Path path = Paths.get(folderPath);
+        if (!Files.exists(path)) Files.createDirectories(path);
+    }
+
+
+    // 파일 저장
+    private void saveFile(String filePath, byte[] data) throws IOException {
+        Path path = Paths.get(filePath);
+        Files.write(path, data);
+    }
+
+    public static void changeFolderPermission(String folderPath) {
+        try {
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                // 폴더가 존재하지 않는 경우에는 먼저 폴더를 생성합니다.
+                folder.mkdirs();
+            }
+            // 폴더의 읽기 및 쓰기 권한을 설정합니다.
+            folder.setReadable(true);
+            folder.setWritable(true);
+            System.out.println("1폴더의 권한 변경 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("2폴더의 권한 변경 실패");
+        }
+    }
+
 }
 
