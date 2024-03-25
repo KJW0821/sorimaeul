@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.dto.dto.PlaylistCoverInfoDto;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
 import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
 import com.usagi.sorimaeul.dto.request.PlaylistUpdateRequest;
+import com.usagi.sorimaeul.dto.response.PlaylistDetailResponse;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.Playlist;
@@ -45,33 +46,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         List<PlaylistInfoDto> playlistInfoDtos = new ArrayList<>();
         // 플레이리스트들을 순회하며
         for (Playlist playlist : playlists) {
-            // 플레이리스트 코드를 이용해서 AI 커버 목록 조회
-            int playlistCode = playlist.getPlaylistCode();
-            List<PlaylistCover> playlistCovers = playlistCoverRepository.findByPlaylist_PlaylistCode(playlistCode);
-            // PlaylistCoverInfoDto 리스트 빈 리스트 생성
-            List<PlaylistCoverInfoDto> playlistCoverInfoDtos = new ArrayList<>();
-            // AI 커버 목록 순회하며
-            for (PlaylistCover playlistCover : playlistCovers) {
-                // 커버 불러오기
-                Cover cover = playlistCover.getCover();
-                // Dto 에 값 넣기
-                PlaylistCoverInfoDto playlistCoverInfoDto = PlaylistCoverInfoDto.builder()
-                        .coverSinger(cover.getCoverSinger())
-                        .singer(cover.getSinger())
-                        .title(cover.getTitle())
-                        .writer(cover.getUser().getNickname())
-                        .storagePath(cover.getStoragePath())
-                        .isPublic(cover.isPublic())
-                        .build();
-                // List 안에 Dto 추가
-                playlistCoverInfoDtos.add(playlistCoverInfoDto);
-            }
             // playlistInfoDto 생성
             PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
-                    .playlistCode(playlistCode)
+                    .playlistCode(playlist.getPlaylistCode())
                     .playlistName(playlist.getPlaylistName())
                     .createTime(playlist.getCreateTime())
-                    .playlist(playlistCoverInfoDtos)
                     .build();
             
             // playlistInfoDtos 리스트에 추가
@@ -89,7 +68,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     // 플레이리스트 상세 조회 - AI 커버 리스트 조회
-    public ResponseEntity<PlaylistInfoDto> getPlaylistCoverList(long userCode, int playlistCode) {
+    public ResponseEntity<PlaylistDetailResponse> getPlaylistCoverList(long userCode, int playlistCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -132,14 +111,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
 
         // 반환할 Dto 생성
-        PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
-                .playlistCode(playlistCode)
-                .playlistName(playlist.getPlaylistName())
-                .createTime(playlist.getCreateTime())
+        PlaylistDetailResponse playlistDetailResponse = PlaylistDetailResponse.builder()
                 .playlist(playlistCoverInfoDtos)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(playlistInfoDto);
+        return ResponseEntity.status(HttpStatus.OK).body(playlistDetailResponse);
     }
 
 
