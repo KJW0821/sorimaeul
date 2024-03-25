@@ -5,7 +5,7 @@ import LandingPage from './pages/home/LandingPage'
 import HomePage from './pages/home/HomePage'
 import LoginCallbackPage from './pages/user/LoginCallbackPage';
 import { Provider } from "react-redux";
-import store from "./stores/store";
+import store, { RootState } from "./stores/store";
 import SignUpPage from "./pages/user/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
@@ -23,12 +23,21 @@ import CoverResultPage from './pages/aiCover/CoverResultPage'
 import PrivateRoute from './components/common/PrivateRoute'
 import CoverCreatePage from './pages/aiCover/CoverCreatePage'
 import ProfilePage from './pages/user/ProfilePage'
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+
+const Spacer = styled.div<{ $isOpen: boolean }>`
+  width: ${(props) => (props.$isOpen ? "314px" : "60px")};
+`
 
 function Layout() {
+  const isOpen = useSelector((state: RootState) => state.common.isOpen);
+
   return (
     <div className="flex">
       <SideBar />
-      <div className="w-full">
+      <Spacer $isOpen={isOpen} />
+      <div className="w-full grow">
         <Outlet />
       </div>
     </div>
