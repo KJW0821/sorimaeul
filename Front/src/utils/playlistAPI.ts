@@ -32,6 +32,13 @@ export const getPlaylist = (playlistCode: string) => {
   .catch(err => console.log(err))
 }
 
+// 플레이리스트 수정
+export const updatePlaylist = (playlistCode: string, data: PlaylistCreateInterface) => {
+  return API.patch(URL + `/${playlistCode}`, data)
+  .then((res) => res.data)
+  .catch(err => console.log(err))
+}
+
 
 // 플레이리스트 삭제 
 export const deletePlaylist = (playlistCode: string) => {
