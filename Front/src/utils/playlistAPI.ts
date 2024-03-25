@@ -9,10 +9,13 @@ interface PlaylistCreateInterface {
 
 export const createPlaylist = (data: PlaylistCreateInterface) => {
   return API.post(URL, data)
-  .then((res) => {
-    return res.data;
-  })
-  .catch((err) => {
-    return err;
-  })
+  .then(res => res)
+  .catch(err => console.log(err))
+}
+
+// 플레이리스트 삭제 
+export const deletePlaylist = (playlistCode: string) => {
+  return API.delete(URL + `/${playlistCode}`)
+  .then(res => res)
+  .catch(err => console.log(err))
 }
