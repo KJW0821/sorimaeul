@@ -6,6 +6,7 @@ import { RootState } from "../../../stores/store";
 import UploadRecordMethod from "./UploadRecordMethod";
 import { useEffect } from "react";
 import { setIsFileUploaded } from "../../../stores/voiceModel";
+import UploadModelMethod from "./UploadModelMethod";
 
 const Container = styled.div`
   border-radius: 35px;
@@ -40,6 +41,10 @@ function SelectMethod() {
       {
         method === "file" &&
         <UploadRecordMethod />
+      }
+      {
+        method === "model" &&
+        <UploadModelMethod />
       }
     </Container>  
   )

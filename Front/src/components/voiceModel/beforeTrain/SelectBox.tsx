@@ -39,15 +39,15 @@ function SelectBox() {
     <Container>
       <div className="flex items-center gap-1">
         <input onChange={methodChangeHandler} type="radio" id="self" name="method" defaultChecked />
-        <label>직접 녹음하기</label>
+        <label htmlFor="self">직접 녹음하기</label>
       </div>
       <div className="flex items-center gap-1">
         <input onChange={methodChangeHandler} type="radio" id="file" name="method" />
-        <label>녹음본 업로드</label>
+        <label htmlFor="file">녹음본 업로드</label>
       </div>
       <div className="flex items-center gap-1">
         <input onChange={methodChangeHandler} type="radio" id="model" name="method" />
-        <label>외부 학습 모델</label>
+        <label htmlFor="model">외부 학습 모델</label>
       </div>
     </Container>
   )

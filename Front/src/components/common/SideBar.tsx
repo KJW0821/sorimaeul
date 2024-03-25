@@ -11,13 +11,15 @@ import voice from '../../assets/voice.png';
 import bgLogo from '../../assets/sideBgLogo.png';
 import foldBtn from '../../assets/foldBtn.png';
 import { Line } from "./Line";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout as logoutAPI } from "../../utils/userAPI";
 import { logout as logoutState } from "../../stores/user";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../stores/store";
+import { toggleSideBar as toggle } from "../../stores/common";
 
 const Container = styled.div<{$isOpen: boolean}>`
+  position: fixed;
   height: 100vh;
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
   background-color: black;
@@ -52,10 +54,10 @@ const Container = styled.div<{$isOpen: boolean}>`
 function SideBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useSelector((state: RootState) => state.common.isOpen);
 
   const toggleSideBar = () => {
-    setIsOpen(pre => !pre);
+    dispatch(toggle());
   };
 
   const handleLogout = () => {
