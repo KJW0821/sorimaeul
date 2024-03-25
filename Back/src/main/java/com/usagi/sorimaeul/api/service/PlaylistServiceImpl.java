@@ -16,6 +16,7 @@ import com.usagi.sorimaeul.repository.PlaylistRepository;
 import com.usagi.sorimaeul.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final CoverRepository coverRepository;
 
     // 플레이리스트 전체 조회
-    public ResponseEntity<PlaylistListResponse> getPlaylistList(long userCode) {
+    public ResponseEntity<PlaylistListResponse> getPlaylistList(long userCode, Integer page) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -44,8 +45,29 @@ public class PlaylistServiceImpl implements PlaylistService {
         // 클라이언트 userCode 와 일치하는 Playlist 모두 조회
         List<Playlist> playlists = playlistRepository.findByUser_UserCode(userCode);
         List<PlaylistInfoDto> playlistInfoDtos = new ArrayList<>();
+        // 인덱스 선언
+        int startIdx = 0;
+        int endIdx = 0;
+        // 총 페이지 수 선언
+        int totalPages = 1;
+        if (page != null) {
+            // 한 페이지 당 10개씩 조회
+            startIdx = Math.min((page - 1) * 8, playlists.size()) / 8 * 8;
+            endIdx = Math.min(startIdx + 8, playlists.size());
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) playlists.size() / 8);
+        }
+        // page 가 null 이면 전체 조회
+        else {
+            endIdx = playlists.size();
+        }
+        // 최신순으로 보여주기 위해 covers 뒤집기
+        reverseList(playlists);
+        // cover 리스트 페이지네이션
+        List<Playlist> pagePlaylists = playlists.subList(startIdx, endIdx);
+
         // 플레이리스트들을 순회하며
-        for (Playlist playlist : playlists) {
+        for (Playlist playlist : pagePlaylists) {
             // playlistInfoDto 생성
             PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
                     .playlistCode(playlist.getPlaylistCode())
@@ -60,6 +82,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         // 리스폰스 생성
         PlaylistListResponse playlistListResponse = PlaylistListResponse.builder()
                 .playlists(playlistInfoDtos)
+                .totalPages(totalPages)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(playlistListResponse);
@@ -302,6 +325,23 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlistRepository.delete(playlist);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("삭제 성공!");
+    }
+
+
+    public void reverseList(List<Playlist> list) {
+        int start = 0;
+        int end = list.size() - 1;
+
+        while (start < end) {
+            // 리스트의 앞과 뒤 요소를 교환
+            Playlist temp = list.get(start);
+            list.set(start, list.get(end));
+            list.set(end, temp);
+
+            // 다음 요소로 이동
+            start++;
+            end--;
+        }
     }
 
 }

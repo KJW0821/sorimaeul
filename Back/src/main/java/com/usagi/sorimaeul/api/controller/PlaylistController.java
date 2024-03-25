@@ -28,9 +28,10 @@ public class PlaylistController {
     @Operation(summary = "플레이리스트 목록 조회", description = "유저 코드로 플레이리스트 목록을 조회한다.")
     @ApiResponse(responseCode = "200", description = "플레이리스트 목록 조회 성공")
     @GetMapping
-    public ResponseEntity<PlaylistListResponse> getPlaylistList(@RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<PlaylistListResponse> getPlaylistList(@RequestHeader(name = "Authorization") String token,
+                                                                @RequestParam(required = false) Integer page) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return playlistService.getPlaylistList(userCode);
+        return playlistService.getPlaylistList(userCode, page);
     }
 
 

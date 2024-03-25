@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface PlaylistService {
 
-    ResponseEntity<PlaylistListResponse> getPlaylistList(long userCode);
+    ResponseEntity<PlaylistListResponse> getPlaylistList(long userCode, Integer page);
 
     ResponseEntity<?> getPlaylistCoverList(long userCode, int playlistCode);
 
