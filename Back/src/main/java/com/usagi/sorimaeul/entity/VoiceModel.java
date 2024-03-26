@@ -31,9 +31,6 @@ public class VoiceModel {
     @Column(name = "model_name")
     private String modelName;
 
-    @Column(name = "storage_path")
-    private String storagePath;
-
     @Column(name = "image_path")
     private String imagePath;
 
