@@ -29,3 +29,13 @@ export const getPopularUserVideo = () => {
     .catch(err => console.error(err))
 };
 
+export const getUserVideos = (page: number) => {
+  return API.get(URL, {
+    params: {
+      target: 'all',
+      page
+    }
+  })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+}
