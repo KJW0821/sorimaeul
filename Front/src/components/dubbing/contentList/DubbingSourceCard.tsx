@@ -3,6 +3,7 @@ import { VideoData } from "../../../pages/dubbing/DubbingListPage";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
+  width: 19%;
   flex: 0 0 19%;
   box-sizing: border-box;
   margin: 0.5%;
@@ -10,7 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  
   .img-box {
     position: relative;
     height: 88%;
@@ -32,6 +33,14 @@ const Container = styled.div`
       justify-content: center;
       color: white;
     }
+  }
+
+  .title {
+    width: 100%;
+    font-size: .875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `
 
