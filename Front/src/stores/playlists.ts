@@ -3,7 +3,7 @@ import { createSlice, PayloadAction  } from "@reduxjs/toolkit";
 interface Playlist {
   playlistCode: number;
   playlistName: string;
-  createdTime: Date;
+  createTime: string;
 }
 
 export interface PlaylistsState {

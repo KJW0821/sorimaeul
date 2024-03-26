@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../stores/modal";
 import { Button } from "../../common/Button";
+import { PlaylistList } from "./PlaylistList";
 
 function PlaylistBox() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function PlaylistBox() {
     <div>
       playlistbox
       <Button onClick={openPlaylistCreateModal} $marginLeft={0} $marginTop={0}> + 새로 만들기</ Button> 
+      <PlaylistList />
     </div>
   )
 }
