@@ -14,9 +14,10 @@ export const Overlay = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
 `;
 export const Content = styled.section`
-  width: 20rem;
-  height: 5rem;
+  width: 30rem;
+  height: 7rem;
   background: #fff;
+  border-radius: 15px;
   padding: 2rem;
   z-index: 1;
 `;
