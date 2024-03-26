@@ -88,12 +88,7 @@ function ModelForm() {
 
   const [modelName, setModelName] = useState('');
   const [imagePath, setImagePath] = useState('');
-  const [selectedImagePath, setSelectedImagePath] = useState('');
-
-  const data: voiceModelAPI.modelCreationData = {
-    modelName,
-    imagePath
-  };
+  const [selectedfile, setSelectedFile] = useState('');
 
   const handleModelName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setModelName(() => e.target.value);
@@ -101,11 +96,11 @@ function ModelForm() {
 
   const handleImagePath = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log(e.target.files?.[0])
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImagePath((reader.result as string));
-      };
+      console.log(file.name)
+      setSelectedFile(file.name);
       reader.readAsDataURL(file);
       try {
         const uploadedImageUrl = await requestS3({
@@ -124,7 +119,7 @@ function ModelForm() {
   };
 
   const submitHandler = async () => {
-    const res = await voiceModelAPI.createModel(data);
+    const res = await voiceModelAPI.createModel({modelName, imagePath});
     if (res?.status === 201) {
       console.log(res.data, '모델 생성 완료');
       dispatch(initModelInfo(res.data.modelCode));
@@ -147,7 +142,7 @@ function ModelForm() {
       <div className="step">
         <h3 className="subtitle">Step 2. 썹네일 업로드</h3>
         <div className="flex items-center gap-2">
-          <p className="input over-text">{ imagePath ? imagePath : '음성 모델 썸네일을 업로드해주세요' }</p>
+          <p className="input over-text">{ selectedfile ? selectedfile : '음성 모델 썸네일을 업로드해주세요' }</p>
           <label htmlFor="file">업로드</label>
           <input onChange={handleImagePath} type="file" id="file" />
         </div>
