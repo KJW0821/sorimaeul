@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { VideoData } from "../../../pages/dubbing/DubbingListPage";
 
 const Container = styled.div`
-  flex: 0 0 21.3%;
+  flex: 0 0 19%;
   box-sizing: border-box;
-  margin: 1.4%;
+  margin: 0.5%;
   height: 8.625rem;
   display: flex;
   flex-direction: column;
