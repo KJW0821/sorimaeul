@@ -2,13 +2,10 @@ import API from "./axios";
 
 const URL = "/playlist";
 
-// 플레이리스트 생성
-interface PlaylistCreateInterface {
-  playlistName: string;
-}
 
-export const createPlaylist = (data: PlaylistCreateInterface) => {
-  return API.post(URL, data)
+// 플레이리스트 생성
+export const createPlaylist = (playlistName: string) => {
+  return API.post(URL, playlistName)
   .then(res => res)
   .catch(err => console.log(err))
 }
@@ -33,8 +30,8 @@ export const getPlaylist = (playlistCode: string) => {
 }
 
 // 플레이리스트 수정
-export const updatePlaylist = (playlistCode: string, data: PlaylistCreateInterface) => {
-  return API.patch(URL + `/${playlistCode}`, data)
+export const updatePlaylist = (playlistCode: string, playlistName: string) => {
+  return API.patch(URL + `/${playlistCode}`, playlistName)
   .then((res) => res.data)
   .catch(err => console.log(err))
 }
