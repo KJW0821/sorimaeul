@@ -1,6 +1,6 @@
-import { isProduction } from "../../utils/axios";
-
 const LandingPage: React.FC = () => {
+  const isProduction = true;
+
   // kakao - axios 통신을 하면 CORS 에러 발생 
   // 소셜로그인 페이지로 이동하는 요청을 href 링크에 담았다 
   const handleSocialLogin = (provider: string) => {
