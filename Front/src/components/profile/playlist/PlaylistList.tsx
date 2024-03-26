@@ -5,6 +5,7 @@ import { PlaylistCard } from "./PlaylistCard";
 import { setPlaylists, setTotalPages } from "../../../stores/playlists";
 import { RootState } from "../../../stores/store";
 import styled from 'styled-components';
+import { openModal } from "../../../stores/modal";
 
 
 const ListContainer = styled.div`
@@ -17,6 +18,7 @@ export function PlaylistList () {
   const dispatch = useDispatch();
   const dataList = useSelector((state: RootState) => state.playlists);
 
+ 
   useEffect(() => {
     (async () => {
       try {
