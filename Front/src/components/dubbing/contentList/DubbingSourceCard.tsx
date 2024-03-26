@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { VideoData } from "../../../pages/dubbing/DubbingListPage";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   flex: 0 0 19%;
@@ -35,8 +36,10 @@ const Container = styled.div`
 `
 
 const DubbingSourceCard: React.FC<{data: VideoData}> = ({data}) => {
+  const navigate = useNavigate();
+
   return (
-    <Container>
+    <Container onClick={() => navigate(`/dubbing/${data.videoSourceCode}`)}>
       <div className="img-box">
         <img className="img" src={data.thumbnailPath} alt="thumbnail" />
         <div className="playtime">{data.videoPlaytime}</div>
