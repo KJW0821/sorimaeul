@@ -17,3 +17,15 @@ export const getSourceVideo = (sourceCode: string) => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const getPopularUserVideo = () => {
+  return API.get(URL, {
+    params: {
+      target: 'popular',
+      page: 1
+    }
+  })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
+
