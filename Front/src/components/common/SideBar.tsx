@@ -87,7 +87,7 @@ function SideBar() {
                 <img src={microphone} alt="learning" />
                 <p>음성 학습</p>
               </div>
-              <div className="col">
+              <div onClick={() => navigate('/dubbing')} className="col">
                 <img src={voice} alt="dubbing" />
                 <p>더빙 학원</p>
               </div>
@@ -132,7 +132,7 @@ function SideBar() {
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
               <img onClick={() => navigate('/model/create')} src={microphone} alt="learning" />
-              <img src={voice} alt="dubbing" />
+              <img onClick={() => navigate('/dubbing')} src={voice} alt="dubbing" />
               <img onClick={() => navigate('/cover')} src={record} alt="aicover" />
               <img onClick={() => navigate('/FAQ')} src={question} alt="inquiry" />
             </div>
