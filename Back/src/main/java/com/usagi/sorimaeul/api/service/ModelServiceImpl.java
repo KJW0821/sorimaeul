@@ -74,7 +74,7 @@ public class ModelServiceImpl implements ModelService {
         // 모델 소유자와 클라이언트가 일치하지 않거나 모델 학습 상태가 녹음중 또는 학습전이 아니면 BAD_REQUEST 반환
         if (voiceModel.getUser() != user)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
-        if (voiceModel.getState() <= 1) {
+        if (voiceModel.getState() > 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델을 학습하기에 적절한 상태가 아닙니다.");
         }
         // 모델 학습 가능 횟수 검사
