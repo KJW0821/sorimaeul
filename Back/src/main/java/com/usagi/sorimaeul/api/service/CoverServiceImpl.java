@@ -193,7 +193,7 @@ public class CoverServiceImpl implements CoverService {
 
 
     // AI 커버 생성
-    public ResponseEntity<CoverCreateResponse> createCover(long userCode, CoverCreateRequest request) {
+    public ResponseEntity<?> createCover(long userCode, CoverCreateRequest request) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -201,6 +201,10 @@ public class CoverServiceImpl implements CoverService {
         }
 
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(request.getModelCode());
+        // 클라이언트의 모델이 맞는지 검증
+        if (voiceModel.getUser() != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델로는 AI 커버를 생성할 수 없습니다.");
+        }
 
 
         // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime, updatedTime 현재 시간, likeCount 기본값 0
