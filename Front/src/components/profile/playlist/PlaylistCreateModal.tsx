@@ -15,6 +15,18 @@ const Label = styled.label`
   color: #888888;
 `;
 
+const CloseButton = styled.div`
+  width: 1.5rem;
+  height: 1.5em;
+  border-radius: 50%;
+  background: #000000;
+  color: #BFEA44;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+
 function PlaylistCreateModal () {
   const dispatch = useDispatch();
   const [playlistName, setPlaylistName] = useState("");
@@ -44,6 +56,7 @@ function PlaylistCreateModal () {
       <Label htmlFor="playlistName">플레이리스트 이름을 입력해주세요.</Label>
       <InputBox type="text" id="playlistName" name="playlistName" value={data.playlistName} onChange={ handlePlaylistName}/>
       <Button onClick={submitHandler} $marginLeft={0} $marginTop={0} disabled={playlistName.trim().length === 0}>생성</Button>
+      <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
     </Content>
     </>
   )
