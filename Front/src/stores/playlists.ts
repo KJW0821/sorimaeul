@@ -25,6 +25,10 @@ export const playlistsSlice = createSlice({
     addPlaylist: (state, action: PayloadAction<Playlist>) => {
       state.playlists.push(action.payload);
     },
+    // 기존 플레이리스트 목록에서 삭제된 플레이리스트를 제거하는 액션
+    removePlaylist: (state, action: PayloadAction<string>) => {
+      state.playlists = state.playlists.filter(playlist => playlist.playlistCode !== action.payload);
+    },
     setPlaylists: (state, action: PayloadAction<Playlist[]>) => {
       state.playlists = action.payload;
     },
@@ -37,5 +41,5 @@ export const playlistsSlice = createSlice({
   },
 });
 
-export const { addPlaylist, setPlaylists, setSelectedPlaylist, setTotalPages } = playlistsSlice.actions;
+export const { addPlaylist, removePlaylist, setPlaylists, setSelectedPlaylist, setTotalPages } = playlistsSlice.actions;
 export default playlistsSlice.reducer;
