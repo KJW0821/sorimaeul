@@ -82,7 +82,7 @@ function SelfRecordMethod() {
   }
 
   useEffect(() => {
-    setPercentage(((Math.round((modelInfo.recordCount/200)*1000))/1000)*100);
+    setPercentage(((Math.round((modelInfo.recordCount/200)*1000*100))/1000));
   }, [modelInfo])
 
   useEffect(() => {
@@ -111,7 +111,7 @@ function SelfRecordMethod() {
               <p className="sm-font">{percentage}% ({modelInfo.recordCount}/200문장)</p>
             </div>
             <div className="flex gap-4 justify-center">
-              <Button $marginLeft={0} $marginTop={0} $width={4.5}>이어하기</Button>
+              <Button onClick={() => navigate(`/model/${modelInfo.modelCode}/record`)} $marginLeft={0} $marginTop={0} $width={4.5}>이어하기</Button>
               <Button $marginLeft={0} $marginTop={0} $width={4.5} $color="black" $background="#7C87E3">새로 하기</Button>
             </div>
           </div>
