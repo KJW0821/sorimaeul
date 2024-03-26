@@ -1,8 +1,8 @@
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { CookiesProvider } from 'react-cookie'
-import './App.css'
-import LandingPage from './pages/home/LandingPage'
-import HomePage from './pages/home/HomePage'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
+import './App.css';
+import LandingPage from './pages/home/LandingPage';
+import HomePage from './pages/home/HomePage';
 import LoginCallbackPage from './pages/user/LoginCallbackPage';
 import { Provider } from "react-redux";
 import store, { RootState } from "./stores/store";
@@ -12,20 +12,21 @@ import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
-import SideBar from './components/common/SideBar'
+import SideBar from './components/common/SideBar';
 import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
-import RecordingPage from './pages/voiceModel/RecordingPage'
-import CoverUpdatePage from './pages/aiCover/CoverUpdatePage'
-import CoverDetailPage from './pages/aiCover/CoverDetailPage'
-import CoverListPage from './pages/aiCover/CoverListPage'
-import CoverResultPage from './pages/aiCover/CoverResultPage'
-import PrivateRoute from './components/common/PrivateRoute'
-import CoverCreatePage from './pages/aiCover/CoverCreatePage'
-import ProfilePage from './pages/user/ProfilePage'
+import RecordingPage from './pages/voiceModel/RecordingPage';
+import CoverUpdatePage from './pages/aiCover/CoverUpdatePage';
+import CoverDetailPage from './pages/aiCover/CoverDetailPage';
+import CoverListPage from './pages/aiCover/CoverListPage';
+import CoverResultPage from './pages/aiCover/CoverResultPage';
+import PrivateRoute from './components/common/PrivateRoute';
+import CoverCreatePage from './pages/aiCover/CoverCreatePage';
+import ProfilePage from './pages/user/ProfilePage';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DubbingListPage from './pages/dubbing/DubbingListPage';
+import DubbingDetailPage from './pages/dubbing/DubbingDetailPage';
 
 const Spacer = styled.div<{ $isOpen: boolean }>`
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -150,6 +151,10 @@ const router = createBrowserRouter([
               {
                 index: true,
                 element: <DubbingListPage />
+              },
+              {
+                path: ":sourceCode",
+                element: <DubbingDetailPage />
               }
             ]
           }
