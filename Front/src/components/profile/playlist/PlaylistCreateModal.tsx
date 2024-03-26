@@ -4,6 +4,8 @@ import { Button } from "../../common/Button";
 import { Content } from "../../common/ModalStyles";
 import { InputBox } from "../../common/InputBox";
 import { PlaylistCreateInterface, createPlaylist } from "../../../utils/playlistAPI";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../../stores/modal";
 
 const Label = styled.label`
   font-style: normal;
@@ -14,6 +16,7 @@ const Label = styled.label`
 `;
 
 function PlaylistCreateModal () {
+  const dispatch = useDispatch();
   const [playlistName, setPlaylistName] = useState("");
   const data: PlaylistCreateInterface = {
     playlistName
@@ -26,14 +29,12 @@ function PlaylistCreateModal () {
 
   const submitHandler = async () => {
     const res = await createPlaylist(data)
-    console.log(data);
-    console.log(res);
     if (res?.status === 201) {
       console.log(res.data, "플레이리스트 생성 완료")
     } else {
       console.log("실패");
     }
-    
+    dispatch(closeModal());
   }
 
 
@@ -42,7 +43,7 @@ function PlaylistCreateModal () {
     <Content>
       <Label htmlFor="playlistName">플레이리스트 이름을 입력해주세요.</Label>
       <InputBox type="text" id="playlistName" name="playlistName" value={data.playlistName} onChange={ handlePlaylistName}/>
-      <Button onClick={submitHandler} $marginLeft={0} $marginTop={0}>생성</Button>
+      <Button onClick={submitHandler} $marginLeft={0} $marginTop={0} disabled={playlistName.trim().length === 0}>생성</Button>
     </Content>
     </>
   )
