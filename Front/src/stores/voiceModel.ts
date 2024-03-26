@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface VoiceModelState {
   modelCode: number,
   modelName: string,
-  storagePath: string,
   imagePath: string,
   recordCount: number,
   learnState: number,
@@ -15,7 +14,6 @@ export interface VoiceModelState {
 const initialState: VoiceModelState = {
   modelCode: 0,
   modelName: "",
-  storagePath: "",
   imagePath: "",
   recordCount: 0,
   learnState: 1,
@@ -34,7 +32,6 @@ const voiceModelSlice = createSlice({
     setModelInfo(state, action) {
       state.modelCode = action.payload.modelCode;
       state.modelName = action.payload.modelName;
-      state.storagePath = action.payload.storagePath;
       state.imagePath = action.payload.imagePath;
       state.recordCount = action.payload.recordCount;
       state.learnState = action.payload.state;
