@@ -4,8 +4,14 @@ import { useEffect, useState } from "react";
 import { PlaylistCard } from "./PlaylistCard";
 import { setPlaylists, setTotalPages } from "../../../stores/playlists";
 import { RootState } from "../../../stores/store";
+import styled from 'styled-components';
 
 
+const ListContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+`;
 
 export function PlaylistList () {
   const dispatch = useDispatch();
@@ -25,6 +31,7 @@ export function PlaylistList () {
 
   return (
     <>
+    <ListContainer>
       {dataList.playlists.map((playlist) => (
         <PlaylistCard
           key={playlist.playlistCode}
@@ -33,6 +40,7 @@ export function PlaylistList () {
           createTime={playlist.createTime}
         />
       ))}
+      </ListContainer>
     </>
   );
 }
