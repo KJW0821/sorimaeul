@@ -1,8 +1,10 @@
 package com.usagi.sorimaeul.api.service;
 
+import com.usagi.sorimaeul.dto.dto.CoverRequestDto;
 import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.dto.dto.ScriptInfoDto;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
+import com.usagi.sorimaeul.dto.request.ModelTrainingRequest;
 import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
 import com.usagi.sorimaeul.dto.response.GetScriptResponse;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
@@ -17,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import static com.usagi.sorimaeul.utils.FileUtil.*;
 
 import java.io.IOException;
@@ -45,7 +49,7 @@ public class ModelServiceImpl implements ModelService {
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // 모델 테이블 생성
-        // modelCode = auto_increment, video_code = null, storage_path = 임시값, image_path = null, state = 기본값 0,
+        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0,
         // record_count = null, created_time = now()
         VoiceModel voiceModel = VoiceModel.builder()
                 .modelName(request.getModelName())
@@ -188,35 +192,18 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델 파일이 올바르게 업로드되지 않았습니다.");
         }
 
-        // 폴더 경로 설정 (GPU 서버)
-        String folderPath = BASE_PATH + "/user_" + userCode + "/model_" + modelCode + "/model/";
-        try {
-            // 폴더 생성
-            createFolder(folderPath);
-            String fileName;
-            for (int i = 0; i < modelFiles.length; i++) {
-                // 첫번째 파일은 .pth 파일
-                if (i == 0) {fileName = "model.pth";}
-                // 두번째 파일은 .index 파일
-                else {fileName = "model.index";}
-                // 파일 저장
-                saveFile(folderPath + fileName, modelFiles[i].getBytes());
-            }
-            // 해당 모델의 유저 코드와 모델 파일 경로, 생성시간, 학습상태 DB에 저장
-            voiceModel.setStoragePath(folderPath);
-            voiceModel.setCreatedTime(LocalDateTime.now());
-            voiceModel.setState(3);
-            voiceModelRepository.save(voiceModel);
-            // 유저 모델 학습 가능 횟수 차감
-            user.setLearnCount(user.getLearnCount() - 1);
-            return ResponseEntity.ok("모델 파일 업로드 성공!");
+        // GPU 서버에 모델 업로드 요청 보내기
+        // 아래 코드는 임시로 작성된 코드로 수정이 필요함(AI 쪽에서 API 미구현)
+        WebClient.create("http://222.107.238.124:7866")
+                .post()
+                .uri("/training")
+                .bodyValue(new ModelTrainingRequest(modelCode, userCode))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-        // 서버 오류 처리
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("모델 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
+
     }
 
 
@@ -242,10 +229,14 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
 
-        // 녹음 파일 저장 경로
-        String recordFolderPath = BASE_PATH + "/model_" + modelCode + "/record/";
-        // 모델 학습 로직 작성
-
+        // GPU 서버에 모델 학습 요청 보내기
+        WebClient.create("http://222.107.238.124:7866")
+                .post()
+                .uri("/training")
+                .bodyValue(new ModelTrainingRequest(modelCode, userCode))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
         // state = 2: '학습중'으로 갱신
         voiceModel.setState(2);
@@ -254,10 +245,8 @@ public class ModelServiceImpl implements ModelService {
         // 모델 학습 가능 횟수 차감
         user.setLearnCount(user.getLearnCount() - 1);
         userRepository.save(user);
-
-        // 생성된 모델을 서버에 저장
-//        uploadModelFile(modelCode, userCode, modelFiles);
-        return ResponseEntity.badRequest().body("모델 학습 성공");
+        
+        return ResponseEntity.badRequest().body("모델 학습 성공!");
     }
 
 
@@ -361,7 +350,6 @@ public class ModelServiceImpl implements ModelService {
         ModelInfoResponse response = ModelInfoResponse.builder()
                 .modelCode(voiceModel.getModelCode())
                 .modelName(voiceModel.getModelName())
-                .storagePath(voiceModel.getStoragePath())
                 .imagePath(voiceModel.getImagePath())
                 .recordCount(voiceModel.getRecordCount())
                 .state(voiceModel.getState())
