@@ -222,7 +222,7 @@ public class CoverServiceImpl implements CoverService {
                 .build();
         coverRepository.save(cover);
         int coverCode = cover.getCoverCode();
-        // AI 커버 생성 로직 작성
+        // GPU 서버에 AI 커버 생성 요청 보내기
         String youtubeLink = request.getYoutubeLink();
         WebClient.create("http://222.107.238.124:7866")
                 .post()
