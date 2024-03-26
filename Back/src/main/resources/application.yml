@@ -118,11 +118,11 @@ logging:
 cloud:
   aws:
     s3:
-      bucket: usagi-sorimaeul
+      bucket: ENC(qLX/RiwHx0Ef9X9zUIjVVVEgKBNDBn2N)
     region:
       static: ap-northeast-2
     credentials:
-      access-key: AKIAZYHAZ4TLW6RGV4YN
-      secret-key: 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
+      access-key: ENC(HIq7IcwId5myQ/2gPhvGjqgI8Obvf2x8cmPnE2Yhj2Q=)
+      secret-key: ENC(3J0px/WljbwFjoLuCUricjoXUWSipL9a9n8YoiipM0eZ7ZeDal9TYPYAO07uOTTTcWFgl1BUUjY=)
     stack:
       auto: false
