@@ -2,7 +2,7 @@ import styled from "styled-components";
 import uploadFile from "../../../assets/uploadFile.png";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsFileUploaded, setIsStart } from "../../../stores/voiceModel";
+import { setIsFileUploaded, setIsLearning, setIsStart } from "../../../stores/voiceModel";
 import { RootState } from "../../../stores/store";
 import { uploadExModelFile } from "../../../utils/voiceModelAPI";
 
@@ -90,6 +90,7 @@ function UploadModelMethod() {
     if (res?.status === 200) {
       console.log('파일 업로드 성공');
       dispatch(setIsStart(false));
+      dispatch(setIsLearning(3));
     }
   }
 
