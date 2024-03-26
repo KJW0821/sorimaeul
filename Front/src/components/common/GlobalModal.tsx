@@ -1,8 +1,9 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PlaylistCreateModal from "../profile/playlist/PlaylistCreateModal";
 import PlaylistDetailModal from "../profile/playlist/PlaylistDetailModal";
 import { RootState } from "../../stores/store";
 import { Container, Overlay } from "./ModalStyles";
+import { closeModal } from "../../stores/modal";
 
 
 const MODAL_TYPES = {
@@ -23,6 +24,7 @@ const MODAL_COMPONENTS = [
 
 const GlobalModal = () => {
   const { modalType, isOpen } = useSelector((state: RootState) => state.modal);
+  const dispatch = useDispatch();
   if (!isOpen) return;
 
   const findModal = MODAL_COMPONENTS.find((modal) => {
@@ -36,7 +38,7 @@ const GlobalModal = () => {
 
   return (
     <Container>
-      <Overlay />
+      <Overlay onClick={() => dispatch(closeModal())}/>
       {renderModal()}
     </Container>
   );
