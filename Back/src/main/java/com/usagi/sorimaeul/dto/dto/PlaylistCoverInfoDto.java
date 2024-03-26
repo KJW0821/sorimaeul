@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public class PlaylistCoverInfoDto {
 
+    private int coverCode;
     private String coverSinger;
     private String singer;
     private String title;

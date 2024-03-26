@@ -122,6 +122,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             Cover cover = playlistCover.getCover();
             // Dto 에 값 넣기
             PlaylistCoverInfoDto playlistCoverInfoDto = PlaylistCoverInfoDto.builder()
+                    .coverCode(cover.getCoverCode())
                     .coverSinger(cover.getCoverSinger())
                     .singer(cover.getSinger())
                     .title(cover.getTitle())
