@@ -18,7 +18,7 @@ const ColorBlock = styled.div`
 function ColorLine() {
   return (
     <ColorBlock>
-      <img className="back" src={backBtn} alt="backButton" />
+      <img onClick={() => window.history.back()} className="back" src={backBtn} alt="backButton" />
     </ColorBlock>
   )
 }
