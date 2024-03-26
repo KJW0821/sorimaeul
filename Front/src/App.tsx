@@ -27,6 +27,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DubbingListPage from './pages/dubbing/DubbingListPage';
 import DubbingDetailPage from './pages/dubbing/DubbingDetailPage';
+import GlobalModal from './components/common/GlobalModal'
 
 const Spacer = styled.div<{ $isOpen: boolean }>`
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -58,13 +59,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <SignUpPage /> 
+    element: <SignUpPage />
   },
   {
     path: "/",
     element: <Layout />,
     children: [
-      { element: <PrivateRoute />,
+      {
+        element: <PrivateRoute />,
         children: [
           {
             index: true,
@@ -127,7 +129,7 @@ const router = createBrowserRouter([
                 path: ":id",
                 element: <CoverDetailPage />
               },
-              { 
+              {
                 path: "register/:id",
                 element: <CoverResultPage />
               },
@@ -159,7 +161,7 @@ const router = createBrowserRouter([
             ]
           }
         ]
-      }   
+      }
     ]
   },
 ]);
@@ -171,6 +173,7 @@ function App() {
   return (
     <Provider store={store}>
       <CookiesProvider>
+        <GlobalModal />
         <RouterProvider router={router} />
       </CookiesProvider>
     </Provider>

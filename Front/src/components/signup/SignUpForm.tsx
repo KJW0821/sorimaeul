@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { checkNickname, signUp } from "../../utils/userAPI";
 import { login, set } from "../../stores/user";
 import { requestS3 } from "../../utils/s3";
-import { getCookie } from "../../utils/cookie";
+
 
 
 function SignUpForm() {
@@ -12,8 +12,8 @@ function SignUpForm() {
   const navigate = useNavigate();
 
   const [inputNickname, setInputNickname] = useState(""); // 입력된 닉네임을 저장할 상태
-  const [imagePath, setImagePath] = useState('');
-  const [selectedImagePath, setSelectedImagePath] = useState('');
+  const [imagePath, setImagePath] = useState("");
+  const [selectedImagePath, setSelectedImagePath] = useState("");;
   const [isValidNickname, setIsValidNickname] = useState(false);
 
   const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {

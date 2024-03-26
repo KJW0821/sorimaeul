@@ -17,14 +17,18 @@ const MenuBarContainer = styled.div`
 `;
 
 interface MenuItemProps {
-  isSelected: boolean;
+  $isSelected: boolean;
 }
+
+const styledMenu = styled.div<MenuItemProps>`
+  color: ${(props) => (props.$isSelected ? "#000000" : '#888888')}
+`
 
 const MenuItem = styled.div<MenuItemProps>`
   cursor: pointer;
   padding: 10px 20px;
-  color: ${(props) => (props.isSelected ? "#000000" : "#888888")};
-  font-weight: ${(props) => (props.isSelected ? "bold" : "normal")};
+  color: ${(props) => (props.$isSelected ? "#000000" : "#888888")};
+  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
   position: relative;
 
   &:hover {
@@ -57,7 +61,7 @@ function MenuBar() {
         <MenuItem
           key={menu}
           onClick={() => dispatch(setSelectedMenu(menu))}
-          isSelected={menu === selectedMenu}
+          $isSelected={menu === selectedMenu}
         >
           {menu}
         </MenuItem>
