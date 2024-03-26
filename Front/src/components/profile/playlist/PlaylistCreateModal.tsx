@@ -4,8 +4,10 @@ import { Button } from "../../common/Button";
 import { Content } from "../../common/ModalStyles";
 import { InputBox } from "../../common/InputBox";
 import { PlaylistCreateInterface, createPlaylist } from "../../../utils/playlistAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../../stores/modal";
+import { RootState } from "@reduxjs/toolkit/query";
+import { addPlaylist } from "../../../stores/playlists";
 
 const Label = styled.label`
   font-style: normal;
@@ -29,6 +31,7 @@ const CloseButton = styled.div`
 
 function PlaylistCreateModal () {
   const dispatch = useDispatch();
+
   const [playlistName, setPlaylistName] = useState("");
   const data: PlaylistCreateInterface = {
     playlistName
@@ -42,7 +45,8 @@ function PlaylistCreateModal () {
   const submitHandler = async () => {
     const res = await createPlaylist(data)
     if (res?.status === 201) {
-      console.log(res.data, "플레이리스트 생성 완료")
+      console.log(res.data, "플레이리스트 생성 완료");
+      dispatch(addPlaylist(res.data));
     } else {
       console.log("실패");
     }

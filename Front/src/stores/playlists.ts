@@ -21,6 +21,10 @@ export const playlistsSlice = createSlice({
   name: 'playlists',
   initialState,
   reducers: {
+    // 기존 플레이리스트 목록에 새로 생성된 플레이리스트를 추가하는 액션
+    addPlaylist: (state, action: PayloadAction<Playlist>) => {
+      state.playlists.push(action.payload);
+    },
     setPlaylists: (state, action: PayloadAction<Playlist[]>) => {
       state.playlists = action.payload;
     },
@@ -33,5 +37,5 @@ export const playlistsSlice = createSlice({
   },
 });
 
-export const { setPlaylists, setSelectedPlaylist, setTotalPages } = playlistsSlice.actions;
+export const { addPlaylist, setPlaylists, setSelectedPlaylist, setTotalPages } = playlistsSlice.actions;
 export default playlistsSlice.reducer;
