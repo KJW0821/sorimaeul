@@ -3,11 +3,8 @@ package com.usagi.sorimaeul.api.controller;
 import com.usagi.sorimaeul.api.service.CoverService;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
-import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
-import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
-import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -84,6 +81,15 @@ public class CoverController {
     @PostMapping("/save/{coverCode}")
     public ResponseEntity<?> saveCreatedCover(@PathVariable int coverCode, MultipartFile file) {
         return coverService.saveCreatedCover(coverCode, file);
+    }
+
+
+    @Operation(summary = "AI 커버 소스 목록 조회", description = "서버에서 제공하는 AI 커버 소스 목록을 조회한다.")
+    @ApiResponse(responseCode = "200", description = "AI 커버 소스 목록 조회 성공")
+    @GetMapping("/source")
+    public ResponseEntity<?> getCoverSourceList(@RequestHeader("Authorization") String token) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return coverService.getCoverSourceList(userCode);
     }
 
 }

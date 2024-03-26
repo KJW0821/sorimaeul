@@ -2,20 +2,16 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
 import com.usagi.sorimaeul.dto.dto.CoverRequestDto;
+import com.usagi.sorimaeul.dto.dto.CoverSourceInfoDto;
 import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
 import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
-import com.usagi.sorimaeul.entity.Cover;
-import com.usagi.sorimaeul.entity.Like;
-import com.usagi.sorimaeul.entity.User;
-import com.usagi.sorimaeul.entity.VoiceModel;
-import com.usagi.sorimaeul.repository.CoverRepository;
-import com.usagi.sorimaeul.repository.LikeRepository;
-import com.usagi.sorimaeul.repository.UserRepository;
-import com.usagi.sorimaeul.repository.VoiceModelRepository;
+import com.usagi.sorimaeul.dto.response.CoverSourceListResponse;
+import com.usagi.sorimaeul.entity.*;
+import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,6 +36,7 @@ public class CoverServiceImpl implements CoverService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final VoiceModelRepository voiceModelRepository;
+    private final CoverSourceRepository coverSourceRepository;
 
 
     // AI 커버 리스트 조회
@@ -300,6 +297,35 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("생성된 AI 커버를 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
         }
+    }
+
+
+    // AI 커버 소스 목록 조회
+    public ResponseEntity<?> getCoverSourceList(long userCode) {
+        // 사용자 정보 확인
+        User user = userRepository.getUser(userCode);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        List<CoverSource> coverSources = coverSourceRepository.findAll();
+        List<CoverSourceInfoDto> coverSourceInfoDtos = new ArrayList<>();
+        for (CoverSource coverSource : coverSources) {
+            CoverSourceInfoDto coverSourceInfoDto = CoverSourceInfoDto.builder()
+                    .coverSourceCode(coverSource.getCoverSourceCode())
+                    .singer(coverSource.getSinger())
+                    .title(coverSource.getTitle())
+                    .youtubeLink(coverSource.getYoutubeLink())
+                    .thumbnailPath(coverSource.getThumbnailPath())
+                    .build();
+            coverSourceInfoDtos.add(coverSourceInfoDto);
+        }
+
+        CoverSourceListResponse response = CoverSourceListResponse.builder()
+                .coverSources(coverSourceInfoDtos)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 

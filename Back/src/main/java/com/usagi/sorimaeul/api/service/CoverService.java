@@ -25,4 +25,6 @@ public interface CoverService {
 
     ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file);
 
+    ResponseEntity<?> getCoverSourceList(long userCode);
+
 }
