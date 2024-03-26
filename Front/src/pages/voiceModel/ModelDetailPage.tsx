@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getModelInfo } from "../../utils/voiceModelAPI";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { setModelInfo, setIsStart, setIsLearning } from "../../stores/voiceModel";
+import { setModelInfo, setIsStart } from "../../stores/voiceModel";
 import { RootState } from "../../stores/store";
 import SoundWave from "../../components/voiceModel/training/SoundWave";
 import { Button } from "../../components/common/Button";
@@ -77,7 +77,6 @@ function ModelDetailPage() {
   }, [params.code, modelInfo.learnState])
 
   const startLearning = async () => {
-    dispatch(setIsLearning(modelInfo.method === "model" ? 3 : 2));
     dispatch(setIsStart(true));
   }
 
