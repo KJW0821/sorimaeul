@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Button } from "../../common/Button";
-import { Content } from "../../common/ModalStyles";
+import { CloseButton, Content } from "../../common/ModalStyles";
 import { InputBox } from "../../common/InputBox";
 import { PlaylistCreateInterface, createPlaylist } from "../../../utils/playlistAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../../stores/modal";
-import { RootState } from "@reduxjs/toolkit/query";
 import { addPlaylist } from "../../../stores/playlists";
 
 const Label = styled.label`
@@ -17,16 +16,6 @@ const Label = styled.label`
   color: #888888;
 `;
 
-const CloseButton = styled.div`
-  width: 1.5rem;
-  height: 1.5em;
-  border-radius: 50%;
-  background: #000000;
-  color: #BFEA44;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
 
 
 function PlaylistCreateModal () {

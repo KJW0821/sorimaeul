@@ -9,7 +9,6 @@ function PlaylistBox() {
   const openPlaylistCreateModal = () => {
     dispatch(openModal({
       modalType: "playlistcreate",
-      isOpen: true,
     }));
   };
 
