@@ -30,6 +30,16 @@ const AwardBox = styled.div`
       color: #BFFF0A;
       font-size: 3.125rem;
     }
+    .blank {
+      width: 100%;
+      flex-grow: 1;
+      margin: 1rem;
+      background: rgba(255, 255, 255, .7);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 `
 const RatingBox = styled.div`
@@ -110,21 +120,29 @@ function SoriAward() {
         <img className="trophy" src={trophy} alt="trophy" />
         <div className="carousel-box">
           <h3 className="award-title">SORI AWARDS</h3>
-          <Carousel hotContents={hotContents} />
+          {
+            hotContents.length ?
+            <Carousel hotContents={hotContents} />
+            :
+            <div className="blank">아직 생성된 컨텐츠가 없습니다</div>
+          }
         </div>
         <RatingBox>
           <p className="title">Best Creators</p>
           <ol className="list">
             {
-              hotContents.slice(0, 3).map((el, idx) => (
-                <Fragment key={el.dubCode}>
-                  <li className="name">{idx + 1}. {el.nickname}</li>
-                  {
-                    idx !== hotContents.length - 1 &&
-                    <div className="line"></div>
-                  }
-                </Fragment>
-              ))
+              hotContents.length ?
+                hotContents.slice(0, 3).map((el, idx) => (
+                  <Fragment key={el.dubCode}>
+                    <li className="name">{idx + 1}. {el.nickname}</li>
+                    {
+                      idx !== hotContents.length - 1 &&
+                      <div className="line"></div>
+                    }
+                  </Fragment>
+                ))
+              :
+              <p>아직 생성된 컨텐츠가 없습니다</p>
             }
           </ol>
         </RatingBox>

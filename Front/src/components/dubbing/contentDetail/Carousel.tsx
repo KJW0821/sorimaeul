@@ -66,17 +66,43 @@ const Card = styled.div<{ $active: boolean, $offset: number, $direction: number,
   display: ${(props) => props.$isOver ? "none" : "flex"};
   flex-direction: column;
   align-items: center;
-  .img {
+  .img-box {
     width: 75%;
     height: 80%;
     box-shadow: ${(props) => props.$active && '0px 0px 10px 10px rgba(191, 255, 10, 0.5)'};
     border-radius: 5px;
-  }
-  .medal {
-    position: absolute;
-    left: 17%;
-    top: 6%;
-    display: ${(props) => props.$active ? "block" : "none"};
+    position: relative;
+    .img {
+      width: 100%;
+      height: 100%;
+    }
+    .medal {
+      position: absolute;
+      left: 2%;
+      top: 4%;
+      display: ${(props) => props.$active ? "block" : "none"};
+    }
+    .like-box {
+      display: ${(props) => props.$active ? "flex" : "none"};
+      gap: .5rem;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.7);
+      border: 0.5px solid #BFFF0A;
+      border-radius: 10px;
+      padding: .2rem .75rem;
+      position: absolute;
+      right: 2%;
+      bottom: 4%;
+      .smile {
+        height: 90%;
+      }
+      .like {
+        color: #BFFF0A;
+        font-size: 1.6rem;
+        font-family: 'GmarketSansBold';
+      }
+    }
   }
   .title {
     display: ${(props) => props.$active ? "flex" : "none"};
@@ -86,32 +112,11 @@ const Card = styled.div<{ $active: boolean, $offset: number, $direction: number,
     margin-top: 5%;
     align-items: center;
   }
-  .like-box {
-    display: ${(props) => props.$active ? "flex" : "none"};
-    gap: .5rem;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.7);
-    border: 0.5px solid #BFFF0A;
-    border-radius: 10px;
-    padding: .2rem .75rem;
-    position: absolute;
-    right: 15%;
-    bottom: 25%;
-    .smile {
-      height: 90%;
-    }
-    .like {
-      color: #BFFF0A;
-      font-size: 1.6rem;
-      font-family: 'GmarketSansBold';
-    }
-  }
 `
 
 const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
-  const count = 3;
-  const MAX_VISIBILITY = 3;
+  const count = hotContents.length;
+  const MAX_VISIBILITY = hotContents.length;
   const [active, setActive] = useState(0);
 
   return (
@@ -136,20 +141,22 @@ const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
           key={child.dubCode}
           className="card-container"
         >
-          <img 
-            className="medal"
-            src={
-              i === 0 && gold ||
-              i === 1 && silver ||
-              i === 2 && bronze ||
-              ''
-            } 
-            alt="medal" 
-          />
-          <img className="img" src={child.thumbnailPath} alt="" />
-          <div className="like-box">
-            <img className="smile" src={smiling} alt="like" />
-            <p className="like">+ {child.likeCount}</p>
+          <div className="img-box">
+            <img 
+              className="medal"
+              src={
+                i === 0 && gold ||
+                i === 1 && silver ||
+                i === 2 && bronze ||
+                ''
+              } 
+              alt="medal" 
+            />
+            <img className="img" src={child.thumbnailPath} alt="" />
+            <div className="like-box">
+              <img className="smile" src={smiling} alt="like" />
+              <p className="like">+ {child.likeCount}</p>
+            </div>
           </div>
           <p className="title">{child.dubName}</p>
         </Card>
