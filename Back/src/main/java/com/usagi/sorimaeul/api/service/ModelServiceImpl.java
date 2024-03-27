@@ -230,7 +230,7 @@ public class ModelServiceImpl implements ModelService {
 
         // GPU 서버에 모델 업로드 요청 보내기
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("file", modelFiles[0]);
+        requestBody.put("files", modelFiles);
         WebClient.create("http://222.107.238.124:7865")
                 .post()
                 .uri("/model/" + modelCode)
