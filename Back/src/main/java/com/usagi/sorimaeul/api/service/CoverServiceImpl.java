@@ -24,8 +24,7 @@ import static com.usagi.sorimaeul.utils.Const.*;
 import static com.usagi.sorimaeul.utils.FileUtil.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +61,7 @@ public class CoverServiceImpl implements CoverService {
             else covers = coverRepository.findByCoverNameContainingAndIsCompleteAndIsPublic(keyword, true, true);
             // page 가 null 이 아니면
             if (page != null) {
-                // 한 페이지 당 10개씩 조회
+                // 한 페이지 당 10개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
                 startIdx = Math.min((page - 1) * 10, covers.size()) / 10 * 10;
                 endIdx = Math.min(startIdx + 10, covers.size());
             }
@@ -78,7 +77,7 @@ public class CoverServiceImpl implements CoverService {
             covers = coverRepository.findByUser_userCode(userCode);
             // page 가 null 이 아니면
             if (page != null) {
-            // 한 페이지 당 6개씩 조회
+            // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
                 startIdx = Math.min((page - 1) * 6, covers.size()) / 6 * 6;
                 endIdx = Math.min(startIdx + 6, covers.size());
             }
@@ -103,7 +102,7 @@ public class CoverServiceImpl implements CoverService {
             }
             // page 가 null 이 아니면
             if (page != null) {
-                // 한 페이지 당 6개씩 조회
+                // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
                 startIdx = Math.min((page - 1) * 6, covers.size()) / 6 * 6;
                 endIdx = Math.min(startIdx + 6, covers.size());
             }
@@ -212,7 +211,6 @@ public class CoverServiceImpl implements CoverService {
         }
 
         // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime, updatedTime 현재 시간, likeCount 기본값 0
-        // isPublic 기본값 false
         Cover cover = Cover.builder()
                 .user(user)
                 .coverName(request.getCoverName())
@@ -224,10 +222,17 @@ public class CoverServiceImpl implements CoverService {
         int coverCode = cover.getCoverCode();
         // GPU 서버에 AI 커버 생성 요청 보내기
         String youtubeLink = request.getYoutubeLink();
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("youtubeLink", youtubeLink);
+        requestBody.put("userCode", userCode);
+        requestBody.put("modelCode", request.getModelCode());
+        requestBody.put("coverCode", coverCode);
+        requestBody.put("coverName", request.getCoverName());
+        requestBody.put("pitch", request.getPitch());
         WebClient.create("http://222.107.238.124:7866")
                 .post()
                 .uri("/rvc/cover")
-                .bodyValue(new CoverRequestDto(youtubeLink, userCode, request.getModelCode(), coverCode, request.getCoverName(), request.getPitch()))
+                .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -337,6 +342,7 @@ public class CoverServiceImpl implements CoverService {
     }
 
 
+    // 리스트 뒤집기
     public void reverseList(List<Cover> list) {
         int start = 0;
         int end = list.size() - 1;
