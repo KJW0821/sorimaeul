@@ -4,6 +4,7 @@ import { getPopularUserVideo } from "../../../utils/dubbingAPI";
 import { Fragment, useEffect, useState } from "react";
 import Carousel from "./Carousel";
 import { useParams } from "react-router-dom";
+import defaultProfile from "../../../assets/profile.png";
 
 const AwardBox = styled.div`
   width: 100%;
@@ -72,9 +73,29 @@ const RatingBox = styled.div`
     }
 
     .name {
-      font-size: 1.5rem;
+      display: flex;
+      font-size: 1.3rem;
       width: 90%;
       font-family: 'GmarketSansBold';
+      height: 1.6rem;
+      align-items: center;
+      gap: .5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      p {
+        padding-top: .4rem;
+      }
+      .profile-box {
+        height: 1.4rem;
+        width: 1.4rem;
+        border-radius: 50%;
+        overflow: hidden;
+        border: .2px solid #A3A3A3;
+        .profile {
+          height: 100%;
+          width: 100%;
+        }
+      }
     }
 
     .line {
@@ -134,7 +155,13 @@ function SoriAward() {
               hotContents.length ?
                 hotContents.slice(0, 3).map((el, idx) => (
                   <Fragment key={el.dubCode}>
-                    <li className="name">{idx + 1}. {el.nickname}</li>
+                    <li className="name">
+                      <p>{idx + 1}. </p> 
+                      <div className="profile-box">
+                        <img className="profile" src={el.profileImage ? el.profileImage : defaultProfile} alt="" /> 
+                      </div>
+                      <p>{el.nickname}</p>
+                    </li>
                     {
                       idx !== hotContents.length - 1 &&
                       <div className="line"></div>
