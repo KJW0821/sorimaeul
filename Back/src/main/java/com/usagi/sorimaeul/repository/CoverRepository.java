@@ -9,10 +9,6 @@ public interface CoverRepository extends JpaRepository<Cover, Integer> {
 
     List<Cover> findByUser_userCode(long userCode);
 
-//    List<Cover> findByUser_userCodeAndIsComplete(long userCode, boolean isComplete);
-//
-//    List<Cover> findByCoverName(String coverName);
-
     Cover findByCoverCode(int coverCode);
 
     List<Cover> findTop5ByOrderByLikeCountDescCoverCodeDesc();
@@ -21,4 +17,5 @@ public interface CoverRepository extends JpaRepository<Cover, Integer> {
 
     List<Cover> findByCoverNameContainingAndIsCompleteAndIsPublic(String coverName, boolean isComplete, boolean isPublic);
 
+    List<Cover> findByCoverNameContainingAndUser_UserCode(String coverName, long userCode);
 }
