@@ -271,7 +271,7 @@ public class ModelServiceImpl implements ModelService {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         for (int i = 1; i <= multipartFiles.size(); i++) {
             MultipartFile multipartFile = multipartFiles.get(i-1);
-            builder.part("file" + i, multipartFile.getResource());
+            builder.part("files", multipartFile.getResource());
         }
 
         WebClient.create("http://222.107.238.124:7865")
