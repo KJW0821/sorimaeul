@@ -4,6 +4,7 @@ import { VideoData } from "./SoriAward";
 import gold from "../../../assets/gold.png";
 import silver from "../../../assets/silver.png";
 import bronze from "../../../assets/bronze.png";
+import smiling from "../../../assets/smiling.png";
 
 const Container = styled.div`
   position: relative;
@@ -85,6 +86,27 @@ const Card = styled.div<{ $active: boolean, $offset: number, $direction: number,
     margin-top: 5%;
     align-items: center;
   }
+  .like-box {
+    display: ${(props) => props.$active ? "flex" : "none"};
+    gap: .5rem;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    border: 0.5px solid #BFFF0A;
+    border-radius: 10px;
+    padding: .2rem .75rem;
+    position: absolute;
+    right: 15%;
+    bottom: 25%;
+    .smile {
+      height: 90%;
+    }
+    .like {
+      color: #BFFF0A;
+      font-size: 1.6rem;
+      font-family: 'GmarketSansBold';
+    }
+  }
 `
 
 const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
@@ -125,6 +147,10 @@ const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
             alt="medal" 
           />
           <img className="img" src={child.thumbnailPath} alt="" />
+          <div className="like-box">
+            <img className="smile" src={smiling} alt="like" />
+            <p className="like">+ {child.likeCount}</p>
+          </div>
           <p className="title">{child.dubName}</p>
         </Card>
       ))}
