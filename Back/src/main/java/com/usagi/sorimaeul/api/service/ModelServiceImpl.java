@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -233,12 +234,12 @@ public class ModelServiceImpl implements ModelService {
         }
 
         // GPU 서버에 모델 업로드 요청 보내기
-        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("file", modelFiles[0]);
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("file", modelFiles[0].getResource());
         WebClient.create("http://222.107.238.124:7865")
                 .post()
                 .uri("/model/" + modelCode)
-                .body(BodyInserters.fromMultipartData(requestBody))
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
