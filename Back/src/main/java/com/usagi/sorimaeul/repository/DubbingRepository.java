@@ -21,6 +21,8 @@ public interface DubbingRepository extends JpaRepository<Dubbing, Integer> {
 
     List<Dubbing> findByIsComplete(boolean isComplete);
 
-    List<Dubbing> findByDubNameAndIsComplete(String dubName, boolean isComplete);
+    List<Dubbing> findByIsCompleteAndIsPublicAndVideoSource_videoSourceCode(boolean isComplete, boolean isPublic, int videoSourceCode);
+
+    List<Dubbing> findByDubNameAndIsCompleteAndIsPublic(String dubName, boolean isComplete, boolean isPublic);
 
 }
