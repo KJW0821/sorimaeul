@@ -26,7 +26,9 @@ import static com.usagi.sorimaeul.utils.FileUtil.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -227,11 +229,12 @@ public class ModelServiceImpl implements ModelService {
         }
 
         // GPU 서버에 모델 업로드 요청 보내기
-        // 아래 코드는 임시로 작성된 코드로 수정이 필요함(AI 쪽에서 API 미구현)
-        WebClient.create("http://222.107.238.124:7866")
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("file", modelFiles[0]);
+        WebClient.create("http://222.107.238.124:7865")
                 .post()
-                .uri("/training")
-                .bodyValue(new ModelTrainingRequest(modelCode, userCode))
+                .uri("/model/" + modelCode)
+                .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -264,7 +267,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // GPU 서버에 모델 학습 요청 보내기
-        WebClient.create("http://222.107.238.124:7866")
+        WebClient.create("http://222.107.238.124:7865")
                 .post()
                 .uri("/training")
                 .bodyValue(new ModelTrainingRequest(modelCode, userCode))
