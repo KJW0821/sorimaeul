@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Playlist from "./playlist/header/Playlist";
-import logoimage from '/src/assets/logo.png';
+import logoimage from '../../assets/logo.png';
 
 interface HeaderProps {
   $isMainPage: boolean;
@@ -17,7 +17,6 @@ const HeaderContainer = styled.div<HeaderProps>`
 `;
 
 interface LogoProps {
-  $logoimage: string;
   $isMainPage: boolean;
 }
 
@@ -42,14 +41,14 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
         <>
           <Playlist />
           <Link to="/">
-            <Logo $logoimage={logoimage} $isMainPage={isMainPage}></Logo>
+            <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
           </Link>
         </>
       ) : (
         <>
           <LogoContainer>
             <Link to="/">
-              <Logo $logoimage={logoimage} $isMainPage={isMainPage}></Logo>
+              <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
             </Link>
           </LogoContainer>
           <Playlist />
