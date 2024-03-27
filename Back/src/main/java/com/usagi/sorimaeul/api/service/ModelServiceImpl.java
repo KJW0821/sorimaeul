@@ -1,6 +1,5 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.usagi.sorimaeul.dto.dto.CoverRequestDto;
 import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.dto.dto.ScriptInfoDto;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
@@ -13,27 +12,23 @@ import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
 import static com.usagi.sorimaeul.utils.Const.*;
+import static com.usagi.sorimaeul.utils.InMemoryMultipartFile.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static com.usagi.sorimaeul.utils.FileUtil.*;
 
+import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -66,8 +61,8 @@ public class ModelServiceImpl implements ModelService {
         voiceModelRepository.save(voiceModel);
         // 리스폰스 생성
         ModelTableCreateResponse response = ModelTableCreateResponse.builder()
-                        .modelCode(voiceModel.getModelCode())
-                        .build();
+                .modelCode(voiceModel.getModelCode())
+                .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -106,7 +101,7 @@ public class ModelServiceImpl implements ModelService {
 
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
-        
+
         try {
             // 폴더 생성
             createFolder(folderPath);
@@ -118,7 +113,7 @@ public class ModelServiceImpl implements ModelService {
             countRecord(voiceModel, num);
             return ResponseEntity.ok(num + "번 녹음 파일 업로드 성공!");
 
-        // 서버 오류 처리
+            // 서버 오류 처리
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -189,7 +184,7 @@ public class ModelServiceImpl implements ModelService {
             voiceModelRepository.save(voiceModel);
             return ResponseEntity.ok("외부 녹음 파일 업로드 성공!");
 
-        // 서버 오류 처리
+            // 서버 오류 처리
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -270,6 +265,22 @@ public class ModelServiceImpl implements ModelService {
         if (user.getLearnCount() < 1)
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
+        // GPU 서버에 음성 파일 업로드
+        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
+        List<MultipartFile> multipartFiles = createMultipartFilesWithAllowedExtensions(folderPath, ALLOWED_EXTENSIONS_AUDIO);
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        for (int i = 1; i <= multipartFiles.size(); i++) {
+            MultipartFile multipartFile = multipartFiles.get(i-1);
+            builder.part("file" + i, multipartFile.getResource());
+        }
+
+        WebClient.create("http://222.107.238.124:7865")
+                .post()
+                .uri("/model/" + modelCode)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
         // GPU 서버에 모델 학습 요청 보내기
         WebClient.create("http://222.107.238.124:7865")
@@ -287,7 +298,7 @@ public class ModelServiceImpl implements ModelService {
         // 모델 학습 가능 횟수 차감
         user.setLearnCount(user.getLearnCount() - 1);
         userRepository.save(user);
-        
+
         return ResponseEntity.badRequest().body("모델 학습 성공!");
     }
 
@@ -318,7 +329,7 @@ public class ModelServiceImpl implements ModelService {
             mergedModelDtos = new ArrayList<>(commonModelDtos);
             mergedModelDtos.addAll(myModelDtos);
 
-        // videoSourceCode 만 null 이면 마이페이지 음성 모델 조회(페이지 네이션, 내가 학습 시킨 모델)
+            // videoSourceCode 만 null 이면 마이페이지 음성 모델 조회(페이지 네이션, 내가 학습 시킨 모델)
         } else if (videoSourceCode == null) {
             // 나의 모델
             List<VoiceModel> myModelList = voiceModelRepository.userModelList(user, -1);
@@ -333,7 +344,7 @@ public class ModelServiceImpl implements ModelService {
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) myModelList.size() / 6);
 
-        // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
+            // page 만 null 이면 더빙 음성 모델 조회(영상 제공 모델, 내가 학습 시킨 모델, 기본 제공 모델)
         } else if (page == null) {
             // 영상 제공 모델
             List<VoiceModel> videoSourceModelList = voiceModelRepository.videoSourceModelList(videoSource);
@@ -374,7 +385,7 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
-        
+
         // 예외 처리
         // 기본 제공 모델, 영상 제공 모델에 접근시 BAD_REQUEST 반환
         User modelUser = voiceModel.getUser();
