@@ -8,6 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface S3Service {
 
-    ResponseS3Dto getPresignedUrlToUpload(long userCode, String fileName);
+    ResponseS3Dto getPresignedUrlToUpload(long userCode, String fileName, String mimeType);
 
 }
