@@ -1,27 +1,78 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../components/common/Header';
 import styled from "styled-components";
+import { CategoryBox } from '../../components/home/HomeStyles';
+import goBtnImg from "../../assets/goBtn.png";
+import { useNavigate } from 'react-router-dom';
+import tape from "../../assets/tape.png";
+import tape2 from "../../assets/tape2.png";
+
 
 const Outer = styled.div`
 height: 100vh;
 overflow-y: auto;
-
+overflow-x: hidden; /* 가로 스크롤바 방지 */
 &::-webkit-scrollbar {
   display: none;
 }
 `;
 
 const Page1 = styled.div`
-  height: calc(100vh - 271px);
+  height: calc(100vh - 230px);
   display: flex;
   background-color: #f7f6cf;
 `;
 
 const Page2 = styled.div`
+  overflow-x: hidden;
+  width: 100%;
   height: 100vh;
   display: flex;
   background-color: #b6d8f2;
 `;
+const GoBtnImg = styled.img`
+position: absolute; 
+left: 30px; 
+top: 50%; 
+transform: translateY(-50%);
+width: 40px; 
+height: auto; 
+`
+
+const Line = styled.div`
+position: absolute;
+width: 627px;
+height: 0px;
+border: 1px solid #000000;
+margin-top: 175px; 
+margin-right: 50px;
+
+`;
+
+const BackgroundTape = styled.img`
+position: absolute;
+margin-top: 35px; 
+margin-right: 100px;
+width: 435px;
+height: auto;
+`;
+
+const RightAlignedContainer = styled.div`
+  display: flex;
+  justify-content: flex-end; 
+  padding-right: 20px; 
+  width: 100%;
+  position: relative;
+`;
+
+const DubbingCategory = styled(CategoryBox)`
+  position: relative;
+  margin-top: 50px; 
+  margin-right: 250px;
+  z-index: 2;
+`;
+
+
 
 const Page3 = styled.div`
   height: 100vh;
@@ -29,7 +80,21 @@ const Page3 = styled.div`
   background-color: #f4cfdf;
 `
 
+const LeftAlignedContainer = styled.div`
+  display: flex;
+  justify-content: flex-start; 
+  padding-left: 50px; 
+  width: 100%;
+`;
+
+const CoverCategory = styled(CategoryBox)`
+  position: relative;
+  margin-top: 100px; 
+  margin-right: 300px;
+`;
+
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
   const DIVIDER_HEIGHT = 5;
   const outerDivRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태 관리
@@ -94,10 +159,29 @@ const HomePage: React.FC = () => {
   return (
 
     <Outer ref={outerDivRef}>
-    <Header />
-      <Page1></Page1>
-      <Page2></Page2>
-      <Page3></Page3>
+      <Header />
+      <Page1>
+
+      </Page1>
+      <Page2>
+      <RightAlignedContainer>
+        
+    <DubbingCategory onClick={()=>navigate("/dubbing")}>
+      더빙 극장
+      <GoBtnImg src={goBtnImg} alt='Button Image'/>
+    </DubbingCategory>
+    <Line />
+    <BackgroundTape src={tape} alt='Tape Image'/>
+  </RightAlignedContainer>
+      </Page2>
+      <Page3>
+        <LeftAlignedContainer>
+        <CoverCategory onClick={()=>navigate("/cover")}>
+           AI 노래방
+          <GoBtnImg src={goBtnImg} alt='Button Image'/>
+        </CoverCategory>
+        </LeftAlignedContainer>
+      </Page3>
     </Outer>
 
   );

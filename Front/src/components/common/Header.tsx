@@ -25,11 +25,11 @@ const LogoContainer = styled.div<LogoProps>`
   justify-content: center;
   width: 100%;
   margin-left: ${props => props.$isMainPage ? '0' : '150px'};
-  margin-top: ${props=> props.$isMainPage ? '-100px' : '0'};
+  margin-top: ${props=> props.$isMainPage ? '-50px' : '0'};
 `;
 
 const Logo = styled.img<LogoProps>`
-  width: ${props => props.$isMainPage ? '750px' : '300px'}; 
+  width: ${props => props.$isMainPage ? '550px' : '300px'}; 
   height: auto; 
 
 `;
