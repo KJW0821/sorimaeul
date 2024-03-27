@@ -12,7 +12,7 @@ overflow-y: auto;
 `;
 
 const Page1 = styled.div`
-  height: 100vh;
+  height: calc(100vh - 271px);
   display: flex;
   background-color: #f7f6cf;
 `;
