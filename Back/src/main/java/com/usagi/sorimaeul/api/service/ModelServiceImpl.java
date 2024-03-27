@@ -238,7 +238,6 @@ public class ModelServiceImpl implements ModelService {
         WebClient.create("http://222.107.238.124:7865")
                 .post()
                 .uri("/model/" + modelCode)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(requestBody))
                 .retrieve()
                 .bodyToMono(String.class)
