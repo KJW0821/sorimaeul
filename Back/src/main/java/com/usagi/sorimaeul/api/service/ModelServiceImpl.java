@@ -233,7 +233,7 @@ public class ModelServiceImpl implements ModelService {
         builder.part("file", modelFiles[0].getResource());
         WebClient.create("http://222.107.238.124:7865")
                 .post()
-                .uri("/model/" + modelCode)
+                .uri("/voice/" + modelCode)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .bodyToMono(String.class)
