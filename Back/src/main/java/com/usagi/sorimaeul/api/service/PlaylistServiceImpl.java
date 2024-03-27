@@ -127,7 +127,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                     .coverSinger(cover.getCoverSinger())
                     .singer(cover.getSinger())
                     .title(cover.getTitle())
-                    .writer(cover.getUser().getNickname())
+                    .nickname(cover.getUser().getNickname())
                     .storagePath(cover.getStoragePath())
                     .isPublic(cover.isPublic())
                     .build();
