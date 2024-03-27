@@ -193,7 +193,7 @@ public class CoverServiceImpl implements CoverService {
 
 
     // AI 커버 생성
-    public ResponseEntity<CoverCreateResponse> createCover(long userCode, CoverCreateRequest request) {
+    public ResponseEntity<?> createCover(long userCode, CoverCreateRequest request) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -201,7 +201,15 @@ public class CoverServiceImpl implements CoverService {
         }
 
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(request.getModelCode());
+        // 클라이언트의 모델이 맞는지 검증
+        if (voiceModel.getUser() != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델로는 AI 커버를 생성할 수 없습니다.");
+        }
 
+        // 학습 가능한 상태의 모델이 아니면 400 반환
+        if (voiceModel.getState() != 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 모델은 AI 커버를 생성할 수 있는 상태가 아닙니다. 학습이 완료된 후에 시도해주세요.");
+        }
 
         // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime, updatedTime 현재 시간, likeCount 기본값 0
         // isPublic 기본값 false
@@ -214,7 +222,7 @@ public class CoverServiceImpl implements CoverService {
                 .build();
         coverRepository.save(cover);
         int coverCode = cover.getCoverCode();
-        // AI 커버 생성 로직 작성
+        // GPU 서버에 AI 커버 생성 요청 보내기
         String youtubeLink = request.getYoutubeLink();
         WebClient.create("http://222.107.238.124:7866")
                 .post()

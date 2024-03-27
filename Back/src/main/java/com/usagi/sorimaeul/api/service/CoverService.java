@@ -17,7 +17,7 @@ public interface CoverService {
 
     ResponseEntity<?> getCoverDetail(long userCode, int coverCode);
 
-    ResponseEntity<CoverCreateResponse> createCover(long userCode, CoverCreateRequest request);
+    ResponseEntity<?> createCover(long userCode, CoverCreateRequest request);
 
     ResponseEntity<?> createCoverBoard(long userCode, int coverCode, CoverBoardRequest request);
 

@@ -48,7 +48,7 @@ public class CoverController {
     @Operation(summary = "AI 커버 생성", description = "AI 커버를 생성한다.")
     @ApiResponse(responseCode = "201", description = "AI 커버 생성 성공")
     @PostMapping("/create")
-    public ResponseEntity<CoverCreateResponse> createCover(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> createCover(@RequestHeader("Authorization") String token,
                                                            @RequestBody CoverCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return coverService.createCover(userCode, request);
