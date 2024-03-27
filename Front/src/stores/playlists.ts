@@ -38,8 +38,14 @@ export const playlistsSlice = createSlice({
     setTotalPages: (state, action: PayloadAction<number>) => {
       state.totalPages = action.payload;
     },
+    updatePlaylistName: (state, action: PayloadAction<{playlistCode: string, playlistName: string}>) => {
+      const index = state.playlists.findIndex(playlist => playlist.playlistCode === action.payload.playlistCode);
+      if (index !== -1) {
+        state.playlists[index].playlistName = action.payload.playlistName;
+      }
+    },
   },
 });
 
-export const { addPlaylist, removePlaylist, setPlaylists, setSelectedPlaylist, setTotalPages } = playlistsSlice.actions;
+export const { addPlaylist, removePlaylist, setPlaylists, setSelectedPlaylist, setTotalPages, updatePlaylistName } = playlistsSlice.actions;
 export default playlistsSlice.reducer;
