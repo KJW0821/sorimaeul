@@ -9,19 +9,19 @@ import java.util.List;
 
 public interface DubbingRepository extends JpaRepository<Dubbing, Integer> {
 
-    List<Dubbing> findByUser_userCode(long userCode);
+    List<Dubbing> findByUser_userCodeOrderByCreatedTimeDesc(long userCode);
 
-//    List<Dubbing> findByUser_userCodeAndIsComplete(long userCode, int isComplete);
+    List<Dubbing> findByUser_userCodeAndDubNameContainingOrderByCreatedTimeDesc(long userCode, String dubName);
 
     List<Dubbing> findByDubName(String dubName);
 
-    List<Dubbing> findTop5ByOrderByLikeCountDesc();
+    List<Dubbing> findTop5ByVideoSource_videoSourceCodeOrderByLikeCountDesc(int videoSourceCode);
 
     Dubbing findByDubCode(int dubCode);
 
     List<Dubbing> findByIsComplete(boolean isComplete);
 
-    List<Dubbing> findByIsCompleteAndIsPublicAndVideoSource_videoSourceCode(boolean isComplete, boolean isPublic, int videoSourceCode);
+    List<Dubbing> findByIsCompleteAndIsPublicAndVideoSource_videoSourceCodeOrderByCreatedTimeDesc(boolean isComplete, boolean isPublic, int videoSourceCode);
 
     List<Dubbing> findByDubNameAndIsCompleteAndIsPublic(String dubName, boolean isComplete, boolean isPublic);
 

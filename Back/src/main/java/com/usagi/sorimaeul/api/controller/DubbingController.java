@@ -7,13 +7,18 @@ import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
 import com.usagi.sorimaeul.dto.response.*;
+import com.usagi.sorimaeul.entity.Dubbing;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.Token;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,6 +83,32 @@ public class DubbingController {
                                                                   @PathVariable int dubCode){
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingDetail(userCode, dubCode);
+    }
+
+    @GetMapping("/file/{dubCode}")
+    public ResponseEntity<Resource> getDubbingVideo(@RequestHeader("Authorization") String token,
+                                                    @PathVariable int dubCode) {
+
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.getDubbingVideo(userCode, dubCode);
+
+//        Dubbing dubbing = dubbingService.getDubbingDetail(userCode, dubCode);
+//
+//        if (dubbing == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        String videoPath = dubbing.getStoragePath();
+//        Resource videoResource = new FileSystemResource(videoPath);
+//        if (!videoResource.exists()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        String mimeType = "video/mp4"; // 예시로, 실제 파일 타입에 따라 변경 필요
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(mimeType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + videoResource.getFilename() + "\"")
+//                .body(videoResource);
     }
     
     @Operation(summary = "더빙 영상 게시글 등록/수정", description = "더빙 영상 게시글을 등록하거나 수정한다.")

@@ -13,6 +13,9 @@ import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -157,12 +160,10 @@ public class DubbingServiceImpl implements DubbingService {
         // 총 페이지 수 선언
         int totalPages = 0;
 
-        // 모든 게시물 조회
+        // 모든 게시물 조회 - 더빙 학원에서만 ( 키워드 검색 없음 )
         if (target.equals("all")) {
-            // keyword 가 null 이면 전체 조회
-            if (keyword == null) dubbings = dubbingRepository.findByIsCompleteAndIsPublicAndVideoSource_videoSourceCode(true, true, videoSourceCode);
-            // keyword 가 null 이 아니면 dubName = keyword 인 데이터 조회
-            else dubbings = dubbingRepository.findByDubNameAndIsCompleteAndIsPublic(keyword, true, true);
+            dubbings = dubbingRepository.findByIsCompleteAndIsPublicAndVideoSource_videoSourceCodeOrderByCreatedTimeDesc(true, true, videoSourceCode);
+
             // 한 페이지 당 8개씩 조회
             startIdx = (page - 1) * 8;
             endIdx = Math.min(startIdx + 8, dubbings.size());
@@ -170,9 +171,17 @@ public class DubbingServiceImpl implements DubbingService {
             totalPages = (int) Math.ceil((double) dubbings.size() / 10);
         }
 
-        // 마이 페이지 - 나의 게시물 조회
+        // 마이 페이지 - 나의 게시물 조회 ( 키워드 검색 가능 )
          else if (target.equals("mine")) {
-            dubbings = dubbingRepository.findByUser_userCode(userCode);
+            // keyword 가 null 이면 전체 조회
+            if (keyword == null){
+                dubbings = dubbingRepository.findByUser_userCodeOrderByCreatedTimeDesc(userCode);
+            }
+            // keyword 가 null 이 아니면 dubName = keyword 를 포함한 데이터 조회
+            else {
+                dubbings = dubbingRepository.findByUser_userCodeAndDubNameContainingOrderByCreatedTimeDesc(userCode, keyword);
+            }
+
             startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, dubbings.size());
             // // 총 페이지 수 계산
@@ -186,12 +195,12 @@ public class DubbingServiceImpl implements DubbingService {
             // like 와 매핑되는 Dubbing 들을 dubbings 에 넣는다.
             for (Like like : likes) {
                 Dubbing dubbing = like.getDubbing();
-                if (dubbing != null) {
+                if (dubbing != null && dubbing.isPublic() && dubbing.isComplete()) {
                     dubbings.add(dubbing);
                 }
             }
             // 한 페이지 당 6개 조회
-            startIdx = (page - 1) * 9;
+            startIdx = (page - 1) * 6;
             endIdx = Math.min(startIdx + 6, dubbings.size());
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) dubbings.size() / 6);
@@ -201,14 +210,13 @@ public class DubbingServiceImpl implements DubbingService {
          else if (target.equals("popular")) {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
 //            dubbings = dubbingRepository.findByTop5OrderByLikeCountDESC();
-            dubbings = dubbingRepository.findTop5ByOrderByLikeCountDesc();
+            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeOrderByLikeCountDesc(videoSourceCode);
             startIdx = 0;
-            endIdx = 4;
+            endIdx = dubbings.size();
             // // 총 페이지 수 계산
             totalPages = 1;
         }
-        // 최신순으로 보여주기 위해 covers 뒤집기
-        reverseList(dubbings);
+
         // dubbing 리스트 페이지네이션
         List<Dubbing> pageDubbings = dubbings.subList(startIdx, endIdx);
         // dubbing 리스트를 순회
@@ -217,7 +225,7 @@ public class DubbingServiceImpl implements DubbingService {
             DubbingInfoDto dubbingInfoDto = DubbingInfoDto.builder()
                     .dubCode(dubbing.getDubCode())
                     .dubName(dubbing.getDubName())
-                    .isPublic(dubbing.getIsPublic())
+                    .isPublic(dubbing.isPublic())
                     .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
                     .likeCount(dubbing.getLikeCount())
                     .nickname(dubbing.getUser().getNickname())
@@ -265,6 +273,27 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.ok(response);
     }
 
+    // 더빙 영상 파일 조회
+    public ResponseEntity<Resource> getDubbingVideo(long userCode, int dubCode){
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+
+        if (dubbing == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String videoPath = dubbing.getStoragePath();
+        Resource videoResource = new FileSystemResource(videoPath);
+        if (!videoResource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String mimeType = "video/mp4"; // 예시로, 실제 파일 타입에 따라 변경 필요
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + videoResource.getFilename() + "\"")
+                .body(videoResource);
+    }
+
     // 더빙 영상 등록/수정
     public ResponseEntity<?> patchDubbingBoard(long userCode, int dubCode, DubbingBoardRequest request){
         // 사용자 정보 확인
@@ -278,7 +307,7 @@ public class DubbingServiceImpl implements DubbingService {
         dubbing.setDubName(request.getDubName());
         dubbing.setDubDetail(request.getDubDetail());
         dubbing.setVideoSource(videoSourceRepository.findByVideoSourceCode(request.getSourceCode()));
-        dubbing.setIsPublic(request.isPublic());
+        dubbing.setPublic(request.isPublic());
         dubbingRepository.save(dubbing);
         
         return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
