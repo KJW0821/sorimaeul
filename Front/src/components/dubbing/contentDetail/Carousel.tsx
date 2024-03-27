@@ -105,12 +105,18 @@ const Card = styled.div<{ $active: boolean, $offset: number, $direction: number,
     }
   }
   .title {
-    display: ${(props) => props.$active ? "flex" : "none"};
+    display: ${(props) => props.$active ? "-webkit-box" : "none"};
     color: white;
     font-size: 1.5rem;
     height: 20%;
-    margin-top: 5%;
-    align-items: center;
+    margin-top: 1.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    line-height: 1.2;
+    word-wrap: break-word;
+    -webkit-line-clamp: 2 ;
+    -webkit-box-orient: vertical;
   }
 `
 

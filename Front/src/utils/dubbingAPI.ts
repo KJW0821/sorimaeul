@@ -41,4 +41,10 @@ export const getUserVideos = (page: number, sourceCode: string) => {
   })
     .then(res => res.data)
     .catch(err => console.error(err))
-}
+};
+
+export const getUserVideo = (dubCode: string) => {
+  return API.get(URL + `/${dubCode}`)
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
