@@ -144,6 +144,28 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.ok(response);
     }
 
+    // 원본 영상 파일 조회
+    public ResponseEntity<Resource> getSourceVideo(long userCode, int videoSourceCode){
+        VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
+
+        if (videoSource == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String videoPath = videoSource.getStoragePath();
+        Resource videoResource = new FileSystemResource(videoPath);
+        if (!videoResource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String mimeType = "video/mp4"; // 예시로, 실제 파일 타입에 따라 변경 필요 inline : 재생, attachment : 다운로드
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + videoResource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + videoResource.getFilename() + "\"")
+                .body(videoResource);
+    }
+
     // 더빙 영상 목록 조회
     public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page, int videoSourceCode){
         // 사용자 정보 확인
