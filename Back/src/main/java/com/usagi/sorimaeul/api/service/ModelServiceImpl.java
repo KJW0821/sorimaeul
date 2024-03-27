@@ -234,7 +234,7 @@ public class ModelServiceImpl implements ModelService {
 
         // GPU 서버에 모델 업로드 요청 보내기
         MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("files", modelFiles);
+        requestBody.add("file", modelFiles[0]);
         WebClient.create("http://222.107.238.124:7865")
                 .post()
                 .uri("/model/" + modelCode)
