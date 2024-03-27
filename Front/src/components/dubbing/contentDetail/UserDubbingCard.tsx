@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { VideoData } from "./SoriAward";
 import defaultProfile from "../../../assets/profile.png";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Container = styled.div`
   width: 23%;
@@ -56,8 +57,17 @@ const Container = styled.div`
 `
 
 const UserDubbingCard: React.FC<{ videoData: VideoData}> = ({ videoData }) => {
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const goDetail = () => {
+    if (params.sourceCode) {
+      navigate(`/dubbing/${params.sourceCode}/${videoData.dubCode}`);
+    }
+  }
+
   return (
-    <Container>
+    <Container onClick={goDetail}>
       <img className="thumbnail" src={videoData.thumbnailPath} alt="thumbnail" />
       <div className="title-box">
         <div className="circle"><img className="profile" src={videoData.profileImage ? videoData.profileImage : defaultProfile} alt="" /></div>
