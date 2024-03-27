@@ -12,6 +12,6 @@ public class PlaylistInfoDto {
 
     private int playlistCode;
     private String playlistName;
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
 
 }

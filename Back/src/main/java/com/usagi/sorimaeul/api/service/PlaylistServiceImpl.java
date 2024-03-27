@@ -73,7 +73,7 @@ public class PlaylistServiceImpl implements PlaylistService {
             PlaylistInfoDto playlistInfoDto = PlaylistInfoDto.builder()
                     .playlistCode(playlist.getPlaylistCode())
                     .playlistName(playlist.getPlaylistName())
-                    .createTime(playlist.getCreateTime())
+                    .createdTime(playlist.getCreatedTime())
                     .build();
             
             // playlistInfoDtos 리스트에 추가
@@ -267,7 +267,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         PlaylistCreateResponse response = PlaylistCreateResponse.builder()
                 .playlistCode(playlist.getPlaylistCode())
                 .playlistName(playlist.getPlaylistName())
-                .createdTime(playlist.getCreateTime())
+                .createdTime(playlist.getCreatedTime())
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
