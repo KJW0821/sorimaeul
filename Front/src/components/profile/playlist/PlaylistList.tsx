@@ -11,7 +11,7 @@ import { openModal } from "../../../stores/modal";
 const ListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
 `;
 
 export function PlaylistList () {

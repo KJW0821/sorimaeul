@@ -23,7 +23,7 @@ export const playlistsSlice = createSlice({
   reducers: {
     // 기존 플레이리스트 목록에 새로 생성된 플레이리스트를 추가하는 액션
     addPlaylist: (state, action: PayloadAction<Playlist>) => {
-      state.playlists.push(action.payload);
+      state.playlists.unshift(action.payload);
     },
     // 기존 플레이리스트 목록에서 삭제된 플레이리스트를 제거하는 액션
     removePlaylist: (state, action: PayloadAction<string>) => {

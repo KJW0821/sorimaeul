@@ -7,7 +7,7 @@ import { deletePlaylist } from '../../../utils/playlistAPI';
 
 const CardContainer = styled.div`
   width: 20rem;
-  height: 30rem;
+  height: 20rem;
 `;
 
 interface Props {
