@@ -269,9 +269,9 @@ public class ModelServiceImpl implements ModelService {
         String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
         List<MultipartFile> multipartFiles = createMultipartFilesWithAllowedExtensions(folderPath, ALLOWED_EXTENSIONS_AUDIO);
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        for (int i = 1; i <= multipartFiles.size(); i++) {
-            MultipartFile multipartFile = multipartFiles.get(i-1);
-            builder.part("file" + i, multipartFile.getResource());
+        for (int i = 0; i < multipartFiles.size(); i++) {
+            MultipartFile multipartFile = multipartFiles.get(i);
+            builder.part("files", multipartFile.getResource());
         }
 
         WebClient.create("http://222.107.238.124:7865")
