@@ -83,7 +83,7 @@ public class ModelServiceImpl implements ModelService {
         }
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1)
-            return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 파일 업로드 확인
         if (recordingFile == null || recordingFile.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 올바르게 업로드되지 않았습니다.");
@@ -139,7 +139,7 @@ public class ModelServiceImpl implements ModelService {
         }
         // 모델 학습 가능 횟수 검사
         if (user.getLearnCount() < 1)
-            return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
         // 파일 업로드 확인
         if (files == null || files.length == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 올바르게 업로드되지 않았습니다.");
