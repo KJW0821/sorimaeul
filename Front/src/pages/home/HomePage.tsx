@@ -6,6 +6,8 @@ import goBtnImg from "../../assets/goBtn.png";
 import { useNavigate } from 'react-router-dom';
 import tape from "../../assets/tape.png";
 import tape2 from "../../assets/tape2.png";
+import MarqueeComponent from '../../components/home/MarqueeComponent';
+
 
 
 const Outer = styled.div`
@@ -81,8 +83,9 @@ const CategoryDescription = styled.p`
   position: absolute;
   margin-top: 125px;
   margin-left: 500px;
-  font-size: 30px;
+  font-size: 35px;
   line-height: 63px;
+  font-family: GmarketSansLight;
   `
 
 const Page3 = styled.div`
@@ -105,6 +108,27 @@ const CoverCategory = styled(CategoryBox)`
   margin-right: 300px;
   z-index: 2;
 `;
+
+const BottomAlignedContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; 
+  width: 100%;
+  height: 100%; 
+  position: relative;
+  bottom: 0; 
+`;
+
+
+const TeamName = styled.p`
+font-family: GmarketSansBold;
+font-style: normal;
+font-weight: 700;
+font-size: 150px;
+line-height: 173px;
+margin-top: 10px;
+`;
+
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -198,6 +222,9 @@ const HomePage: React.FC = () => {
         </CategoryDescription>
         <BackgroundTape src={tape2} alt='Tape Image' $marginTop={125}/>
         </LeftAlignedContainer>
+        <BottomAlignedContainer>
+    <MarqueeComponent />
+      </BottomAlignedContainer>
       </Page3>
     </Outer>
 
