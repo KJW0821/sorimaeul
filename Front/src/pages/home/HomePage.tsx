@@ -3,7 +3,7 @@ import Header from '../../components/common/Header';
 import styled from "styled-components";
 
 const Outer = styled.div`
-height: calc(100vh - 132px);
+height: 100vh;
 overflow-y: auto;
 
 &::-webkit-scrollbar {
@@ -99,7 +99,6 @@ const HomePage: React.FC = () => {
       <Page2></Page2>
       <Page3></Page3>
     </Outer>
-
 
   );
 };

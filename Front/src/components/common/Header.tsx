@@ -20,15 +20,18 @@ interface LogoProps {
   $isMainPage: boolean;
 }
 
-const LogoContainer = styled.div`
+const LogoContainer = styled.div<LogoProps>`
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-left: ${props => props.$isMainPage ? '0' : '150px'};
+  margin-top: ${props=> props.$isMainPage ? '-100px' : '0'};
 `;
 
 const Logo = styled.img<LogoProps>`
-  width: ${props => props.$isMainPage ? '800px' : '300px'}; // 메인 페이지 여부에 따른 너비 설정
-  height: auto; // 높이는 자동으로 조절
+  width: ${props => props.$isMainPage ? '750px' : '300px'}; 
+  height: auto; 
+
 `;
 
 
@@ -46,7 +49,7 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
         </>
       ) : (
         <>
-          <LogoContainer>
+          <LogoContainer $isMainPage={isMainPage}>
             <Link to="/">
               <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
             </Link>
