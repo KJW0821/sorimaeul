@@ -12,11 +12,13 @@ import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -351,6 +353,49 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 음성 변환
+//        private static final String AI_SERVER_URL = "http://70.12.130.111:7867/rvc/infer/";
+//
+//        // 더빙 음성 변환과 파일 저장
+//        public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request, MultipartFile recordFile, int pitch, MultipartFile voiceModel) {
+//            // 사용자 정보 확인
+//            User user = userRepository.getUser(userCode);
+//            if (user == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+//            }
+//
+//            // 변환된 파일을 저장할 폴더 경로 설정
+//            String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
+//
+//            // AI 서버에 요청을 보내기 위한 WebClient 구성
+//            WebClient webClient = WebClient.create(AI_SERVER_URL);
+//
+//            // AI 서버에 요청 보내기
+//            return sendRecordToAIServer(userCode, request.getSourceCode(), num, request.getModelCode(), recordFile, pitch, voiceModel, webClient)
+//                    .map(response -> {
+//                        // AI 서버로부터 받은 변환된 파일 저장
+//                        String convertedFileName = folderPath + num + "_converted.wav";
+//                        try {
+//                            saveFile(convertedFileName, response.getVoiceModelConvertedFileBytes());
+//                            return ResponseEntity.ok("파일 변환 및 저장이 완료되었습니다.");
+//                        } catch (IOException e) {
+//                            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("변환된 파일 저장 중 오류 발생: " + e.getMessage());
+//                        }
+//                    }).block(); // 비동기 요청의 결과를 동기화하기 위해 block 사용
+//        }
+//
+//        // AI 서버로부터 변환된 파일 받기
+//        private Mono<DubbingRecordConvertResponse> sendRecordToAIServer(long userCode, int videoSourceCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel, WebClient webClient) {
+//            return webClient.post()
+//                    .uri(uriBuilder -> uriBuilder.path("/rvc/infer/{userCode}/{videoSourceCode}/{voiceIndex}/{modelCode}/{pitch}")
+//                            .build(userCode, videoSourceCode, voiceIndex, modelCode, pitch))
+//                    .contentType(MediaType.MULTIPART_FORM_DATA)
+//                    .body(BodyInserters.fromMultipartData("recordFile", recordFile.getResource())
+//                            .with("voiceModel", voiceModel.getResource()))
+//                    .retrieve()
+//                    .bodyToMono(DubbingRecordConvertResponse.class); // 변환된 파일의 바이트 배열을 포함하는 응답 타입으로 매핑
+//        }
+
+        // 파일 저장 로직 (기존에 정의된 saveFile 메서드 사용 가능)
 //    public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request){
 //        // 사용자 정보 확인
 //        User user = userRepository.getUser(userCode);
@@ -393,6 +438,29 @@ public class DubbingServiceImpl implements DubbingService {
 //        return ResponseEntity.ok(response);
 //    }
 //
+//    public Mono<ResponseEntity<?>> sendRecordToAIServer(long userCode, int videoSourceCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel) {
+//        // 파일을 바이트 배열로 변환합니다. 실제 사용 시 파일 경로에서 파일을 읽어와서 바이트 배열로 변환해야 합니다.
+//        byte[] recordFileBytes;
+//        byte[] voiceModelBytes;
+//        try {
+//            recordFileBytes = recordFile.getBytes();
+//            voiceModelBytes = voiceModel.getBytes();
+//        } catch (IOException e) {
+//            return Mono.error(e); // 파일 읽기 실패 시 에러 처리
+//        }
+//
+//        return WebClient.create("http://70.12.130.111:7867")
+//                .post()
+//                .uri("/rvc/infer/"+userCode+"/"+videoSourceCode+"/"+voiceIndex+"/"+modelCode+"/"+pitch)
+//                .contentType(MediaType.MULTIPART_FORM_DATA)
+//                .body(BodyInserters.fromMultipartData("recordFile", new ByteArrayResource(recordFileBytes))
+//                                .with("voiceModel", new ByteArrayResource(voiceModelBytes))
+//                        // 기타 필요한 데이터 추가
+//                )
+//                .retrieve()
+//                .toEntity(String.class); // or toEntity(YourResponseType.class) if you have a specific response type
+//    }
+
 //    private MultipartFile getConvertedFile(long userCode, int videoSourceCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel){
 //        MultipartFile a = voiceModel;
 //        return WebClient.create("http://70.12.130.111:7867")

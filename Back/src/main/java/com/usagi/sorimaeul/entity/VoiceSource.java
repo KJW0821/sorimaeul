@@ -28,4 +28,7 @@ public class VoiceSource {
     @Column(name = "voice_path")
     private String voicePath;
 
+    @Column(name = "voice_index")
+    private int voiceIndex;
+
 }
