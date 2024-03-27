@@ -4,7 +4,100 @@ import { useNavigate } from "react-router-dom";
 import { checkNickname, signUp } from "../../utils/userAPI";
 import { login, set } from "../../stores/user";
 import { requestS3 } from "../../utils/s3";
+import styled from 'styled-components';
+import Gradient from "./Gradient";
+import { Button } from "../common/Button";
+import logoImg from "../../assets/logo.png";
 
+const FormContainer = styled.div`
+  background-color: rgba(255, 255, 255, 0.5); 
+  border-radius: 25px;
+  padding: 20px;
+  width: 90%;
+  max-width: 700px;
+  height: 730px;
+`;
+
+const LogoImage = styled.img`
+  position: absolute; 
+  top: 20px;
+  left: 50%; 
+  transform: translateX(-50%); 
+  z-index: 1000;
+  width: 250px; 
+  height: auto; 
+`;
+
+const FormTitle = styled.h2`
+  padding: 30px;
+  color: white;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  font-family: 'GmarketSansBold';
+  font-size: 35px;
+  text-align: center;
+`;
+
+const NicknameContainer = styled.div`
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  gap: 20px; 
+  margin-bottom: 20px; 
+`;
+
+const SubmitButtonContainer = styled.div`
+  display: flex;
+  justify-content: center; 
+  width: 100%; 
+`;
+const NicknameTitle = styled.label`
+  color: white;
+  font-size: 30px;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+`;
+
+
+// 입력 필드 스타일
+const InputField = styled.input`
+  padding: 10px; 
+  font-size: 16px;
+  width: 50%; 
+  margin: 5px 0; 
+  border: 1px solid #CECECE;
+  border-radius: 5px;
+`;
+
+
+interface ProfileImageProps {
+  image?: string;
+}
+
+const ProfileImage = styled.div<ProfileImageProps>`
+  display: inline-block;
+  background-image: url(${props => props.image});
+  background-color: ${props => props.image ? 'rgba(255, 255, 255, 0.5)' : 'white'};
+  background-size: cover;
+  border-radius: 150px; 
+  border: 1px solid #FFFFFF;
+  width: 300px; 
+  height: 300px;
+  line-height: 200px; 
+  text-align: center;
+  margin: 10px 0;
+  cursor: pointer;
+  font-size: 16px; 
+  color: black;
+
+  &:hover{
+    background-color:
+  }
+`;
+
+// 간격 주는 용도
+const Divider = styled.div`
+  height: 30px; 
+  width: 100%;
+`;
 
 
 function SignUpForm() {
@@ -55,7 +148,7 @@ function SignUpForm() {
       setIsValidNickname(false);
     }
   };
-  
+
   // 회원 정보 등록 
   const submitHandler = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -70,7 +163,7 @@ function SignUpForm() {
         }
       } catch (error) {
         console.error("회원 가입 실패", error);
-      } 
+      }
     } else {
       console.log("중복된 닉네임입니다.");
     }
@@ -78,22 +171,33 @@ function SignUpForm() {
 
 
   return (
-    <div>
-      <h2>회원 정보 기입</h2>
-      <form onSubmit={submitHandler}>
-        <div>
-          <label>프로필 이미지 업로드</label>
-          <input type="file" id="file" accept="image/*" onChange={handleImagePath} />
-          {selectedImagePath && (<img src={selectedImagePath} alt="Selected Proofile" />)}
-        </div>
-        <div>
-          <label>닉네임:</label>
-          <input type="text" value={inputNickname} onChange={handleNickname} />
-          <button onClick={onClickCheckNickname}>중복 확인</button>
-        </div>
-        <button type="submit">등록</button>
-      </form>
-    </div>
+    <Gradient>
+      <LogoImage src={logoImg} alt="Logo Image" />
+      <FormContainer>
+        <FormTitle>회원 정보 기입</FormTitle>
+        <form onSubmit={submitHandler}>
+          <div className="flex flex-col items-center">
+            <label htmlFor="file" className="cursor-pointer">
+              {selectedImagePath ? (
+                <ProfileImage image={selectedImagePath}></ProfileImage>
+              ) : (
+                <ProfileImage>프로필 사진 올리기</ProfileImage>
+              )}
+            </label>
+            <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
+            <Divider />
+          </div>
+          <NicknameContainer>
+            <NicknameTitle>닉네임:</NicknameTitle>
+            <InputField type="text" value={inputNickname} onChange={handleNickname} />
+            <Button onClick={onClickCheckNickname}  $fontFamily='GmarketSansLight' $fontSize={1.2} $marginLeft={0} $marginTop={0}>중복 확인</Button>
+          </NicknameContainer>
+          <SubmitButtonContainer>
+            <Button type="submit" $fontFamily='GmarketSansLight' $fontSize={1.2} $width={5} $height={2.5} $marginLeft={0} $marginTop={0} disabled={!inputNickname || !isValidNickname}>등록</Button>
+          </SubmitButtonContainer>
+        </form>
+      </FormContainer>
+    </Gradient>
   )
 
 }
