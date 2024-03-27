@@ -23,7 +23,7 @@ export const Button = styled.button<buttonInterface>`
   padding-top: ${(props) =>
     props.$paddingY === 0 || props.$paddingY
       ? `${props.$paddingY}rem`
-      : "0.2rem"};
+      : "0.4rem"};
   padding-bottom: ${(props) =>
     props.$paddingY === 0 || props.$paddingY
       ? `${props.$paddingY}rem`
@@ -46,7 +46,6 @@ export const Button = styled.button<buttonInterface>`
   margin-left: ${(props) =>
     props.$marginLeft === undefined ? "auto" : `${props.$marginLeft}rem`};
   background-color: ${(props) => props.$background || "black"};
-  padding-top: 0.4rem;
   font-family: ${(props) => props.$fontFamily || "GmarketSansMedium"};
   opacity: ${(props) => props.$selected === undefined ? 'none' : props.$selected ? 'none' : '0.6' };
 
