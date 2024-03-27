@@ -220,6 +220,8 @@ public class CoverServiceImpl implements CoverService {
                 .build();
         coverRepository.save(cover);
         int coverCode = cover.getCoverCode();
+
+
         // GPU 서버에 AI 커버 생성 요청 보내기
         String youtubeLink = request.getYoutubeLink();
         Map<String, Object> requestBody = new HashMap<>();
