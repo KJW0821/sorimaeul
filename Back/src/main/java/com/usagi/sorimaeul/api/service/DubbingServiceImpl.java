@@ -231,7 +231,7 @@ public class DubbingServiceImpl implements DubbingService {
          else if (target.equals("popular")) {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
 //            dubbings = dubbingRepository.findByTop5OrderByLikeCountDESC();
-            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeOrderByLikeCountDesc(videoSourceCode);
+            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(true, true, videoSourceCode);
             startIdx = 0;
             endIdx = dubbings.size();
             // // 총 페이지 수 계산
@@ -407,7 +407,7 @@ public class DubbingServiceImpl implements DubbingService {
         }
     }
 
-    // 더빙 음성 변환
+//     더빙 음성 변환
 //    private static final String AI_SERVER_URL = "http://70.12.130.111:7867/rvc/infer/";
 //
 //    // 더빙 음성 변환과 파일 저장
@@ -429,7 +429,7 @@ public class DubbingServiceImpl implements DubbingService {
 //                    // AI 서버로부터 받은 변환된 파일 저장
 //                    String convertedFileName = folderPath + num + ".wav";
 //                    try {
-////                        saveFile(convertedFileName, response.getVoiceModelConvertedFileBytes());
+//                        saveFile(convertedFileName, response.getVoiceModelConvertedFileBytes());
 //                        return ResponseEntity.ok("파일 변환 및 저장이 완료되었습니다.");
 //                    } catch (IOException e) {
 //                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("변환된 파일 저장 중 오류 발생: " + e.getMessage());
