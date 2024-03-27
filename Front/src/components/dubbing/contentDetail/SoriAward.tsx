@@ -7,19 +7,20 @@ import { useParams } from "react-router-dom";
 
 const AwardBox = styled.div`
   width: 100%;
-  height: 24rem;
+  height: 27rem;
   background: black;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
 
   .trophy {
-    height: 100%;
+    height: 90%;
   }
 
   .carousel-box {
     width: 44.5%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

@@ -13,7 +13,8 @@ const Container = styled.div`
   perspective: 90%;
   transform-style: preserve-3d;
   width: 100%;
-  height: 16rem;
+  height: 18rem;
+  flex-grow: 1;
 
   .nav {
     color: rgba(255 ,255, 255, 0.7);
@@ -65,8 +66,8 @@ const Card = styled.div<{ $active: boolean, $offset: number, $direction: number,
   flex-direction: column;
   align-items: center;
   .img {
-    width: 70%;
-    height: 75%;
+    width: 75%;
+    height: 80%;
     box-shadow: ${(props) => props.$active && '0px 0px 10px 10px rgba(191, 255, 10, 0.5)'};
     border-radius: 5px;
   }
