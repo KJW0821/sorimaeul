@@ -5,6 +5,7 @@ const URL = '/dub';
 export const getSourceVideoList = (page: number) => {
   return API.get(URL + '/video', {
     params: {
+      target: 'all',
       page
     }
   })
@@ -18,9 +19,10 @@ export const getSourceVideo = (sourceCode: string) => {
     .catch(err => console.error(err))
 };
 
-export const getPopularUserVideo = () => {
+export const getPopularUserVideo = (sourceCode: string) => {
   return API.get(URL, {
     params: {
+      videoSourceCode: sourceCode,
       target: 'popular',
       page: 1
     }
@@ -29,9 +31,10 @@ export const getPopularUserVideo = () => {
     .catch(err => console.error(err))
 };
 
-export const getUserVideos = (page: number) => {
+export const getUserVideos = (page: number, sourceCode: string) => {
   return API.get(URL, {
     params: {
+      videoSourceCode: sourceCode,
       target: 'all',
       page
     }
