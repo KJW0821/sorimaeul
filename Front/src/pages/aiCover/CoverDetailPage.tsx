@@ -3,21 +3,24 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deleteCover, getCover } from "../../utils/coverAPI";
 import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
 import { Button } from "../../components/common/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserState } from "../../stores/user";
 import { RootState } from "../../stores/store";
+import { openModal } from "../../stores/modal";
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
+  const coverCode = params.id;
 
   useEffect(() => {
     (async () => {
       try {
-        if (params.id) {
-          const data = await getCover(params.id);
+        if (coverCode) {
+          const data = await getCover(coverCode);
           setData(data);
         }
 
@@ -25,18 +28,25 @@ const CoverDetailPage: React.FC = () => {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
     })();
-  }, [params.id]);
+  }, [coverCode]);
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement> ) => {
     e.preventDefault();
     try {
-      if (params.id) {
-        await deleteCover(params.id);
+      if (coverCode) {
+        await deleteCover(coverCode);
         navigate(`/cover`);
       }
     } catch (err) {
       console.log(err);
     }
+  }
+
+  const openPlaylistAddModal = () => {
+    dispatch(openModal({
+      modalType: "playlistadd",
+      payload: { coverCode: coverCode }
+    }))
   }
 
   return (
@@ -55,7 +65,8 @@ const CoverDetailPage: React.FC = () => {
           <h2> 좋아요 여부 {data.isLiked} </h2>
         </div>
       }
-
+      
+      <button onClick={openPlaylistAddModal}>플레이리스트에 추가</button>
       {data && data.nickname === loggedInUserNickname &&
         <Button onClick={() => navigate(`/cover/edit/${params.id}`) } $marginLeft={0} $marginTop={0}>수정</Button>}
 
