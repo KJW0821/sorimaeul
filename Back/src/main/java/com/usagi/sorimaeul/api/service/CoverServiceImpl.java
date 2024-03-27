@@ -24,8 +24,7 @@ import static com.usagi.sorimaeul.utils.Const.*;
 import static com.usagi.sorimaeul.utils.FileUtil.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -223,10 +222,17 @@ public class CoverServiceImpl implements CoverService {
         int coverCode = cover.getCoverCode();
         // GPU 서버에 AI 커버 생성 요청 보내기
         String youtubeLink = request.getYoutubeLink();
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("youtubeLink", youtubeLink);
+        requestBody.put("userCode", userCode);
+        requestBody.put("modelCode", request.getModelCode());
+        requestBody.put("coverCode", coverCode);
+        requestBody.put("coverName", request.getCoverName());
+        requestBody.put("pitch", request.getPitch());
         WebClient.create("http://222.107.238.124:7866")
                 .post()
                 .uri("/rvc/cover")
-                .bodyValue(new CoverRequestDto(youtubeLink, userCode, request.getModelCode(), coverCode, request.getCoverName(), request.getPitch()))
+                .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
