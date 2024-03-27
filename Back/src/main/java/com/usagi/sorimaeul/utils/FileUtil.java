@@ -29,10 +29,13 @@ public class FileUtil {
 
 
     // 허용된 확장자 여부 확인
-    public static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("mp3", "m4a", "wav", "flac", "aac", "aiff");
+    public static final List<String> ALLOWED_EXTENSIONS_AUDIO = Arrays.asList("mp3", "m4a", "wav", "flac", "aac", "aiff");
 
-    public static boolean isAllowedExtension(String extension) {
-        return ALLOWED_EXTENSIONS.contains(extension.toLowerCase());
+    public static final List<String> ALLOWED_EXTENSIONS_MODEL = Arrays.asList("pth", "index");
+
+
+    public static boolean isAllowedExtension(String extension, List<String> list) {
+        return list.contains(extension.toLowerCase());
     }
 
 }
