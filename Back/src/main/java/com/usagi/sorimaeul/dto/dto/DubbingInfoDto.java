@@ -23,5 +23,6 @@ public class DubbingInfoDto {
     private int likeCount;
     private LocalDateTime createdTime;
     private int isLiked;
+    private boolean isComplete;
 
 }
