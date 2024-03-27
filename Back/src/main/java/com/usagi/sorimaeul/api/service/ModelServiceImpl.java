@@ -299,7 +299,7 @@ public class ModelServiceImpl implements ModelService {
         user.setLearnCount(user.getLearnCount() - 1);
         userRepository.save(user);
 
-        return ResponseEntity.badRequest().body("모델 학습 성공!");
+        return ResponseEntity.status(HttpStatus.OK).body("모델 학습 성공!");
     }
 
 
