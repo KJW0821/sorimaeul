@@ -13,6 +13,9 @@ import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -268,6 +271,27 @@ public class DubbingServiceImpl implements DubbingService {
                 .build();
 
         return ResponseEntity.ok(response);
+    }
+
+    // 더빙 영상 파일 조회
+    public ResponseEntity<Resource> getDubbingVideo(long userCode, int dubCode){
+        Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+
+        if (dubbing == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String videoPath = dubbing.getStoragePath();
+        Resource videoResource = new FileSystemResource(videoPath);
+        if (!videoResource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String mimeType = "video/mp4"; // 예시로, 실제 파일 타입에 따라 변경 필요
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + videoResource.getFilename() + "\"")
+                .body(videoResource);
     }
 
     // 더빙 영상 등록/수정
