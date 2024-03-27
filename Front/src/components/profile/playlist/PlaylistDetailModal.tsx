@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
 import { useEffect, useState } from "react";
-import { getPlaylist } from "../../../utils/playlistAPI";
+import { deleteCoverFromList, getPlaylist } from "../../../utils/playlistAPI";
 import { CloseButton, Content } from "../../common/ModalStyles";
 
 
 
 export interface CoverInfo {
-  coverCode: number;
+  coverCode: string;
   coverSinger: string;
   singer: string;
   title: string;
@@ -38,6 +38,15 @@ function PlaylistDetailModal() {
     }
   }, [playlistCode]);
 
+  const deletCoverFromPlaylist = async (coverCode: string) => {
+    const res = await deleteCoverFromList(playlistCode, coverCode);
+    if (res.status == 200) {
+      console.log("삭제 성공!");
+      const updateData = await getPlaylist(playlistCode);
+      setData(updateData);
+    }
+  }
+
   return (
     <>
       <Content $width={40} $height={50} $borderRadius={30}>
@@ -55,8 +64,8 @@ function PlaylistDetailModal() {
             {data?.playlist.map((cover, index) => (
               <li key={index}>
                 <span>{cover.title}-{cover.singer}({cover.coverSinger})</span>
-                <span>작성자명: {cover.nickname}</span>
-
+                <span>작성자명: {cover.nickname} </span>
+                <button onClick={()=>deletCoverFromPlaylist(cover.coverCode)}>[삭제]</button>
 
               </li>
             ))}

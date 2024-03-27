@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Song {
-  coverCode: number,
+  coverCode: string,
   coverSinger: string;
   singer: string;
   title: string;

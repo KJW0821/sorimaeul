@@ -56,3 +56,10 @@ export const addCoverToList = (playlistCode: string, coverCode: string) => {
   .then(res => res)
   .catch(err => err)
 }
+
+// 플레이리스트에 ai 커버 삭제
+export const deleteCoverFromList = (playlistCode: string, coverCode: string) => {
+  return API.delete(URL + `/${playlistCode}/${coverCode}`)
+  .then(res => res)
+  .catch(err => err)
+}

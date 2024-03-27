@@ -39,7 +39,7 @@ const PlaylistAddModal : React.FC = () => {
   }) ();
 }, []);
 
-const handlePlaylistClick = async (playlistCode: string) => {
+const addCoverToPlaylist = async (playlistCode: string) => {
     const res = await addCoverToList(playlistCode, coverCode);
     if (res.status === 201) {
       console.log(res);
@@ -60,7 +60,7 @@ const handlePlaylistClick = async (playlistCode: string) => {
       <ScrollableList>
           {dataList && dataList.playlists.map((playlist) => (
             <PlaylistItem key={playlist.playlistCode} className="border-b border-gray-200"
-            onClick={() => handlePlaylistClick(playlist.playlistCode)}>
+            onClick={() => addCoverToPlaylist(playlist.playlistCode)}>
               {playlist.playlistName} {playlist.createTime}
             </PlaylistItem>
           ))}
