@@ -4,6 +4,7 @@ import com.usagi.sorimaeul.dto.dto.PlaylistCoverInfoDto;
 import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
 import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
 import com.usagi.sorimaeul.dto.request.PlaylistUpdateRequest;
+import com.usagi.sorimaeul.dto.response.PlaylistCreateResponse;
 import com.usagi.sorimaeul.dto.response.PlaylistDetailResponse;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
 import com.usagi.sorimaeul.entity.Cover;
@@ -263,7 +264,13 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         playlistRepository.save(playlist);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("생성 성공");
+        PlaylistCreateResponse response = PlaylistCreateResponse.builder()
+                .playlistCode(playlist.getPlaylistCode())
+                .playlistName(playlist.getPlaylistName())
+                .createdTime(playlist.getCreateTime())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
