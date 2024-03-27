@@ -16,6 +16,5 @@ public class VideoSourceInfoDto {
     private String thumbnailPath;
     private String videoPlaytime;
     private LocalDateTime createdTime;
-    private String storagePath;
     private String sourceDetail;
 }

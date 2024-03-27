@@ -33,7 +33,7 @@ public class S3ServiceImpl implements S3Service {
 
     // 파일 업로드를 위한 presignedUrl 요청
     @Override
-    public ResponseS3Dto getPresignedUrlToUpload(long userCode, String fileName) {
+    public ResponseS3Dto getPresignedUrlToUpload(long userCode, String fileName, String mimeType) {
         // 현재 시간을 기준으로 30분 후의 시간을 얻습니다.
         Date expiration = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30));
 
@@ -41,19 +41,19 @@ public class S3ServiceImpl implements S3Service {
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
         expiration.setTime(expiration.getTime() + timeZone.getRawOffset());
 
-        // 경로 구성 => filename ( Front에서 파일명 생성 날짜 + 파일명 + 난수 )
+        // fileName ( Front에서 파일명 생성 날짜 + 파일명 + 난수 )
+        // 경로 구성 => filePath = mimeType 앞부분 + 파일명
+        String filePath = mimeType.split("/")[0] + fileName;
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(expiration);
 
         // content-type을 지정합니다.
-        generatePresignedUrlRequest.addRequestParameter("Content-Type", "image/jpeg");
+        generatePresignedUrlRequest.addRequestParameter("Content-Type", mimeType);
 
         return ResponseS3Dto.builder()
                 .url(amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString())
                 .build();
     }
-
-
 
 }

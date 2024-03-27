@@ -136,12 +136,33 @@ public class DubbingServiceImpl implements DubbingService {
                 .sourceName(videoSource.getSourceName())
                 .sourceDetail(videoSource.getSourceDetail())
                 .videoPlaytime(videoSource.getVideoPlaytime())
-                .storagePath(videoSource.getStoragePath())
                 .thumbnailPath(videoSource.getThumbnailPath())
                 .createdTime(videoSource.getCreatedTime())
                 .build();
 
         return ResponseEntity.ok(response);
+    }
+
+    // 원본 영상 파일 조회
+    public ResponseEntity<Resource> getSourceVideo(long userCode, int videoSourceCode){
+        VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(videoSourceCode);
+
+        if (videoSource == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String videoPath = videoSource.getStoragePath();
+        Resource videoResource = new FileSystemResource(videoPath);
+        if (!videoResource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String mimeType = "video/mp4"; // 예시로, 실제 파일 타입에 따라 변경 필요 inline : 재생, attachment : 다운로드
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mimeType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + videoResource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + videoResource.getFilename() + "\"")
+                .body(videoResource);
     }
 
     // 더빙 영상 목록 조회
@@ -210,7 +231,7 @@ public class DubbingServiceImpl implements DubbingService {
          else if (target.equals("popular")) {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
 //            dubbings = dubbingRepository.findByTop5OrderByLikeCountDESC();
-            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeOrderByLikeCountDesc(videoSourceCode);
+            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(true, true, videoSourceCode);
             startIdx = 0;
             endIdx = dubbings.size();
             // // 총 페이지 수 계산
@@ -226,6 +247,7 @@ public class DubbingServiceImpl implements DubbingService {
                     .dubCode(dubbing.getDubCode())
                     .dubName(dubbing.getDubName())
                     .isPublic(dubbing.isPublic())
+                    .isComplete(dubbing.isComplete())
                     .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
                     .likeCount(dubbing.getLikeCount())
                     .nickname(dubbing.getUser().getNickname())
@@ -260,7 +282,6 @@ public class DubbingServiceImpl implements DubbingService {
         DubbingDetailResponse response = DubbingDetailResponse.builder()
                 .dubCode(dubCode)
                 .dubName(dubbing.getDubName())
-                .storagePath(dubbing.getStoragePath())
                 .dubDetail(dubbing.getDubDetail())
                 .nickname(dubbing.getUser().getNickname())
                 .profileImage(dubbing.getUser().getProfileImage())
@@ -367,6 +388,7 @@ public class DubbingServiceImpl implements DubbingService {
         try {
             // 폴더 생성
             createFolder(folderPath);
+
             // record_1.wav 형식으로 저장
             String fileName = num + ".wav";
             // 파일 생성
@@ -385,71 +407,70 @@ public class DubbingServiceImpl implements DubbingService {
         }
     }
 
-    // 더빙 음성 변환
-//        private static final String AI_SERVER_URL = "http://70.12.130.111:7867/rvc/infer/";
+//     더빙 음성 변환
+//    private static final String AI_SERVER_URL = "http://70.12.130.111:7867/rvc/infer/";
 //
-//        // 더빙 음성 변환과 파일 저장
-//        public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request, MultipartFile recordFile, int pitch, MultipartFile voiceModel) {
-//            // 사용자 정보 확인
-//            User user = userRepository.getUser(userCode);
-//            if (user == null) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-//            }
-//
-//            // 변환된 파일을 저장할 폴더 경로 설정
-//            String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
-//
-//            // AI 서버에 요청을 보내기 위한 WebClient 구성
-//            WebClient webClient = WebClient.create(AI_SERVER_URL);
-//
-//            // AI 서버에 요청 보내기
-//            return sendRecordToAIServer(userCode, request.getSourceCode(), num, request.getModelCode(), recordFile, pitch, voiceModel, webClient)
-//                    .map(response -> {
-//                        // AI 서버로부터 받은 변환된 파일 저장
-//                        String convertedFileName = folderPath + num + "_converted.wav";
-//                        try {
-//                            saveFile(convertedFileName, response.getVoiceModelConvertedFileBytes());
-//                            return ResponseEntity.ok("파일 변환 및 저장이 완료되었습니다.");
-//                        } catch (IOException e) {
-//                            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("변환된 파일 저장 중 오류 발생: " + e.getMessage());
-//                        }
-//                    }).block(); // 비동기 요청의 결과를 동기화하기 위해 block 사용
+//    // 더빙 음성 변환과 파일 저장
+//    public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request, MultipartFile recordFile, int pitch, MultipartFile voiceModel) {
+//        // 사용자 정보 확인
+//        User user = userRepository.getUser(userCode);
+//        if (user == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
 //        }
 //
-//        // AI 서버로부터 변환된 파일 받기
-//        private Mono<DubbingRecordConvertResponse> sendRecordToAIServer(long userCode, int videoSourceCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel, WebClient webClient) {
-//            return webClient.post()
-//                    .uri(uriBuilder -> uriBuilder.path("/rvc/infer/{userCode}/{videoSourceCode}/{voiceIndex}/{modelCode}/{pitch}")
-//                            .build(userCode, videoSourceCode, voiceIndex, modelCode, pitch))
-//                    .contentType(MediaType.MULTIPART_FORM_DATA)
-//                    .body(BodyInserters.fromMultipartData("recordFile", recordFile.getResource())
-//                            .with("voiceModel", voiceModel.getResource()))
-//                    .retrieve()
-//                    .bodyToMono(DubbingRecordConvertResponse.class); // 변환된 파일의 바이트 배열을 포함하는 응답 타입으로 매핑
-//        }
+//        // 변환된 파일을 저장할 폴더 경로 설정
+//        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
+//        // AI 서버에 요청을 보내기 위한 WebClient 구성
+//        WebClient webClient = WebClient.create(AI_SERVER_URL);
+//
+//        // AI 서버에 요청 보내기
+//        return sendRecordToAIServer(userCode, request.getSourceCode(), num, request.getModelCode(), recordFile, pitch, voiceModel, webClient)
+//                .map(response -> {
+//                    // AI 서버로부터 받은 변환된 파일 저장
+//                    String convertedFileName = folderPath + num + ".wav";
+//                    try {
+//                        saveFile(convertedFileName, response.getVoiceModelConvertedFileBytes());
+//                        return ResponseEntity.ok("파일 변환 및 저장이 완료되었습니다.");
+//                    } catch (IOException e) {
+//                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("변환된 파일 저장 중 오류 발생: " + e.getMessage());
+//                    }
+//                }).block(); // 비동기 요청의 결과를 동기화하기 위해 block 사용
+//    }
 
-        // 파일 저장 로직 (기존에 정의된 saveFile 메서드 사용 가능)
+        // AI 서버로부터 변환된 파일 받기
+        private Mono<DubbingRecordConvertResponse> sendRecordToAIServer(long userCode, int videoSourceCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel, WebClient webClient) {
+            return webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path("/rvc/infer/{userCode}/{videoSourceCode}/{voiceIndex}/{modelCode}/{pitch}")
+                            .build(userCode, videoSourceCode, voiceIndex, modelCode, pitch))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .body(BodyInserters.fromMultipartData("recordFile", recordFile.getResource())
+                            .with("voiceModel", voiceModel.getResource()))
+                    .retrieve()
+                    .bodyToMono(DubbingRecordConvertResponse.class); // 변환된 파일의 바이트 배열을 포함하는 응답 타입으로 매핑
+        }
+
+//         파일 저장 로직 (기존에 정의된 saveFile 메서드 사용 가능)
 //    public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request){
 //        // 사용자 정보 확인
 //        User user = userRepository.getUser(userCode);
 //        if (user == null) {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //        }
-//
-//
-//        // 폴더 경로 설정
+
+
+        // 폴더 경로 설정
 //        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
-//
-////        MultipartFile convertedRecord = getConvertedFile();
-//        // 파일 경로를 통해 녹음 파일과 피치 모델을 AI 서버에 보내고 받아온다
-////        try {
-////            // 폴더 생성
-////            createFolder(folderPath);
-////            // record_1.wav 형식으로 저장
+
+//        MultipartFile convertedRecord = getConvertedFile();
+        // 파일 경로를 통해 녹음 파일과 피치 모델을 AI 서버에 보내고 받아온다
+//        try {
+//            // 폴더 생성
+//            createFolder(folderPath);
+//            // record_1.wav 형식으로 저장
 //            String fileName = num + ".wav";
-////            // 파일 생성
-////            saveFile(folderPath + fileName, recordFile.getBytes());
-////
+//            // 파일 생성
+//            saveFile(folderPath + fileName, recordFile.getBytes());
+//
 //            VoiceSource voiceSource = new VoiceSource();
 //            voiceSource.setVoicePath(folderPath + fileName);
 //            voiceSourceRepository.save(voiceSource);
@@ -458,16 +479,16 @@ public class DubbingServiceImpl implements DubbingService {
 //                    .voiceSourceCode(voiceSource.getVoiceSourceCode())
 //                    .voicePath(folderPath + fileName)
 //                    .build();
-////
-////
-////            return ResponseEntity.status(HttpStatus.OK).body(response);
-////
-////            // 서버 오류 처리
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-////                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
-////        }
+//
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(response);
+//
+//            // 서버 오류 처리
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+//        }
 //        return ResponseEntity.ok(response);
 //    }
 //

@@ -63,6 +63,16 @@ public class DubbingController {
         return dubbingService.getVideoSourceDetail(userCode, sourceCode);
     }
 
+    @Operation(summary = "더빙 원본 영상 파일 조회", description = "더빙 원본 영상 파일을 조회한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 원본 영상 파일 조회 성공")
+    @GetMapping("/file/{videoSourceCode}")
+    public ResponseEntity<Resource> getSourceVideo(@RequestHeader("Authorization") String token,
+                                                    @PathVariable int videoSourceCode) {
+
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return dubbingService.getSourceVideo(userCode, videoSourceCode);
+    }
+
     @Operation(summary = "더빙 영상 목록 조회", description = "더빙 영상 목록을 조회한다.")
     @ApiResponse(responseCode = "200", description = "더빙 영상 목록 조회 성공")
     @GetMapping
@@ -85,30 +95,14 @@ public class DubbingController {
         return dubbingService.getDubbingDetail(userCode, dubCode);
     }
 
+    @Operation(summary = "더빙 영상 파일 조회", description = "더빙 영상 파일을 조회한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 파일 조회 성공")
     @GetMapping("/file/{dubCode}")
     public ResponseEntity<Resource> getDubbingVideo(@RequestHeader("Authorization") String token,
                                                     @PathVariable int dubCode) {
 
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingVideo(userCode, dubCode);
-
-//        Dubbing dubbing = dubbingService.getDubbingDetail(userCode, dubCode);
-//
-//        if (dubbing == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        String videoPath = dubbing.getStoragePath();
-//        Resource videoResource = new FileSystemResource(videoPath);
-//        if (!videoResource.exists()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        String mimeType = "video/mp4"; // 예시로, 실제 파일 타입에 따라 변경 필요
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(mimeType))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + videoResource.getFilename() + "\"")
-//                .body(videoResource);
     }
     
     @Operation(summary = "더빙 영상 게시글 등록/수정", description = "더빙 영상 게시글을 등록하거나 수정한다.")
