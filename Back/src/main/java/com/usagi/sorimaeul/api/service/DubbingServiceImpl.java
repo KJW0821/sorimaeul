@@ -42,7 +42,7 @@ public class DubbingServiceImpl implements DubbingService {
     private static final String BASE_PATH = "/home/ubuntu/sorimaeul-data";
 
     // 원본 영상 목록 조회
-    public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, int page){
+    public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, Integer page, String target){
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -52,34 +52,65 @@ public class DubbingServiceImpl implements DubbingService {
         List<VideoSource> videoSources = new ArrayList<>();
         List<VideoSourceInfoDto> customVideoSources = new ArrayList<>();
         // 인덱스 선언
-        int startIdx;
-        int endIdx;
+        int startIdx = 0;
+        int endIdx = 0;
+        // 총 페이지 수 선언
+        int totalPages = 0;
 
-        // 모든 게시물 조회
-        videoSources = videoSourceRepository.findAll();
-        startIdx = (page - 1) * 10;
-        endIdx = Math.min(startIdx + 10, videoSources.size());
+        // 인기 영상 조회
+        if (target.equals("popular")) {
+            videoSources = videoSourceRepository.findTop5VideoSourcesOrderByDubbingCountDesc();
 
-        // 원본 영상 페이지네이션
-        List<VideoSource> pageVideoSources = videoSources.subList(startIdx, endIdx);
-        // 원본 영상 리스트 순회
-        for (VideoSource videoSource : pageVideoSources){
             // Dto 에 담기
-            VideoSourceInfoDto videoSourceInfoDto = VideoSourceInfoDto.builder()
+            for (VideoSource videoSource : videoSources){
+                // Dto 에 담기
+                VideoSourceInfoDto videoSourceInfoDto = VideoSourceInfoDto.builder()
+                        .videoSourceCode(videoSource.getVideoSourceCode())
+                        .sourceName(videoSource.getSourceName())
+                        .thumbnailPath(videoSource.getThumbnailPath())
+                        .build();
+                // customVideoSources 에 담기
+                customVideoSources.add(videoSourceInfoDto);
+            }
+            // Response 생성
+            VideoSourceListResponse response = VideoSourceListResponse.builder()
+                    .videoSources(customVideoSources)
+                    .build();
+
+            return ResponseEntity.ok(response);
+        }
+        // 전체 영상 조회
+        else {
+            videoSources = videoSourceRepository.findAllByOrderByCreatedTimeDesc();
+
+            if (page != null) {
+                startIdx = (page -   1) * 10;
+                endIdx = Math.min(startIdx + 10, videoSources.size());
+            }
+            else {
+                endIdx = videoSources.size();
+            }
+            // 원본 영상 페이지네이션
+            List<VideoSource> pageVideoSources = videoSources.subList(startIdx, endIdx);
+            // 원본 영상 리스트 순회
+            for (VideoSource videoSource : pageVideoSources){
+                // Dto 에 담기
+                VideoSourceInfoDto videoSourceInfoDto = VideoSourceInfoDto.builder()
                     .videoSourceCode(videoSource.getVideoSourceCode())
                     .sourceName(videoSource.getSourceName())
                     .thumbnailPath(videoSource.getThumbnailPath())
                     .build();
-            // customVideoSources 에 담기
-            customVideoSources.add(videoSourceInfoDto);
+                // customVideoSources 에 담기
+                customVideoSources.add(videoSourceInfoDto);
+            }
+
+            // Response 생성
+            VideoSourceListResponse videoSourceListResponse = VideoSourceListResponse.builder()
+                 .videoSources(customVideoSources)
+                 .build();
+
+            return ResponseEntity.ok(videoSourceListResponse);
         }
-
-        // Response 생성
-        VideoSourceListResponse videoSourceListResponse = VideoSourceListResponse.builder()
-                .videoSources(customVideoSources)
-                .build();
-
-        return ResponseEntity.ok(videoSourceListResponse);
     }
 
     // 원본 영상 상세 조회
@@ -320,60 +351,60 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 음성 변환
-    public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request){
-        // 사용자 정보 확인
-        User user = userRepository.getUser(userCode);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-
-
-        // 폴더 경로 설정
-        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
-
-//        MultipartFile convertedRecord = getConvertedFile();
-        // 파일 경로를 통해 녹음 파일과 피치 모델을 AI 서버에 보내고 받아온다
-//        try {
-//            // 폴더 생성
-//            createFolder(folderPath);
-//            // record_1.wav 형식으로 저장
-            String fileName = num + ".wav";
-//            // 파일 생성
-//            saveFile(folderPath + fileName, recordFile.getBytes());
-//
-            VoiceSource voiceSource = new VoiceSource();
-            voiceSource.setVoicePath(folderPath + fileName);
-            voiceSourceRepository.save(voiceSource);
-
-            DubbingRecordConvertResponse response = DubbingRecordConvertResponse.builder()
-                    .voiceSourceCode(voiceSource.getVoiceSourceCode())
-                    .voicePath(folderPath + fileName)
-                    .build();
-//
-//
-//            return ResponseEntity.status(HttpStatus.OK).body(response);
-//
-//            // 서버 오류 처리
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+//    public ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request){
+//        // 사용자 정보 확인
+//        User user = userRepository.getUser(userCode);
+//        if (user == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //        }
-        return ResponseEntity.ok(response);
-    }
-
-    private MultipartFile getConvertedFile(long userCode, int dubCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel){
-        MultipartFile a = voiceModel;
-        return WebClient.create("http://70.12.130.111:7867")
-                .post()
-                .uri("/rvc/infer/"+userCode+"/"+dubCode+"/"+voiceIndex+"/"+modelCode+"/"+pitch)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(Mono.just(
-                        org.springframework.http.client.MultipartBodyBuilder()
-                                .part("file", resource)
-                                .build()
-                ), MediaType.MULTIPART_FORM_DATA);
-    }
+//
+//
+//        // 폴더 경로 설정
+//        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/converted/";
+//
+////        MultipartFile convertedRecord = getConvertedFile();
+//        // 파일 경로를 통해 녹음 파일과 피치 모델을 AI 서버에 보내고 받아온다
+////        try {
+////            // 폴더 생성
+////            createFolder(folderPath);
+////            // record_1.wav 형식으로 저장
+//            String fileName = num + ".wav";
+////            // 파일 생성
+////            saveFile(folderPath + fileName, recordFile.getBytes());
+////
+//            VoiceSource voiceSource = new VoiceSource();
+//            voiceSource.setVoicePath(folderPath + fileName);
+//            voiceSourceRepository.save(voiceSource);
+//
+//            DubbingRecordConvertResponse response = DubbingRecordConvertResponse.builder()
+//                    .voiceSourceCode(voiceSource.getVoiceSourceCode())
+//                    .voicePath(folderPath + fileName)
+//                    .build();
+////
+////
+////            return ResponseEntity.status(HttpStatus.OK).body(response);
+////
+////            // 서버 오류 처리
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+////                    .body("녹음 파일을 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+////        }
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    private MultipartFile getConvertedFile(long userCode, int videoSourceCode, int voiceIndex, int modelCode, MultipartFile recordFile, int pitch, MultipartFile voiceModel){
+//        MultipartFile a = voiceModel;
+//        return WebClient.create("http://70.12.130.111:7867")
+//                .post()
+//                .uri("/rvc/infer/"+userCode+"/"+videoSourceCode+"/"+voiceIndex+"/"+modelCode+"/"+pitch)
+//                .contentType(MediaType.MULTIPART_FORM_DATA)
+//                .body(Mono.just(
+//                        org.springframework.http.client.MultipartBodyBuilder()
+//                                .part("file", resource)
+//                                .build()
+//                ), MediaType.MULTIPART_FORM_DATA);
+//    }
 
     public HttpStatus createDub (long userCode, DubCreateRequest request){
         User user = userRepository.getUser(userCode);

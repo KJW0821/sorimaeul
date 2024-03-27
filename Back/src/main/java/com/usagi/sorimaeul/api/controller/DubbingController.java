@@ -42,9 +42,11 @@ public class DubbingController {
     @ApiResponse(responseCode = "200", description = "더빙 원본 영상 목록 조회 성공")
     @GetMapping("/video")
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(@RequestHeader("Authorization") String token,
-                                                                      @RequestParam(required = false) int page){
+                                                                      @RequestParam(required = false) Integer page,
+                                                                      @RequestParam(required = false) String target
+                                                                      ){
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return dubbingService.getVideoSourceList(userCode, page);
+        return dubbingService.getVideoSourceList(userCode, page, target);
     }
 
     @Operation(summary = "더빙 원본 영상 상세 조회", description = "더빙 원본 영상을 상세 조회한다.")

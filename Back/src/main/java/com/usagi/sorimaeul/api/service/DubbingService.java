@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface DubbingService {
     HttpStatus createDub(long userCode, DubCreateRequest dubCreateRequest);
 
-    ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, int page);
+    ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, Integer page, String target);
 
     ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(long userCode, int sourceCode);
 
@@ -29,5 +29,5 @@ public interface DubbingService {
 
     ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
 
-    ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request);
+//    ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request);
 }
