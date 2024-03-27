@@ -43,7 +43,7 @@ export const getUserVideos = (page: number, sourceCode: string) => {
     .catch(err => console.error(err))
 };
 
-export const getUserVideo = (dubCode: number) => {
+export const getUserVideo = (dubCode: string) => {
   return API.get(URL + dubCode)
     .then(res => res.data)
     .catch(err => console.error(err))
