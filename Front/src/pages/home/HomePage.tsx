@@ -39,22 +39,27 @@ width: 40px;
 height: auto; 
 `
 
-const Line = styled.div`
-position: absolute;
-width: 627px;
-height: 0px;
-border: 1px solid #000000;
-margin-top: 175px; 
-margin-right: 50px;
+interface MarginProps {
+  $marginTop?: number;
+  $marginRight?: number;
+}
 
+
+const Line = styled.div`
+  position: absolute;
+  width: '627px';
+  height: 0px;
+  border: 1px solid #000000;
+  margin-top: '175px';
+  margin-right: '50px';
 `;
 
-const BackgroundTape = styled.img`
-position: absolute;
-margin-top: 35px; 
-margin-right: 100px;
-width: 435px;
-height: auto;
+const BackgroundTape = styled.img<MarginProps>`
+  position: absolute;
+  margin-top: ${(props) => props.$marginTop? `${props.$marginTop}px` : '75px'};
+  margin-right: ${(props) => props.$marginRight? `${props.$marginRight}px` : '100px'};
+  width:'435px';
+  height:'auto';
 `;
 
 const RightAlignedContainer = styled.div`
@@ -67,12 +72,18 @@ const RightAlignedContainer = styled.div`
 
 const DubbingCategory = styled(CategoryBox)`
   position: relative;
-  margin-top: 50px; 
+  margin-top: 100px; 
   margin-right: 250px;
   z-index: 2;
 `;
 
-
+const CategoryDescription = styled.p`
+  position: absolute;
+  margin-top: 125px;
+  margin-left: 500px;
+  font-size: 30px;
+  line-height: 63px;
+  `
 
 const Page3 = styled.div`
   height: 100vh;
@@ -85,12 +96,14 @@ const LeftAlignedContainer = styled.div`
   justify-content: flex-start; 
   padding-left: 50px; 
   width: 100%;
+  position: relative;
 `;
 
 const CoverCategory = styled(CategoryBox)`
   position: relative;
-  margin-top: 100px; 
+  margin-top: 90px; 
   margin-right: 300px;
+  z-index: 2;
 `;
 
 const HomePage: React.FC = () => {
@@ -180,6 +193,10 @@ const HomePage: React.FC = () => {
            AI 노래방
           <GoBtnImg src={goBtnImg} alt='Button Image'/>
         </CoverCategory>
+        <CategoryDescription>
+          나만의 AI 커버 송을 만들어 보세요!
+        </CategoryDescription>
+        <BackgroundTape src={tape2} alt='Tape Image' $marginTop={125}/>
         </LeftAlignedContainer>
       </Page3>
     </Outer>
