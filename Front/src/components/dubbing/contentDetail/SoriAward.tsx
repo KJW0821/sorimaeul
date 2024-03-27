@@ -2,6 +2,8 @@ import styled from "styled-components";
 import trophy from "../../../assets/trophy.png";
 import { getPopularUserVideo } from "../../../utils/dubbingAPI";
 import { Fragment, useEffect, useState } from "react";
+import Carousel from "./Carousel";
+import { useParams } from "react-router-dom";
 
 const AwardBox = styled.div`
   width: 100%;
@@ -18,6 +20,10 @@ const AwardBox = styled.div`
 
   .carousel-box {
     width: 44.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     .award-title {
       font-family: 'Bagel Fat One';
       color: #BFFF0A;
@@ -41,6 +47,7 @@ const RatingBox = styled.div`
 
   .list {
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: space-around;
     background: white;
@@ -48,6 +55,10 @@ const RatingBox = styled.div`
     padding: 1rem;
     border-radius: 10px;
     align-items: center;
+
+    & > div:last-child {
+      margin-bottom: auto;
+    }
 
     .name {
       font-size: 1.5rem;
@@ -78,11 +89,15 @@ export interface VideoData {
 }
 
 function SoriAward() {
+  const params = useParams();
+
   const [hotContents, setHotContents] = useState<VideoData[]>([]);
 
   const getHotContents = async () => {
-    const res = await getPopularUserVideo();
-    setHotContents(res.dubbings.slice(0, 3));
+    if (params.sourceCode) {
+      const res = await getPopularUserVideo(params.sourceCode);
+      setHotContents(res.dubbings.slice(0, 3));
+    }
   }
 
   useEffect(() => {
@@ -94,6 +109,7 @@ function SoriAward() {
         <img className="trophy" src={trophy} alt="trophy" />
         <div className="carousel-box">
           <h3 className="award-title">SORI AWARDS</h3>
+          <Carousel hotContents={hotContents} />
         </div>
         <RatingBox>
           <p className="title">Best Creators</p>
@@ -103,7 +119,7 @@ function SoriAward() {
                 <Fragment key={el.dubCode}>
                   <li className="name">{idx + 1}. {el.nickname}</li>
                   {
-                    idx !== 2 &&
+                    idx !== hotContents.length - 1 &&
                     <div className="line"></div>
                   }
                 </Fragment>
