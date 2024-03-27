@@ -29,6 +29,6 @@ public class Playlist {
 
     @CreationTimestamp
     @Column(name = "created_time")
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
 
 }
