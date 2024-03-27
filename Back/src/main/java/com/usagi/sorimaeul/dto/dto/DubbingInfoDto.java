@@ -14,7 +14,6 @@ public class DubbingInfoDto {
 
     private int dubCode;
     private String dubName;
-    private String storagePath;
     private String thumbnailPath;
     private String dubDetail;
     private boolean isPublic;

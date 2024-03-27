@@ -13,7 +13,6 @@ public class VideoSourceDetailResponse {
 
     private int videoSourceCode;
     private String sourceName;
-    private String storagePath;
     private LocalDateTime createdTime;
     private String thumbnailPath;
     private String videoPlaytime;

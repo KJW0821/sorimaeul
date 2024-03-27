@@ -136,7 +136,6 @@ public class DubbingServiceImpl implements DubbingService {
                 .sourceName(videoSource.getSourceName())
                 .sourceDetail(videoSource.getSourceDetail())
                 .videoPlaytime(videoSource.getVideoPlaytime())
-                .storagePath(videoSource.getStoragePath())
                 .thumbnailPath(videoSource.getThumbnailPath())
                 .createdTime(videoSource.getCreatedTime())
                 .build();
@@ -282,7 +281,6 @@ public class DubbingServiceImpl implements DubbingService {
         DubbingDetailResponse response = DubbingDetailResponse.builder()
                 .dubCode(dubCode)
                 .dubName(dubbing.getDubName())
-                .storagePath(dubbing.getStoragePath())
                 .dubDetail(dubbing.getDubDetail())
                 .nickname(dubbing.getUser().getNickname())
                 .profileImage(dubbing.getUser().getProfileImage())

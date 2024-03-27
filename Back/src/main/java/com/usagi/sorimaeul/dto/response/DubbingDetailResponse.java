@@ -14,7 +14,6 @@ public class DubbingDetailResponse {
 
     private int dubCode;
     private String dubName;
-    private String storagePath;
     private String dubDetail;
     private String nickname;
     private String profileImage;
