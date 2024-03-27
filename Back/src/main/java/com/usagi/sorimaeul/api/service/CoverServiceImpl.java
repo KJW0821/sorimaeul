@@ -74,7 +74,10 @@ public class CoverServiceImpl implements CoverService {
 
         // 마이 페이지 - 나의 게시물 조회
         } else if (target.equals("mine")) {
-            covers = coverRepository.findByUser_userCode(userCode);
+            // keyword 가 null 이면 내 게시물 모두 조회
+            if (keyword == null) covers = coverRepository.findByUser_userCode(userCode);
+            // keyword 가 null 이 아니면 CoverName = keyword 인 내 게시물 조회
+            else covers = coverRepository.findByCoverNameContainingAndUser_UserCode(keyword, userCode);
             // page 가 null 이 아니면
             if (page != null) {
             // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
