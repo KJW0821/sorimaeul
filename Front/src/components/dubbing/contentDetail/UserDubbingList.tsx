@@ -3,6 +3,7 @@ import { getUserVideos } from "../../../utils/dubbingAPI";
 import { VideoData } from "./SoriAward";
 import UserDubbingCard from "./UserDubbingCard";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -17,14 +18,18 @@ const Container = styled.div`
 `
 
 function UserDubbingList() {
+  const params = useParams();
+  
   const [page, setPage] = useState(1);
   const [userVideoList, setUserVideoList] = useState<VideoData[]>([]);
   const [totalPage, setTotalPage] = useState(1);
 
   const getUserVideoList = async () => {
-    const res = await getUserVideos(page);
-    setUserVideoList(res.dubbings);
-    setTotalPage(res.totalPages);
+    if (params.sourceCode) {
+      const res = await getUserVideos(page, params.sourceCode);
+      setUserVideoList(res.dubbings);
+      setTotalPage(res.totalPages);
+    }
   }
 
   useEffect(() => {
