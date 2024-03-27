@@ -17,7 +17,7 @@ public interface DubbingService {
 
     ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(long userCode, int sourceCode);
 
-    ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page);
+    ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page, int videoSourceCode);
 
     ResponseEntity<DubbingDetailResponse> getDubbingDetail(long userCode, int dubCode);
 

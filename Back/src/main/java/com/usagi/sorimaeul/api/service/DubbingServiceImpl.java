@@ -57,7 +57,7 @@ public class DubbingServiceImpl implements DubbingService {
         int startIdx = 0;
         int endIdx = 0;
         // 총 페이지 수 선언
-        int totalPages = 0;
+        int totalPages = 1;
 
         // 인기 영상 조회
         if (target.equals("popular")) {
@@ -92,6 +92,9 @@ public class DubbingServiceImpl implements DubbingService {
             else {
                 endIdx = videoSources.size();
             }
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) videoSources.size() / 10);
+
             // 원본 영상 페이지네이션
             List<VideoSource> pageVideoSources = videoSources.subList(startIdx, endIdx);
             // 원본 영상 리스트 순회
@@ -108,8 +111,9 @@ public class DubbingServiceImpl implements DubbingService {
 
             // Response 생성
             VideoSourceListResponse videoSourceListResponse = VideoSourceListResponse.builder()
-                 .videoSources(customVideoSources)
-                 .build();
+                    .videoSources(customVideoSources)
+                    .totalPages(totalPages)
+                    .build();
 
             return ResponseEntity.ok(videoSourceListResponse);
         }
@@ -138,7 +142,7 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 영상 목록 조회
-    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page){
+    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page, int videoSourceCode){
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -156,9 +160,9 @@ public class DubbingServiceImpl implements DubbingService {
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회
-            if (keyword == null) dubbings = dubbingRepository.findByIsComplete(true);
+            if (keyword == null) dubbings = dubbingRepository.findByIsCompleteAndIsPublicAndVideoSource_videoSourceCode(true, true, videoSourceCode);
             // keyword 가 null 이 아니면 dubName = keyword 인 데이터 조회
-            else dubbings = dubbingRepository.findByDubNameAndIsComplete(keyword, true);
+            else dubbings = dubbingRepository.findByDubNameAndIsCompleteAndIsPublic(keyword, true, true);
             // 한 페이지 당 8개씩 조회
             startIdx = (page - 1) * 8;
             endIdx = Math.min(startIdx + 8, dubbings.size());

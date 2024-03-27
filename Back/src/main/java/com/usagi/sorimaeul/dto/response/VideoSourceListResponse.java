@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class VideoSourceListResponse {
     private List<VideoSourceInfoDto> videoSources;
+
+    private int totalPages;
     // AllArgsConstructor가 이 역할을 대신함
 //    public VideoSourceListResponse(List<VideoSource> videoSourceList) {
 //        this.videoSourceList = videoSourceList;
