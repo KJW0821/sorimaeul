@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Playlist from "./playlist/header/Playlist";
-import logoimage from '/src/assets/logo.png';
+import logoimage from '../../assets/logo.png';
 
 interface HeaderProps {
   $isMainPage: boolean;
@@ -17,19 +17,21 @@ const HeaderContainer = styled.div<HeaderProps>`
 `;
 
 interface LogoProps {
-  $logoimage: string;
   $isMainPage: boolean;
 }
 
-const LogoContainer = styled.div`
+const LogoContainer = styled.div<LogoProps>`
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-left: ${props => props.$isMainPage ? '0' : '150px'};
+  margin-top: ${props=> props.$isMainPage ? '-50px' : '0'};
 `;
 
 const Logo = styled.img<LogoProps>`
-  width: ${props => props.$isMainPage ? '800px' : '300px'}; // 메인 페이지 여부에 따른 너비 설정
-  height: auto; // 높이는 자동으로 조절
+  width: ${props => props.$isMainPage ? '550px' : '300px'}; 
+  height: auto; 
+
 `;
 
 
@@ -42,14 +44,14 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
         <>
           <Playlist />
           <Link to="/">
-            <Logo $logoimage={logoimage} $isMainPage={isMainPage}></Logo>
+            <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
           </Link>
         </>
       ) : (
         <>
-          <LogoContainer>
+          <LogoContainer $isMainPage={isMainPage}>
             <Link to="/">
-              <Logo $logoimage={logoimage} $isMainPage={isMainPage}></Logo>
+              <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
             </Link>
           </LogoContainer>
           <Playlist />
