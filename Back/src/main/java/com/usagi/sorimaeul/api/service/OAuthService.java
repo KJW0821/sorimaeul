@@ -162,18 +162,23 @@ public class OAuthService {
     public void logout(String accessToken, String refreshToken) {
         refreshTokenRepository.deleteById(refreshToken);
 
-        BlackList access = BlackList.builder()
-                .token(accessToken)
-                .expiration(jwtTokenProvider.getExpiration(accessToken))
-                .build();
+        if (jwtTokenProvider.validateToken(accessToken)) {
+            BlackList access = BlackList.builder()
+                    .token(accessToken)
+                    .expiration(jwtTokenProvider.getExpiration(accessToken))
+                    .build();
 
-        BlackList refresh = BlackList.builder()
-                .token(refreshToken)
-                .expiration(jwtTokenProvider.getExpiration(refreshToken))
-                .build();
+            blackListRepository.save(access);
+        }
 
-        blackListRepository.save(access);
-        blackListRepository.save(refresh);
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            BlackList refresh = BlackList.builder()
+                    .token(refreshToken)
+                    .expiration(jwtTokenProvider.getExpiration(refreshToken))
+                    .build();
+
+            blackListRepository.save(refresh);
+        }
     }
 
 }
