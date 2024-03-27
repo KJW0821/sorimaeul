@@ -13,7 +13,7 @@ import RequestCreatePage from './pages/inquiry/RequestCreatePage';
 import RequestDetailPage from './pages/inquiry/RequestDetailPage';
 import RequestEditPage from './pages/inquiry/RequestEditPage';
 import SideBar from './components/common/SideBar';
-import ModelCreatePage from './pages/voiceModel/ModelCreatePage'
+import ModelCreatePage from './pages/voiceModel/ModelCreatePage';
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
 import RecordingPage from './pages/voiceModel/RecordingPage';
 import CoverUpdatePage from './pages/aiCover/CoverUpdatePage';
@@ -27,7 +27,8 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DubbingListPage from './pages/dubbing/DubbingListPage';
 import DubbingDetailPage from './pages/dubbing/DubbingDetailPage';
-import GlobalModal from './components/common/GlobalModal'
+import GlobalModal from './components/common/GlobalModal';
+import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
 
 const Spacer = styled.div<{ $isOpen: boolean }>`
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -156,8 +157,17 @@ const router = createBrowserRouter([
               },
               {
                 path: ":sourceCode",
-                element: <DubbingDetailPage />
-              }
+                children: [
+                  {
+                    index: true,
+                    element: <DubbingDetailPage />
+                  },
+                  {
+                    path: ":dubCode",
+                    element: <UserDubbingDetailPage />
+                  }
+                ]
+              },
             ]
           }
         ]
