@@ -89,6 +89,13 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("음성 파일이 업로드되지 않았습니다.");
         }
 
+        // 확장자 검사
+        String originalFilename = recordingFile.getOriginalFilename();
+        String fileExtension = getFileExtension(originalFilename);
+        if (!isAllowedExtension(fileExtension, ALLOWED_EXTENSIONS_AUDIO)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("허용되지 않는 파일 형식입니다.");
+        }
+
 
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
@@ -142,15 +149,32 @@ public class ModelServiceImpl implements ModelService {
         // 폴더 경로 설정
         String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
 
+        // 허용되지 않는 확장자의 파일들을 저장할 리스트 생성
+        List<String> invalidFiles = new ArrayList<>();
+
         try {
             // 폴더 생성
             createFolder(folderPath);
 
             for (int i = 0; i < files.length; i++) {
+                String originalFilename = files[i].getOriginalFilename();
+                String fileExtension = getFileExtension(originalFilename);
+
+                // 확장자 검사
+                if (!isAllowedExtension(fileExtension, ALLOWED_EXTENSIONS_AUDIO)) {
+                    invalidFiles.add(originalFilename);
+                    continue; // 유효하지 않은 파일은 스킵하고 다음 파일 처리
+                }
                 // record_1.wav 형식으로 저장
                 String fileName = "record_" + (i + 1) + ".wav";
                 // 파일 저장
                 saveFile(folderPath + fileName, files[i].getBytes());
+            }
+
+            // 유효하지 않은 파일에 대한 처리
+            if (!invalidFiles.isEmpty()) {
+                String errorMessage = "다음 파일들은 허용되지 않는 확장자입니다: " + String.join(", ", invalidFiles);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
             }
 
             // state = 1 : '학습전'으로 DB 갱신
