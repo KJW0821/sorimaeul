@@ -16,9 +16,13 @@ import static com.usagi.sorimaeul.utils.Const.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static com.usagi.sorimaeul.utils.FileUtil.*;
@@ -229,12 +233,13 @@ public class ModelServiceImpl implements ModelService {
         }
 
         // GPU 서버에 모델 업로드 요청 보내기
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("files", modelFiles);
+        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("files", modelFiles);
         WebClient.create("http://222.107.238.124:7865")
                 .post()
                 .uri("/model/" + modelCode)
-                .bodyValue(requestBody)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(requestBody))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
