@@ -39,7 +39,7 @@ public class Dubbing {
 
     @Builder.Default
     @Column(name = "is_public")
-    private Boolean isPublic = false;
+    private boolean isPublic = false;
 
     @CreationTimestamp
     @Column(name = "created_time")
