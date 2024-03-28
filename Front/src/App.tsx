@@ -1,4 +1,4 @@
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Outlet, RouterProvider, createBrowserRouter, useLocation } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import './App.css';
 import LandingPage from './pages/home/LandingPage';
@@ -29,19 +29,27 @@ import DubbingListPage from './pages/dubbing/DubbingListPage';
 import DubbingDetailPage from './pages/dubbing/DubbingDetailPage';
 import GlobalModal from './components/common/GlobalModal';
 import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
+import Header from './components/common/Header';
 
 const Spacer = styled.div<{ $isOpen: boolean }>`
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
 `
 
 function Layout() {
+  const location = useLocation();
   const isOpen = useSelector((state: RootState) => state.common.isOpen);
+
+  // 헤더가 포함되지 않는 경로들
+  const noHeaderRoutes = ['/landing', '/login-callback/:provider', '/signup'];
+
+  const showHeader = !noHeaderRoutes.some(route => location.pathname.match(route));
 
   return (
     <div className="flex">
       <SideBar />
       <Spacer $isOpen={isOpen} />
       <div className="grow">
+        {showHeader && <Header />}
         <Outlet />
       </div>
     </div>
