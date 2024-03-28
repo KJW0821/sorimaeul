@@ -13,3 +13,9 @@ export const checkAlarm = (notifyCode: number) => {
     .then(res => res)
     .catch(err => console.error(err))
 };
+
+export const deleteAlarm = (notifyCode: number) => {
+  return API.delete(URL + `/${notifyCode}`)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
