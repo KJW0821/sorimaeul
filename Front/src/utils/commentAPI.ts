@@ -16,7 +16,7 @@ export const createCoverComment = (coverCode: string, data: CommentCreateInterfa
 // 커버 게시물 댓글 조회
 export const getCoverComment = (coverCode: string) => {
   return API.get(URL + `/cover/${coverCode}`)
-  .then(res => res.data)
+  .then(res => res.data.comments)
   .catch(err => console.error(err))
 }
 
@@ -30,7 +30,7 @@ export const createDubComment = (dubCode: string, data: CommentCreateInterface )
 // 더빙 게시물 댓글 조회
 export const getDubComment = (dubCode: string) => {
   return API.get(URL + `/dub/${dubCode}`)
-  .then(res => res.data)
+  .then(res => res.data.comments)
   .catch(err => console.error(err))
 }
 
