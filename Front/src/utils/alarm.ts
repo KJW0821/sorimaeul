@@ -7,3 +7,9 @@ export const getAlarmList = () => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const checkAlarm = (notifyCode: number) => {
+  return API.patch(URL + `/${notifyCode}`)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
