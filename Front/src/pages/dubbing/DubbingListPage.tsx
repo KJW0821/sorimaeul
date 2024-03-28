@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { getSourceVideoList } from "../../utils/dubbingAPI";
+import { getSourceVideoList, getPopularSourceVideoList } from "../../utils/dubbingAPI";
 import styled from "styled-components";
 import DubbingSourceCard from "../../components/dubbing/contentList/DubbingSourceCard";
+import Pagination from "../../components/common/Pagination";
+import HotDubbingSourceCard from "../../components/dubbing/contentList/HotDubbingSourceCard";
 
 const ColorBlock = styled.div`
   width: 100%;
@@ -31,9 +33,69 @@ const ContentList = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 
   & > div:last-child {
     margin-right: auto;
+  }
+`
+
+const HotContentsContainer = styled.div`
+  width: 100%;
+  height: 15.375rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    font-size: 2.5rem;
+    font-family: 'GmarketSansBold';
+    width: 80%;
+  }
+
+  .film {
+    background: black;
+    height: 11.875rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    .line {
+      display: flex;
+      height: 11%;
+      align-items: center;
+      overflow: hidden;
+      justify-content: space-between;
+      .hole {
+        width: calc(100% / 90);
+        min-width: calc(100% / 90);
+        height: 70%;
+        background: white;
+        border-radius: 3px;
+      }
+    }
+    .video-box {
+      width: 100%;
+      display: flex;
+      height: 78%;
+      align-items: center;
+      will-change: transform;
+      animation: loop 10s linear infinite;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  @keyframes loop{
+    from {
+      transform: translateX(0); 
+    }
+    to {
+      transform: translateX(-100%);
+    }
   }
 `
 
@@ -49,25 +111,64 @@ export interface VideoData {
 
 function DubbingListPage() {
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [videoList, setVideoList] = useState<VideoData[]>([]);
+  const [hotVideoList, setHotVideoList] = useState<VideoData[]>([]);
 
   const getSourceVideos = async () => {
     const res = await getSourceVideoList(page);
     setVideoList(res.videoSources);
-  }
+    setTotalPages(res.totalPages);
+  };
+
+  const getHotVideos = async () => {
+    const res = await getPopularSourceVideoList();
+    setHotVideoList(res.videoSources);
+  };
 
   useEffect(() => {
     getSourceVideos();
   }, [page])
 
+  useEffect(() => {
+    getHotVideos();
+  }, [])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   return (
     <>
       <ColorBlock>
         <div className="flex ml-32 items-end gap-4">  
-          <Title>더빙 학원</Title>
+          <Title>더빙 극장</Title>
           <p className="description">영상을 선택한 후, 직접 더빙해보세요!</p>
         </div>
       </ColorBlock>
+      <HotContentsContainer>
+        <h2 className="title">Hot Contents</h2>
+        <div className="film">
+          <div className="line">
+            {[...new Array(70)].map((_, idx) => (
+              <div key={idx} className="hole"></div>
+            ))}
+          </div>
+          <div className="video-box">
+            {
+              hotVideoList && 
+              [...hotVideoList, ...hotVideoList.slice(0, 2), ...hotVideoList, ...hotVideoList.slice(0, 2)].map((data, idx) => (
+                <HotDubbingSourceCard key={data.videoSourceCode + idx*100} data={data} />
+              ))
+            }
+          </div>
+          <div className="line">
+            {[...new Array(70)].map((_, idx) => (
+              <div key={idx} className="hole"></div>
+            ))}
+          </div>
+        </div>
+      </HotContentsContainer>
       <ContentList>
         {
           videoList &&
@@ -76,6 +177,7 @@ function DubbingListPage() {
           ))
         }
       </ContentList>
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#26BA28" />
     </>
   )
 }
