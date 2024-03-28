@@ -390,7 +390,7 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "/dub/source_" + request.getSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+        String folderPath = BASE_PATH + "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
 
         try {
             // 폴더 생성

@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-public class DubbingRecordRequest {
-    private int videoSourceCode;
+public class DubbingRecordRequestWrapper {
+    private DubbingRecordRequest request;
+    private MultipartFile recordFile;
 }
