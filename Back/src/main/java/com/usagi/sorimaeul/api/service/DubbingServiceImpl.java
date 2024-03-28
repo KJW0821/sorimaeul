@@ -436,6 +436,9 @@ public class DubbingServiceImpl implements DubbingService {
         // 변환된 파일을 저장할 폴더 경로 설정
         String folderPath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/converted/";
 
+        // 변환된 파일을 저장할 폴더 경로 설정
+        String folderPathUnconverted = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/unconverted/";
+
         // 로컬 파일 시스템에서 파일 가져오기
         byte[] fileToSend;
         Path path;
@@ -446,6 +449,8 @@ public class DubbingServiceImpl implements DubbingService {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 읽는 중 오류가 발생했습니다.");
         }
+        // 미변환 음성 파일 S3에 저장하기
+        s3Service.saveByteToS3(folderPathUnconverted + voiceIndex + ".wav", fileToSend);
 
         WebClient client = WebClient.create("http://222.107.238.124:7867");
 
@@ -458,9 +463,7 @@ public class DubbingServiceImpl implements DubbingService {
             }
         });
 
-//        // 변환된 파일을 저장할 폴더 경로 설정
-//        String folderPath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/converted/";
-//
+
 //        // S3 에서 파일 가져오기
 //        byte[] fileToSend = s3Service.downloadFile(request.getVoicePath());
 //

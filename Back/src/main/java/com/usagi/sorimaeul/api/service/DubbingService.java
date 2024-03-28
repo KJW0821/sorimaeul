@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface DubbingService {
-    ResponseEntity<DubbingCreateResponse> createDubbing(long userCode, DubbingCreateRequest dubCreateRequest);
+    ResponseEntity<DubbingCreateResponse> createDubbing(long userCode, DubbingCreateRequest request);
 
     ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, Integer page, String target);
 
