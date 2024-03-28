@@ -29,6 +29,7 @@ const Container = styled.div<{$isOpen: boolean}>`
   padding-top: 1.5rem;
   padding-bottom: 2.5rem;
   justify-content: space-between;
+  z-index: 999;
 
   .content {
     width: ${(props) => (props.$isOpen ? "85%" : "80%")};

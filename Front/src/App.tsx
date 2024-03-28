@@ -32,8 +32,9 @@ import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
 import Header from './components/common/Header';
 import { PersistGate } from 'redux-persist/integration/react';
 
-const Spacer = styled.div<{ $isOpen: boolean }>`
-  width: ${(props) => (props.$isOpen ? "314px" : "60px")};
+const Content = styled.div<{ $isOpen: boolean}>`
+  padding-left: ${(props) => (props.$isOpen ? "314px" : "60px")};
+  width: 100%;
 `
 
 function Layout() {
@@ -48,11 +49,10 @@ function Layout() {
   return (
     <div className="flex">
       <SideBar />
-      <Spacer $isOpen={isOpen} />
-      <div className="grow">
+      <Content $isOpen={isOpen}>
         {showHeader && <Header />}
         <Outlet />
-      </div>
+      </Content>
     </div>
   );
 }

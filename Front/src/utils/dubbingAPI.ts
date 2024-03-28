@@ -13,6 +13,16 @@ export const getSourceVideoList = (page: number) => {
     .catch(err => console.error(err))
 };
 
+export const getPopularSourceVideoList = () => {
+  return API.get(URL + '/video', {
+    params: {
+      target: 'popular'
+    }
+  })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
+
 export const getSourceVideo = (sourceCode: string) => {
   return API.get(URL + `/video/${sourceCode}`)
     .then(res => res.data)
