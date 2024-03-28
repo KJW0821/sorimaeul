@@ -1,10 +1,9 @@
 package com.usagi.sorimaeul.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usagi.sorimaeul.api.service.DubbingService;
-import com.usagi.sorimaeul.dto.request.DubbingCreateRequest;
-import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
-import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
-import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
+import com.usagi.sorimaeul.dto.request.*;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -127,20 +127,50 @@ public class DubbingController {
         return dubbingService.getVideoSourceVoice(userCode, sourceCode);
     }
 
-    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
-    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
+//    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
+//    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
+//    @PostMapping("/record/{num}")
+//    public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
+//                                                 @PathVariable int num,
+//                                                 @RequestBody DubbingRecordRequest request,
+//                                                 @RequestBody MultipartFile recordFile){
+//        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+//        return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
+//    }
+//    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
+//    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
+//    @PostMapping(value = "/record/{num}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
+//                                                 @PathVariable int num,
+//                                                 @ModelAttribute DubbingRecordRequestWrapper requestWrapper){
+//    MultipartFile recordFile = requestWrapper.getRecordFile();
+//    DubbingRecordRequest request = requestWrapper.getRequest();
+//    long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+//    return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
+//}
     @PostMapping("/record/{num}")
     public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
-                                                                     @PathVariable int num,
-                                                                     @RequestBody DubbingRecordRequest request,
-                                                 @RequestParam("file") MultipartFile recordFile){
-        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
+                                             @PathVariable int num,
+                                             @RequestParam("request") String requestJson,
+                                             @RequestParam("recordFile") MultipartFile recordFile) {
+    long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+
+    DubbingRecordRequest request;
+    try {
+        // JSON 문자열을 객체로 변환
+        request = new ObjectMapper().readValue(requestJson, DubbingRecordRequest.class);
+    } catch (JsonProcessingException e) {
+        // JSON 파싱 중 발생한 예외를 처리
+        e.printStackTrace();
+        return ResponseEntity.badRequest().body("JSON 파싱 오류: " + e.getMessage());
     }
+
+    return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
+}
 
     @Operation(summary = "더빙 음성 변환", description = "더빙 음성을 변환한다.")
     @ApiResponse(responseCode = "200", description = "더빙 음성 변환 성공")
-    @PostMapping("/convert/{num}")
+    @PostMapping("/convert/{voiceIndex}")
     public ResponseEntity<?> convertDubbingRecord(@RequestHeader("Authorization") String token,
                                                  @PathVariable int voiceIndex,
                                                  @RequestBody DubbingRecordConvertRequest request){
