@@ -88,6 +88,7 @@ const CategoryDescription = styled.p`
   `
 
 const Page3 = styled.div`
+  position: relative;
   height: 100vh;
   display: flex;
   background-color: #f4cfdf;
@@ -108,25 +109,22 @@ const CoverCategory = styled(CategoryBox)`
   z-index: 2;
 `;
 
-const BottomAlignedContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-end; 
+const MarqueeComponentStyled = styled.div`
+  position: absolute;
+  bottom: 0;
+  height: auto;
   width: 100%;
-  height: 100%; 
-  position: relative;
-  bottom: 0; 
 `;
 
+interface TextLineInterface {
+  $height?: number;
+  $margin?: number;
+}
 
-const TeamName = styled.p`
-font-family: GmarketSansBold;
-font-style: normal;
-font-weight: 700;
-font-size: 150px;
-line-height: 173px;
-margin-top: 10px;
-`;
+const TextLine = styled.div<TextLineInterface>`
+  height: ${(props) => (props.$height ? `${props.$height}px` : "1px")};
+  background-color: #000;
+`
 
 
 const HomePage: React.FC = () => {
@@ -220,9 +218,14 @@ const HomePage: React.FC = () => {
         </CategoryDescription>
         <BackgroundTape src={tape2} alt='Tape Image' $marginTop={125}/>
         </LeftAlignedContainer>
-        <BottomAlignedContainer>
-    <MarqueeComponent />
-      </BottomAlignedContainer>
+        <MarqueeComponentStyled>
+          <TextLine $height={5} className='my-3'/>
+          <TextLine />
+        <MarqueeComponent />
+        <TextLine className='my-3'/>
+        <TextLine $height={5} className='my-2'/>
+        </MarqueeComponentStyled>
+        
       </Page3>
     </Outer>
 
