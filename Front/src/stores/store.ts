@@ -24,7 +24,7 @@ export interface RootState {
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
-  whitelist: ['user', 'playlists', 'playlist', 'comment'] // 저장할 상태 넣기
+  whitelist: ['user', 'playlists', 'playlist', 'comment', 'common'] // 저장할 상태 넣기
 }
 
 // reducer 등록하는 곳
@@ -36,7 +36,7 @@ const rootReducer = combineReducers({
   playlists: playlistsSlice,
   playlist: playlistSlice,
   modal: modalSlice,
-  comment: commentSlice,
+  comment: commentSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
