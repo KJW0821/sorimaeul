@@ -231,7 +231,7 @@ public class DubbingServiceImpl implements DubbingService {
          else if (target.equals("popular")) {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
 //            dubbings = dubbingRepository.findByTop5OrderByLikeCountDESC();
-            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(true, true, videoSourceCode);
+            dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(videoSourceCode, true, true);
             startIdx = 0;
             endIdx = dubbings.size();
             // // 총 페이지 수 계산
