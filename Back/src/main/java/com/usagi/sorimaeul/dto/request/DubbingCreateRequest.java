@@ -3,15 +3,13 @@ package com.usagi.sorimaeul.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
 @Getter
 @Setter
-public class DubCreateRequest {
+public class DubbingCreateRequest {
 
-    private int sourceCode;
+    private int videoSourceCode;
 
     private String dubName;
 
-    private String[] voicePath;
+    private String[] voicePaths;
 }

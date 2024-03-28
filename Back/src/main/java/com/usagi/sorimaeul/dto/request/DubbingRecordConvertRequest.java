@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class DubbingRecordConvertRequest {
 
-    private int sourceCode;
+    private int videoSourceCode;
     private int modelCode;
-    private String recordPath;
+    private String voicePath;
     private int pitch;
 }
