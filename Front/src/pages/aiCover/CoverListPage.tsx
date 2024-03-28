@@ -1,12 +1,33 @@
 import { useEffect, useState } from "react";
 import { CoverListInterface } from "../../components/aiCover/CoverInterface";
 import { getCovers, getPopularCovers } from "../../utils/coverAPI";
+import styled from "styled-components";
 import CoverList from "../../components/aiCover/CoverList";
-import ColorLine from "../../components/aiCover/ColorLine";
 import PopularCoverList from "../../components/aiCover/PopularCoverList";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
 
+const ColorBlock = styled.div`
+  width: 100%;
+  height: 11rem;
+  background: linear-gradient(90deg, rgba(225, 165, 255, 0.5) 0%, rgba(229, 151, 249, 0.5) 12.97%, rgba(255, 55, 211, 0.5) 100%), #FDFF00;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .description {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+`
+
+const Title = styled.h1`
+  font-family: "ClimateCrisisKRVF";
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.5);
+  -webkit-text-stroke: 1px white;
+`
 
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,7 +56,12 @@ const CoverListPage: React.FC = () => {
 
   return (
     <>
-      <ColorLine />
+      <ColorBlock>
+      <div className="flex ml-32 items-end gap-4">  
+          <Title>AI 노래방</Title>
+          <p className="description">나만의 노래 커버를 만들어 보세요!</p>
+        </div>
+      </ColorBlock>
       <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
       <PopularCoverList data={popularDataList} />
       <CoverList data={dataList} />

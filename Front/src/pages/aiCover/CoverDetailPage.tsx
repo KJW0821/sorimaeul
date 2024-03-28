@@ -9,6 +9,7 @@ import { openModal } from "../../stores/modal";
 import CommentComponent from "../../components/common/Comment";
 import { createCoverComment, getCoverComment } from "../../utils/commentAPI";
 import { addComment, setCategory, setComments, setSelectedPostId } from "../../stores/comment";
+import ColorLine from "../../components/aiCover/ColorLine";
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ const CoverDetailPage: React.FC = () => {
 
   return (
     <>
+    <ColorLine />
       {data &&
         <div>
           <h2> 커버 제목(게시물) {data.coverName} </h2>
