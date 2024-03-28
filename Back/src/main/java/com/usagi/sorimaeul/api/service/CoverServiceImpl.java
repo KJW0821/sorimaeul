@@ -119,7 +119,7 @@ public class CoverServiceImpl implements CoverService {
         // 인기 게시글 조회
         } else if (target.equals("popular")) {
             // 커버 게시글 좋아요 순, 최신 순으로 5개 조회
-            covers = coverRepository.findTop5ByOrderByLikeCountDescCoverCodeDesc();
+            covers = coverRepository.findTop5ByIsCompleteAndIsPublicOrderByLikeCountDescCoverCodeDesc(true, true);
             // 인덱스 0 ~ covers.size() 로 정의
             endIdx = covers.size();
         }
