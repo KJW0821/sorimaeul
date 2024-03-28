@@ -1,7 +1,6 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.amazonaws.Response;
-import com.usagi.sorimaeul.dto.request.DubCreateRequest;
+import com.usagi.sorimaeul.dto.request.DubbingCreateRequest;
 import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
 import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
@@ -12,11 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface DubbingService {
-    HttpStatus createDub(long userCode, DubCreateRequest dubCreateRequest);
+    ResponseEntity<DubbingCreateResponse> createDubbing(long userCode, DubbingCreateRequest dubCreateRequest);
 
     ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, Integer page, String target);
 
-    ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(long userCode, int sourceCode);
+    ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(long userCode, int videoSourceCode);
 
     ResponseEntity<Resource> getSourceVideo(long userCode, int videoSourceCode);
 
@@ -30,9 +29,9 @@ public interface DubbingService {
 
     ResponseEntity<?> deleteDubbing(long userCode, int dubCode);
 
-    ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int sourceCode);
+    ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int videoSourceCode);
 
     ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
 
-//    ResponseEntity<?> convertDubbingRecord(long userCode, int num, DubbingRecordConvertRequest request);
+    ResponseEntity<?> convertDubbingRecord(long userCode, int voiceIndex, DubbingRecordConvertRequest request);
 }
