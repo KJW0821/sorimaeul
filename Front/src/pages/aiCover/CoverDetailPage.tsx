@@ -49,17 +49,6 @@ const CoverDetailPage: React.FC = () => {
     }
   }
 
-  const submitCommentHandler = async (content: string) => {
-    if (coverCode) {
-      const res = await createCoverComment(coverCode, { content });
-      console.log("댓글 등록 결과", res);
-      if (res?.status === 201) {
-        console.log("생성된 댓글", res);
-        dispatch(addComment(res.data));
-      };
-    }
-  };
-
   const openPlaylistAddModal = () => {
     dispatch(openModal({
       modalType: "playlistadd",

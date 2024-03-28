@@ -79,14 +79,6 @@ const CommentContent = styled.p`
   font-family: GmarketSansLight;
 `;
 
-interface Comment {
-  commentCode: string;
-  nickname: string;
-  profileImage: string;
-  content: string;
-  time: string;
-}
-
 
 
 const CommentComponent: React.FC = () => {
@@ -123,7 +115,6 @@ const CommentComponent: React.FC = () => {
       console.log("실패");
     }
 
-   
     setNewComment("");
   }
 
@@ -132,7 +123,7 @@ const CommentComponent: React.FC = () => {
     <CommentContainer>
       <TitleSection>
         <h2 className="title">댓글</h2>
-        <span className="text-orange-400 pt-2">{comments.length}개</span>
+        <span className="text-orange-400 pt-2">{comments?.length || 0}개</span>
       </TitleSection>
       <CommentInputSection>
         <img src={logginedUserImg} className="rounded-full w-10 h-10 mr-4 pl-2" alt="Current User ProfileImage" />
