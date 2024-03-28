@@ -32,7 +32,7 @@ function PlaylistCreateModal () {
   }
 
   const submitHandler = async () => {
-    const res = await createPlaylist(data)
+    const res = await createPlaylist(data);
     if (res?.status === 201) {
       console.log(res.data, "플레이리스트 생성 완료");
       dispatch(addPlaylist(res.data));

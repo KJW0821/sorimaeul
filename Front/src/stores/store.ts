@@ -6,6 +6,7 @@ import commonSlice, { CommonState } from "./common";
 import playlistsSlice, { PlaylistsState } from "./playlists";
 import playlistSlice, { PlaylistSongsState } from "./playlist";
 import modalSlice, { ModalState } from "./modal";
+import commentSlice, { CommentState } from "./comment";
 
 
 export interface RootState {
@@ -16,6 +17,7 @@ export interface RootState {
   playlists: PlaylistsState;
   playlist: PlaylistSongsState;
   modal: ModalState;
+  comment: CommentState;
 }
 
 const store = configureStore({
@@ -27,6 +29,7 @@ const store = configureStore({
     playlists: playlistsSlice,
     playlist: playlistSlice,
     modal: modalSlice,
+    comment: commentSlice,
   }
 })
 

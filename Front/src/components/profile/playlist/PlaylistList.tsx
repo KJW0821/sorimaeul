@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getPlaylists } from "../../../utils/playlistAPI";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { PlaylistCard } from "./PlaylistCard";
 import { setPlaylists, setTotalPages } from "../../../stores/playlists";
 import { RootState } from "../../../stores/store";
 import styled from 'styled-components';
-import { openModal } from "../../../stores/modal";
 
 
 const ListContainer = styled.div`
