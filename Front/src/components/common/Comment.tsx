@@ -1,10 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Button } from "./Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import deleteIcon from "../../assets/deleteIcon.png";
-import { deleteComment } from "../../utils/commentAPI";
+import { createCoverComment, createDubComment, deleteComment } from "../../utils/commentAPI";
+import { addComment, removeComment } from "../../stores/comment";
 
 const CommentContainer = styled.div`
   width: 75%;
@@ -86,32 +87,45 @@ interface Comment {
   time: string;
 }
 
-interface CommentProps {
-  comments: Comment[];
-  onCommentSubmit: (content: string) => Promise<void>; // 댓글 제출 함수, 비동기로 가정
-}
 
-const CommentComponent: React.FC<CommentProps> = ({ comments, onCommentSubmit }) => {
+
+const CommentComponent: React.FC = () => {
+  const dispatch = useDispatch();
   const [newComment, setNewComment] = useState('');
   const logginedUserImg = useSelector((state: RootState) => state.user.profileImage);
   const logginedUser = useSelector((state: RootState) => state.user.nickname);
+  const { category, selectedPostId, comments } = useSelector((state: RootState) => state.comment);
 
-  const handleDeleteComment = async (commentCode: string) => {
-    try {
-      const res = await deleteComment(commentCode);
-      console.log(res);
-    } catch (err) {
-      console.error("댓글 삭제 실패", err);
+  const deleteCommentFromPost = async (commentCode: string) => {
+    const res = await deleteComment(commentCode);
+    if (res === "댓글 삭제 성공!") {
+      dispatch(removeComment(commentCode));
     }
   }
 
-  const submitHandler = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newComment.trim()) return;
-    await onCommentSubmit(newComment);
-    setNewComment(''); // 댓글 제출 후 입력창 초기화
-  };
+  const handleComment = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNewComment(e.target.value);
+  }
 
+  const submitHandler =async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); 
+    const data = { content: newComment };
+    if (selectedPostId && category === "cover") {
+      const res = await createCoverComment(selectedPostId, data);
+      dispatch(addComment(res));
+    } else if (selectedPostId && category === "dub") {
+      const res = await createDubComment(selectedPostId, data);
+      dispatch(addComment(res));
+    }
+    else {
+      console.log("실패");
+    }
+
+   
+    setNewComment("");
+  }
 
 
   return (
@@ -126,7 +140,7 @@ const CommentComponent: React.FC<CommentProps> = ({ comments, onCommentSubmit })
           <InputBox
             type="text"
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={handleComment}
             placeholder="댓글을 입력하세요"
           />
           <Button type="submit" $width={5} $height={2.5} $marginTop={0} $marginLeft={0} disabled={!newComment}>등록</Button>
@@ -134,6 +148,7 @@ const CommentComponent: React.FC<CommentProps> = ({ comments, onCommentSubmit })
       </CommentInputSection>
       <Line $color="#FDA06C" />
       <CommentList>
+        
         {comments && comments.map(({ commentCode, nickname, profileImage, content, time }) => (
           <CommentItem key={commentCode}>
 
@@ -144,7 +159,7 @@ const CommentComponent: React.FC<CommentProps> = ({ comments, onCommentSubmit })
             </div>
             { logginedUser === nickname &&
              <button className="text-stone-400 flex items-center text-sm pb-3 pr-4"
-             onClick={() => handleDeleteComment(commentCode)}>
+             onClick={() => deleteCommentFromPost(commentCode)}>
               <span className="pb-0">삭제</span>
              <img src={deleteIcon} alt="Delete Icon" className="pb-1 ml-2"/>
              </button>

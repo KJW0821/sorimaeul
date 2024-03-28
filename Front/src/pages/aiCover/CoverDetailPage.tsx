@@ -8,13 +8,14 @@ import { RootState } from "../../stores/store";
 import { openModal } from "../../stores/modal";
 import CommentComponent from "../../components/common/Comment";
 import { createCoverComment, getCoverComment } from "../../utils/commentAPI";
+import { addComment, setCategory, setComments, setSelectedPostId } from "../../stores/comment";
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
-  const [comments, setComments] = useState([]);
+  const { category, selectedPostId, comments } = useSelector((state: RootState) => state.comment);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
 
@@ -24,26 +25,16 @@ const CoverDetailPage: React.FC = () => {
         if (coverCode) {
           const data = await getCover(coverCode);
           setData(data);
+          const commentData = await getCoverComment(coverCode);
+          dispatch(setCategory("cover"));
+          dispatch(setSelectedPostId(coverCode));
+          dispatch(setComments(commentData));
         }
       } catch (err) {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
     })();
-  }, [coverCode]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        if (coverCode) {
-          const commentData = await getCoverComment(coverCode);
-          console.log(commentData);
-          setComments(commentData);
-        } 
-      } catch (err) {
-        console.error("댓글 데이터를 가져오는데 실패했습니다.");
-      } 
-    }) ();
-  }, [coverCode]);
+  }, [coverCode, dispatch]);
 
 
 
@@ -61,13 +52,12 @@ const CoverDetailPage: React.FC = () => {
 
   const submitCommentHandler = async (content: string) => {
     if (coverCode) {
-      await createCoverComment(coverCode, { content });
-      getCoverComment(coverCode)
-        .then(data => {
-          setComments(data);
-          console.log(data);
-        })
-        .catch(err => console.error(err));
+      const res = await createCoverComment(coverCode, { content });
+      console.log("댓글 등록 결과", res);
+      if (res?.status === 201) {
+        console.log("생성된 댓글", res);
+        dispatch(addComment(res.data));
+      };
     }
   };
 
@@ -101,7 +91,7 @@ const CoverDetailPage: React.FC = () => {
 
       {data && data.nickname === loggedInUserNickname &&
         <Button onClick={handleDelete} $marginLeft={0} $marginTop={0}>삭제</Button>}
-      <CommentComponent comments={comments} onCommentSubmit={submitCommentHandler}></CommentComponent>
+      <CommentComponent ></CommentComponent>
     
     </>
   );
