@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Header from '../../components/common/Header';
 import styled from "styled-components";
 import { CategoryBox } from '../../components/home/HomeStyles';
 import goBtnImg from "../../assets/goBtn.png";
@@ -196,7 +195,6 @@ const HomePage: React.FC = () => {
   return (
 
     <Outer ref={outerDivRef}>
-      <Header />
       <Page1>
 
       </Page1>
