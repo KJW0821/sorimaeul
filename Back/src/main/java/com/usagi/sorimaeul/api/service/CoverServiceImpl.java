@@ -308,6 +308,8 @@ public class CoverServiceImpl implements CoverService {
             createFolder(folderPath);
             // 파일 생성
             saveFile(folderPath + fileName, file.getBytes());
+            Cover cover = coverRepository.findByCoverCode(coverCode);
+            cover.setComplete(true);
             return ResponseEntity.status(HttpStatus.CREATED).body("저장 성공!");
         } catch (IOException e) {
             e.printStackTrace();
