@@ -81,7 +81,7 @@ const HotContentsContainer = styled.div`
       height: 78%;
       align-items: center;
       will-change: transform;
-      animation: loop 10s linear infinite;
+      animation: loop 17s linear infinite;
     }
   }
 
