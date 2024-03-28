@@ -3,7 +3,7 @@ import MenuBar from "../../components/profile/MenuBar";
 import PlaylistBox from "../../components/profile/playlist/PlaylistBox";
 import { RootState } from "../../stores/store";
 import ColorLine from "../../components/profile/ColorLine";
-import Header from "../../components/common/Header";
+
 
 
 function ProfilePage() {
@@ -18,7 +18,6 @@ function ProfilePage() {
   
   return (
     <>
-    <Header />
     <ColorLine/>
     <MenuBar />
     {ComponentToShow && <ComponentToShow />}

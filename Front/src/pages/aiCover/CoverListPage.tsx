@@ -6,7 +6,7 @@ import ColorLine from "../../components/aiCover/ColorLine";
 import PopularCoverList from "../../components/aiCover/PopularCoverList";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
-import Header from "../../components/common/Header";
+
 
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ const CoverListPage: React.FC = () => {
 
   return (
     <>
-      <Header />
       <ColorLine />
       <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
       <PopularCoverList data={popularDataList} />
