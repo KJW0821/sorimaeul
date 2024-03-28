@@ -90,3 +90,17 @@ export const deleteCover = (coverCode: string) => {
     return err;
   })
 }
+
+// AI 커버 좋아요
+export const likeCover = (coverCode: string) => {
+  return API.get(`/like/cover/${coverCode}`)
+  .then(res => res)
+  .catch(err => err)
+}
+
+// AI 커버 좋아요 취소
+export const unlikeCover = (coverCode: string) => {
+  return API.delete(`/like/cover/${coverCode}`)
+  .then(res => res)
+  .catch(err => err)
+}
