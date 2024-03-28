@@ -29,6 +29,17 @@ const Title = styled.h1`
   -webkit-text-stroke: 1px white;
 `
 
+const Container = styled.div`
+  width: 80%;
+  margin: 0 auto; 
+`
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 2rem;
+`;
+
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
   const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
@@ -57,14 +68,20 @@ const CoverListPage: React.FC = () => {
   return (
     <>
       <ColorBlock>
-      <div className="flex ml-32 items-end gap-4">  
+        <div className="flex ml-32 items-end gap-4">
           <Title>AI 노래방</Title>
           <p className="description">나만의 노래 커버를 만들어 보세요!</p>
         </div>
       </ColorBlock>
-      <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
-      <PopularCoverList data={popularDataList} />
-      <CoverList data={dataList} />
+      <Container>
+        <ButtonContainer>
+          <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
+        </ButtonContainer>
+
+        <PopularCoverList data={popularDataList} />
+
+        <CoverList data={dataList} />
+      </Container>
     </>
   );
 };

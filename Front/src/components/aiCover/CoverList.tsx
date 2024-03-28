@@ -9,7 +9,7 @@ const CoverList: React.FC<Props> = ({
 }) => {
   return (
     <>
-      {data.covers.map((cover) => (
+      {data.covers?.map((cover) => (
         <CoverCard key={cover.coverCode} cover={cover}/>
       ))}
     </>

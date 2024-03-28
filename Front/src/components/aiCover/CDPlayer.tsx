@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Cover } from "./CoverInterface";
 import { useNavigate } from "react-router";
+import heart from "../../assets/heart.png";
 
 const CDContainer = styled.div`
   border: 2px solid #ccc;
@@ -53,18 +54,20 @@ const LikeSection = styled.div`
 `;
 
 const LikeImage = styled.img`
-  width: 24px; // 좋아요 이미지 크기
+  width: 24px; 
   height: 24px;
-  margin-right: 5px; // 좋아요 수와의 간격
+  margin-right: 5px; 
 `;
 
 const LikeCount = styled.p`
-  font-size: 0.875rem; // 글자 크기 설정
+  font-size: 0.875rem; 
+  margin-top: 4px;
 `;
 
 const SongInfo = styled.p`
-  font-size: 0.75rem; // 글자 크기 설정
-  color: #575757;
+  font-size: 0.7rem; 
+  font-family: 
+  color: #A3A3A3;
 `;
 
 interface Props {
@@ -92,7 +95,7 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
         <ProfileImage src="/path/to/profile/image.jpg" alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
         <Nickname>{nickname}</Nickname>
         <LikeSection>
-          <LikeImage src="/path/to/like/icon.jpg" alt="Like" /> {/* 좋아요 이미지 경로 수정 필요 */}
+          <LikeImage src={heart} alt="Like" /> 
           <LikeCount>{likeCount}</LikeCount>
         </LikeSection>
       </ProfileSection>

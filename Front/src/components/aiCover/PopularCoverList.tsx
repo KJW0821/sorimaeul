@@ -5,13 +5,14 @@ import { CoverListInterface } from "./CoverInterface";
 const ListContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap; // 여기를 수정하세요
-  overflow-x: auto; // 필요한 경우 스크롤바 추가
+  flex-wrap: nowrap; 
+  overflow-x: auto; 
+  justify-content: center; 
+  width: 100%; 
+  padding: 20px 0; 
+  gap: 20px;
 `;
 
-const ListItem = styled.div`
-  margin-right: 10px; // 각 아이템 간의 간격 조정
-`;
 
 interface Props {
   data: CoverListInterface['data'];
@@ -21,7 +22,7 @@ const CoverList: React.FC<Props> = ({
 }) => {
   return (
 <ListContainer>
-      {data.covers.map((cover) => (
+      {data.covers?.map((cover) => (
         <div key={cover.coverCode} className="mr-2"> 
           <CDPlayer cover={cover}/>
         </div>
