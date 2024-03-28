@@ -5,7 +5,7 @@ import LandingPage from './pages/home/LandingPage';
 import HomePage from './pages/home/HomePage';
 import LoginCallbackPage from './pages/user/LoginCallbackPage';
 import { Provider } from "react-redux";
-import store, { RootState } from "./stores/store";
+import { store, RootState, persistor } from "./stores/store";
 import SignUpPage from "./pages/user/SignUpPage";
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
@@ -30,6 +30,7 @@ import DubbingDetailPage from './pages/dubbing/DubbingDetailPage';
 import GlobalModal from './components/common/GlobalModal';
 import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
 import Header from './components/common/Header';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Spacer = styled.div<{ $isOpen: boolean }>`
   width: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -190,10 +191,12 @@ function App() {
 
   return (
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <CookiesProvider>
         <GlobalModal />
         <RouterProvider router={router} />
       </CookiesProvider>
+      </PersistGate>
     </Provider>
   )
 }
