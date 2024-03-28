@@ -51,7 +51,7 @@ const IntroText = styled.div`
 font-family: 'ClimateCrisisKRVF';
 color: #FFFFFF;
   font-size: 70px; 
-  margin-bottom: 30px; 
+  margin-bottom: 45px; 
   text-align: center; 
   max-width: 80%; 
   display: flex; 
@@ -136,7 +136,7 @@ const LandingPage: React.FC = () => {
           <span> 세상에 없던 <Highlight2>콘텐츠</Highlight2>를</span>
           <span> <Highlight3>만들어</Highlight3>보세요 .</span>
         </IntroText>
-        <WelcomeText>소셜 로그인으로 시작하기</WelcomeText>
+        {/* <WelcomeText>소셜 로그인으로 시작하기</WelcomeText> */}
         <KakaoLoginBtn onClick={() => handleSocialLogin('kakao')} />
         <GoogleLoginBtn onClick={() => handleSocialLogin('google')} />
 
