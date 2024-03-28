@@ -31,6 +31,7 @@ import GlobalModal from './components/common/GlobalModal';
 import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
 import Header from './components/common/Header';
 import { PersistGate } from 'redux-persist/integration/react';
+import AlarmModal from './components/common/AlarmModal';
 
 const Content = styled.div<{ $isOpen: boolean}>`
   padding-left: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -49,6 +50,7 @@ function Layout() {
   return (
     <div className="flex">
       <SideBar />
+      <AlarmModal />
       <Content $isOpen={isOpen}>
         {showHeader && <Header />}
         <Outlet />
