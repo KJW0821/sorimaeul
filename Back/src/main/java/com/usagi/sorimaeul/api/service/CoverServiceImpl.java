@@ -1,9 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.CoverInfoDto;
-import com.usagi.sorimaeul.dto.dto.CoverRequestDto;
 import com.usagi.sorimaeul.dto.dto.CoverSourceInfoDto;
-import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
@@ -19,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
+
 
 import static com.usagi.sorimaeul.utils.Const.*;
 import static com.usagi.sorimaeul.utils.FileUtil.*;
@@ -241,7 +240,7 @@ public class CoverServiceImpl implements CoverService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-        String folderPath = BASE_PATH + "/cover/";
+        String folderPath = EC2_BASE_PATH + "/cover/";
         String fileName = "cover_" + coverCode + ".mp3";
         cover.setStoragePath(folderPath + fileName);
         CoverCreateResponse response = CoverCreateResponse.builder()
@@ -303,7 +302,7 @@ public class CoverServiceImpl implements CoverService {
     // 생성된 AI 커버 저장
     public ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file)  {
         try {
-            String folderPath = BASE_PATH + "/cover/";
+            String folderPath = EC2_BASE_PATH + "/cover/";
             String fileName = "cover_" + coverCode + ".mp3";
             // 폴더 생성
             createFolder(folderPath);

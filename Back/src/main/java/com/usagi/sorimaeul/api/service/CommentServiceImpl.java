@@ -142,8 +142,16 @@ public class CommentServiceImpl implements CommentService {
                 .content(request.getContent())
                 .build();
         commentRepository.save(comment);
+
+        CommentInfoDto response = CommentInfoDto.builder()
+                .commentCode(comment.getCommentCode())
+                .content(comment.getContent())
+                .nickname(comment.getUser().getNickname())
+                .profileImage(comment.getUser().getProfileImage())
+                .time(formatElapsedTime(comment.getCreatedTime()))
+                .build();
         
-        return ResponseEntity.status(HttpStatus.CREATED).body("댓글 생성 성공!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
@@ -170,7 +178,15 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("댓글 생성 성공!");
+        CommentInfoDto response = CommentInfoDto.builder()
+                .commentCode(comment.getCommentCode())
+                .content(comment.getContent())
+                .nickname(comment.getUser().getNickname())
+                .profileImage(comment.getUser().getProfileImage())
+                .time(formatElapsedTime(comment.getCreatedTime()))
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
@@ -218,9 +234,5 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    public static void main(String[] args) {
-        LocalDateTime commentTime = LocalDateTime.of(2024, 2, 1, 12, 30);
-        System.out.println(formatElapsedTime(commentTime)); // 예시 시간을 넣어서 출력해봅니다.
-    }
 
 }
