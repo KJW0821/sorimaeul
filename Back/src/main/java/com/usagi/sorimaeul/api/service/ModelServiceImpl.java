@@ -25,7 +25,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static com.usagi.sorimaeul.utils.FileUtil.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +99,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
+        String folderPath = EC2_BASE_PATH + "/model_" + modelCode + "/record/";
 
         try {
             // 폴더 생성
@@ -149,7 +148,7 @@ public class ModelServiceImpl implements ModelService {
 
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
+        String folderPath = EC2_BASE_PATH + "/model_" + modelCode + "/record/";
 
         // 허용되지 않는 확장자의 파일들을 저장할 리스트 생성
         List<String> invalidFiles = new ArrayList<>();
@@ -266,7 +265,7 @@ public class ModelServiceImpl implements ModelService {
             return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // GPU 서버에 음성 파일 업로드
-        String folderPath = BASE_PATH + "/model_" + modelCode + "/record/";
+        String folderPath = EC2_BASE_PATH + "/model_" + modelCode + "/record/";
         List<MultipartFile> multipartFiles = createMultipartFilesWithAllowedExtensions(folderPath, ALLOWED_EXTENSIONS_AUDIO);
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         for (int i = 0; i < multipartFiles.size(); i++) {
