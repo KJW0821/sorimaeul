@@ -26,7 +26,7 @@ public class DubbingController {
     private final JwtTokenProvider jwtTokenProvider;
     private final DubbingService dubbingService;
 
-    @Operation(summary = "더빙 양싱 제작", description = "더빙 영상을 제작한다")
+    @Operation(summary = "더빙 영상 제작", description = "더빙 영상을 제작한다")
     @ApiResponse(responseCode = "201", description = "더빙 영상 제작 성공")
     @PostMapping("/create")
     public ResponseEntity<DubbingCreateResponse> createDubbing(@RequestHeader("Authorization") String token, DubbingCreateRequest request){
@@ -35,6 +35,14 @@ public class DubbingController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 
         return dubbingService.createDubbing(userCode, request);
+    }
+
+    @Operation(summary = "더빙 영상 저장", description = "더빙 영상을 S3 서버에 저장한다")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 저장 성공")
+    @PostMapping("/save")
+    public ResponseEntity<?> saveDubbing(DubbingSaveRequest request){
+        // 유저 코드 받아오기
+        return dubbingService.saveDubbing(request);
     }
 
     @Operation(summary = "더빙 원본 영상 목록 조회", description = "더빙 원본 영상 목록 조회한다.")

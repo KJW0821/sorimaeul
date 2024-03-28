@@ -1,9 +1,6 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.usagi.sorimaeul.dto.request.DubbingCreateRequest;
-import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
-import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
-import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
+import com.usagi.sorimaeul.dto.request.*;
 import com.usagi.sorimaeul.dto.response.*;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -12,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface DubbingService {
     ResponseEntity<DubbingCreateResponse> createDubbing(long userCode, DubbingCreateRequest request);
+
+    ResponseEntity<?> saveDubbing(DubbingSaveRequest request);
 
     ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, Integer page, String target);
 

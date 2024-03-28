@@ -3,13 +3,11 @@ package com.usagi.sorimaeul.api.service;
 import com.usagi.sorimaeul.dto.dto.DubbingInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
 import com.usagi.sorimaeul.dto.dto.VideoSourceVoiceInfoDto;
-import com.usagi.sorimaeul.dto.request.DubbingCreateRequest;
-import com.usagi.sorimaeul.dto.request.DubbingBoardRequest;
-import com.usagi.sorimaeul.dto.request.DubbingRecordConvertRequest;
-import com.usagi.sorimaeul.dto.request.DubbingRecordRequest;
+import com.usagi.sorimaeul.dto.request.*;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
@@ -520,7 +518,7 @@ public class DubbingServiceImpl implements DubbingService {
                 .bodyToMono(DubbingRecordConvertResponse.class); // 변환된 파일의 바이트 배열을 포함하는 응답 타입으로 매핑
     }
 
-
+    // 더빙 영상 제작
     public ResponseEntity<DubbingCreateResponse> createDubbing (long userCode, DubbingCreateRequest request){
         User user = userRepository.getUser(userCode);
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode());
@@ -533,6 +531,27 @@ public class DubbingServiceImpl implements DubbingService {
 
         dubbingRepository.save(dubbing);
 
+        // 더빙 영상 제작 요청 보내기 Python 서버로
+        WebClient client = WebClient.create("https://j10e201.p.ssafy.io");
+
+        DubbingCreateRequestToPythonServer requestBody = DubbingCreateRequestToPythonServer.builder()
+                .userCode(userCode)
+                .dubCode(dubbing.getDubCode())
+                .dubName(dubbing.getDubName())
+                .videoURL(videoSource.getStoragePath())
+                .voiceURL(request.getVoicePaths())
+                .build();
+
+        Mono<String> responseClient = client.post()
+                .uri("/create-dubbing")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(requestBody), RequestBody.class)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        // Python 서버 응답
+        responseClient.block();
+
         DubbingCreateResponse response = DubbingCreateResponse.builder()
                 .dubCode(dubbing.getDubCode())
                 .storagePath(dubbing.getStoragePath())
@@ -541,6 +560,25 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.ok(response);
     }
 
+    // 더빙 영상 저장
+    public ResponseEntity<?> saveDubbing(DubbingSaveRequest request){
+
+        // 로컬 파일 시스템에서 파일 가져오기
+        byte[] fileToSend;
+        Path path;
+        try {
+            path = Paths.get(BASE_PATH + "/" + request.getPath()); // 로컬 파일 경로
+            fileToSend = Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 읽는 중 오류가 발생했습니다.");
+        }
+
+        // 미변환 음성 파일 S3에 저장하기
+        s3Service.saveByteToS3(BASE_PATH + "/" + request.getPath(), fileToSend);
+
+        return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
+    }
 
     // 리스트 뒤집기
     public void reverseList(List<Dubbing> list) {
