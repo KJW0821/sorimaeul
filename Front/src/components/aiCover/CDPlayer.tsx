@@ -5,42 +5,102 @@ import { useNavigate } from "react-router";
 const CDContainer = styled.div`
   border: 2px solid #ccc;
   padding: 20px;
-  width: 213px;
+  width: 15rem;
   height: 350px;
-  
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  cursor: pointer;
+`;
+
+const StyledImage = styled.img`
+  border-radius: 50%;
+  width: 14rem;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 10px; // 커버 제목과의 간격
+`;
+
+const CoverTitle = styled.p`
+  font-size: 1.3rem; // 글자 크기 설정
+  margin-bottom: 5px; // 프로필 이미지와의 간격
+`;
+
+const ProfileSection = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 5px; // 다음 내용과의 간격
+`;
+
+const ProfileImage = styled.img`
+  border-radius: 50%;
+  width: 30px; // 프로필 이미지 크기
+  height: 30px;
+  object-fit: cover;
+`;
+
+const Nickname = styled.p`
+  flex-grow: 1;
+  margin-left: 10px;
+  font-size: 0.875rem; 
+  color: #575757;
+`;
+
+const LikeSection = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const LikeImage = styled.img`
+  width: 24px; // 좋아요 이미지 크기
+  height: 24px;
+  margin-right: 5px; // 좋아요 수와의 간격
+`;
+
+const LikeCount = styled.p`
+  font-size: 0.875rem; // 글자 크기 설정
+`;
+
+const SongInfo = styled.p`
+  font-size: 0.75rem; // 글자 크기 설정
+  color: #575757;
 `;
 
 interface Props {
   cover: Cover;
 }
 
-const StyledImage = styled.img`
-  border-radius: 50%;
-  width: 200px; 
-  height: 200px; 
-  object-fit: cover; 
-`;
-
-const CDPlayer: React.FC<Props> = ({
-  cover
-}) => {
-  const { coverCode, coverName, thumbnailPath, nickname, likeCount, coverSinger, singer, title } = cover;
+const CDPlayer: React.FC<Props> = ({ cover }) => {
+  const {
+    coverCode,
+    coverName,
+    thumbnailPath,
+    nickname,
+    likeCount,
+    coverSinger,
+    singer,
+    title,
+  } = cover;
   const navigate = useNavigate();
 
   return (
     <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
       <StyledImage src={thumbnailPath} alt={title} />
-      <p>커버 제목: {coverName}</p>
-      <p>{singer} - {title} ({coverSinger})</p>
-
-      <p>업로드한 사용자: {nickname}</p>
-      <p>좋아요 수: {likeCount}</p>
+      <CoverTitle>{coverName}</CoverTitle>
+      <ProfileSection>
+        <ProfileImage src="/path/to/profile/image.jpg" alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
+        <Nickname>{nickname}</Nickname>
+        <LikeSection>
+          <LikeImage src="/path/to/like/icon.jpg" alt="Like" /> {/* 좋아요 이미지 경로 수정 필요 */}
+          <LikeCount>{likeCount}</LikeCount>
+        </LikeSection>
+      </ProfileSection>
+      <SongInfo>
+        {singer} - {title} ({coverSinger})
+      </SongInfo>
     </CDContainer>
   );
-}
+};
 
 export default CDPlayer;
