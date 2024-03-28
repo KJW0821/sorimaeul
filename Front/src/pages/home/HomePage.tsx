@@ -5,7 +5,12 @@ import goBtnImg from "../../assets/goBtn.png";
 import { useNavigate } from 'react-router-dom';
 import tape from "../../assets/tape.png";
 import tape2 from "../../assets/tape2.png";
+import album1 from "../../assets/album1.jpg";
+import album2 from "../../assets/album2.jpg";
+import album3 from "../../assets/album3.jpg";
+import album4 from "../../assets/album4.jpg";
 import MarqueeComponent from '../../components/home/MarqueeComponent';
+import DubbingContents from '../../components/home/DubbingContents';
 
 
 
@@ -57,8 +62,8 @@ const Line = styled.div`
 
 const BackgroundTape = styled.img<MarginProps>`
   position: absolute;
-  margin-top: ${(props) => props.$marginTop? `${props.$marginTop}px` : '75px'};
-  margin-right: ${(props) => props.$marginRight? `${props.$marginRight}px` : '100px'};
+  margin-top: ${(props) => props.$marginTop ? `${props.$marginTop}px` : '75px'};
+  margin-right: ${(props) => props.$marginRight ? `${props.$marginRight}px` : '100px'};
   width:'435px';
   height:'auto';
 `;
@@ -78,11 +83,19 @@ const DubbingCategory = styled(CategoryBox)`
   z-index: 2;
 `;
 
+const DubbingContentsWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 20px;
+`;
+
 const CategoryDescription = styled.p`
   position: absolute;
   margin-top: 125px;
   margin-left: 500px;
   font-size: 35px;
+  width: 600px;
   line-height: 63px;
   font-family: GmarketSansLight;
   `
@@ -107,6 +120,24 @@ const CoverCategory = styled(CategoryBox)`
   margin-top: 90px; 
   margin-right: 300px;
   z-index: 2;
+`;
+
+const ImagesContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;
+
+interface ImageInterface {
+  $rotation: string;
+}
+
+const StyledImage = styled.img<ImageInterface>`
+  width: 450px; 
+  height: auto; 
+  border-radius: 10px;
+  transform: rotate(${(props) => props.$rotation || '0deg'});
 `;
 
 const MarqueeComponentStyled = styled.div`
@@ -197,35 +228,43 @@ const HomePage: React.FC = () => {
 
       </Page1>
       <Page2>
-      <RightAlignedContainer>
-        
-    <DubbingCategory onClick={()=>navigate("/dubbing")}>
-      더빙 극장
-      <GoBtnImg src={goBtnImg} alt='Button Image'/>
-    </DubbingCategory>
-    <Line />
-    <BackgroundTape src={tape} alt='Tape Image'/>
-  </RightAlignedContainer>
+        <RightAlignedContainer>
+          <DubbingCategory onClick={() => navigate("/dubbing")}>
+            더빙 극장
+            <GoBtnImg src={goBtnImg} alt='Button Image' />
+          </DubbingCategory>
+          <DubbingContentsWrapper>
+            <DubbingContents />
+          </DubbingContentsWrapper>
+          <Line />
+          <BackgroundTape src={tape} alt='Tape Image' />
+        </RightAlignedContainer>
       </Page2>
       <Page3>
         <LeftAlignedContainer>
-        <CoverCategory onClick={()=>navigate("/cover")}>
-           AI 노래방
-          <GoBtnImg src={goBtnImg} alt='Button Image'/>
-        </CoverCategory>
-        <CategoryDescription>
-          나만의 AI 커버 송을 만들어 보세요!
-        </CategoryDescription>
-        <BackgroundTape src={tape2} alt='Tape Image' $marginTop={125}/>
+          <CoverCategory onClick={() => navigate("/cover")}>
+            AI 노래방
+            <GoBtnImg src={goBtnImg} alt='Button Image' />
+          </CoverCategory>
+          <CategoryDescription>
+            나만의 AI 커버 송을 만들어 보세요!
+          </CategoryDescription>
+          <BackgroundTape src={tape2} alt='Tape Image' $marginTop={125} />
         </LeftAlignedContainer>
+        <ImagesContainer>
+          <StyledImage $rotation="-7.7deg" src={album1} alt='AI Cover image1'/>
+          <StyledImage $rotation="4.74deg" src={album2} alt='AI Cover image2'/>
+          <StyledImage $rotation="-8.2deg" src={album3} alt='AI Cover image3'/>
+          <StyledImage $rotation="11.5deg" src={album4} alt='AI Cover image4'/>
+        </ImagesContainer>
         <MarqueeComponentStyled>
-          <TextLine $height={5} className='my-3'/>
+          <TextLine $height={5} className='my-3' />
           <TextLine />
-        <MarqueeComponent />
-        <TextLine className='my-3'/>
-        <TextLine $height={5} className='my-2'/>
+          <MarqueeComponent />
+          <TextLine className='my-3' />
+          <TextLine $height={5} className='my-2' />
         </MarqueeComponentStyled>
-        
+
       </Page3>
     </Outer>
 
