@@ -15,7 +15,6 @@ const CoverDetailPage: React.FC = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
-  const { category, selectedPostId, comments } = useSelector((state: RootState) => state.comment);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
 
