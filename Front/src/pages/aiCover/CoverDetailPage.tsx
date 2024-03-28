@@ -4,15 +4,17 @@ import { deleteCover, getCover } from "../../utils/coverAPI";
 import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
 import { Button } from "../../components/common/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { UserState } from "../../stores/user";
 import { RootState } from "../../stores/store";
 import { openModal } from "../../stores/modal";
+import CommentComponent from "../../components/common/Comment";
+import { createCoverComment, getCoverComment } from "../../utils/commentAPI";
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
+  const [comments, setComments] = useState([]);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
 
@@ -23,12 +25,27 @@ const CoverDetailPage: React.FC = () => {
           const data = await getCover(coverCode);
           setData(data);
         }
-
       } catch (err) {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
     })();
   }, [coverCode]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (coverCode) {
+          const commentData = await getCoverComment(coverCode);
+          console.log(commentData);
+          setComments(commentData);
+        } 
+      } catch (err) {
+        console.error("댓글 데이터를 가져오는데 실패했습니다.");
+      } 
+    }) ();
+  }, [coverCode]);
+
+
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement> ) => {
     e.preventDefault();
@@ -41,6 +58,18 @@ const CoverDetailPage: React.FC = () => {
       console.log(err);
     }
   }
+
+  const submitCommentHandler = async (content: string) => {
+    if (coverCode) {
+      await createCoverComment(coverCode, { content });
+      getCoverComment(coverCode)
+        .then(data => {
+          setComments(data);
+          console.log(data);
+        })
+        .catch(err => console.error(err));
+    }
+  };
 
   const openPlaylistAddModal = () => {
     dispatch(openModal({
@@ -72,6 +101,8 @@ const CoverDetailPage: React.FC = () => {
 
       {data && data.nickname === loggedInUserNickname &&
         <Button onClick={handleDelete} $marginLeft={0} $marginTop={0}>삭제</Button>}
+      <CommentComponent comments={comments} onCommentSubmit={submitCommentHandler}></CommentComponent>
+    
     </>
   );
 };
