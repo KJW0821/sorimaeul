@@ -18,3 +18,9 @@ export const getRequests = (page: number) => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const getRequestDetail = (boardCode: string) => {
+  return API.get(URL + `/${boardCode}`)
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
