@@ -250,9 +250,7 @@ public class CoverServiceImpl implements CoverService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-        String folderPath = EC2_BASE_PATH + "/cover/";
-        String fileName = "cover_" + coverCode + ".mp3";
-        cover.setStoragePath(folderPath + fileName);
+
         CoverCreateResponse response = CoverCreateResponse.builder()
                 .coverCode(coverCode)
                 .build();
