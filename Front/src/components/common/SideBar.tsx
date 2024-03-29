@@ -93,6 +93,7 @@ function SideBar() {
           headers: {
             Authorization: getCookie('accessToken')
           },
+          heartbeatTimeout: 1500000,
           withCredentials: true,
         }
       );
@@ -105,6 +106,10 @@ function SideBar() {
         console.log('메시지 왔다', e.data);
         dispatch(increaseUnreadMsgCnt());
       };
+
+      eventSource.addEventListener("message", (e) => {
+        console.log(JSON.parse(e.data));
+      })
   
       eventSource.onerror = (e: any) => {
         if (!e.error.message.includes("No activity")) {
