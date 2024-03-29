@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { VideoData } from "../../../pages/dubbing/DubbingListPage";
 import { useNavigate } from "react-router-dom";
+import { s3URL } from "../../../utils/s3";
 
 const Container = styled.div`
   width: 19%;
@@ -40,7 +41,7 @@ const DubbingSourceCard: React.FC<{data: VideoData}> = ({data}) => {
   return (
     <Container onClick={() => navigate(`/dubbing/${data.videoSourceCode}`)}>
       <div className="img-box">
-        <img className="img" src={data.thumbnailPath} alt="thumbnail" />
+        <img className="img" src={s3URL + `/${data.thumbnailPath}`} alt="thumbnail" />
       </div>
       <p className="title">{data.sourceName}</p>
     </Container>
