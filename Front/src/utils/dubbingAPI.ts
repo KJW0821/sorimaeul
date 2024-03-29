@@ -58,3 +58,9 @@ export const getUserVideo = (dubCode: string) => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const getOriginVoices = (sourceCode: string) => {
+  return API.get(URL + `/audio/${sourceCode}`)
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
