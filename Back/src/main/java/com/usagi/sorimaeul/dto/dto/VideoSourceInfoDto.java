@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VideoSourceInfoDto {
 
-    private int videoSourceCode;
+
     private String sourceName;
     private String thumbnailPath;
     private String videoPlaytime;

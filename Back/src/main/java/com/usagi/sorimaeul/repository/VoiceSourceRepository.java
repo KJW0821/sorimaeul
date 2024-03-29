@@ -11,6 +11,7 @@ public interface VoiceSourceRepository extends JpaRepository<VoiceSource, Intege
 
     List<VoiceSource> findByVideoSource_VideoSourceCodeAndVoiceModelIsNull(int videoSourceCode);
 
+    List<VoiceSource> findByVideoSource_videoSourceCode(int videoSourceCode);
     VoiceSource findByVideoSourceIsNullAndVoiceModelIsNull();
 
 }

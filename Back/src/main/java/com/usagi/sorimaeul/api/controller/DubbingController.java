@@ -128,11 +128,11 @@ public class DubbingController {
 
     @Operation(summary = "더빙 영상 분리된 음성 조회", description = "더빙 영상 분리된 음성을 조회한다.")
     @ApiResponse(responseCode = "200", description = "더빙 영상 분리된 음성 조회 성공")
-    @GetMapping("/audio/{sourceCode}")
+    @GetMapping("/audio/{videoSourceCode}")
     public ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(@RequestHeader("Authorization") String token,
-                                                                        @PathVariable int sourceCode) {
+                                                                        @PathVariable int videoSourceCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return dubbingService.getVideoSourceVoice(userCode, sourceCode);
+        return dubbingService.getVideoSourceVoice(userCode, videoSourceCode);
     }
 
 

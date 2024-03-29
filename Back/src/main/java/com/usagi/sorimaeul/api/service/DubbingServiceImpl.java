@@ -360,7 +360,7 @@ public class DubbingServiceImpl implements DubbingService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 성공");
     }
 
-    // 더빙 영상 분리된 음성 조회
+    // 더빙 영상 분리된 음성 및 원본 영상 조회
     public ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int videoSourceCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
@@ -368,18 +368,24 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         // 음성 조회
-        List<VoiceSource> voiceSources = voiceSourceRepository.findByVideoSource_VideoSourceCodeAndVoiceModelIsNull(videoSourceCode);
+        List<VoiceSource> voiceSources = voiceSourceRepository.findByVideoSource_videoSourceCode(videoSourceCode);
         List<VideoSourceVoiceInfoDto> videoSourceVoiceInfoDtos = new ArrayList<>();
         for (VoiceSource voiceSource : voiceSources) {
             // Dto에 담기
             VideoSourceVoiceInfoDto videoSourceVoiceInfoDto = VideoSourceVoiceInfoDto.builder()
-                    .videoSourceCode(voiceSource.getVoiceSourceCode())
+                    .voiceIndex(voiceSource.getVoiceIndex())
                     .voicePath(voiceSource.getVoicePath())
+                    .voiceName(voiceSource.getVoiceModel().getModelName())
                     .build();
             videoSourceVoiceInfoDtos.add(videoSourceVoiceInfoDto);
         }
+        // 음성 제거된 영상 경로
+        String videoPath = "/dub/source_" + videoSourceCode + "/origin/video/videoNoVoice.mp4";
+
         // 리스폰스 생성
         VideoSourceVoiceResponse response = VideoSourceVoiceResponse.builder()
+                .videoSourceCode(videoSourceCode)
+                .videoPath(videoPath)
                 .voiceSources(videoSourceVoiceInfoDtos)
                 .build();
 
