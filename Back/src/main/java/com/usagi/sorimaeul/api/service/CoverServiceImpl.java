@@ -208,7 +208,7 @@ public class CoverServiceImpl implements CoverService {
 
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(request.getModelCode());
         // 클라이언트의 모델이 맞는지 검증
-        if (voiceModel.getUser() != user) {
+        if (voiceModel.getUser() != user && voiceModel.getUser() != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델로는 AI 커버를 생성할 수 없습니다.");
         }
 
