@@ -1,6 +1,10 @@
+import Dubbing from "../../components/dubbing/contentCreation/Dubbing";
+
 function UserDubbingCreatePage() {
   return (
-    <div>이것은 더빙 생성 페이지</div>
+    <>
+      <Dubbing />
+    </>
   )
 }
 
