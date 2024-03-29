@@ -2,6 +2,8 @@ import Resizer from "react-image-file-resizer";
 import API from "./axios";
 import axios from "axios";
 
+export const s3URL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+
 export const resizeFile = async (file: File) =>
   new Promise<File>((res) => {
     Resizer.imageFileResizer(
