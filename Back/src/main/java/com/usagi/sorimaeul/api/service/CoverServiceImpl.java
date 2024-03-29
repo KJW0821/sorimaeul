@@ -316,7 +316,7 @@ public class CoverServiceImpl implements CoverService {
     public ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file)  {
         Cover cover = coverRepository.findByCoverCode(coverCode);
         String folderPath = "cover/";
-        String fileName = "cover_" + coverCode + ".wav";
+        String fileName = "cover_" + coverCode + ".mp3";
 
         // 변환된 파일을 s3에 저장
         byte[] responseFile;
