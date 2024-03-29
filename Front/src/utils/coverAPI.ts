@@ -12,6 +12,13 @@ export const getCoverModels = () => {
   })
 }
 
+// AI 커버 생성을 위한 서버 제공 노래 소스 목록 조회 
+export const getMusicSources = () => {
+  return API.get("cover/source")
+  .then(res => res.data)
+  .catch(err => console.error(err))
+}
+
 // AI 커버 생성
 export const createCover = (data: CoverCreateInterface) => {
   return API.post("cover/create", data)
