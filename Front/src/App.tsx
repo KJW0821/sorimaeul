@@ -1,12 +1,17 @@
-import { Outlet, RouterProvider, createBrowserRouter, useLocation } from 'react-router-dom';
+import {
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  useLocation,
+} from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import './App.css';
 import LandingPage from './pages/home/LandingPage';
 import HomePage from './pages/home/HomePage';
 import LoginCallbackPage from './pages/user/LoginCallbackPage';
-import { Provider } from "react-redux";
-import { store, RootState, persistor } from "./stores/store";
-import SignUpPage from "./pages/user/SignUpPage";
+import { Provider } from 'react-redux';
+import { store, RootState, persistor } from './stores/store';
+import SignUpPage from './pages/user/SignUpPage';
 import FAQPage from './pages/inquiry/FAQPage';
 import RequestListPage from './pages/inquiry/RequestListPage';
 import RequestCreatePage from './pages/inquiry/RequestCreatePage';
@@ -32,10 +37,10 @@ import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
 import Header from './components/common/Header';
 import { PersistGate } from 'redux-persist/integration/react';
 
-const Content = styled.div<{ $isOpen: boolean}>`
-  padding-left: ${(props) => (props.$isOpen ? "314px" : "60px")};
+const Content = styled.div<{ $isOpen: boolean }>`
+  padding-left: ${(props) => (props.$isOpen ? '314px' : '60px')};
   width: 100%;
-`
+`;
 
 function Layout() {
   const location = useLocation();
@@ -44,7 +49,9 @@ function Layout() {
   // 헤더가 포함되지 않는 경로들
   const noHeaderRoutes = ['/landing', '/login-callback/:provider', '/signup'];
 
-  const showHeader = !noHeaderRoutes.some(route => location.pathname.match(route));
+  const showHeader = !noHeaderRoutes.some((route) =>
+    location.pathname.match(route),
+  );
 
   return (
     <div className="flex">
@@ -57,22 +64,21 @@ function Layout() {
   );
 }
 
-
 const router = createBrowserRouter([
   {
-    path: "/landing",
-    element: <LandingPage />
+    path: '/landing',
+    element: <LandingPage />,
   },
   {
-    path: "/login-callback/:provider",
-    element: <LoginCallbackPage />
+    path: '/login-callback/:provider',
+    element: <LoginCallbackPage />,
   },
   {
-    path: "/signup",
-    element: <SignUpPage />
+    path: '/signup',
+    element: <SignUpPage />,
   },
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     children: [
       {
@@ -83,122 +89,119 @@ const router = createBrowserRouter([
             element: <HomePage />,
           },
           {
-            path: "request",
+            path: 'request',
             children: [
               {
                 index: true,
                 element: <RequestListPage />,
               },
               {
-                path: "create",
+                path: 'create',
                 element: <RequestCreatePage />,
               },
               {
-                path: ":id",
+                path: ':id',
                 element: <RequestDetailPage />,
               },
               {
-                path: ":id/edit",
+                path: ':id/edit',
                 element: <RequestEditPage />,
-              }
-            ]
+              },
+            ],
           },
           {
-            path: "FAQ",
-            element: <FAQPage />
+            path: 'FAQ',
+            element: <FAQPage />,
           },
           {
-            path: "model",
+            path: 'model',
             children: [
               {
-                path: "create",
-                element: <ModelCreatePage />
+                path: 'create',
+                element: <ModelCreatePage />,
               },
               {
-                path: ":code",
-                element: <ModelDetailPage />
+                path: ':code',
+                element: <ModelDetailPage />,
               },
               {
-                path: ":code/record",
-                element: <RecordingPage />
-              }
-            ]
+                path: ':code/record',
+                element: <RecordingPage />,
+              },
+            ],
           },
           {
-            path: "cover",
-            children: [
-              {
-                index: true,
-                element: <CoverListPage />
-              },
-              {
-                path: "create",
-                element: <CoverCreatePage />
-              },
-              {
-                path: ":id",
-                element: <CoverDetailPage />
-              },
-              {
-                path: "register/:id",
-                element: <CoverResultPage />
-              },
-              {
-                path: "edit/:id",
-                element: <CoverUpdatePage />
-              },
-              {
-                path: "board/:id",
-                element: <CoverResultPage />
-              }
-            ]
-          },
-          {
-            path: "profile",
-            element: <ProfilePage />
-          },
-          {
-            path: "dubbing",
+            path: 'cover',
             children: [
               {
                 index: true,
-                element: <DubbingListPage />
+                element: <CoverListPage />,
               },
               {
-                path: ":sourceCode",
+                path: 'create',
+                element: <CoverCreatePage />,
+              },
+              {
+                path: ':id',
+                element: <CoverDetailPage />,
+              },
+              {
+                path: 'register/:id',
+                element: <CoverResultPage />,
+              },
+              {
+                path: 'edit/:id',
+                element: <CoverUpdatePage />,
+              },
+              {
+                path: 'board/:id',
+                element: <CoverResultPage />,
+              },
+            ],
+          },
+          {
+            path: 'profile',
+            element: <ProfilePage />,
+          },
+          {
+            path: 'dubbing',
+            children: [
+              {
+                index: true,
+                element: <DubbingListPage />,
+              },
+              {
+                path: ':sourceCode',
                 children: [
                   {
                     index: true,
-                    element: <DubbingDetailPage />
+                    element: <DubbingDetailPage />,
                   },
                   {
-                    path: ":dubCode",
-                    element: <UserDubbingDetailPage />
-                  }
-                ]
+                    path: ':dubCode',
+                    element: <UserDubbingDetailPage />,
+                  },
+                ],
               },
-            ]
-          }
-        ]
-      }
-    ]
+            ],
+          },
+        ],
+      },
+    ],
   },
 ]);
 
-
-
 function App() {
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-      <CookiesProvider>
-        <GlobalModal />
-        <RouterProvider router={router} />
-      </CookiesProvider>
+        <CookiesProvider>
+          <GlobalModal />
+          <RouterProvider router={router} />
+        </CookiesProvider>
       </PersistGate>
     </Provider>
-  )
+  );
 }
 
-export default App
+export default App;

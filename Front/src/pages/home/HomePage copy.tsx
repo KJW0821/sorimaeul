@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { CategoryBox } from '../../components/home/HomeStyles';
 import goBtnImg from '../../assets/goBtn.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import tape from '../../assets/tape.png';
 import tape2 from '../../assets/tape2.png';
 import album1 from '../../assets/album1.jpg';
@@ -11,8 +11,6 @@ import album3 from '../../assets/album3.jpg';
 import album4 from '../../assets/album4.jpg';
 import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
-import logoimage from '../../assets/logo.png';
-import Playlist from '../../components/common/playlist/header/Playlist';
 
 const Outer = styled.div`
   height: 100vh;
@@ -23,16 +21,8 @@ const Outer = styled.div`
   }
 `;
 
-const LogoContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-left: 150px;
-  margin-top: 0;
-`;
-
 const Page1 = styled.div`
-  height: calc(100vh - 0px);
+  height: calc(100vh - 230px);
   display: flex;
   background-color: #f7f6cf;
 `;
@@ -86,16 +76,16 @@ const RightAlignedContainer = styled.div`
 `;
 
 const DubbingCategory = styled(CategoryBox)`
-  position: absolute;
+  position: relative;
   margin-top: 100px;
-  margin-right: 280px;
+  margin-right: 250px;
   z-index: 2;
 `;
 
 const DubbingContentsWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
   gap: 20px;
 `;
 
@@ -112,18 +102,20 @@ const CategoryDescription = styled.p`
 const Page3 = styled.div`
   position: relative;
   height: 100vh;
-  width: 1975px;
   display: flex;
   background-color: #f4cfdf;
 `;
 
-const Temp = styled.div`
+const LeftAlignedContainer = styled.div`
   display: flex;
-  margin-left: 60px;
+  justify-content: flex-start;
+  padding-left: 50px;
+  width: 100%;
+  position: relative;
 `;
 
 const CoverCategory = styled(CategoryBox)`
-  position: absolute;
+  position: relative;
   margin-top: 90px;
   margin-right: 300px;
   z-index: 2;
@@ -141,7 +133,6 @@ interface ImageInterface {
 }
 
 const StyledImage = styled.img<ImageInterface>`
-  display: flex;
   width: 450px;
   height: auto;
   border-radius: 10px;
@@ -232,14 +223,7 @@ const HomePage: React.FC = () => {
 
   return (
     <Outer ref={outerDivRef}>
-      <Page1>
-        <LogoContainer>
-          <Playlist />
-          <Link to="/">
-            <img src={logoimage}></img>
-          </Link>
-        </LogoContainer>
-      </Page1>
+      <Page1></Page1>
       <Page2>
         <RightAlignedContainer>
           <DubbingCategory onClick={() => navigate('/dubbing')}>
@@ -254,7 +238,7 @@ const HomePage: React.FC = () => {
         </RightAlignedContainer>
       </Page2>
       <Page3>
-        <Temp>
+        <LeftAlignedContainer>
           <CoverCategory onClick={() => navigate('/cover')}>
             AI 노래방
             <GoBtnImg src={goBtnImg} alt="Button Image" />
@@ -263,36 +247,20 @@ const HomePage: React.FC = () => {
             나만의 AI 커버 송을 만들어 보세요!
           </CategoryDescription>
           <BackgroundTape src={tape2} alt="Tape Image" $marginTop={125} />
-          <ImagesContainer>
-            <StyledImage
-              $rotation="-7.7deg"
-              src={album1}
-              alt="AI Cover image1"
-            />
-            <StyledImage
-              $rotation="4.74deg"
-              src={album2}
-              alt="AI Cover image2"
-            />
-            <StyledImage
-              $rotation="-8.2deg"
-              src={album3}
-              alt="AI Cover image3"
-            />
-            <StyledImage
-              $rotation="11.5deg"
-              src={album4}
-              alt="AI Cover image4"
-            />
-          </ImagesContainer>
-          <MarqueeComponentStyled>
-            <TextLine $height={5} className="my-3" />
-            <TextLine />
-            <MarqueeComponent />
-            <TextLine className="my-3" />
-            <TextLine $height={5} className="my-2" />
-          </MarqueeComponentStyled>
-        </Temp>
+        </LeftAlignedContainer>
+        <ImagesContainer>
+          <StyledImage $rotation="-7.7deg" src={album1} alt="AI Cover image1" />
+          <StyledImage $rotation="4.74deg" src={album2} alt="AI Cover image2" />
+          <StyledImage $rotation="-8.2deg" src={album3} alt="AI Cover image3" />
+          <StyledImage $rotation="11.5deg" src={album4} alt="AI Cover image4" />
+        </ImagesContainer>
+        <MarqueeComponentStyled>
+          <TextLine $height={5} className="my-3" />
+          <TextLine />
+          <MarqueeComponent />
+          <TextLine className="my-3" />
+          <TextLine $height={5} className="my-2" />
+        </MarqueeComponentStyled>
       </Page3>
     </Outer>
   );
