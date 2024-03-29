@@ -48,6 +48,7 @@ function Layout() {
 
   return (
     <div className="flex">
+      <GlobalModal />
       <SideBar />
       <Content $isOpen={isOpen}>
         {showHeader && <Header />}
@@ -193,7 +194,6 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
       <CookiesProvider>
-        <GlobalModal />
         <RouterProvider router={router} />
       </CookiesProvider>
       </PersistGate>
