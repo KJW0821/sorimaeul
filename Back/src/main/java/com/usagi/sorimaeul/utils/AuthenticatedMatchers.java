@@ -13,6 +13,7 @@ public class AuthenticatedMatchers {
             "/sse/**",
             "/cover/save/**",
             "/dub/save",
+            "/notify/send",
             "/api-docs",
             "/api-docs/json",
             "/v3/**",
