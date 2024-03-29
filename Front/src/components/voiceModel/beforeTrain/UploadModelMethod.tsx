@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFileUploaded, setIsLearning, setIsStart } from "../../../stores/voiceModel";
 import { RootState } from "../../../stores/store";
-import { uploadExModelFile } from "../../../utils/voiceModelAPI";
+import { startModelLearning, uploadExModelFile } from "../../../utils/voiceModelAPI";
 
 const Container = styled.div<{ $isUploaded: boolean }>`
   width: 100%;
