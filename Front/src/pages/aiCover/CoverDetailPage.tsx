@@ -13,125 +13,155 @@ import ColorLine from "../../components/aiCover/ColorLine";
 import styled from "styled-components";
 import heart from "../../assets/heart.png";
 import inactiveHeart from "../../assets/inactiveHeart.png";
+import sumOrange from "../../assets/sumOrange.png";
 
-const Container = styled.div`
+
+const StyledContainer = styled.div`
   width: 75%;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   margin: 2rem auto;
   gap: 1rem;
-  
-  .title {
-    font-size: 2.25rem;
-    font-family: 'GmarketSansBold';
+`;
+
+const Title = styled.h1`
+  font-size: 2.25rem;
+  font-family: 'GmarketSansBold';
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  width: 100%;
+`;
+
+const MediaSection = styled.div`
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 50px;
+`;
+
+const ThumbnailContainer = styled.div`
+  position: relative;
+  width: 23rem; 
+  height: 23rem; 
+  margin: 0 auto; 
+  border-radius: 50%;
+  overflow: hidden; 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%; 
+    background-color: white; 
+    z-index: 2; 
   }
+`;
 
-  .content-container {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    width: 100%;
+const Thumbnail = styled.img`
+  width: 100%; 
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 1; 
+`;
 
-    .media-section {
-      flex: 4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 50px;
+const InfoSection = styled.div`
+  flex: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 700px;
+`;
 
-      .thumbnail {
-        width: 330px;
-        height: 330px;
-        border-radius: 50%;
-        background-size: cover;
-        background-position: center;
-      }
+const InfoBox = styled.div`
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 1px dashed #000000;
+  border-radius: 10px;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
 
-      .audio-player {
-        width: 100%;
-      }
-    }
+const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
 
-    .info-section {
-      flex: 6;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      max-width: 700px;
-      .info-box {
-        box-sizing: border-box;
-        background: #FFFFFF;
-        border: 1px dashed #000000;
-        border-radius: 10px;
-        padding: 3rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
+const ProfileImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+`;
 
-        .profile {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
+const DetailLine = styled.div`
+  height: 1px;
+  background-color: #A3A3A3;
+  margin: 0.5rem 0;
+`;
 
-          .profile-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-          }
+const CoverDetail = styled.p`
+  font-family: GmarketSansLight;
+  font-size: 25px;
+  min-height: 150px; 
+`;
 
-          .nickname {
-            margin: 5px;
-            flex-grow: 1;
-          }
+const Actions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-          .created-time {
-            /* 오른쪽 정렬을 위한 스타일 */
-          }
-        }
+const AddPlaylistBtn = styled.button`
+  font-size: 20px;
+  background-color: #f5f5f5; /* 버튼 배경 색상 */
+  color: #333; /* 버튼 글자 색상 */
+  border: none;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 이미지와 텍스트 사이의 간격 */
+  cursor: pointer;
 
-        .detail-line {
-          height: 1px;
-          background-color: #A3A3A3;
-          margin: 0.5rem 0;
-        }
+  &:hover {
+    background-color: #eee; /* 호버 시 배경 색상 변경 */
+  }
+`;
 
-        .cover-detail {
-          font-family: GmarketSansLight;
-          min-height: 150px; 
-        }
+const LikeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  
+  .like-count {
+    font-size: 20px;
+    margin-left: 15px;
+    margin-right: 10px;
+  }
+`;
 
-        .actions {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+const SongInfo = styled.div`
+  font-size: 1rem;
+  margin-top: 0.5rem;
+`;
 
-          .like-section {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-
-            /* 좋아요 버튼과 좋아요 수 스타일 */
-          }
-        }
-
-        .song-info {
-          font-size: 1rem;
-          margin-top: 0.5rem;
-
-          .song-title,
-          .original-singer,
-          .cover-singer {
-            font-family: GmarketSansLight;
-            margin-top: 0.25rem;
-          }
-        }
-      }
-    }
-  `
+const SongDetail = styled.p`
+  font-family: GmarketSansLight;
+  margin-top: 0.25rem;
+`;
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -208,47 +238,51 @@ const CoverDetailPage: React.FC = () => {
     <>
       <ColorLine />
       {data &&
-        <Container>
-          <h1 className="title"> {data.coverName} </h1>
-          <div className="content-container">
-
-            <div className="media-section">
-              <img className="thumbnail" src={data.thumbnailPath} alt="Cover Thumbnail" />
-              <div className="auto-player">
+        <StyledContainer>
+          <Title> {data.coverName} </Title>
+          <ContentContainer>
+            <MediaSection>
+            <ThumbnailContainer>
+    <Thumbnail src={data.thumbnailPath} alt="Cover Thumbnail" />
+  </ThumbnailContainer>
+              <div>
                 음원 저장 경로 {data.storagePath}
               </div>
-            </div>
-            <div className="info-section">
-              <div className="info-box">
-                <div className="profile">
-                  <img className="profile-image" src="" alt="Creator Profile Image" />
+            </MediaSection>
+            <InfoSection>
+              <InfoBox>
+                <Profile >
+                  <ProfileImage src="" alt="Creator Profile Image" />
                   <p className="nickname"> {data.nickname} </p>
-                </div>
-                <p className="detail-line" />
-                <p className="cover-detail"> {data.coverDetail} </p>
-                <div className="like-section">
-                  <button onClick={openPlaylistAddModal}>플레이리스트에 추가</button>
+                </Profile>
+                <DetailLine />
+                <CoverDetail> {data.coverDetail} </CoverDetail>
+                <Actions>
+                  <AddPlaylistBtn onClick={openPlaylistAddModal}>
+                    <img src={sumOrange} alt="Button Icon" />
+                  플레이리스트에 추가</AddPlaylistBtn>
+                  <LikeContainer>
                   <span onClick={handleLike}>
                     {isLiked ? (
                       <img src={heart} alt="Active Heart" />
                     ) : (
                       <img src={inactiveHeart} alt="Inactive Heart" />
                     )}
-
                   </span>
-                  <span>좋아요 수 {data.likeCount}</span>
-                  <p className="detail-line" />
-                </div>
-                <div className="song-info">
+                  <span className="like-count"> {data.likeCount}</span>
+                  </LikeContainer>
+                </Actions>
+                <DetailLine />
+                <SongInfo>
                   <p>노래 정보</p>
-                  <p className="song-title">노래 제목: {data.title}</p>
-                  <p className="original-singer">원곡 가수: {data.singer}</p>
-                  <p className="cover-singer">목소리 모델: {data.coverSinger}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Container>
+                  <SongDetail>노래 제목 : {data.title}</SongDetail>
+                  <SongDetail>원곡 가수 : {data.singer}</SongDetail>
+                  <SongDetail>AI 모델 : {data.coverSinger}</SongDetail>
+                </SongInfo>
+              </InfoBox>
+            </InfoSection>
+          </ContentContainer>
+        </StyledContainer>
 
       }
 
