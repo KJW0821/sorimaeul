@@ -17,6 +17,12 @@ import { logout as logoutState } from "../../stores/user";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import { toggleSideBar as toggle } from "../../stores/common";
+import { openModal } from "../../stores/modal";
+import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
+import { useEffect } from 'react';
+import { isProduction } from '../../utils/axios';
+import { getCookie } from '../../utils/cookie';
+import { increaseUnreadMsgCnt } from '../../stores/common';
 
 const Container = styled.div<{$isOpen: boolean}>`
   position: fixed;
@@ -56,6 +62,7 @@ function SideBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.common.isOpen);
+  const isUser = useSelector((state: RootState) => state.user.loggedIn);
 
   const toggleSideBar = () => {
     dispatch(toggle());
@@ -70,7 +77,42 @@ function SideBar() {
     .catch((err) => {
       console.error("로그아웃 실패;", err);
     })
-  }
+  };
+
+  const openAlarmModal = () => {
+    dispatch(openModal({modalType: "alarm",}));
+  };
+
+  const EventSource = EventSourcePolyfill || NativeEventSource;
+
+  useEffect(() => {
+    if (isUser) {
+      const eventSource = new EventSource(
+        `${isProduction ? "https://j10e201.p.ssafy.io/api" : "http://localhost:8000/api"}/sse/connect`, 
+        {
+          headers: {
+            Authorization: getCookie('accessToken')
+          },
+          withCredentials: true,
+        }
+      );
+
+      eventSource.onopen = (e) => {
+        console.log('연결 열림');
+      };
+  
+      eventSource.onmessage = (e) => {
+        console.log('메시지 왔다', e.data);
+        dispatch(increaseUnreadMsgCnt());
+      };
+  
+      eventSource.onerror = (e: any) => {
+        if (!e.error.message.includes("No activity")) {
+          eventSource.close();
+        }
+      };
+    }
+  }, [isUser])
 
   return (
     <Container $isOpen={isOpen}>
@@ -107,7 +149,7 @@ function SideBar() {
                 <img onClick={() => navigate('/profile')} src={user} alt="profile" />
                 <p>마이페이지</p>
               </div>
-              <div className="col">
+              <div className="col" onClick={openAlarmModal}>
                 <img src={bell} alt="alarm" />
                 <p>알림</p>
               </div>
@@ -140,7 +182,7 @@ function SideBar() {
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
               <img onClick={() => navigate('/profile')} src={user} alt="profile" />
-              <img src={bell} alt="alarm" />
+              <img onClick={openAlarmModal} src={bell} alt="alarm" />
             </div>
           </div>
           <div className="content">
