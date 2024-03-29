@@ -312,7 +312,7 @@ public class CoverServiceImpl implements CoverService {
     // 생성된 AI 커버 저장
     public ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file)  {
         Cover cover = coverRepository.findByCoverCode(coverCode);
-        String folderPath = "/cover/";
+        String folderPath = "cover/";
         String fileName = "cover_" + coverCode + ".wav";
 
         // 변환된 파일을 s3에 저장
