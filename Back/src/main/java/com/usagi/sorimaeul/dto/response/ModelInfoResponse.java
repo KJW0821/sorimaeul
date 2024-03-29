@@ -11,7 +11,6 @@ public class ModelInfoResponse {
 
     private int modelCode;
     private String modelName;
-    private String storagePath;
     private String imagePath;
     private int recordCount;
     private int state;
