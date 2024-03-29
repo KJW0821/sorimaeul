@@ -2,6 +2,8 @@ package com.usagi.sorimaeul.dto.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -21,5 +23,7 @@ public class CoverDetailResponse {
     private String title;
     private boolean isLiked;
     private boolean isComplete;
+    private LocalDateTime createdTime;
+    private LocalDateTime postTime;
 
 }
