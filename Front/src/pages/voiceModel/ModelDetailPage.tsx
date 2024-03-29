@@ -98,10 +98,16 @@ function ModelDetailPage() {
                 $height={3.125} 
                 $fontSize={1} 
                 $color="#7C87E3" 
-                disabled={(modelInfo.method === "self" && modelInfo.learnState === 0) || (modelInfo.method === "file" && !modelInfo.isFileUploaded)}
+                disabled={
+                  (modelInfo.method === "self" && modelInfo.recordCount < 200) 
+                  || 
+                  (modelInfo.method === "file" && !modelInfo.isFileUploaded) 
+                  || 
+                  (modelInfo.method === "model" && !modelInfo.isFileUploaded)
+                }
               >
                 {
-                  modelInfo.method === 'model' ? '등록하기' : '학습시작'
+                  modelInfo.method === "model" ? "등록하기" : "학습시작"
                 }
               </Button>
             </div>
