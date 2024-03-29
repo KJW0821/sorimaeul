@@ -150,7 +150,6 @@ function UserEditor() {
   </>
 ) : (
   <>
-    {console.log('렌더링되고 있는 이미지 경로:', selectedImagePath)}
     <ProfileImage $image={selectedImagePath} />
   </>
 )}
