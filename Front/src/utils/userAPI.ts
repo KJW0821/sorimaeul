@@ -1,6 +1,7 @@
 import API from "./axios";
 import { getCookie, removeCookie } from "./cookie";
 
+// 로그인 여부 확인 
 export const checkLogin = () => {
   const access = getCookie("accessToken");
   const refresh = getCookie("refreshToken");
@@ -11,6 +12,7 @@ export const checkLogin = () => {
   return isUserLoggedIn;
 }
 
+// 닉네임 중복 체크 
 export const checkNickname = (nickname: string) => {
   return API.get(`user/nickname/${nickname}`)
     .then((res) => {
@@ -21,6 +23,7 @@ export const checkNickname = (nickname: string) => {
     });
 }
 
+// 회원가입
 export const signUp = (nickname: string, profileImage: string) => {
   try {
     return API.post("user/signup", { nickname, profileImage });
@@ -29,6 +32,7 @@ export const signUp = (nickname: string, profileImage: string) => {
   }
 }
 
+// 로그아웃
 export const logout = () => {
   const access = getCookie("accessToken");
   const refresh = getCookie("refreshToken");
@@ -42,4 +46,11 @@ export const logout = () => {
     .catch((err) => {
       console.log(err);
     })
+}
+
+// 회원 정보 수정 
+export const editUserInfo = (nickname: string, profileImage: string)  => {
+  return API.patch("user", { nickname, profileImage })
+  .then(res => res.data)
+  .catch(err => console.error(err))
 }

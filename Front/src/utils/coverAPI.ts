@@ -44,12 +44,19 @@ export const getCovers = (keyword: string | null = null) => {
   }
   
   return API.get("cover", { params })
-  .then((res) => {
-    return res.data;
-  })
-  .catch((err) => {
-    return err;
-  })
+  .then(res => res.data)
+  .catch(err => err)
+}
+
+// AI 마이 페이지 조회
+export const getMyCovers = (keyword: string | null = null) => {
+  const params: ListParams = { target: "mine", page: 1};
+  if (keyword) {
+    params.keyword = keyword;
+  }
+  return API.get("cover", { params })
+  .then(res => res.data)
+  .catch(err => err)
 }
 
 // AI 인기 목록 조회
@@ -57,45 +64,29 @@ export const getPopularCovers = () => {
   const params: ListParams = { target: "popular", page: 1 };
 
   return API.get("cover", { params })
-  .then((res) => {
-    return res.data;
-  })
-  .catch((err) => {
-    return err;
-  })
+  .then(res => res.data)
+  .catch(err => err)
 }
 
 // AI 상세 목록 조회
 export const getCover = (coverCode: string) => {
   return API.get(`cover/${coverCode}`)
-  .then((res) => { 
-    return res.data;
-  }) 
-  .catch((err) => {
-    return err;
-  })
+  .then(res => res.data)
+  .catch(err => err)
 }
 
 // AI 커버 게시(수정)
 export const updateCover = (coverCode: string, edit: CoverUpdateInterface) => {
   return API.patch(`cover/board/${coverCode}`, edit)
-  .then((res) => {
-    return res.data;
-  }) 
-  .catch((err) => {
-    return err
-  })
+  .then(res => res.data)
+  .catch(err => err)
 }
 
 // AI 커버 삭제
 export const deleteCover = (coverCode: string) => {
   return API.delete(`cover/board/${coverCode}`)
-  .then((res) => {
-    return res.data;
-  })
-  .catch((err) => {
-    return err;
-  })
+  .then(res => res.data)
+  .catch(err => err)
 }
 
 // AI 커버 좋아요
