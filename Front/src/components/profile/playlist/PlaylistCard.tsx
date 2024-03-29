@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { openModal } from '../../../stores/modal';
 import { removePlaylist, setSelectedPlaylist, updatePlaylistName } from '../../../stores/playlists';
-import { Button } from '../../common/Button';
 import { deletePlaylist, updatePlaylist } from '../../../utils/playlistAPI';
 import playlistImg from "../../../assets/playlist.png";
+import deleteIcon from "../../../assets/deleteIcon.png";
+import editIcon from "../../../assets/editIcon.png";
 
 const CardContainer = styled.div`
   width: 20rem;
@@ -19,6 +20,35 @@ const StyledInput = styled.input`
   padding: 8px; /* padding 설정 */
   width: calc(100% - 16px); /* 전체 너비에서 padding 고려 */
   margin-bottom: 10px; /* input과 버튼 사이의 간격 설정 */
+`;
+
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: .2rem;
+  background: white;
+  color: #797979;
+  width: 4rem;
+  font-size: 1rem;
+  height: 2rem;
+  border: 1px solid #797979;
+  border-radius: 5px;
+
+  .icon {
+    height: 100%;
+  }
+
+  p {
+    padding-top: .2rem;
+  }
+`
+const ButtonBox = styled.div`
+  display: flex;
+  gap: .5rem;
+  .icon {
+    height: 80%;
+  }
 `;
 
 interface Props {
@@ -62,10 +92,10 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
     e.stopPropagation();
     if (isEditing) {
       // 수정 모드이면, 변경된 이름으로 업데이트 요청
-      updatePlaylist(playlistCode, {playlistName: editedName})
+      updatePlaylist(playlistCode, { playlistName: editedName })
         .then(() => {
           setIsEditing(false); // 수정 모드 종료
-          dispatch(updatePlaylistName({playlistCode, playlistName: editedName}));
+          dispatch(updatePlaylistName({ playlistCode, playlistName: editedName }));
         })
         .catch(err => {
           console.log(err);
@@ -87,13 +117,16 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
         <p>{playlistName}</p>
       )}
       <p>{createTime}</p>
-      <Button onClick={handleDelete} disabled={isEditing}>  
-        삭제
-      </Button>
-
-      <Button onClick={handleEdit}>
-        {isEditing ? '저장' : '수정'}
-      </Button>
+      <ButtonBox>
+        <Button onClick={handleEdit}>
+          <img className="icon" src={editIcon} alt="" />
+          <p>{isEditing ? '저장' : '수정'}</p>
+        </Button>
+        <Button onClick={handleDelete} disabled={isEditing}>
+          <img className="icon" src={deleteIcon} alt="" />
+          <p>삭제</p>
+        </Button>
+      </ButtonBox>
     </CardContainer>
   )
 }
