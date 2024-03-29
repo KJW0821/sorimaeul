@@ -9,6 +9,6 @@ import java.util.*;
 @Repository
 public interface NotifyRepository extends JpaRepository<Notify, Integer>, NotifyRepositoryCustom {
 
-	List<Notify> findAllByUserCode(long userCode);
+	List<Notify> findAllByUserCodeOrderByNotifyCodeDesc(long userCode);
 
 }

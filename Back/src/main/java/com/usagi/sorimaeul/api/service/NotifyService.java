@@ -7,7 +7,6 @@ import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.repository.NotifyRepository;
 import com.usagi.sorimaeul.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,7 @@ public class NotifyService {
 	private final UserRepository userRepository;
 
 	public NotifyResponse getNotify(long userCode) {
-		List<Notify> list = notifyRepository.findAllByUserCode(userCode);
+		List<Notify> list = notifyRepository.findAllByUserCodeOrderByNotifyCodeDesc(userCode);
 		return NotifyResponse.builder()
 				.list(list)
 				.build();
