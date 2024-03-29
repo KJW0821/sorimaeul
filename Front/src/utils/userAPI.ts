@@ -47,3 +47,10 @@ export const logout = () => {
       console.log(err);
     })
 }
+
+// 회원 정보 수정 
+export const editUserInfo = (nickname: string, profileImage: string)  => {
+  return API.patch("user", { nickname, profileImage })
+  .then(res => res.data)
+  .catch(err => console.error(err))
+}
