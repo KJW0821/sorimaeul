@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getSourceVideo } from "../../../utils/dubbingAPI";
 import { Button } from "../../common/Button";
+import { s3URL } from "../../../utils/s3";
 
 const Container = styled.div`
   display: flex;
@@ -28,6 +29,7 @@ const Container = styled.div`
       .video {
         width: 100%;
         height: 100%;
+        object-fit: cover;
       }
     }
     .info-box {
@@ -102,11 +104,12 @@ function SourceVideoInfo() {
   }, [params.sourceCode])
 
   return (
+    videoInfo &&
     <Container>
       <h1 className="title">{videoInfo?.sourceName}</h1>
       <div className="content-box">
         <div className="video-box">
-          <img className="video" src={videoInfo?.thumbnailPath} alt="" />
+          <video className="video" controls src={s3URL + `/${videoInfo?.storagePath}`} />
         </div>
         <div className="info-box">
           <div className="flex flex-col gap-2">
@@ -121,7 +124,6 @@ function SourceVideoInfo() {
             <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} $marginTop={0} $marginLeft={0} $background="black" $color="#BFFF0A" $width={7} $height={2.5} $fontSize={1.3}>더빙하기</Button>
           </div>
         </div>
-        
       </div>
     </Container>
   )
