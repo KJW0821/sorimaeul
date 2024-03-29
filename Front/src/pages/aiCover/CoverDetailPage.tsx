@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteCover, getCover, likeCover, unlikeCover } from "../../utils/coverAPI";
 import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
-import { Button } from "../../components/common/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import { openModal } from "../../stores/modal";
@@ -14,6 +13,8 @@ import styled from "styled-components";
 import heart from "../../assets/heart.png";
 import inactiveHeart from "../../assets/inactiveHeart.png";
 import sumOrange from "../../assets/sumOrange.png";
+import deleteIcon from "../../assets/deleteIcon.png";
+import editIcon from "../../assets/editIcon.png";
 
 // 상세 조회 페이지
 const StyledContainer = styled.div`
@@ -163,6 +164,37 @@ const SongDetail = styled.p`
   margin-top: 0.25rem;
 `;
 
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: .2rem;
+  background: white;
+  color: #797979;
+  width: 4.6rem;
+  font-size: 1.125rem;
+  height: 2rem;
+  border: 1px solid #797979;
+  border-radius: 5px;
+
+  .icon {
+    height: 100%;
+  }
+
+  p {
+    padding-top: .2rem;
+  }
+`
+const ButtonBox = styled.div`
+    display: flex;
+    gap: .5rem;
+    justify-content: flex-end;
+    margin-right: 220px;
+    .icon {
+      height: 80%;
+    }
+`;
+
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -234,7 +266,7 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
-  const musicPath = `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${data.storagePath}`
+  const musicPath = `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${data?.storagePath}`
   return (
     <>
       <ColorLine />
@@ -288,13 +320,23 @@ const CoverDetailPage: React.FC = () => {
 
       }
 
+       {/* 작성자만 수정/삭제 버튼 표시 */}
+      <ButtonBox>
+      {data && data.nickname === loggedInUserNickname &&
+        <Button onClick={() => navigate(`/cover/edit/${params.id}`)}>
+          <img className="icon" src={editIcon} alt="edit icon" />
+          <p>수정</p>
+          </Button>}
 
       {data && data.nickname === loggedInUserNickname &&
-        <Button onClick={() => navigate(`/cover/edit/${params.id}`)} $marginLeft={0} $marginTop={0}>수정</Button>}
+        <Button onClick={handleDelete}>
+          <img className="icon" src={deleteIcon} alt="delete icon" />
+          <p>삭제</p>
+            </Button>}
+      </ButtonBox>
 
-      {data && data.nickname === loggedInUserNickname &&
-        <Button onClick={handleDelete} $marginLeft={0} $marginTop={0}>삭제</Button>}
-      <CommentComponent ></CommentComponent>
+      {/* 댓글란 */}
+      <CommentComponent />
 
     </>
   );
