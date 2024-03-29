@@ -47,11 +47,9 @@ public class Cover {
     @Column(name = "is_public")
     private boolean isPublic = false;
 
-    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @CreationTimestamp
     @Column(name = "post_time")
     private LocalDateTime postTime;
 
