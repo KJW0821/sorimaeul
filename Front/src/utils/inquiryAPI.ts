@@ -35,3 +35,9 @@ export const createRequest = (data: RequestData) => {
     .then(res => res)
     .catch(err => console.error(err))
 };
+
+export const editRequest = (boardCode: string, data: RequestData) => {
+  return API.put(URL + `/${boardCode}`, data)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
