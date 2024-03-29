@@ -2,6 +2,8 @@ package com.usagi.sorimaeul.dto.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -21,5 +23,6 @@ public class CoverInfoDto {
     private String singer;
     private String title;
     private boolean isComplete;
+    private LocalDateTime createdTime;
 
 }

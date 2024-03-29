@@ -23,6 +23,7 @@ import static com.usagi.sorimaeul.utils.Const.*;
 import static com.usagi.sorimaeul.utils.FileUtil.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -143,6 +144,7 @@ public class CoverServiceImpl implements CoverService {
                     .singer(cover.getSinger())
                     .title(cover.getTitle())
                     .isComplete(cover.isComplete())
+                    .createdTime(cover.getCreatedTime())
                     .build();
             // customCovers 에 담기
             customCovers.add(coverInfoDto);
@@ -187,6 +189,7 @@ public class CoverServiceImpl implements CoverService {
                 .title(cover.getTitle())
                 .isLiked(isLiked)
                 .isComplete(cover.isComplete())
+                .createdTime(cover.getCreatedTime())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -212,7 +215,7 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 모델은 AI 커버를 생성할 수 있는 상태가 아닙니다. 학습이 완료된 후에 시도해주세요.");
         }
 
-        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime, updatedTime 현재 시간, likeCount 기본값 0
+        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime 최초 공개 설정시 생성, updatedTime 현재 시간, likeCount 기본값 0
         Cover cover = Cover.builder()
                 .user(user)
                 .coverName(request.getCoverName())
@@ -265,6 +268,9 @@ public class CoverServiceImpl implements CoverService {
         if (coverCreator != user) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+
+
         // 커버 수정
         cover.setCoverName(request.getCoverName());
         cover.setCoverDetail(request.getCoverDetail());
