@@ -41,3 +41,9 @@ export const editRequest = (boardCode: string, data: RequestData) => {
     .then(res => res)
     .catch(err => console.error(err))
 };
+
+export const deleteRequest = (boardCode: string) => {
+  return API.delete(URL + `/${boardCode}`)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
