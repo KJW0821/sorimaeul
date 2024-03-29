@@ -3,6 +3,7 @@ import { VideoData } from "../../../pages/dubbing/DubbingListPage";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
+import { s3URL } from "../../../utils/s3";
 
 const Container = styled.div<{ $isOpen: boolean }>`
   min-width: ${(props) => `calc((100vw - ${props.$isOpen ? "314px" : "60px"}) / 5)` };
@@ -37,7 +38,7 @@ const HotDubbingSourceCard: React.FC<{data: VideoData}> = ({data}) => {
 
   return (
     <Container $isOpen={isOpen} onClick={() => navigate(`/dubbing/${data.videoSourceCode}`)}>
-      <img className="img" src={data.thumbnailPath} alt="thumbnail" />
+      <img className="img" src={s3URL + `/${data.thumbnailPath}`} alt="thumbnail" />
       <p className="content-title">{data.sourceName}</p>
     </Container>
   )
