@@ -6,7 +6,7 @@ export const Container = styled.div`
   align-items: center;
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 5;
 `;
 export const Overlay = styled.div`
   position: fixed;
