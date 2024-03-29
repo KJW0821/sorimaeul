@@ -27,7 +27,7 @@ export interface CoverCreateInterface {
   youtubeLink: string;
   singer: string;
   title: string;
-  modelCode: number;
+  modelCode: string;
   pitch: number;
   coverName: string;
 }
