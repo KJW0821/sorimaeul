@@ -24,5 +24,6 @@ public class CoverDetailResponse {
     private boolean isLiked;
     private boolean isComplete;
     private LocalDateTime createdTime;
+    private LocalDateTime postTime;
 
 }

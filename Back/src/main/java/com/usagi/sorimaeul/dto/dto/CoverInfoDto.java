@@ -24,5 +24,6 @@ public class CoverInfoDto {
     private String title;
     private boolean isComplete;
     private LocalDateTime createdTime;
+    private LocalDateTime postTime;
 
 }
