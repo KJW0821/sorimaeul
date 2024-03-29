@@ -5,6 +5,7 @@ import { openModal } from '../../../stores/modal';
 import { removePlaylist, setSelectedPlaylist, updatePlaylistName } from '../../../stores/playlists';
 import { Button } from '../../common/Button';
 import { deletePlaylist, updatePlaylist } from '../../../utils/playlistAPI';
+import playlistImg from "../../../assets/playlist.png";
 
 const CardContainer = styled.div`
   width: 20rem;
@@ -76,7 +77,7 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
 
   return (
     <CardContainer onClick={() => openPlaylistDetailModal(playlistCode)}>
-      <img src={"/src/assets/playlist.png"} alt='플레이리스트 고정 이미지' />
+      <img src={playlistImg} alt='플레이리스트 고정 이미지' />
       {isEditing ? (
         <StyledInput
           value={editedName}

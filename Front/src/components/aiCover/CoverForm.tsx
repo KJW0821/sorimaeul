@@ -6,23 +6,85 @@ import styled from "styled-components";
 import DirectUpload from "./DirectUpload";
 import Recommendation from "./Recommendation";
 
-interface Props {
-  onSubmit: (data: CoverCreateInterface) => void;
-}
+
+const Container = styled.form`
+  border-radius: 25px;
+  background-color: rgba(214, 214, 214, 0.66);
+  width: 65%;
+  padding: 4rem 1rem;
+  backdrop-filter: blur(.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+
+  .title {
+    font-size: 1.875rem;
+    color: white;
+    font-family: 'GmarketSansBold';
+  }
+`;
+
+const Step = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  width: 65%;
+
+  .subtitle {
+    font-size: 1.3rem;
+    color: white;
+    padding-top: 0.4rem;
+    font-family: 'GmarketSansBold';
+  };
+
+  .thirdtitle {
+    font-size: 1rem;
+    color: #78716c; 
+
+  }
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem; 
+  color: #78716c; 
+  font-size: 1.24rem;
+
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+`;
 
 const Input = styled.input`
-  border: 1px solid #ccc; /* 기본 테두리 색상 */
-  &:focus {
-    border-color: #007bff; /* 포커스 시 테두리 색상 */
-  }
+  border-radius: 5px;
+  flex-grow: 1;
+  height: 2.75rem;
+  padding: 0 1rem;
+  outline: none;
+  background-color: white;
+  color: #9F9F9F;
+  display: flex;
+  align-items: center;
+
 `;
 
 const Select = styled.select`
-  border: 1px solid #ccc; /* 기본 테두리 색상 */
+    border: 1px solid #ccc; 
   &:focus {
-    border-color: #007bff; /* 포커스 시 테두리 색상 */
+    border-color: #FE9D6A;
   }
 `;
+
+
+interface Props {
+  onSubmit: (data: CoverCreateInterface) => void;
+}
 
 const CoverForm: React.FC<Props> = ({ onSubmit }) => {
   const [data, setData] = useState<CoverCreateInterface>({
@@ -63,7 +125,20 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
   }
 
   const handleUploadType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadType(e.target.value);
+    const newUploadType = e.target.value;
+    setUploadType(newUploadType);
+
+    setData({
+      ...data,
+      youtubeLink: "",
+      singer: "",
+      title: "",
+      coverName: "",
+    })
+
+    if(newUploadType === "direct") {
+      setYoutubeLink("");
+    }
   };
 
   const handleDirectLink = (link: string) => {
@@ -98,10 +173,14 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
   };
   
   return (
-    <form onSubmit={submitHandler}>
-      <h2>AI 커버 만들기</h2>
-      <h3>Step 1. 노래 업로드</h3>
-      <div>
+    <Container onSubmit={submitHandler}>
+      <h2 className="title">AI 커버 만들기</h2>
+      <hr className="w-5/6" />
+      <Step>
+        <h3 className="subtitle">Step 1. 노래 업로드</h3></Step>
+     
+      <div className="flex items-center gap-2">
+        <RadioGroup>
         <label>
           <input
             type="radio"
@@ -123,17 +202,23 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
           />
           추천 목록에서 선택
         </label>
+        </RadioGroup>
       </div>
+      
       {uploadType === "direct" && (
         <>
           <DirectUpload  link={youtubeLink} onLinkChange={handleDirectLink} />
-          <h3>Step 2. 원곡 정보 입력</h3>
+          <Step>
+            
+          <h3 className="subtitle">Step 2. 원곡 정보 입력</h3>
           <div>
-            <label htmlFor="singer">원곡 가수명</label>
+            <label htmlFor="singer" className="thirdtitle">원곡 가수명</label>
             <Input type="text" id="singer" name="singer" value={data.singer} onChange={handleChange} />
-            <label htmlFor="title">원곡 제목</label>
+            <label htmlFor="title"  className="thirdtitle">원곡 제목</label>
             <Input type="text" id="title" name="title" value={data.title} onChange={handleChange} />
           </div>
+          </Step>
+
         </>
       )
       }
@@ -144,34 +229,42 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
 
 
 
-      <h3>Step {baseStepNumber + 1}. 모델 선택하기</h3>
-      <div>
-        <label htmlFor="modelCode">원하는 음성 모델을 선택하고, 알맞게 피치를 조절해주세요.</label>
+      <Step>
+      <h3 className="subtitle">Step {baseStepNumber + 1}. 모델 선택하기</h3>
+      <label className="thirdtitle" htmlFor="modelCode" >원하는 음성 모델을 선택하고, 알맞게 피치를 조절해주세요.</label>
         <Select name="modelCode" id="modelCode" value={data.modelCode} onChange={handleChange}>
-          <option value=""> 모델을 선택해주세요. </option>
+          <option value="" > 모델을 선택해주세요. </option>
           {models.voiceModels.map((model) => (
             <option key={model.modelCode} value={model.modelCode}>
               {model.modelName}
             </option>
           ))}
         </Select>
-        <label htmlFor="pitch">피치 조절</label>
+        <label className="text-stone-500" htmlFor="pitch">피치 조절</label>
         <Select name="pitch" id="pitch" value={data.pitch} onChange={handleChange}>
           {[...Array(25).keys()].map(i => (
             <option key={i} value={i - 12}>{i - 12}</option>
           ))}
         </Select>
-      </div>
-      <h3>Step {baseStepNumber + 2}. 커버 이름 정하기</h3>
-      <div>
-        <Input type="text" id="coverName" name="coverName" value={data.coverName} onChange={handleChange} />
-      </div>
-      <Button $marginLeft={0} $marginTop={0} type="submit"
+      </Step>
+      
+
+
+      
+      <Step>
+      <h3 className="subtitle">Step {baseStepNumber + 2}. 커버 이름 정하기</h3>
+      <Input type="text" id="coverName" name="coverName" value={data.coverName} onChange={handleChange} />
+      </Step>
+
+      <div className="w-5/6 flex">
+      <Button $marginTop={2} $color="#FE9D6A" $width={10} $height={3} type="submit"
         disabled={
           !isValidYoutubeLink(data.youtubeLink) ||!data.youtubeLink || !data.singer || !data.title || data.modelCode === 0 || !data.coverName}>변환하기</Button>
+      </div>
+      
 
 
-    </form>
+    </Container>
   )
 }
 
