@@ -27,6 +27,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import static com.usagi.sorimaeul.utils.FileUtil.*;
+import static com.usagi.sorimaeul.utils.Const.*;
 
 
 import java.io.File;
@@ -49,7 +50,6 @@ public class DubbingServiceImpl implements DubbingService {
     private final VoiceSourceRepository voiceSourceRepository;
     private final VoiceModelRepository voiceModelRepository;
     private final S3Service s3Service;
-    private static final String BASE_PATH = "/home/ubuntu/sorimaeul-data";
 
     // 원본 영상 목록 조회
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(long userCode, Integer page, String target){
@@ -390,7 +390,7 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 폴더 경로 설정
-        String folderPath = BASE_PATH + "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+        String folderPath = EC2_BASE_PATH + "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
 
         try {
             // 폴더 생성
@@ -569,7 +569,7 @@ public class DubbingServiceImpl implements DubbingService {
         byte[] fileToSend;
         Path path;
         try {
-            path = Paths.get(BASE_PATH + "/" + request.getPath()); // 로컬 파일 경로
+            path = Paths.get(EC2_BASE_PATH + "/" + request.getPath()); // 로컬 파일 경로
             fileToSend = Files.readAllBytes(path);
         } catch (IOException e) {
             e.printStackTrace();
@@ -577,7 +577,7 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 미변환 음성 파일 S3에 저장하기
-        s3Service.saveByteToS3(BASE_PATH + "/" + request.getPath(), fileToSend);
+        s3Service.saveByteToS3(EC2_BASE_PATH + "/" + request.getPath(), fileToSend);
 
         return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
     }
