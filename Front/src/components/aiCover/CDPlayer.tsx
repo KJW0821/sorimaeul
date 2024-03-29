@@ -3,40 +3,8 @@ import { Cover } from "./CoverInterface";
 import { useNavigate } from "react-router";
 import heart from "../../assets/heart.png";
 
-const CDContainer = styled.div`
-  position: relative;
-  padding: 20px;
-  width: 100%;
-  height: 100%;;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -110%);
-    width: 3vw;
-    height: 3vw;
-    border-radius: 50%;
-    background-color: white;
-    z-index: 2;
-  }
-`;
 
-const StyledImage = styled.img`
-  border-radius: 50%;
-  width: 13vw;
-  height: auto;
-  object-fit: cover;
-  margin: 0 auto 10px auto;
-  margin-bottom: 10px; 
-  display: block; 
-  position: relative; 
-  z-index: 1;  
-`;
 
 const CoverTitle = styled.p`
   font-size: 1rem; 
@@ -51,22 +19,8 @@ const ProfileSection = styled.div`
   margin-bottom: 13px;
 `;
 
-const ProfileImage = styled.img`
-  border-radius: 50%;
-  width: 2.2rem; 
-  height: 2.2rem;
-  object-fit: cover;
-  margin-top: 9px;
-  margin-right: 10px;
-`;
 
-const Nickname = styled.p`
-  flex-grow: 1;
-  margin-left: 10px;
-  margin-top: 1rem;
-  font-size: 1rem; 
-  color: #575757;
-`;
+
 
 const LikeSection = styled.div`
   display: flex;
@@ -76,7 +30,7 @@ const LikeSection = styled.div`
 const LikeImage = styled.img`
   width: 24px; 
   height: 24px;
-  margin-right: 5px; 
+
 `;
 
 const LikeCount = styled.p`
@@ -106,23 +60,25 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     title,
   } = cover;
   const navigate = useNavigate();
-
+  console.log(cover);
   return (
-    <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
-      <StyledImage src={thumbnailPath} alt={title} />
-      <CoverTitle>{coverName}</CoverTitle>
-      <ProfileSection>
-        <ProfileImage src={profileImage} alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
-        <Nickname>{nickname}</Nickname>
-        <LikeSection>
+    <div onClick={() => navigate(`/cover/${coverCode}`)}>
+      확인
+      <img src={thumbnailPath} alt={title} />
+      <p>{coverName}</p>
+      <div>
+        <img src={profileImage} alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
+        <p>{nickname}</p>
+        <div>
           <LikeImage src={heart} alt="Like" />
           <LikeCount>{likeCount}</LikeCount>
-        </LikeSection>
-      </ProfileSection>
+        </div>
+      </div>
       <SongInfo>
         {singer} - {title} ({coverSinger})
       </SongInfo>
-    </CDContainer>
+      확인
+    </div>
   );
 };
 
