@@ -4,26 +4,43 @@ import { useNavigate } from "react-router";
 import heart from "../../assets/heart.png";
 
 const CDContainer = styled.div`
-  border: 2px solid #ccc;
+  position: relative;
   padding: 20px;
-  width: 15rem;
-  height: 350px;
+  width: 18rem;
+  height: 22rem;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -145%);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: white;
+    z-index: 2;
+  }
 `;
 
 const StyledImage = styled.img`
   border-radius: 50%;
-  width: 14rem;
-  height: 200px;
+  width: 13rem;
+  height: 13rem;
   object-fit: cover;
-  margin-bottom: 10px; // 커버 제목과의 간격
+  margin: 0 auto 10px auto;
+  margin-bottom: 10px; 
+  display: block; 
+  position: relative; 
+  z-index: 1;  
 `;
 
 const CoverTitle = styled.p`
-  font-size: 1.3rem; // 글자 크기 설정
-  margin-bottom: 5px; // 프로필 이미지와의 간격
+  font-size: 1.3rem; 
+  margin-bottom: 5px; 
 `;
 
 const ProfileSection = styled.div`
@@ -31,20 +48,23 @@ const ProfileSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px; // 다음 내용과의 간격
+  margin-bottom: 13px;
 `;
 
 const ProfileImage = styled.img`
   border-radius: 50%;
-  width: 30px; // 프로필 이미지 크기
-  height: 30px;
+  width: 2.2rem; 
+  height: 2.2rem;
   object-fit: cover;
+  margin-top: 9px;
+  margin-right: 10px;
 `;
 
 const Nickname = styled.p`
   flex-grow: 1;
   margin-left: 10px;
-  font-size: 0.875rem; 
+  margin-top: 1rem;
+  font-size: 1rem; 
   color: #575757;
 `;
 
@@ -66,7 +86,6 @@ const LikeCount = styled.p`
 
 const SongInfo = styled.p`
   font-size: 0.7rem; 
-  font-family: 
   color: #A3A3A3;
 `;
 
@@ -79,6 +98,7 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     coverCode,
     coverName,
     thumbnailPath,
+    profileImage,
     nickname,
     likeCount,
     coverSinger,
@@ -92,10 +112,10 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
       <StyledImage src={thumbnailPath} alt={title} />
       <CoverTitle>{coverName}</CoverTitle>
       <ProfileSection>
-        <ProfileImage src="/path/to/profile/image.jpg" alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
+        <ProfileImage src={profileImage} alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
         <Nickname>{nickname}</Nickname>
         <LikeSection>
-          <LikeImage src={heart} alt="Like" /> 
+          <LikeImage src={heart} alt="Like" />
           <LikeCount>{likeCount}</LikeCount>
         </LikeSection>
       </ProfileSection>

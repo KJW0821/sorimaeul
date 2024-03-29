@@ -1,13 +1,80 @@
 import { useNavigate } from "react-router-dom";
 import { Cover } from "./CoverInterface"
 import styled from 'styled-components';
+import heart from "../../assets/heart.png";
 
 const CardContainer = styled.div`
-  border: 2px solid #ccc; /* 네모 테두리 스타일 지정 */
-  padding: 20px; /* 내부 패딩 지정 */
-  border-radius: 8px; /* 둥근 테두리를 위한 border-radius 지정 */
-  width: 400px; /* 특정한 너비로 고정 */
+  margin-top: 1rem;
+  margin-bottom: -2rem;
+  padding: 20px;
+  border-radius: 8px;
+  width: 17rem;
+  cursor: pointer;
 `;
+
+const ThumbnailImage = styled.img`
+  width: 100%; 
+  height: auto; 
+  border-radius: 4px; 
+`;
+
+const Title = styled.h2`
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
+const Nickname = styled.p`
+  flex-grow: 1;
+  margin-left: 10px;
+  margin-top: 0.5rem;
+  font-size: 1rem; 
+  color: #575757;
+`;
+
+const ProfileLine = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+`;
+
+const ProfileInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ProfileImage = styled.img`
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%; 
+  margin-right: 0.5rem;
+`;
+
+const LikeContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const HeartIcon = styled.img`
+  margin-right: 10px;
+  width: 24px; 
+  height: auto; 
+`;
+
+const LikeCount = styled.p`
+margin-right: 10px;
+  font-size: 1.4rem; 
+  margin-top: 4px;
+`;
+
+const SongInfo = styled.p`
+  font-size: 0.9rem; 
+  color: #A3A3A3;
+`;
+
+
+
 
 interface Props {
   cover: Cover;
@@ -16,18 +83,24 @@ interface Props {
 const CoverCard: React.FC<Props> = ({
   cover
 }) => {
-  const { coverCode, coverName, thumbnailPath, nickname, likeCount, coverSinger, singer, title } = cover;
+  const { coverCode, coverName, thumbnailPath, profileImage, nickname, likeCount, coverSinger, singer, title } = cover;
   const navigate = useNavigate();
 
   return (
-    <CardContainer onClick={()=> navigate(`/cover/${coverCode}`)}>
-      <img src={thumbnailPath} alt={title} />
-      <h2>{title}</h2>
-      <p>원곡 가수: {singer}</p>
-      <p>커버 가수: {coverSinger}</p>
-      <p>커버 제목: {coverName}</p>
-      <p>업로드한 사용자: {nickname}</p>
-      <p>좋아요 수: {likeCount}</p>
+  <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
+      <ThumbnailImage src={thumbnailPath} alt={title} />
+      <Title>{coverName}</Title>
+      <ProfileLine>
+        <ProfileInfo>
+          <ProfileImage src={profileImage} />
+          <Nickname>{nickname}</Nickname>
+        </ProfileInfo>
+        <LikeContainer>
+          <HeartIcon src={heart} alt="Heart" />
+          <LikeCount>{likeCount}</LikeCount>
+        </LikeContainer>
+      </ProfileLine>
+      <SongInfo>{singer} - {title} ({coverSinger})</SongInfo>
     </CardContainer>
   );
 };
