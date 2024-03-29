@@ -52,6 +52,17 @@ export const getCovers = (keyword: string | null = null) => {
   })
 }
 
+// AI 마이 페이지 조회
+export const getMyCovers = (keyword: string | null = null) => {
+  const params: ListParams = { target: "mine", page: 1};
+  if (keyword) {
+    params.keyword = keyword;
+  }
+  return API.get("cover", { params })
+  .then(res => res.data)
+  .catch(err => err)
+}
+
 // AI 인기 목록 조회
 export const getPopularCovers = () => {
   const params: ListParams = { target: "popular", page: 1 };
