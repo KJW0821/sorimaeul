@@ -36,7 +36,7 @@ public class NotifyController {
 			@ApiResponse(responseCode = "200", description = "알림 확인 성공"),
 			@ApiResponse(responseCode = "404", description = "알림 존재하지 않음")
 	})
-	@PatchMapping("/{notify-code}")
+	@PatchMapping("/{notifyCode}")
 	public ResponseEntity<Void> checkNotify(@PathVariable int notifyCode) {
 		int cnt = notifyService.checkNotify(notifyCode);
 		if (cnt == 1) {
@@ -52,7 +52,7 @@ public class NotifyController {
 			@ApiResponse(responseCode = "200", description = "알림 삭제 성공"),
 			@ApiResponse(responseCode = "404", description = "알림 존재하지 않음")
 	})
-	@DeleteMapping("/{notify-code}")
+	@DeleteMapping("/{notifyCode}")
 	public ResponseEntity<Void> deleteNotify(@PathVariable int notifyCode) {
 		int cnt = notifyService.deleteNotify(notifyCode);
 		if (cnt == 1) {
