@@ -1,9 +1,19 @@
+import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router"
 import { createCover } from "../../utils/coverAPI";
 import { CoverCreateInterface } from "../../components/aiCover/CoverInterface";
 import CoverForm from "../../components/aiCover/CoverForm";
+import coverBg from "../../assets/coverBg.png";
 
+const Container = styled.div`
+background: url(${coverBg});
+height: 100vh;
+background-size: cover;
+display: flex;
+justify-content: center;
+align-items: center;
+`
 
 
 // 커버 컨텐츠 생성 페이지
@@ -28,9 +38,9 @@ const CoverCreatePage: React.FC = () => {
   };
 
   return (
-    <>
+    <Container>
       <CoverForm onSubmit={handleSubmit} />
-    </>
+    </Container>
   )
 }
 
