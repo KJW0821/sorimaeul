@@ -21,7 +21,6 @@ import SideBar from './components/common/SideBar';
 import ModelCreatePage from './pages/voiceModel/ModelCreatePage';
 import ModelDetailPage from './pages/voiceModel/ModelDetailPage';
 import RecordingPage from './pages/voiceModel/RecordingPage';
-import CoverUpdatePage from './pages/aiCover/CoverUpdatePage';
 import CoverDetailPage from './pages/aiCover/CoverDetailPage';
 import CoverListPage from './pages/aiCover/CoverListPage';
 import CoverResultPage from './pages/aiCover/CoverResultPage';
@@ -152,14 +151,10 @@ const router = createBrowserRouter([
                 element: <CoverResultPage />,
               },
               {
-                path: 'edit/:id',
-                element: <CoverUpdatePage />,
-              },
-              {
-                path: 'board/:id',
-                element: <CoverResultPage />,
-              },
-            ],
+                path: "board/:id",
+                element: <CoverResultPage />
+              }
+            ]
           },
           {
             path: 'profile',

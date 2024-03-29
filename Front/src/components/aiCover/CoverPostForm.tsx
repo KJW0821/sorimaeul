@@ -2,20 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../common/Button";
 import { CoverUpdateInterface } from "./CoverInterface";
 import { requestS3 } from "../../utils/s3";
+import { CoverInfo } from "../profile/playlist/PlaylistDetailModal";
 
 interface Props {
   isEdit: boolean;
   initialData?: CoverUpdateInterface; 
   onSubmit: (data: CoverUpdateInterface) => void; 
+  coverData: CoverInfo | null;
 }
 // 커버 게시 정보 설정 폼 
-const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, onSubmit }) => { 
+const CoverPostForm : React.FC<Props> = ({ isEdit, initialData, coverData, onSubmit }) => { 
   const [data, setData] = useState<CoverUpdateInterface>({    
     coverName: "",
     coverDetail: "",
     thumbnailPath: "",
     isPublic: true,
   });
+
+  const { coverSinger , singer,  title, storagePath,  nickname } = coverData || {};
+
 
   // 초기 데이터 설정
   useEffect(() => {
