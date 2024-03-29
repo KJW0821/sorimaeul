@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseController {
 
 	private final SseService sseService;
+	private final NotifyService notifyService;
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Operation(summary = "SSE 연결 요청",
@@ -41,6 +42,15 @@ public class SseController {
 	public ResponseEntity<Void> disconnect(@RequestHeader("Authorization") String token) {
 		long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 		sseService.disConnect(userCode);
+		return ResponseEntity.ok().build();
+	}
+
+	@Operation(summary = "알림 전송",
+			description = "파라미터를 받아 알림 전송")
+	@PostMapping("/notify")
+	public ResponseEntity<Void> notify(@RequestBody SseRequest request) {
+		notifyService.createNotify(request);
+		sseService.sendToClient(request.getUserCode(), request.getName(), request.getData());
 		return ResponseEntity.ok().build();
 	}
 
