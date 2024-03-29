@@ -13,11 +13,13 @@ export interface AlarmData {
 export interface CommonState {
   isOpen: boolean;
   alarmList: AlarmData[];
+  unreadMsgCnt: number;
 }
 
 const initialState: CommonState = {
   isOpen: false,
-  alarmList: []
+  alarmList: [],
+  unreadMsgCnt: 0
 }
 
 export const commonSlice = createSlice({
@@ -38,11 +40,14 @@ export const commonSlice = createSlice({
         return el;
       })
     },
+    setUnreadMsgCnt(state) {
+      state.unreadMsgCnt = state.alarmList.filter(el => el.isChecked === 0).length
+    },
     removeAlarm(state, action) {
       state.alarmList = state.alarmList.filter(el => el.notifyCode !== action.payload)
     }
   }
 });
 
-export const { toggleSideBar, setAlarmList, checkAlarmState, removeAlarm } = commonSlice.actions;
+export const { toggleSideBar, setAlarmList, checkAlarmState, removeAlarm, setUnreadMsgCnt } = commonSlice.actions;
 export default commonSlice.reducer;
