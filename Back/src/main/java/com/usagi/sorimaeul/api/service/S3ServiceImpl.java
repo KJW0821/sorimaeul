@@ -46,7 +46,7 @@ public class S3ServiceImpl implements S3Service {
         // fileName ( Front에서 파일명 생성 날짜 + 파일명 + 난수 )
         // 경로 구성 => filePath = mimeType 앞부분 + 파일명
         String filePath = mimeType.split("/")[0] + fileName;
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, filePath)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(expiration);
 
