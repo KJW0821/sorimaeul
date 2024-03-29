@@ -66,7 +66,7 @@ const RequestForm: React.FC<{ isEdit: boolean }> = ({isEdit}) => {
         navigate(`/request/${params.id}`);
       } else {
         const res = await createRequest({title, content});
-        console.log(res);
+        navigate(`/request/${res?.data.boardCode}`);
       }
     } else {
       alert('제목과 내용을 입력해주세요.');
