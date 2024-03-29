@@ -16,7 +16,7 @@ import { logout as logoutAPI } from "../../utils/userAPI";
 import { logout as logoutState } from "../../stores/user";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
-import { setAlarmList, toggleSideBar as toggle } from "../../stores/common";
+import { setAlarmList, setUnreadMsgCnt, toggleSideBar as toggle } from "../../stores/common";
 import { openModal } from "../../stores/modal";
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { useEffect } from 'react';
@@ -90,7 +90,8 @@ function SideBar() {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.common.isOpen);
   const isUser = useSelector((state: RootState) => state.user.loggedIn);
-  const msgCnt = useSelector((state: RootState) => state.common.alarmList.length);
+  const msgCnt = useSelector((state: RootState) => state.common.unreadMsgCnt);
+  const alarmList = useSelector((state: RootState) => state.common.alarmList);
 
   const toggleSideBar = () => {
     dispatch(toggle());
@@ -159,6 +160,10 @@ function SideBar() {
       getAlarmData();
     }
   }, [isUser])
+
+  useEffect(() => {
+    dispatch(setUnreadMsgCnt());
+  }, [alarmList])
 
   return (
     <Container $isOpen={isOpen}>
