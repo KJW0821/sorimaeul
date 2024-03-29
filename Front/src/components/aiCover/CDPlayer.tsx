@@ -53,16 +53,18 @@ const ProfileSection = styled.div`
 
 const ProfileImage = styled.img`
   border-radius: 50%;
-  width: 35px; 
-  height: 35px;
+  width: 2.2rem; 
+  height: 2.2rem;
   object-fit: cover;
-  margin-top: 7px;
+  margin-top: 9px;
+  margin-right: 10px;
 `;
 
 const Nickname = styled.p`
   flex-grow: 1;
   margin-left: 10px;
-  font-size: 0.875rem; 
+  margin-top: 1rem;
+  font-size: 1rem; 
   color: #575757;
 `;
 
@@ -84,7 +86,6 @@ const LikeCount = styled.p`
 
 const SongInfo = styled.p`
   font-size: 0.7rem; 
-  font-family: 
   color: #A3A3A3;
 `;
 
@@ -97,6 +98,7 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     coverCode,
     coverName,
     thumbnailPath,
+    profileImage,
     nickname,
     likeCount,
     coverSinger,
@@ -110,7 +112,7 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
       <StyledImage src={thumbnailPath} alt={title} />
       <CoverTitle>{coverName}</CoverTitle>
       <ProfileSection>
-        <ProfileImage src="/path/to/profile/image.jpg" alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
+        <ProfileImage src={profileImage} alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
         <Nickname>{nickname}</Nickname>
         <LikeSection>
           <LikeImage src={heart} alt="Like" />

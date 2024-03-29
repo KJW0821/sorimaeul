@@ -4,6 +4,7 @@ export interface Cover {
   storagePath: string; // "String, AI 커버 파일 경로"
   isPublic: number; // "Integer, 공개 여부"
   likeCount: number; // "Integer, 좋아요 수"
+  profileImage: string;
   thumbnailPath: string; // "String, 썸네일 이미지 경로"
   nickname: string; // "String, 닉네임"
   coverSinger: string; // "String, 커버 가수명"

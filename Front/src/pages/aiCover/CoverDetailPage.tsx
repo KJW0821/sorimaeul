@@ -15,7 +15,7 @@ import heart from "../../assets/heart.png";
 import inactiveHeart from "../../assets/inactiveHeart.png";
 import sumOrange from "../../assets/sumOrange.png";
 
-
+// 상세 조회 페이지
 const StyledContainer = styled.div`
   width: 75%;
   display: flex;

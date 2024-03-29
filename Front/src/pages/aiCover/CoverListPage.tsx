@@ -34,12 +34,26 @@ const Container = styled.div`
   margin: 0 auto; 
 `
 
+const CoverListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+`
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end; 
   margin-bottom: 2rem;
 `;
 
+const DetailLine = styled.div`
+  height: 2px;
+  background-color: #A3A3A3;
+  margin: 0.5rem 0;
+`;
+
+// 커버 전체 목록 페이지
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
   const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
@@ -77,10 +91,11 @@ const CoverListPage: React.FC = () => {
         <ButtonContainer>
           <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
         </ButtonContainer>
-
         <PopularCoverList data={popularDataList} />
-
+        <DetailLine />
+        <CoverListContainer>
         <CoverList data={dataList} />
+        </CoverListContainer>
       </Container>
     </>
   );

@@ -4,7 +4,7 @@ import CoverPostForm from "../../components/aiCover/CoverPostForm";
 import { CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
 import { updateCover } from "../../utils/coverAPI";
 
-
+// 커버 컨텐츠 결과 확인 및 게시 정보 설정 페이지
 const CoverResultPage: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
