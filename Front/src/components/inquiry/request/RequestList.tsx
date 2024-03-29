@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Line } from "../../common/Line";
 import { useNavigate } from "react-router-dom";
+import React, { Fragment } from "react";
+import { RequestData } from "../../../pages/inquiry/RequestListPage";
 
 const List = styled.div`
   width: 100%;
@@ -20,42 +22,9 @@ const List = styled.div`
   }
 `
 
-function RequestList() {
+const RequestList: React.FC<{ data: RequestData[] }> = ({data}) => {
   const navigate = useNavigate();
 
-  const data = [
-    {
-      id: 1,
-      title: "타짜 영상 올려주세요",
-      createdTime: "2024-03-19"
-    },
-    {
-      id: 2,
-      title: "짱구는 못말려 영상도 올려주세요",
-      createdTime: "2024-03-19"
-    },
-    {
-      id: 3,
-      title: "요청요청",
-      createdTime: "2024-03-18"
-    },
-    {
-      id: 4,
-      title: "요청요청",
-      createdTime: "2024-03-18"
-    },
-    {
-      id: 5,
-      title: "요청요청",
-      createdTime: "2024-03-18"
-    },
-    {
-      id: 6,
-      title: "요청요청",
-      createdTime: "2024-03-17"
-    }
-  ]
-  
   return (
     <List>
       <div className="flex justify-center items-center">
@@ -64,14 +33,14 @@ function RequestList() {
       </div>
       <Line />
       {
-        data.map(el => (
-          <>
-            <div onClick={() => navigate(`/request/${el.id}`)} className="flex items-center justify-center">
+        data.map((el) => (
+          <Fragment key={el.boardCode}>
+            <div onClick={() => navigate(`/request/${el.boardCode}`)} className="flex items-center justify-center">
               <p className="title w-3/4">{el.title}</p>
               <p className="date w-1/6">{el.createdTime}</p>
             </div>
             <Line $color="#A3A3A3" />
-          </>
+          </Fragment>
         ))
       }
     </List>
