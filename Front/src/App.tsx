@@ -176,12 +176,12 @@ const router = createBrowserRouter([
                   {
                     path: ":dubCode",
                     element: <UserDubbingDetailPage />
+                  },
+                  {
+                    path: "create",
+                    element: <UserDubbingCreatePage />
                   }
                 ]
-              },
-              {
-                path: "create",
-                element: <UserDubbingCreatePage />
               }
             ]
           }
