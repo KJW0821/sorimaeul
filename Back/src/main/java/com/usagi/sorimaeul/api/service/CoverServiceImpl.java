@@ -270,7 +270,6 @@ public class CoverServiceImpl implements CoverService {
         }
 
 
-
         // 커버 수정
         cover.setCoverName(request.getCoverName());
         cover.setCoverDetail(request.getCoverDetail());
@@ -316,6 +315,7 @@ public class CoverServiceImpl implements CoverService {
             saveFile(folderPath + fileName, file.getBytes());
             Cover cover = coverRepository.findByCoverCode(coverCode);
             cover.setComplete(true);
+            coverRepository.save(cover);
             return ResponseEntity.status(HttpStatus.CREATED).body("저장 성공!");
         } catch (IOException e) {
             e.printStackTrace();
