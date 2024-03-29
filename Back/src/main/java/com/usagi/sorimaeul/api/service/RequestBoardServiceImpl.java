@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.service;
 
 import com.usagi.sorimaeul.dto.dto.RequestInfoDto;
 import com.usagi.sorimaeul.dto.request.RequestCreateRequest;
+import com.usagi.sorimaeul.dto.response.RequestCreateResponse;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestFAQListResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
@@ -77,6 +78,7 @@ public class RequestBoardServiceImpl implements RequestBoardService {
         RequestBoard requestDetail = requestBoardRepository.findByBoardCode(boardCode);
 
         RequestDetailResponse response = RequestDetailResponse.builder()
+                .nickname(user.getNickname())
                 .title(requestDetail.getTitle())
                 .content((requestDetail.getContent()))
                 .createdTime(requestDetail.getCreatedTime())
@@ -101,7 +103,11 @@ public class RequestBoardServiceImpl implements RequestBoardService {
                 .build();
         requestBoardRepository.save(newRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("생성 성공");
+        RequestCreateResponse response =RequestCreateResponse.builder()
+                .boardCode(newRequest.getBoardCode())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     // 문의 게시글 수정

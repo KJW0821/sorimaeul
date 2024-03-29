@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RequestDetailResponse {
 
+    private String nickname;
     private String title;
     private String content;
     private LocalDateTime createdTime;
