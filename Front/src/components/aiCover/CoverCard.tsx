@@ -62,14 +62,20 @@ const HeartIcon = styled.img`
 `;
 
 const LikeCount = styled.p`
-margin-right: 10px;
+  margin-right: 10px;
   font-size: 1.4rem; 
   margin-top: 4px;
 `;
 
 const SongInfo = styled.p`
+  width: 230px;
+  height: 22px;
+  line-height: 22px;
   font-size: 0.9rem; 
   color: #A3A3A3;
+  overflow: hidden;
+  white-spce: nowrap;
+  text-overflow: ellipsis;
 `;
 
 

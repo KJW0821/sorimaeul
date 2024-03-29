@@ -5,13 +5,13 @@ import { CoverListInterface } from "./CoverInterface";
 const ListContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap; 
   justify-content: center; 
-  width: 100%; 
-  height: 20rem;
-  padding: 20px 0; 
+  width: 960px;
+  height: 400px;
+  padding: 80px 0; 
   gap: 20px;
-  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 
