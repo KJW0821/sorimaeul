@@ -6,13 +6,14 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap; 
-  overflow-x: auto; 
   justify-content: center; 
   width: 100%; 
   height: 20rem;
   padding: 20px 0; 
   gap: 20px;
+  margin-bottom: 30px;
 `;
+
 
 
 interface Props {
