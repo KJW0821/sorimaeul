@@ -1,24 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface AlarmData {
   notifyCode: number;
   userCode: number;
   notifyContent: string;
+  notifyType: string;
   isChecked: number;
   createdTime: string;
-  notifyType: string;
   targetCode: number;
 }
 
 export interface CommonState {
   isOpen: boolean;
-  unreadMsgCnt: number;
   alarmList: AlarmData[];
 }
 
 const initialState: CommonState = {
   isOpen: false,
-  unreadMsgCnt: 0,
   alarmList: []
 }
 
@@ -29,11 +27,8 @@ export const commonSlice = createSlice({
     toggleSideBar(state) {
       state.isOpen = !state.isOpen
     },
-    increaseUnreadMsgCnt(state) {
-      state.unreadMsgCnt += 1
-    },
     setAlarmList(state, action) {
-      state.alarmList = action.payload
+      state.alarmList = action.payload;
     },
     checkAlarmState(state, action) {
       state.alarmList = state.alarmList.map(el => {
@@ -49,5 +44,5 @@ export const commonSlice = createSlice({
   }
 });
 
-export const { toggleSideBar, increaseUnreadMsgCnt, setAlarmList, checkAlarmState, removeAlarm } = commonSlice.actions;
+export const { toggleSideBar, setAlarmList, checkAlarmState, removeAlarm } = commonSlice.actions;
 export default commonSlice.reducer;
