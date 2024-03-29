@@ -6,8 +6,7 @@ import heart from "../../assets/heart.png";
 const CardContainer = styled.div`
   margin-top: 1rem;
   margin-bottom: -2rem;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 7px;
   width: 250px;
   cursor: pointer;
 `;
@@ -15,7 +14,7 @@ const CardContainer = styled.div`
 const ThumbnailImage = styled.img`
   width: 100%; 
   height: auto; 
-  border-radius: 4px; 
+  border-radius: 2px; 
 `;
 
 const Title = styled.h2`
