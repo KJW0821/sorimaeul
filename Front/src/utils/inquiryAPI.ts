@@ -7,3 +7,14 @@ export const getFAQ = () => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const getRequests = (page: number) => {
+  return API.get(URL, {
+    params: {
+      page,
+      typeCode: 0
+    }
+  })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
