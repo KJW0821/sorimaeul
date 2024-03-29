@@ -1,14 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CoverPostForm from "../../components/aiCover/CoverPostForm";
 import { CoverUpdateInterface } from "../../components/aiCover/CoverInterface";
-import { updateCover } from "../../utils/coverAPI";
+import { getCover, updateCover } from "../../utils/coverAPI";
+import CoverConverting from "../../components/aiCover/CoverConverting";
+import { CoverInfo } from "../../components/profile/playlist/PlaylistDetailModal";
 
 // 커버 컨텐츠 결과 확인 및 게시 정보 설정 페이지
 const CoverResultPage: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [data, setData] = useState<CoverUpdateInterface | null>(null);
+  const [coverData, setCoverData] = useState<CoverInfo | null>(null);
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const coverCode = params.id;
+
+  // 변환 완료 여부 확인 
+  useEffect(() => {
+    (async () => {
+      try {
+        if (coverCode) {
+          const res = await getCover(coverCode);
+          setIsCompleted(res.complete);
+          console.log("학습 완료 여부", res);
+
+          if (res.complete) {
+            setCoverData(res);
+          };
+
+        };
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
 
   // 폼 제출 핸들러
   const handleSubmit = async (formData: CoverUpdateInterface) => {
@@ -26,7 +51,11 @@ const CoverResultPage: React.FC = () => {
 
   return (
     <>
-      <CoverPostForm isEdit={false} onSubmit={handleSubmit} />
+    {isCompleted ?
+    <CoverPostForm isEdit={false} onSubmit={handleSubmit} coverData={coverData}/>
+      : <CoverConverting />
+     }
+
     </>
   );
 };
