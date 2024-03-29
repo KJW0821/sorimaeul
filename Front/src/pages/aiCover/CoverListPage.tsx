@@ -7,6 +7,9 @@ import PopularCoverList from "../../components/aiCover/PopularCoverList";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
 
+
+
+
 const ColorBlock = styled.div`
   width: 100%;
   height: 11rem;
@@ -31,7 +34,13 @@ const Title = styled.h1`
 
 const Container = styled.div`
   width: 80%;
-  margin: 0 auto; 
+  margin: 0 auto;
+  
+  .title {
+    font-size: 2.5rem;
+    font-family: 'GmarketSansBold';
+    width: 80%;
+  };
 `
 
 const CoverListContainer = styled.div`
@@ -50,6 +59,7 @@ const ButtonContainer = styled.div`
 
 const DetailLine = styled.div`
   height: 2px;
+  width: 1300px;
   background-color: #A3A3A3;
   margin: 0.5rem 0;
 `;
@@ -89,6 +99,7 @@ const CoverListPage: React.FC = () => {
         </div>
       </ColorBlock>
       <Container>
+        <h2 className="title">Hot Contents</h2>
         <ButtonContainer>
           <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
         </ButtonContainer>
