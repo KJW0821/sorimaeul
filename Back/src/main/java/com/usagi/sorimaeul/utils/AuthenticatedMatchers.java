@@ -10,7 +10,9 @@ public class AuthenticatedMatchers {
             "/oauth/login/**",
             "/oauth/logout",
             "/oauth/reissue",
-            "/sse/**",
+            "/cover/save/**",
+            "/dub/save",
+            "/notify/send",
             "/api-docs",
             "/api-docs/json",
             "/v3/**",
@@ -18,8 +20,7 @@ public class AuthenticatedMatchers {
             "/swagger-ui/index.html",
             "/swagger-ui/**",
             "/api-docs/**",
-            "/swagger-ui.html",
-            "/cover/save/**"
+            "/swagger-ui.html"
     };
 
 }
