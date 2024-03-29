@@ -16,13 +16,13 @@ import { logout as logoutAPI } from "../../utils/userAPI";
 import { logout as logoutState } from "../../stores/user";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
-import { toggleSideBar as toggle } from "../../stores/common";
+import { setAlarmList, toggleSideBar as toggle } from "../../stores/common";
 import { openModal } from "../../stores/modal";
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { useEffect } from 'react';
 import { isProduction } from '../../utils/axios';
 import { getCookie } from '../../utils/cookie';
-import { increaseUnreadMsgCnt } from '../../stores/common';
+import { getAlarmList } from "../../utils/alarm";
 
 const Container = styled.div<{$isOpen: boolean}>`
   position: fixed;
@@ -43,11 +43,38 @@ const Container = styled.div<{$isOpen: boolean}>`
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    .msg-cnt {
+      background: #BFFF0A;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      padding-top: .2rem;
+      font-size: .75rem;
+      color: black;
+      top: -.25rem;
+      right: -.25rem;
+    }
     .col {
       width: 100%;
       display: flex;
       gap: 1rem;
       align-items: center;
+      .col-msg-cnt {
+        background: #BFFF0A;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        padding-top: .2rem;
+        font-size: .75rem;
+        color: black;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
     }
 
     p {
@@ -63,6 +90,7 @@ function SideBar() {
   const dispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.common.isOpen);
   const isUser = useSelector((state: RootState) => state.user.loggedIn);
+  const msgCnt = useSelector((state: RootState) => state.common.alarmList.length);
 
   const toggleSideBar = () => {
     dispatch(toggle());
@@ -83,6 +111,11 @@ function SideBar() {
     dispatch(openModal({modalType: "alarm",}));
   };
 
+  const getAlarmData = async () => {
+    const res = await getAlarmList();
+    dispatch(setAlarmList(res.list));
+  };
+
   const EventSource = EventSourcePolyfill || NativeEventSource;
 
   useEffect(() => {
@@ -101,21 +134,29 @@ function SideBar() {
       eventSource.onopen = (e) => {
         console.log('연결 열림');
       };
-  
-      eventSource.onmessage = (e) => {
-        console.log('메시지 왔다', e.data);
-        dispatch(increaseUnreadMsgCnt());
-      };
 
-      eventSource.addEventListener("message", (e) => {
+      eventSource.addEventListener("train", (e: any) => {
         console.log(JSON.parse(e.data));
-      })
+        getAlarmData();
+      });
+
+      eventSource.addEventListener("cover", (e: any) => {
+        console.log(JSON.parse(e.data));
+        getAlarmData();
+      });
+
+      eventSource.addEventListener("cover", (e: any) => {
+        console.log(JSON.parse(e.data));
+        getAlarmData();
+      });
   
       eventSource.onerror = (e: any) => {
         if (!e.error.message.includes("No activity")) {
           eventSource.close();
         }
       };
+
+      getAlarmData();
     }
   }, [isUser])
 
@@ -157,6 +198,9 @@ function SideBar() {
               <div className="col" onClick={openAlarmModal}>
                 <img src={bell} alt="alarm" />
                 <p>알림</p>
+                <div className="col-msg-cnt">
+                  {msgCnt}
+                </div>
               </div>
             </div>
           </div>
@@ -187,7 +231,12 @@ function SideBar() {
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
               <img onClick={() => navigate('/profile')} src={user} alt="profile" />
-              <img onClick={openAlarmModal} src={bell} alt="alarm" />
+              <div className="relative">
+                <img onClick={openAlarmModal} src={bell} alt="alarm" />
+                <div className="msg-cnt">
+                  {msgCnt}
+                </div>
+              </div>
             </div>
           </div>
           <div className="content">
