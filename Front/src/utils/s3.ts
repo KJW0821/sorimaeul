@@ -16,11 +16,15 @@ export const resizeFile = async (file: File) =>
     );
   });
 
-const getPresignedURL = async (filename: string) => {
-  const URL = "/images/presigned/upload";
+const getPresignedURL = async (fileName: string, mimeType: string, fileSize: number) => {
+  const URL = "/s3/upload";
   const response = await API.get(URL, {
     method: "GET",
-    params: { filename },
+    params: { 
+      fileName,
+      mimeType,
+      fileSize
+     },
   });
   return response.data.url as string;
 };
@@ -45,7 +49,7 @@ interface RequestS3 {
 export const requestS3 = async ({ filename, file }: RequestS3) => {
   const fileName = getFileName(filename);
   const [uploadURLResult, resizedFileResult] = await Promise.allSettled([
-    getPresignedURL(fileName),
+    getPresignedURL(fileName, file.type, file.size),
     resizeFile(file),
   ]);
 
@@ -58,7 +62,7 @@ export const requestS3 = async ({ filename, file }: RequestS3) => {
         "Content-Type": file.type,
       },
     });
-    return `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${fileName}`;
+    return `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/images/${fileName}`;
   } else {
     const error = new Error();
     error.name = "이미지 처리중 에러가 발생하였습니다.";
