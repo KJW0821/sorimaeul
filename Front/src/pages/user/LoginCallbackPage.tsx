@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import API from "../../utils/axios";
 import { setCookie, getCookie, removeCookie } from "../../utils/cookie";
 import { set, login } from "../../stores/user";
+import spinner from "../../assets/spinner.gif";
 
 // 소셜 로그인 후 redirect될 페이지 (call back)
 // 서버로부터 token(access, refresh)까지 받는 역할
@@ -62,11 +63,14 @@ const LoginCallbackPage: React.FC = () => {
   }, [code, provider]);
 
   return (
-      <div>
-          { status === 200 && <Navigate to={"/"} />}
-          { status === 204 && <Navigate to={"/signup"} />}
-      </div>
+    <div className="flex justify-center items-center flex-col h-screen">
+      <h1 className="text-xl font-bold mb-4">로그인 중입니다.</h1>
+      <img src={spinner} alt="로딩중" className="w-1/2"/>
+      { status === 200 && <Navigate to={"/"} />}
+      { status === 204 && <Navigate to={"/signup"} />}
+    </div>
   );
+  
 };
 
 export default LoginCallbackPage;
