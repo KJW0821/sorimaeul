@@ -6,9 +6,9 @@ import heart from "../../assets/heart.png";
 const CardContainer = styled.div`
   margin-top: 1rem;
   margin-bottom: -2rem;
-  padding: 20px;
+  padding: 10px;
   border-radius: 8px;
-  width: 220px;
+  width: 250px;
   cursor: pointer;
 `;
 
