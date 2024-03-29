@@ -1,10 +1,12 @@
 import { RootState } from "../../stores/store";
-import { getAlarmList, checkAlarm, deleteAlarm } from "../../utils/alarm";
+import { checkAlarm, deleteAlarm } from "../../utils/alarm";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import modalCloseBtn from "../../assets/modalCloseBtn.png";
 import { useEffect } from "react";
-import { setAlarmList, checkAlarmState, removeAlarm } from "../../stores/common";
+import { checkAlarmState, removeAlarm } from "../../stores/common";
+import { closeModal } from "../../stores/modal";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 34.125rem;
@@ -64,14 +66,9 @@ const Container = styled.div`
 function AlarmModal() {
   const alarmList = useSelector((state: RootState) => state.common.alarmList);
   const dispatch = useDispatch();
-
-  const getAlarmData = async () => {
-    const res = await getAlarmList();
-    dispatch(setAlarmList(res.list));
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getAlarmData();
     alarmList.forEach((el) => {
       checkAlarm(el.notifyCode);
       dispatch(checkAlarmState(el.notifyCode));
@@ -83,17 +80,28 @@ function AlarmModal() {
     dispatch(removeAlarm(notifyCode));
   };
 
+  const goDetail = (notifyType: string, targetCode: number) => {
+    if (notifyType === 'train') {
+      navigate(`/model/${targetCode}`);
+    } else if (notifyType === 'cover') {
+      //커버로 가기
+    } else {
+      //더빙으로 가기
+    }
+    dispatch(closeModal());
+  };
+
   return (
     <Container>
       <div className="control-box">
         <p className="count">총 <span className="bold">{alarmList ? alarmList.length : 0}</span>개의 알림이 있습니다.</p>
-        <img src={modalCloseBtn} alt="X" />
+        <img onClick={() => dispatch(closeModal())} src={modalCloseBtn} alt="X" />
       </div>
       <div className="alarm-box">
         {
           alarmList &&
           alarmList.map(el => (
-            <div className="alarm" key={el.notifyCode}>
+            <div onClick={() => goDetail(el.notifyType, el.targetCode)} className="alarm" key={el.notifyCode}>
               <p className="content">{el.notifyContent}</p>
               <div className="flex gap-3 justify-center items-center">
                 <p className="date">{el.createdTime.split('T')[0]}</p>
