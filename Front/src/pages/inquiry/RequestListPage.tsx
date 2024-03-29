@@ -36,7 +36,7 @@ function RequestListPage() {
 
   useEffect(() => {
     getRequestList();
-  }, []);
+  }, [page]);
 
   return (
     <>
