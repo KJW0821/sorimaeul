@@ -212,6 +212,11 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델로는 AI 커버를 생성할 수 없습니다.");
         }
 
+        // 더빙 영상용 모델에는 접근 불가
+        if (voiceModel.getVideoSource() != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("더빙용 모델로는 AI 커버를 생성할 수 없습니다.");
+        }
+
         // 학습 가능한 상태의 모델이 아니면 400 반환
         if (voiceModel.getState() != 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 모델은 AI 커버를 생성할 수 있는 상태가 아닙니다. 학습이 완료된 후에 시도해주세요.");
