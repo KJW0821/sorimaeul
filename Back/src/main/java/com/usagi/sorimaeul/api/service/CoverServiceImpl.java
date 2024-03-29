@@ -36,7 +36,7 @@ public class CoverServiceImpl implements CoverService {
     private final LikeRepository likeRepository;
     private final VoiceModelRepository voiceModelRepository;
     private final CoverSourceRepository coverSourceRepository;
-
+    private final S3Service s3Service;
 
     // AI 커버 리스트 조회
     public ResponseEntity<CoverListResponse> getCoverList(long userCode, String target, String keyword, Integer page) {
@@ -311,24 +311,26 @@ public class CoverServiceImpl implements CoverService {
 
     // 생성된 AI 커버 저장
     public ResponseEntity<?> saveCreatedCover(int coverCode, MultipartFile file)  {
+        Cover cover = coverRepository.findByCoverCode(coverCode);
+        String folderPath = "/cover/";
+        String fileName = "cover_" + coverCode + ".wav";
+
+        // 변환된 파일을 s3에 저장
+        byte[] responseFile;
         try {
-            String folderPath = EC2_BASE_PATH + "/cover/";
-            String fileName = "cover_" + coverCode + ".mp3";
-            // 폴더 생성
-            createFolder(folderPath);
-            // 파일 생성
-            saveFile(folderPath + fileName, file.getBytes());
-            Cover cover = coverRepository.findByCoverCode(coverCode);
-            // 완료 표시와 생성 시간 업데이트
-            cover.setComplete(true);
-            cover.setCreatedTime(LocalDateTime.now());
-            coverRepository.save(cover);
-            return ResponseEntity.status(HttpStatus.CREATED).body("저장 성공!");
+            responseFile = file.getBytes();
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("생성된 AI 커버를 업로드하는 과정에서 오류가 발생했습니다." + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 읽는 중 오류가 발생했습니다.");
         }
+        s3Service.saveByteToS3(folderPath + fileName, responseFile);
+
+        // 완료 표시와 생성 시간 업데이트
+        cover.setComplete(true);
+        cover.setCreatedTime(LocalDateTime.now());
+        cover.setStoragePath(folderPath + fileName);
+        coverRepository.save(cover);
+        return ResponseEntity.status(HttpStatus.CREATED).body("저장 성공!");
     }
 
 
