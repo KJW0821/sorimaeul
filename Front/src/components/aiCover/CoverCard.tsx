@@ -8,7 +8,7 @@ const CardContainer = styled.div`
   margin-bottom: -2rem;
   padding: 20px;
   border-radius: 8px;
-  width: 17rem;
+  width: 220px;
   cursor: pointer;
 `;
 

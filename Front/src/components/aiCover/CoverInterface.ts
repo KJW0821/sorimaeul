@@ -57,3 +57,11 @@ export interface CoverUpdateInterface {
   thumbnailPath: string;
   isPublic: boolean;
 }
+
+export interface SongInterface {
+  coverSourceCode: number;
+  singer: string; 
+  title: string;
+  youtubeLink: string;
+  thumbnailPath: string; 
+}
