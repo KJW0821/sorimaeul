@@ -323,7 +323,7 @@ const CoverDetailPage: React.FC = () => {
        {/* 작성자만 수정/삭제 버튼 표시 */}
       <ButtonBox>
       {data && data.nickname === loggedInUserNickname &&
-        <Button onClick={() => navigate(`/cover/edit/${params.id}`)}>
+        <Button onClick={() => navigate(`/cover/board/${params.id}`)}>
           <img className="icon" src={editIcon} alt="edit icon" />
           <p>수정</p>
           </Button>}
