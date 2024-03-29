@@ -119,13 +119,17 @@ function ModelForm() {
   };
 
   const submitHandler = async () => {
-    const res = await voiceModelAPI.createModel({modelName, imagePath});
-    if (res?.status === 201) {
-      console.log(res.data, '모델 생성 완료');
-      dispatch(initModelInfo(res.data.modelCode));
-      navigate(`/model/${res.data.modelCode}`);
+    if (modelName !== "") {
+      const res = await voiceModelAPI.createModel({modelName, imagePath});
+      if (res?.status === 201) {
+        console.log(res.data, '모델 생성 완료');
+        dispatch(initModelInfo(res.data.modelCode));
+        navigate(`/model/${res.data.modelCode}`);
+      } else {
+        console.log(res);
+      }
     } else {
-      console.log(res);
+      window.alert('제목을 입력해주세요');
     }
   };
 

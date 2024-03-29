@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../stores/store";
 import { Button } from "../../common/Button";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { startModelLearning } from "../../../utils/voiceModelAPI";
-// import { setIsLearning, setIsStart } from "../../../stores/voiceModel";
+import { startModelLearning } from "../../../utils/voiceModelAPI";
+import { setIsLearning, setIsStart } from "../../../stores/voiceModel";
 
 const Container = styled.div`
   width: 100%;
@@ -63,7 +63,7 @@ const ProgressBar = styled.div<{ $percentage: number }>`
 `
 
 function SelfRecordMethod() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const modelInfo = useSelector((state: RootState) => state.voiceModel);
@@ -73,13 +73,15 @@ function SelfRecordMethod() {
     if (modelInfo.learnState === 0) {
       navigate(`/model/${modelInfo.modelCode}/record`);
     }
-  }
+  };
 
   const startLearning = async () => {
-    // await startModelLearning(modelInfo.modelCode);
-    // dispatch(setIsLearning(2));
-    // dispatch(setIsStart(false));
-  }
+    const res = await startModelLearning(modelInfo.modelCode);
+    if (res?.status === 200) {
+      dispatch(setIsLearning(2));
+      dispatch(setIsStart(false));
+    }
+  };
 
   useEffect(() => {
     setPercentage(((Math.round((modelInfo.recordCount/200)*1000*100))/1000));
@@ -110,9 +112,8 @@ function SelfRecordMethod() {
               </ProgressBar>
               <p className="sm-font">{percentage}% ({modelInfo.recordCount}/200문장)</p>
             </div>
-            <div className="flex gap-4 justify-center">
+            <div className="flex justify-center">
               <Button onClick={() => navigate(`/model/${modelInfo.modelCode}/record`)} $marginLeft={0} $marginTop={0} $width={4.5}>이어하기</Button>
-              <Button $marginLeft={0} $marginTop={0} $width={4.5} $color="black" $background="#7C87E3">새로 하기</Button>
             </div>
           </div>
           :
