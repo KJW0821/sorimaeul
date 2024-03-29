@@ -7,6 +7,10 @@ import smile from "../../assets/smiling.png";
 import defaultProfile from "../../assets/profile.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import editIcon from "../../assets/editIcon.png";
+import CommentComponent from "../../components/common/Comment";
+import { getDubComment } from "../../utils/commentAPI";
+import { useDispatch } from "react-redux";
+import { setCategory, setComments, setSelectedPostId } from "../../stores/comment";
 
 const Container = styled.div`
   width: 75%;
@@ -117,6 +121,7 @@ interface InfoData {
 
 function UserDubbingDetailPage() {
   const params = useParams();
+  const dispatch = useDispatch();
   
   const [info, setInfo] = useState<InfoData | null>(null);
 
@@ -125,10 +130,20 @@ function UserDubbingDetailPage() {
       const res = await getUserVideo(params.dubCode);
       setInfo(res);
     }
+  };
+
+  const getComments = async () => {
+    if (params.dubCode) {
+      const res = await getDubComment(params.dubCode);
+      dispatch(setComments(res));
+      dispatch(setSelectedPostId(params.dubCode));
+      dispatch(setCategory('dub'));
+    }
   }
 
   useEffect(() => {
     getUserVideoData();
+    getComments();
   }, [params.dubCode])
 
   return (
@@ -163,6 +178,7 @@ function UserDubbingDetailPage() {
           <p className="description">{info?.dubDetail}</p>
           <p className="date">{info?.createdTime}</p>
         </div>
+        <CommentComponent width={100} />
       </Container> 
     </>
   )
