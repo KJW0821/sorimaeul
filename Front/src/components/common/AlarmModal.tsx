@@ -3,10 +3,10 @@ import { checkAlarm, deleteAlarm } from "../../utils/alarm";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import modalCloseBtn from "../../assets/modalCloseBtn.png";
-import { useEffect } from "react";
-import { checkAlarmState, removeAlarm } from "../../stores/common";
+import { checkAlarmState, removeAlarm, setUnreadMsgCnt } from "../../stores/common";
 import { closeModal } from "../../stores/modal";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Container = styled.div`
   width: 34.125rem;
@@ -68,19 +68,14 @@ function AlarmModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    alarmList.forEach((el) => {
-      checkAlarm(el.notifyCode);
-      dispatch(checkAlarmState(el.notifyCode));
-    })
-  }, [])
-
   const clickDelete = (notifyCode: number) => {
     deleteAlarm(notifyCode);
     dispatch(removeAlarm(notifyCode));
   };
 
-  const goDetail = (notifyType: string, targetCode: number) => {
+  const goDetail = (notifyType: string, targetCode: number, notifyCode: number) => {
+    checkAlarm(notifyCode);
+    dispatch(checkAlarmState(notifyCode));
     if (notifyType === 'train') {
       navigate(`/model/${targetCode}`);
     } else if (notifyType === 'cover') {
@@ -90,6 +85,10 @@ function AlarmModal() {
     }
     dispatch(closeModal());
   };
+
+  useEffect(() => {
+    dispatch(setUnreadMsgCnt());
+  }, [alarmList])
 
   return (
     <Container>
@@ -101,11 +100,18 @@ function AlarmModal() {
         {
           alarmList &&
           alarmList.map(el => (
-            <div onClick={() => goDetail(el.notifyType, el.targetCode)} className="alarm" key={el.notifyCode}>
+            <div onClick={() => goDetail(el.notifyType, el.targetCode, el.notifyCode)} className="alarm" key={el.notifyCode}>
               <p className="content">{el.notifyContent}</p>
               <div className="flex gap-3 justify-center items-center">
                 <p className="date">{el.createdTime.split('T')[0]}</p>
-                <img onClick={() => clickDelete(el.notifyCode)} src={modalCloseBtn} alt="" />
+                <img 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clickDelete(el.notifyCode);
+                  }} 
+                  src={modalCloseBtn} 
+                  alt="" 
+                />
               </div>
             </div>
           ))
