@@ -51,9 +51,9 @@ public class Cover {
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @UpdateTimestamp
-    @Column(name = "updated_time")
-    private LocalDateTime updatedTime;
+    @CreationTimestamp
+    @Column(name = "post_time")
+    private LocalDateTime postTime;
 
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
