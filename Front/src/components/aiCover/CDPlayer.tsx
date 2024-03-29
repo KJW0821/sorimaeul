@@ -6,8 +6,8 @@ import heart from "../../assets/heart.png";
 const CDContainer = styled.div`
   position: relative;
   padding: 20px;
-  width: 18rem;
-  height: 22rem;
+  width: 100%;
+  height: 100%;;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -17,9 +17,9 @@ const CDContainer = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -145%);
-    width: 3rem;
-    height: 3rem;
+    transform: translate(-50%, -110%);
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
     background-color: white;
     z-index: 2;
@@ -28,8 +28,8 @@ const CDContainer = styled.div`
 
 const StyledImage = styled.img`
   border-radius: 50%;
-  width: 13rem;
-  height: 13rem;
+  width: 13vw;
+  height: auto;
   object-fit: cover;
   margin: 0 auto 10px auto;
   margin-bottom: 10px; 
@@ -39,7 +39,7 @@ const StyledImage = styled.img`
 `;
 
 const CoverTitle = styled.p`
-  font-size: 1.3rem; 
+  font-size: 1rem; 
   margin-bottom: 5px; 
 `;
 
