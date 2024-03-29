@@ -1,10 +1,11 @@
 import ColorLine from "../../components/inquiry/ColorLine";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import closeBtn from '../../assets/closeBtn.png';
 import openBtn from '../../assets/openBtn.png';
 import { useNavigate } from "react-router-dom";
 import SubTitle from "../../components/inquiry/SubTitle";
+import { getFAQ } from "../../utils/inquiryAPI";
 
 
 const Question = styled.p`
@@ -18,39 +19,33 @@ const Answer = styled.p`
 `
 
 interface questionData {
-  q: string;
-  a: string;
+  title: string;
+  content: string;
   isOpen?: boolean;
 }
 
 function FAQPage() {
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState<questionData[]>([]);
 
-  const questions: questionData[] = [
-    {
-      q: '이 사이트는 어떻게 이용하나요?',
-      a: '우리 사이트 사용법은 알아서 만들어가보아요....\n쓰면서 익혀보는건 어떨까요???\n원래 다 하면서 배우는거니까 사용하면서 알아가보세요....ㅎㅎㅎㅎ'
-    },
-    {
-      q: '이 사이트는 어떻게 이용하나요?',
-      a: '우리 사이트 사용법은 알아서 만들어가보아요....\n쓰면서 익혀보는건 어떨까요???\n원래 다 하면서 배우는거니까 사용하면서 알아가보세요....ㅎㅎㅎㅎ'
-    },
-    {
-      q: '이 사이트는 어떻게 이용하나요?',
-      a: '우리 사이트 사용법은 알아서 만들어가보아요....\n쓰면서 익혀보는건 어떨까요???\n원래 다 하면서 배우는거니까 사용하면서 알아가보세요....ㅎㅎㅎㅎ'
-    }
-  ]
+  const getRequestList = async () => {
+    const res = await getFAQ();
+    setQuestions(res.requests);
+  }
 
-  const [questionsState, setQuestionState] = useState<questionData[]>(questions.map(question => {
-    const q = question;
-    q.isOpen = false;
-    return q;
-  }));
+  useEffect(() => {
+    getRequestList();
+    setQuestions(questions.map(question => {
+      const q = question;
+      q.isOpen = false;
+      return q;
+    }));
+  }, [])
 
   return (
     <>
       <ColorLine />
-      <div className="mx-auto w-9/12 flex flex-col gap-8">
+      <div className="mx-auto w-9/12 flex flex-col gap-8 pt-4 pb-8">
         <div className="flex gap-4 items-center">
           <SubTitle>
             <span className="lg-font">자</span>주 묻는 질문 FAQ
@@ -59,24 +54,24 @@ function FAQPage() {
         </div>
         <div className="flex flex-col gap-6">
           {
-            questionsState.map((question, idx) => (
+            questions.map((question, idx) => (
               <div key={idx} className="flex flex-col gap-4">
                 <div className="flex gap-2 justify-between items-center">
-                  <Question>Q. {question.q}</Question>
-                  {question.isOpen ? <button onClick={() => setQuestionState(pre => {
+                  <Question>Q. {question.title}</Question>
+                  {question.isOpen ? <button onClick={() => setQuestions(pre => {
                     const newState = [...pre];
                     newState[idx].isOpen = false;
                     return newState
                   })}><img src={closeBtn} /></button>
                   : 
-                  <button onClick={() => setQuestionState(pre => {
+                  <button onClick={() => setQuestions(pre => {
                     const newState = [...pre];
                     newState[idx].isOpen = true;
                     return newState
                   })}><img src={openBtn} /></button>}
                 </div>
-                {question.isOpen && <Answer>{question.a}</Answer>}
-                {idx !== questionsState.length - 1 && <hr />}
+                {question.isOpen && <Answer>{question.content}</Answer>}
+                {idx !== questions.length - 1 && <hr />}
               </div>
             ))
           }
