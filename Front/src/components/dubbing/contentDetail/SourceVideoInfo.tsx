@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getSourceVideo } from "../../../utils/dubbingAPI";
 import { Button } from "../../common/Button";
@@ -74,7 +74,7 @@ const Container = styled.div`
   }
 `
 
-interface VideoData {
+export interface VideoData {
   videoSourceCode: number;
   sourceName: string;
   storagePath: string;
@@ -86,6 +86,7 @@ interface VideoData {
 
 function SourceVideoInfo() {
   const params = useParams();
+  const navigate = useNavigate();
   const [videoInfo, setVideoInfo] = useState<VideoData | null>(null);
 
   const getVideoInfo = async () => {
@@ -117,7 +118,7 @@ function SourceVideoInfo() {
               <p className="playtime">영상 길이: {videoInfo?.videoPlaytime}</p>
               <p className="date">업로드: {videoInfo?.createdTime}</p>
             </div>
-            <Button $marginTop={0} $marginLeft={0} $background="black" $color="#BFFF0A" $width={7} $height={2.5} $fontSize={1.3}>더빙하기</Button>
+            <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} $marginTop={0} $marginLeft={0} $background="black" $color="#BFFF0A" $width={7} $height={2.5} $fontSize={1.3}>더빙하기</Button>
           </div>
         </div>
         

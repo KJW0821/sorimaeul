@@ -11,6 +11,8 @@ interface PaginationProps {
 const Container = styled.div<{ $color: string }>`
   display: flex;
   justify-content: center;
+  margin-bottom: 2rem;
+
   .active {
     border-color: ${(props) => props.$color};
     color: ${(props) => props.$color};

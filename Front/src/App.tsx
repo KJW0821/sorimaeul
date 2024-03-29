@@ -31,6 +31,7 @@ import GlobalModal from './components/common/GlobalModal';
 import UserDubbingDetailPage from './pages/dubbing/UserDubbingDetailPage';
 import Header from './components/common/Header';
 import { PersistGate } from 'redux-persist/integration/react';
+import UserDubbingCreatePage from './pages/dubbing/UserDubbingCreatePage';
 
 const Content = styled.div<{ $isOpen: boolean}>`
   padding-left: ${(props) => (props.$isOpen ? "314px" : "60px")};
@@ -175,9 +176,13 @@ const router = createBrowserRouter([
                   {
                     path: ":dubCode",
                     element: <UserDubbingDetailPage />
+                  },
+                  {
+                    path: "create",
+                    element: <UserDubbingCreatePage />
                   }
                 ]
-              },
+              }
             ]
           }
         ]

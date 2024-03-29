@@ -6,9 +6,10 @@ import { RootState } from "../../stores/store";
 import deleteIcon from "../../assets/deleteIcon.png";
 import { createCoverComment, createDubComment, deleteComment } from "../../utils/commentAPI";
 import { addComment, removeComment } from "../../stores/comment";
+import defaultProfile from "../../assets/profile.png";
 
-const CommentContainer = styled.div`
-  width: 75%;
+const CommentContainer = styled.div<{ $width?: number; }>`
+  width: ${(props) => props.$width ? `${props.$width}%` : '75%'};
   display: flex;
   flex-direction: column;
   border-radius: 15px;
@@ -40,6 +41,7 @@ const InputBox = styled.input`
   flex-grow: 1;
   margin-right: 10px;
   height: 40px;
+  padding: 0 .5rem;
 `;
 
 const Form = styled.form`
@@ -81,7 +83,7 @@ const CommentContent = styled.p`
 
 
 
-const CommentComponent: React.FC = () => {
+const CommentComponent: React.FC<{ width?: number }> = ({width}) => {
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState('');
   const logginedUserImg = useSelector((state: RootState) => state.user.profileImage);
@@ -120,13 +122,15 @@ const CommentComponent: React.FC = () => {
 
 
   return (
-    <CommentContainer>
+    <CommentContainer $width={width}>
       <TitleSection>
         <h2 className="title">댓글</h2>
         <span className="text-orange-400 pt-2">{comments?.length || 0}개</span>
       </TitleSection>
       <CommentInputSection>
-        <img src={logginedUserImg} className="rounded-full w-10 h-10 mr-4 pl-2" alt="Current User ProfileImage" />
+        <div className="rounded-full w-10 h-10 mr-4 overflow-hidden">
+          <img src={logginedUserImg ? logginedUserImg : defaultProfile} className="w-full h-full" alt="Current User ProfileImage" />
+        </div>
         <Form onSubmit={submitHandler}>
           <InputBox
             type="text"
@@ -142,8 +146,9 @@ const CommentComponent: React.FC = () => {
         
         {comments && comments.map(({ commentCode, nickname, profileImage, content, time }) => (
           <CommentItem key={commentCode}>
-
-            <img src={profileImage} className="rounded-full w-10 h-10 mr-4 pl-2" alt={nickname} />
+            <div className="rounded-full w-10 h-10 mr-4 overflow-hidden">
+              <img src={profileImage ? profileImage : defaultProfile} className="w-full h-full" alt={nickname} />
+            </div>
             <div style={{ flexGrow: 1 }}>
               <span>{nickname} <span className="text-stone-300 text-xs">{time}</span></span>
               <CommentContent>{content}</CommentContent>
