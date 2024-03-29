@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class VideoSourceVoiceInfoDto {
 
-    private int videoSourceCode;
     private String voicePath;
+    private int voiceIndex;
+    private String voiceName;
 }

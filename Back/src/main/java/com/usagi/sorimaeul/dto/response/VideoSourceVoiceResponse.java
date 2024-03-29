@@ -12,5 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VideoSourceVoiceResponse {
 
+    private int videoSourceCode;
+    private String videoPath;
     private List<VideoSourceVoiceInfoDto> voiceSources;
 }

@@ -29,7 +29,7 @@ public class DubbingController {
     @Operation(summary = "더빙 영상 제작", description = "더빙 영상을 제작한다")
     @ApiResponse(responseCode = "201", description = "더빙 영상 제작 성공")
     @PostMapping("/create")
-    public ResponseEntity<DubbingCreateResponse> createDubbing(@RequestHeader("Authorization") String token, DubbingCreateRequest request){
+    public ResponseEntity<DubbingCreateResponse> createDubbing(@RequestHeader("Authorization") String token, DubbingCreateRequest request) {
         // API 요청 시 헤더 중 Authorization 키에 담긴 값을 받아옴
         // 유저 코드 받아오기
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
@@ -40,7 +40,7 @@ public class DubbingController {
     @Operation(summary = "더빙 영상 저장", description = "더빙 영상을 S3 서버에 저장한다")
     @ApiResponse(responseCode = "200", description = "더빙 영상 저장 성공")
     @PostMapping("/save")
-    public ResponseEntity<?> saveDubbing(DubbingSaveRequest request){
+    public ResponseEntity<?> saveDubbing(DubbingSaveRequest request) {
         // 유저 코드 받아오기
         return dubbingService.saveDubbing(request);
     }
@@ -51,7 +51,7 @@ public class DubbingController {
     public ResponseEntity<VideoSourceListResponse> getVideoSourceList(@RequestHeader("Authorization") String token,
                                                                       @RequestParam(required = false) Integer page,
                                                                       @RequestParam(required = false) String target
-                                                                      ){
+    ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getVideoSourceList(userCode, page, target);
     }
@@ -60,7 +60,7 @@ public class DubbingController {
     @ApiResponse(responseCode = "200", description = "더빙 원본 영상 상세 조회 성공")
     @GetMapping("/video/{videoSourceCode}")
     public ResponseEntity<VideoSourceDetailResponse> getVideoSourceDetail(@RequestHeader("Authorization") String token,
-                                                                          @PathVariable int videoSourceCode){
+                                                                          @PathVariable int videoSourceCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getVideoSourceDetail(userCode, videoSourceCode);
     }
@@ -69,7 +69,7 @@ public class DubbingController {
     @ApiResponse(responseCode = "200", description = "더빙 원본 영상 파일 조회 성공")
     @GetMapping("/file/{videoSourceCode}")
     public ResponseEntity<Resource> getSourceVideo(@RequestHeader("Authorization") String token,
-                                                    @PathVariable int videoSourceCode) {
+                                                   @PathVariable int videoSourceCode) {
 
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getSourceVideo(userCode, videoSourceCode);
@@ -83,7 +83,7 @@ public class DubbingController {
                                                               @RequestParam(required = false) String keyword,
                                                               @RequestParam(required = false) int page,
                                                               @RequestParam(required = true) int videoSourceCode
-                                                              ) {
+    ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingList(userCode, target, keyword, page, videoSourceCode);
     }
@@ -92,7 +92,7 @@ public class DubbingController {
     @ApiResponse(responseCode = "200", description = "더빙 영상 상세 조회 성공")
     @GetMapping("/{dubCode}")
     public ResponseEntity<DubbingDetailResponse> getDubbingDetail(@RequestHeader("Authorization") String token,
-                                                                  @PathVariable int dubCode){
+                                                                  @PathVariable int dubCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingDetail(userCode, dubCode);
     }
@@ -106,13 +106,13 @@ public class DubbingController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingVideo(userCode, dubCode);
     }
-    
+
     @Operation(summary = "더빙 영상 게시글 등록/수정", description = "더빙 영상 게시글을 등록하거나 수정한다.")
     @ApiResponse(responseCode = "200", description = "더빙 영상 등록/수정 성공")
     @PatchMapping("/{dubCode}")
     public ResponseEntity<?> patchDubbingBoard(@RequestHeader("Authorization") String token,
                                                @PathVariable int dubCode,
-                                               @RequestBody DubbingBoardRequest request){
+                                               @RequestBody DubbingBoardRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.patchDubbingBoard(userCode, dubCode, request);
     }
@@ -121,67 +121,49 @@ public class DubbingController {
     @ApiResponse(responseCode = "204", description = "더빙 영상 삭제 성공")
     @DeleteMapping("/{dubCode}")
     public ResponseEntity<?> deleteDubbing(@RequestHeader("Authorization") String token,
-                                               @PathVariable int dubCode){
+                                           @PathVariable int dubCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.deleteDubbing(userCode, dubCode);
     }
 
     @Operation(summary = "더빙 영상 분리된 음성 조회", description = "더빙 영상 분리된 음성을 조회한다.")
     @ApiResponse(responseCode = "200", description = "더빙 영상 분리된 음성 조회 성공")
-    @GetMapping("/audio/{sourceCode}")
+    @GetMapping("/audio/{videoSourceCode}")
     public ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(@RequestHeader("Authorization") String token,
-                                                                        @PathVariable int sourceCode){
+                                                                        @PathVariable int videoSourceCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-        return dubbingService.getVideoSourceVoice(userCode, sourceCode);
+        return dubbingService.getVideoSourceVoice(userCode, videoSourceCode);
     }
 
-//    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
-//    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
-//    @PostMapping("/record/{num}")
-//    public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
-//                                                 @PathVariable int num,
-//                                                 @RequestBody DubbingRecordRequest request,
-//                                                 @RequestBody MultipartFile recordFile){
-//        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-//        return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
-//    }
-//    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
-//    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
-//    @PostMapping(value = "/record/{num}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
-//                                                 @PathVariable int num,
-//                                                 @ModelAttribute DubbingRecordRequestWrapper requestWrapper){
-//    MultipartFile recordFile = requestWrapper.getRecordFile();
-//    DubbingRecordRequest request = requestWrapper.getRequest();
-//    long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
-//    return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
-//}
+
+    @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
+    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
     @PostMapping("/record/{num}")
     public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
-                                             @PathVariable int num,
-                                             @RequestParam("request") String requestJson,
-                                             @RequestParam("recordFile") MultipartFile recordFile) {
-    long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+                                                 @PathVariable int num,
+                                                 @RequestParam("request") String requestJson,
+                                                 @RequestParam("recordFile") MultipartFile recordFile) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 
-    DubbingRecordRequest request;
-    try {
-        // JSON 문자열을 객체로 변환
-        request = new ObjectMapper().readValue(requestJson, DubbingRecordRequest.class);
-    } catch (JsonProcessingException e) {
-        // JSON 파싱 중 발생한 예외를 처리
-        e.printStackTrace();
-        return ResponseEntity.badRequest().body("JSON 파싱 오류: " + e.getMessage());
+        DubbingRecordRequest request;
+        try {
+            // JSON 문자열을 객체로 변환
+            request = new ObjectMapper().readValue(requestJson, DubbingRecordRequest.class);
+        } catch (JsonProcessingException e) {
+            // JSON 파싱 중 발생한 예외를 처리
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("JSON 파싱 오류: " + e.getMessage());
+        }
+
+        return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
     }
-
-    return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
-}
 
     @Operation(summary = "더빙 음성 변환", description = "더빙 음성을 변환한다.")
     @ApiResponse(responseCode = "200", description = "더빙 음성 변환 성공")
     @PostMapping("/convert/{voiceIndex}")
     public ResponseEntity<?> convertDubbingRecord(@RequestHeader("Authorization") String token,
-                                                 @PathVariable int voiceIndex,
-                                                 @RequestBody DubbingRecordConvertRequest request){
+                                                  @PathVariable int voiceIndex,
+                                                  @RequestBody DubbingRecordConvertRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.convertDubbingRecord(userCode, voiceIndex, request);
     }
