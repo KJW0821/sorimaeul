@@ -234,6 +234,7 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
+  const musicPath = `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${data.storagePath}`
   return (
     <>
       <ColorLine />
@@ -246,7 +247,8 @@ const CoverDetailPage: React.FC = () => {
     <Thumbnail src={data.thumbnailPath} alt="Cover Thumbnail" />
   </ThumbnailContainer>
               <div>
-                음원 저장 경로 {data.storagePath}
+                
+                <audio src={musicPath} controls />
               </div>
             </MediaSection>
             <InfoSection>
