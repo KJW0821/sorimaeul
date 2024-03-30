@@ -233,6 +233,8 @@ public class ModelServiceImpl implements ModelService {
             }
         }
 
+
+
         // GPU 서버에 모델 업로드 요청 보내기
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", modelFiles[0].getResource());
@@ -244,6 +246,10 @@ public class ModelServiceImpl implements ModelService {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
+
+            // state = 3 : '학습완료'로 DB 갱신
+            voiceModel.setState(3);
+            voiceModelRepository.save(voiceModel);
             return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("모델 업로드 실패: " + e.getMessage());
