@@ -559,19 +559,22 @@ public class DubbingServiceImpl implements DubbingService {
     // 더빙 영상 저장
     public ResponseEntity<?> saveDubbing(DubbingSaveRequest request) {
 
+        Dubbing dubbing = dubbingRepository.findByDubCode(request.getDubCode());
+
+        String savePath = "dub/source_" + dubbing.getVideoSource().getVideoSourceCode() + "/dub_" + dubbing.getDubCode() + "dub_" + dubbing.getDubCode() + ".mp4";
         // 로컬 파일 시스템에서 파일 가져오기
-        byte[] fileToSend;
+        byte[] fileToSave;
         Path path;
         try {
-            path = Paths.get(EC2_BASE_PATH + "/" + request.getPath()); // 로컬 파일 경로
-            fileToSend = Files.readAllBytes(path);
+            path = Paths.get(request.getPath()); // 로컬 파일 경로
+            fileToSave = Files.readAllBytes(path);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 읽는 중 오류가 발생했습니다.");
         }
 
-        // 미변환 음성 파일 S3에 저장하기
-        s3Service.saveByteToS3(EC2_BASE_PATH + "/" + request.getPath(), fileToSend);
+        // 더빙 영상 S3에 저장하기
+        s3Service.saveByteToS3(savePath, fileToSave);
 
         return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
     }
