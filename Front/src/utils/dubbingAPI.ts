@@ -2,6 +2,13 @@ import API from "./axios";
 
 const URL = '/dub';
 
+interface ConvertingData {
+  videoSourceCode: number;
+  modelCode: number;
+  voicePath: string;
+  pitch: number;
+}
+
 export const getSourceVideoList = (page: number) => {
   return API.get(URL + '/video', {
     params: {
@@ -61,6 +68,22 @@ export const getUserVideo = (dubCode: string) => {
 
 export const getOriginVoices = (sourceCode: string) => {
   return API.get(URL + `/audio/${sourceCode}`)
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
+
+export const uploadRecord = (videoSourceCode: string, voiceIndex: number, data: FormData) => {
+  return API.post(URL + `/record/${videoSourceCode}/${voiceIndex}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
+
+export const convertRecord = (voiceIndex: number, data: ConvertingData) => {
+  return API.post(URL + `/convert/${voiceIndex}`, data)
     .then(res => res.data)
     .catch(err => console.error(err))
 };
