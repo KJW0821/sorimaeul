@@ -11,11 +11,12 @@ const StyledContainer = styled.div`
   flex-direction: column;
   margin: 2rem auto;
   gap: 1rem;
-  img {
-      width: 35px;
-      height: 35px;
-      margin-top: 5px;
-    }
+`;
+
+const Icon = styled.img`
+width: 35px;
+height: 35px;
+margin-top: 5px;
 `;
 
 const Title = styled.h1`
@@ -42,7 +43,7 @@ const MediaSection = styled.div`
 `;
 
 const ThumbnailContainer = styled.div`
-  position: relative;
+position: relative;
   width: 23rem; 
   height: 23rem; 
   margin: 0 auto; 
@@ -63,13 +64,12 @@ const ThumbnailContainer = styled.div`
 `;
 
 const Thumbnail = styled.img`
-  width: 100%; 
-  height: auto;
-  display: block;
-  position: relative;
-  z-index: 1; 
+width: 100%; 
+height: auto;
+display: block;
+position: relative;
+z-index: 1; 
 `;
-
 
 const InfoSection = styled.div`
   flex: 6;
@@ -210,29 +210,29 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     <StyledContainer>
       <ContentContainer>
         <MediaSection>
-          <div>
+          
             {/* 이미지 존재 여부에 따른 처리 */}
             <label htmlFor="file" className="cursor-pointer">
+              <ThumbnailContainer>
             {selectedImagePath ? (
-              <img src={selectedImagePath} />
+              <Thumbnail src={selectedImagePath}/>
             ) : data.thumbnailPath ? (
-              <img src={`${baseURL}${data.thumbnailPath}`} />
+              <Thumbnail src={`${baseURL}${data.thumbnailPath}`} />
             ) : (
               // `thumbnailPath`가 `null`이거나 비어 있는 경우 기본 이미지 표시
-              <img src="/path/to/default/image.png" /> // 기본 이미지 경로로 변경해주세요
+             <Thumbnail src="/path/to/default/image.png" />
             )}
+            </ThumbnailContainer>
             </label>
             <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
-          </div>
-          <div>
             {data.storagePath && (
-              <audio src={`${baseURL}/${data.storagePath}`} controls></audio>
+              <audio className="mt-10" src={`${baseURL}/${data.storagePath}`} controls></audio>
             )}
-          </div>
+
         </MediaSection>
         <InfoSection>
           <StyledForm onSubmit={submitHandler}>
-            <Title><img src={musicIcon} alt="music icon" />AI 커버 확인</Title>
+            <Title><Icon src={musicIcon} alt="music icon" />AI 커버 확인</Title>
             <FormRow>
               <Label htmlFor="coverName">제목:</Label>
               <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
