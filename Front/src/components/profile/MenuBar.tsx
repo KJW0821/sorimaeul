@@ -25,6 +25,7 @@ const MenuItem = styled.div<MenuItemProps>`
   cursor: pointer;
   padding: 10px 20px;
   color: ${(props) => (props.$isSelected ? "#000000" : "#888888")};
+  font-size: 20px;
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
   position: relative;
 

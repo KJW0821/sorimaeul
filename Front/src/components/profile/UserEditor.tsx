@@ -17,6 +17,7 @@ const ProfileImage = styled.div<ProfileImageProps>`
   width: 220px; 
   height: 220px; 
   border-radius: 50%; 
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   background-size: cover;
   background-position: center;
 `;
