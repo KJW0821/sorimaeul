@@ -116,7 +116,7 @@ const CoverListPage: React.FC = () => {
         <CoverList data={dataList} />
         </CoverListContainer>
       </Container>
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#26BA28" />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#FDA06C" />
     </>
   );
 };
