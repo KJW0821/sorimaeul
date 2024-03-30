@@ -289,10 +289,11 @@ public class ModelServiceImpl implements ModelService {
             builder.part("files", multipartFile.getResource());
         }
         try {
-            // 음성 파일 업로드
             // state = 2: '학습중'으로 갱신
             voiceModel.setState(2);
             voiceModelRepository.save(voiceModel);
+
+            // 음성 파일 업로드
             WebClient.create("http://222.107.238.124:7865")
                     .post()
                     .uri("/voice/" + modelCode)
