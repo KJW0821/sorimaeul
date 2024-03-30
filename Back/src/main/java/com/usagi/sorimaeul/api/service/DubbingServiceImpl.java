@@ -335,7 +335,6 @@ public class DubbingServiceImpl implements DubbingService {
         // 더빙 영상 등록/수정
         dubbing.setDubName(request.getDubName());
         dubbing.setDubDetail(request.getDubDetail());
-        dubbing.setVideoSource(videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode()));
         dubbing.setIsPublic(request.getIsPublic());
         dubbingRepository.save(dubbing);
 
@@ -402,12 +401,16 @@ public class DubbingServiceImpl implements DubbingService {
         // 폴더 경로 설정
         String folderPath = EC2_BASE_PATH + "/" + voicePath;
 
+        // 원본 파일명
+        String originName = recordFile.getOriginalFilename();
+        String fileExtension = originName.substring(originName.lastIndexOf("."));
+
         try {
             // 폴더 생성
             createFolder(folderPath);
 
             // record_1.wav 형식으로 저장
-            String fileName = num + ".wav";
+            String fileName = num + "." + fileExtension;
             // 파일 생성
             saveFile(folderPath + fileName, recordFile.getBytes());
 
