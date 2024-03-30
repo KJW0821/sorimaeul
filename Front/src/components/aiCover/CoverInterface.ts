@@ -11,6 +11,7 @@ export interface Cover {
   singer: string; // "String, 원곡 가수명"
   title: string; // "String, 원곡명"
   complete: boolean;
+  createdTime: string;
 }
 
 interface ModelInfo {
