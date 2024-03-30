@@ -103,11 +103,11 @@ const Divider = styled.div`
 function SignUpForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [inputNickname, setInputNickname] = useState(""); // 입력된 닉네임을 저장할 상태
   const [imagePath, setImagePath] = useState("");
   const [selectedImagePath, setSelectedImagePath] = useState("");;
   const [isValidNickname, setIsValidNickname] = useState(false);
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
@@ -179,7 +179,7 @@ function SignUpForm() {
           <div className="flex flex-col items-center">
             <label htmlFor="file" className="cursor-pointer">
               {selectedImagePath ? (
-                <ProfileImage image={selectedImagePath}></ProfileImage>
+                <ProfileImage image={`${baseURL}${selectedImagePath}`}></ProfileImage>
               ) : (
                 <ProfileImage>프로필 사진 올리기</ProfileImage>
               )}
