@@ -18,8 +18,8 @@ spring:
       maximum-pool-size: 10
       connection-timeout: 5000
       connection-init-sql: SELECT 1
-      idle-timeout: 600000
-      max-lifetime: 1800000
+      idle-timeout: 30000
+      max-lifetime: 55000
       auto-commit: true
     tomcat:
       max-active: 10
