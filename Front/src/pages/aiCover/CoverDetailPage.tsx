@@ -204,6 +204,7 @@ const CoverDetailPage: React.FC = () => {
   const [likeCount, setLikeCount] = useState(0);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   useEffect(() => {
     (async () => {
@@ -211,7 +212,7 @@ const CoverDetailPage: React.FC = () => {
         if (coverCode) {
           const data = await getCover(coverCode);
           setData(data);
-          console.log(data);
+          console.log("상세 정보 페이지에서 조회된 데이터", data);
           setIsLiked(data.liked);
           setLikeCount(data.likeCount);
           const commentData = await getCoverComment(coverCode);
@@ -266,7 +267,8 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
-  const musicPath = `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${data?.storagePath}`
+  const musicPath = `/${data?.storagePath}`
+
   return (
     <>
       <ColorLine />
@@ -275,12 +277,12 @@ const CoverDetailPage: React.FC = () => {
           <Title> {data.coverName} </Title>
           <ContentContainer>
             <MediaSection>
-            <ThumbnailContainer>
-    <Thumbnail src={data.thumbnailPath} alt="Cover Thumbnail" />
-  </ThumbnailContainer>
+              <ThumbnailContainer>
+                <Thumbnail src={`${baseURL}${data.thumbnailPath}`} alt="Cover Thumbnail" />
+              </ThumbnailContainer>
               <div>
-                
-                <audio src={musicPath} controls />
+
+                <audio src={`${baseURL}/${data.storagePath}`} controls />
               </div>
             </MediaSection>
             <InfoSection>
@@ -294,16 +296,16 @@ const CoverDetailPage: React.FC = () => {
                 <Actions>
                   <AddPlaylistBtn onClick={openPlaylistAddModal}>
                     <img src={sumOrange} alt="Button Icon" />
-                  플레이리스트에 추가</AddPlaylistBtn>
+                    플레이리스트에 추가</AddPlaylistBtn>
                   <LikeContainer>
-                  <span onClick={handleLike}>
-                    {isLiked ? (
-                      <img src={heart} alt="Active Heart" />
-                    ) : (
-                      <img src={inactiveHeart} alt="Inactive Heart" />
-                    )}
-                  </span>
-                  <span className="like-count"> {data.likeCount}</span>
+                    <span onClick={handleLike}>
+                      {isLiked ? (
+                        <img src={heart} alt="Active Heart" />
+                      ) : (
+                        <img src={inactiveHeart} alt="Inactive Heart" />
+                      )}
+                    </span>
+                    <span className="like-count"> {data.likeCount}</span>
                   </LikeContainer>
                 </Actions>
                 <DetailLine />
@@ -320,19 +322,19 @@ const CoverDetailPage: React.FC = () => {
 
       }
 
-       {/* 작성자만 수정/삭제 버튼 표시 */}
+      {/* 작성자만 수정/삭제 버튼 표시 */}
       <ButtonBox>
-      {data && data.nickname === loggedInUserNickname &&
-        <Button onClick={() => navigate(`/cover/board/${params.id}`)}>
-          <img className="icon" src={editIcon} alt="edit icon" />
-          <p>수정</p>
+        {data && data.nickname === loggedInUserNickname &&
+          <Button onClick={() => navigate(`/cover/board/${params.id}`)}>
+            <img className="icon" src={editIcon} alt="edit icon" />
+            <p>수정</p>
           </Button>}
 
-      {data && data.nickname === loggedInUserNickname &&
-        <Button onClick={handleDelete}>
-          <img className="icon" src={deleteIcon} alt="delete icon" />
-          <p>삭제</p>
-            </Button>}
+        {data && data.nickname === loggedInUserNickname &&
+          <Button onClick={handleDelete}>
+            <img className="icon" src={deleteIcon} alt="delete icon" />
+            <p>삭제</p>
+          </Button>}
       </ButtonBox>
 
       {/* 댓글란 */}
