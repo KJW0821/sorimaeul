@@ -544,7 +544,7 @@ public class DubbingServiceImpl implements DubbingService {
         Mono<String> responseClient = client.post()
                 .uri("/create-dubbing")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(requestBody), RequestBody.class)
+                .body(Mono.just(requestBody), DubbingCreateRequestToPythonServer.class)
                 .retrieve()
                 .bodyToMono(String.class);
 
