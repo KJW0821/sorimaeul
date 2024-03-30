@@ -1,5 +1,5 @@
 import API from "./axios";
-import { CoverCreateInterface, CoverUpdateInterface } from "../components/aiCover/CoverInterface";
+import { CoverCreateInterface, CoverResultInterface } from "../components/aiCover/CoverInterface";
 
 // AI 커버 생성을 위한 음성 모델 조회 - videoSourceCode 와 page 모두 null로 전달
 export const getCoverModels = () => {
@@ -76,7 +76,7 @@ export const getCover = (coverCode: string) => {
 }
 
 // AI 커버 게시(수정)
-export const updateCover = (coverCode: string, edit: CoverUpdateInterface) => {
+export const updateCover = (coverCode: string, edit: CoverResultInterface) => {
   return API.patch(`cover/board/${coverCode}`, edit)
   .then(res => res.data)
   .catch(err => err)
