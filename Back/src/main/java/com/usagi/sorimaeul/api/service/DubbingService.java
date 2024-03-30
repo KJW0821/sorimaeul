@@ -29,7 +29,7 @@ public interface DubbingService {
 
     ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int videoSourceCode);
 
-    ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
+    ResponseEntity<?> uploadDubbingRecord(long userCode, int num, int videoSourceCode, MultipartFile recordFile);
 
     ResponseEntity<?> convertDubbingRecord(long userCode, int voiceIndex, DubbingRecordConvertRequest request);
 }

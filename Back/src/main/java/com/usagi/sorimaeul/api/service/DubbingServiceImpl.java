@@ -389,7 +389,7 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 음성 녹음 업로드
-    public ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile) {
+    public ResponseEntity<?> uploadDubbingRecord(long userCode, int num, int videoSourceCode, MultipartFile recordFile) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -397,7 +397,7 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 응답 경로 설정
-        String voicePath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+        String voicePath = "dub/source_" + videoSourceCode + "/user_" + user.getUserCode() + "/Unconverted/";
 
         // 폴더 경로 설정
         String folderPath = EC2_BASE_PATH + "/" + voicePath;
