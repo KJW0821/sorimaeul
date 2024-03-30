@@ -23,6 +23,7 @@ public class CoverDetailResponse {
     private String title;
     private boolean isLiked;
     private boolean isComplete;
+    private boolean isPublic;
     private LocalDateTime createdTime;
     private LocalDateTime postTime;
 

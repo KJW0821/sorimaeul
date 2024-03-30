@@ -189,6 +189,7 @@ public class CoverServiceImpl implements CoverService {
                 .title(cover.getTitle())
                 .isLiked(isLiked)
                 .isComplete(cover.isComplete())
+                .isPublic(cover.isPublic())
                 .createdTime(cover.getCreatedTime())
                 .postTime(cover.getPostTime())
                 .build();
