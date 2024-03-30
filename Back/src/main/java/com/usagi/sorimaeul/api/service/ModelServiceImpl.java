@@ -140,8 +140,8 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         if (voiceModel.getUser() != user)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
-        // 학습 상태가 '녹음중'일 때만 학습 가능
-        if (voiceModel.getState() != 0) {
+        // 학습 상태가 '녹음중', '학습전'일 때만 학습 가능
+        if (voiceModel.getState() > 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("녹음중 단계일 때만 업로드 가능합니다.");
         }
         // 모델 학습 가능 횟수 검사
@@ -233,6 +233,8 @@ public class ModelServiceImpl implements ModelService {
             }
         }
 
+
+
         // GPU 서버에 모델 업로드 요청 보내기
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", modelFiles[0].getResource());
@@ -244,6 +246,10 @@ public class ModelServiceImpl implements ModelService {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
+
+            // state = 3 : '학습완료'로 DB 갱신
+            voiceModel.setState(3);
+            voiceModelRepository.save(voiceModel);
             return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("모델 업로드 실패: " + e.getMessage());
@@ -283,10 +289,11 @@ public class ModelServiceImpl implements ModelService {
             builder.part("files", multipartFile.getResource());
         }
         try {
-            // 음성 파일 업로드
             // state = 2: '학습중'으로 갱신
             voiceModel.setState(2);
             voiceModelRepository.save(voiceModel);
+
+            // 음성 파일 업로드
             WebClient.create("http://222.107.238.124:7865")
                     .post()
                     .uri("/voice/" + modelCode)
