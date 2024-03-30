@@ -104,7 +104,14 @@ const Creator = styled.div`
 
 const TotalCount = styled.div`
   /* 총 곡수는 flex-grow를 사용하지 않고, 필요한 만큼의 공간만 사용하도록 함 */
+  width: 65px;
+  color: #888888;
   white-space: nowrap;
+  background: #D9D9D9;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export interface CoverInfo {
@@ -124,6 +131,7 @@ function PlaylistDetailModal() {
   const dispatch = useDispatch();
   const { playlistCode, playlistName, createTime } = useSelector((state: RootState) => state.playlists.selectedPlaylist) ?? { playlistCode: '', playlistName: '', createTime: '' };
   const [data, setData] = useState<PlaylistDetailInterface | null>(null);
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   useEffect(() => {
     if (playlistCode) {
@@ -160,7 +168,7 @@ function PlaylistDetailModal() {
         <InfoContainer>
         <CoverName>커버명</CoverName>
           <Creator>크리에이터</Creator>
-          <TotalCount>총 곡수</TotalCount>
+          <TotalCount>총 {data?.playlist.length}곡</TotalCount>
           </InfoContainer>
           <Line />
         <div>
