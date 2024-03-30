@@ -179,7 +179,7 @@ function SignUpForm() {
           <div className="flex flex-col items-center">
             <label htmlFor="file" className="cursor-pointer">
               {selectedImagePath ? (
-                <ProfileImage image={`${baseURL}${selectedImagePath}`}></ProfileImage>
+                <ProfileImage image={selectedImagePath}></ProfileImage>
               ) : (
                 <ProfileImage>프로필 사진 올리기</ProfileImage>
               )}
