@@ -24,6 +24,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -453,8 +454,19 @@ public class DubbingServiceImpl implements DubbingService {
         // 미변환 음성 파일 S3에 저장하기
         s3Service.saveByteToS3(folderPathUnconverted + voiceIndex + ".wav", fileToSend);
 
-        WebClient client = WebClient.create("http://222.107.238.124:7867");
+        // 최대 버퍼 크기를 16MB로 설정
+        int bufferSize = 16 * 1024 * 1024;
 
+        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(bufferSize))
+                .build();
+
+//        WebClient client = WebClient.create("http://222.107.238.124:7867");
+        WebClient client = WebClient.builder()
+                .baseUrl("http://222.107.238.124:7867")
+                .exchangeStrategies(exchangeStrategies)
+                .build();
+        
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         // ByteArrayResource를 사용하여 byte[]를 MultiValueMap에 추가
         body.add("file", new ByteArrayResource(fileToSend) {
