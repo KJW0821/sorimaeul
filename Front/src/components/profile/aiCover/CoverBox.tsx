@@ -16,16 +16,16 @@ const CoverContainer = styled.div`
 `;
 
 // 상태에 따른 배경색과 조금 더 진한 배경색 설정
-const getStatusColor = ($complete: boolean, $public: boolean = false) => {
-  if (!$complete) return { main: '#FAD02E', dark: '#C7961E' }; // 미완료(변환중)
-  if ($public) return { main: '#90EE90', dark: '#5CA85C' }; // 공개(게시)
+const getStatusColor = ($isComplete: boolean, $isPublic: boolean = false) => {
+  if (!$isComplete) return { main: '#FAD02E', dark: '#C7961E' }; // 미완료(변환중)
+  if ($isPublic) return { main: '#90EE90', dark: '#5CA85C' }; // 공개(게시)
   return { main: '#FFB6C1', dark: '#C97891' }; // 비공개(미게시)
 };
 
-const CoverContent = styled.div<{ $complete: boolean; $public?: boolean }>`
+const CoverContent = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
   width: 864px;
   height: 50px;
-  background: ${({ $complete, $public }) => getStatusColor($complete, $public).main};
+  background: ${({ $isComplete, $isPublic }) => getStatusColor($isComplete, $isPublic).main};
   border: 1px solid #A0A0A0;
   border-radius: 10px;
   display: flex;
@@ -34,7 +34,7 @@ const CoverContent = styled.div<{ $complete: boolean; $public?: boolean }>`
   overflow: hidden;
 `;
 
-const StatusIndicator = styled.div<{ $complete: boolean; $public?: boolean }>`
+const StatusIndicator = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
   display: flex;
   align-items: center;
   margin-right: 10px;
@@ -45,7 +45,7 @@ const StatusIndicator = styled.div<{ $complete: boolean; $public?: boolean }>`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: ${({ $complete, $public }) => getStatusColor($complete, $public ?? false).dark};
+    background: ${({ $isComplete, $isPublic }) => getStatusColor($isComplete, $isPublic ?? false).dark};
     margin-right: 5px;
   }
 `;
@@ -97,9 +97,9 @@ function CoverBox() {
     <CoverContainer>
       
     {dataList && dataList.map((cover) => (
-      <CoverContent key={cover.coverCode} $complete={cover.complete} $public={cover.public}>
-        <StatusIndicator $complete={cover.complete} $public={cover.public}>
-          <StatusDescription>{cover.complete ? (cover.public ? '공개 ' : '비공개') : '변환 중'}</StatusDescription>
+      <CoverContent key={cover.coverCode} $isComplete={cover.isComplete} $isPublic={cover.isPublic}>
+        <StatusIndicator $isComplete={cover.isComplete} $isPublic={cover.isPublic}>
+          <StatusDescription>{cover.isComplete ? (cover.isPublic ? '공개 ' : '비공개') : '변환 중'}</StatusDescription>
         </StatusIndicator>
         <CoverInfo>
           <CoverText > ♪ {cover.coverName} - {cover.coverSinger}</CoverText>
@@ -107,7 +107,7 @@ function CoverBox() {
           <span>생성일: {cover.createdTime}</span>
         </CoverInfo>
         <Button onClick={() => {
-        if (cover.complete && cover.public) {
+        if (cover.isComplete && cover.isPublic) {
         // 공개(게시) 상태면 상세 조회 페이지로 이동
         navigate(`/cover/${cover.coverCode}`);
         } else {
