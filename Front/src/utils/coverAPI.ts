@@ -34,26 +34,18 @@ export const createCover = (data: CoverCreateInterface) => {
 interface ListParams {
   target: string;
   page: number;
-  keyword?: string | null;
 }
 
-export const getCovers = (keyword: string | null = null) => {
-  const params: ListParams = { target: "all", page: 1 };
-  if (keyword) {
-    params.keyword = keyword;
-  }
-  
+export const getCovers = (page: number) => {
+  const params: ListParams = { target: "all", page };
   return API.get("cover", { params })
   .then(res => res.data)
   .catch(err => err)
 }
 
 // AI 마이 페이지 조회
-export const getMyCovers = (keyword: string | null = null) => {
+export const getMyCovers = () => {
   const params: ListParams = { target: "mine", page: 1};
-  if (keyword) {
-    params.keyword = keyword;
-  }
   return API.get("cover", { params })
   .then(res => res.data)
   .catch(err => err)
