@@ -21,6 +21,6 @@ export const getCookie = (name: string) => {
 /** Key를 받아 쿠키를 삭제
  * @param {string} name
  */
-export const removeCookie = (name: string) => {
-  return cookies.remove(name);
+export const removeCookie = (name: string, options?: any) => {
+  return cookies.remove(name, { ...options });
 }
