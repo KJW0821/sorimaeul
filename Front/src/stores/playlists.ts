@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction  } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 interface Playlist {
   playlistCode: string;
@@ -45,6 +46,9 @@ export const playlistsSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+  }
 });
 
 export const { addPlaylist, removePlaylist, setPlaylists, setSelectedPlaylist, setTotalPages, updatePlaylistName } = playlistsSlice.actions;

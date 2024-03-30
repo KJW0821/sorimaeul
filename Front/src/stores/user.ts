@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 export interface UserState {
   nickname: string,
@@ -32,7 +33,10 @@ export const userSlice = createSlice({
       state.nickname = "";
       state.profileImage = "";
       state.learnCount = 0;
-    }
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
   }
 });
 

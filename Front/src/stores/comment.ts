@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 interface Comment {
   commentCode: string;
@@ -41,6 +42,9 @@ export const commentSlice = createSlice({
       state.category = action.payload;
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+  }
 });
 
 export const { addComment, removeComment, setComments, setSelectedPostId, setCategory } = commentSlice.actions;
