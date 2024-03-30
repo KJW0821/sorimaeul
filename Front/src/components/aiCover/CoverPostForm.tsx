@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Cover, CoverResultInterface } from "./CoverInterface";
 import { requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
-import { useParams } from "react-router-dom";
 import musicIcon from "../../assets/music.png";
 
 const StyledContainer = styled.div`
@@ -70,6 +69,7 @@ const Thumbnail = styled.img`
   position: relative;
   z-index: 1; 
 `;
+
 
 const InfoSection = styled.div`
   flex: 6;
@@ -156,6 +156,7 @@ interface Props {
 }
 
 const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
+  const [selectedImagePath, setSelectedImagePath] = useState("");
   const [data, setData] = useState<CoverResultInterface>(initialData || {
     coverName: '',
     coverDetail: '',
@@ -166,48 +167,66 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     title: '',
     public: false
   });
+
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
-  
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleImagePath = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImagePath(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+
       try {
         const uploadedImageUrl = await requestS3({
           filename: file.name.replace(/\.[^/.]+$/, ''),
           file: file,
         });
-        if (uploadedImageUrl) {
-          setData({ ...data, thumbnailPath: uploadedImageUrl });
-        } else {
-          console.error("Error: Uploaded image URL is undefined");
-        }
+
+        setData({ ...data, thumbnailPath: uploadedImageUrl });
       } catch (err) {
         console.error("Error:", err);
       }
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setData({ ...data,[name]: name === "public" ? value === "true" : value});
-  }
-
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(data);
+    const formData = {
+      ...data,
+      isPublic: data.public,
+    };
+    onSubmit(formData);
   }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name } = e.target;
+    const value = e.target instanceof HTMLInputElement && e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setData({ ...data, [name]: value });
+  };
 
-  console.log(data);
   return (
     <StyledContainer>
       <ContentContainer>
         <MediaSection>
-          <ThumbnailContainer>
-            <Thumbnail src={`${baseURL}${data.thumbnailPath}`} alt="cover thumbnail" />
-          </ThumbnailContainer>
+          <div>
+            {/* 이미지 존재 여부에 따른 처리 */}
+            <label htmlFor="file" className="cursor-pointer">
+            {selectedImagePath ? (
+              <img src={selectedImagePath} />
+            ) : data.thumbnailPath ? (
+              <img src={`${baseURL}${data.thumbnailPath}`} />
+            ) : (
+              // `thumbnailPath`가 `null`이거나 비어 있는 경우 기본 이미지 표시
+              <img src="/path/to/default/image.png" /> // 기본 이미지 경로로 변경해주세요
+            )}
+            </label>
+            <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
+          </div>
           <div>
             {data.storagePath && (
-              <audio src={data.storagePath} controls></audio>
+              <audio src={`${baseURL}/${data.storagePath}`} controls></audio>
             )}
           </div>
         </MediaSection>
@@ -219,13 +238,14 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
               <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
             </FormRow>
             <TextArea id="coverDetail" name="coverDetail" value={data.coverDetail} placeholder="커버에 대한 설명을 입력해주세요" onChange={handleChange} cols={30} rows={10}></TextArea>
-            <Label htmlFor="thumbnailPath">이미지 파일 업로드</Label>
-            <input type="file" onChange={handleImageUpload} />
-            <Label htmlFor="isPublic">공개 여부</Label>
-            <select  id="public" name="public" value={String(data.public)} onChange={handleChange}>
-              <option value="true">공개</option>
-              <option value="false">비공개</option>
-            </select>
+            <Label htmlFor="public">공개 여부</Label>
+            <input
+              type="checkbox"
+              id="public"
+              name="public"
+              checked={data.public}
+              onChange={handleChange}
+            />
             <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
           </StyledForm>
         </InfoSection>
