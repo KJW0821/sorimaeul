@@ -214,7 +214,7 @@ const CoverDetailPage: React.FC = () => {
           const data = await getCover(coverCode);
           setData(data);
           console.log("상세 정보 페이지에서 조회된 데이터", data);
-          setIsLiked(data.liked);
+          setIsLiked(data.isLiked);
           setLikeCount(data.likeCount);
           const commentData = await getCoverComment(coverCode);
           dispatch(setCategory("cover"));
