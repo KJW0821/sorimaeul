@@ -7,6 +7,7 @@ import { Content } from "../../common/ModalStyles";
 import logo from "../../../assets/sideSmLogo.png";
 import deleteIcon from "../../../assets/deleteIcon.png";
 import { closeModal } from "../../../stores/modal";
+import DetailPlayer from "../../audioPlayer/DetailPlayer";
 
 const ModalHeader = styled.div`
   display: flex;
@@ -26,6 +27,7 @@ const ModalHeader = styled.div`
     overflow: hidden; 
     text-overflow: ellipsis; 
     max-width: 80%; 
+    color: #BFEA44;
   }
 `;
 
@@ -64,7 +66,7 @@ const Line = styled.hr`
   border: 0;
   height: 1px;
   background: #ccc;
-  margin: 10px 0;
+  margin: 7px 0;
 `;
 
 export const CloseButton = styled.div`
@@ -95,7 +97,7 @@ const CoverName = styled.div`
 
 const Creator = styled.div`
   flex-grow: 1;
-  margin-left: 30%; /* 커버명과의 간격을 30%로 설정 */
+  margin-left: 24%; /* 커버명과의 간격을 30%로 설정 */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -175,8 +177,9 @@ function PlaylistDetailModal() {
           <CoverList>
             {data?.playlist.map((cover, index) => (
               <CoverItem key={index}>
-                <span>{cover.title}-{cover.singer}({cover.coverSinger})</span>
-                <span>{cover.nickname} </span>
+                <span className="text-lime-700">{cover.title}-{cover.singer}({cover.coverSinger})</span>
+                <span className="ml-5 text-lime-600">{cover.nickname} </span>
+                {cover && <DetailPlayer src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
                 <img src={deleteIcon} onClick={()=>deletCoverFromPlaylist(cover.coverCode)} />
 
               </CoverItem>
