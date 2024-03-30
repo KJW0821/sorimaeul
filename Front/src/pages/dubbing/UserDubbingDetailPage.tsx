@@ -154,7 +154,7 @@ function UserDubbingDetailPage() {
       <ColorLine />
       <Container>
         <h1 className="title">{info?.dubName}</h1>
-        <video className="video" controls src={s3URL + `/${info?.storagePath}`} />
+        <video className="video" controls src={s3URL + info?.storagePath} />
         <div className="flex justify-between items-center">
           <div className="profile-box">
             <img className="profile" src={info?.profileImage ? info.profileImage : defaultProfile} alt="" />

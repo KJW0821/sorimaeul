@@ -9,6 +9,12 @@ interface ConvertingData {
   pitch: number;
 }
 
+interface CreatingData {
+  videoSourceCode: number;
+  dubName: string;
+  voicePaths: string[];
+}
+
 export const getSourceVideoList = (page: number) => {
   return API.get(URL + '/video', {
     params: {
@@ -84,6 +90,12 @@ export const uploadRecord = (videoSourceCode: string, voiceIndex: number, data: 
 
 export const convertRecord = (voiceIndex: number, data: ConvertingData) => {
   return API.post(URL + `/convert/${voiceIndex}`, data)
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
+
+export const createDubbing = (data: CreatingData) => {
+  return API.post(URL + '/create', data)
     .then(res => res.data)
     .catch(err => console.error(err))
 };

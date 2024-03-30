@@ -6,6 +6,7 @@ import silver from "../../../assets/silver.png";
 import bronze from "../../../assets/bronze.png";
 import smiling from "../../../assets/smiling.png";
 import { s3URL } from "../../../utils/s3";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -122,6 +123,9 @@ const Card = styled.div<{ $active: boolean, $offset: number, $direction: number,
 `
 
 const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
+  const navigate = useNavigate();
+  const params = useParams();
+
   const count = hotContents.length;
   const MAX_VISIBILITY = hotContents.length;
   const [active, setActive] = useState(0);
@@ -140,6 +144,7 @@ const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
       )}
       {hotContents.map((child, i) => (
         <Card
+          onClick={() => navigate(`/dubbing/${params.sourceCode}/${child.dubCode}`)}
           $active={i === active ? true : false}
           $offset={(active - i) / 3}
           $direction={Math.sign(active - 1)}
@@ -159,7 +164,7 @@ const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
               } 
               alt="medal" 
             />
-            <img className="img" src={s3URL + `/${child.thumbnailPath}`} alt="" />
+            <img className="img" src={s3URL + child.thumbnailPath} alt="" />
             <div className="like-box">
               <img className="smile" src={smiling} alt="like" />
               <p className="like">+ {child.likeCount}</p>
