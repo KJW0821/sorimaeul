@@ -128,7 +128,7 @@ public class PlaylistServiceImpl implements PlaylistService {
                     .title(cover.getTitle())
                     .nickname(cover.getUser().getNickname())
                     .storagePath(cover.getStoragePath())
-                    .isPublic(cover.isPublic())
+                    .isPublic(cover.getIsPublic())
                     .build();
             // List 안에 Dto 추가
             playlistCoverInfoDtos.add(playlistCoverInfoDto);
@@ -171,7 +171,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
         // 제작 완료 여부, 공개 여부에 따른 예외 처리
         Cover cover = coverRepository.findByCoverCode(coverCode);
-        if (!cover.isComplete() || !cover.isPublic()) {
+        if (!cover.getIsComplete() || !cover.getIsPublic()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 AI 커버에는 접근할 수 없습니다.");
         }
 

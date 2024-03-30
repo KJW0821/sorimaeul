@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class ModelInfoDto {
 
-    private boolean isMine;
-    private boolean isExistSource;
+    private Boolean isMine;
+    private Boolean isExistSource;
     private int modelCode;
     private String modelName;
     private String imagePath;

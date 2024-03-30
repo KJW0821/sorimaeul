@@ -14,7 +14,7 @@ public class CoverInfoDto {
     private int coverCode;
     private String coverName;
     private String storagePath;
-    private boolean isPublic;
+    private Boolean isPublic;
     private int likeCount;
     private String thumbnailPath;
     private String nickname;
@@ -22,7 +22,7 @@ public class CoverInfoDto {
     private String coverSinger;
     private String singer;
     private String title;
-    private boolean isComplete;
+    private Boolean isComplete;
     private LocalDateTime createdTime;
     private LocalDateTime postTime;
 

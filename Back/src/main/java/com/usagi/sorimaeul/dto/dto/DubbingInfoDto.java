@@ -15,12 +15,12 @@ public class DubbingInfoDto {
     private String dubName;
     private String thumbnailPath;
     private String dubDetail;
-    private boolean isPublic;
+    private Boolean isPublic;
     private String nickname;
     private String profileImage;
     private int likeCount;
     private LocalDateTime createdTime;
     private int isLiked;
-    private boolean isComplete;
+    private Boolean isComplete;
 
 }
