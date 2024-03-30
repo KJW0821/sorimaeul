@@ -220,7 +220,7 @@ public class DubbingServiceImpl implements DubbingService {
             // like 와 매핑되는 Dubbing 들을 dubbings 에 넣는다.
             for (Like like : likes) {
                 Dubbing dubbing = like.getDubbing();
-                if (dubbing != null && dubbing.isPublic() && dubbing.isComplete()) {
+                if (dubbing != null && dubbing.getIsPublic() && dubbing.getIsComplete()) {
                     dubbings.add(dubbing);
                 }
             }
@@ -235,7 +235,6 @@ public class DubbingServiceImpl implements DubbingService {
         else if (target.equals("popular")) {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
             dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(videoSourceCode, true, true);
-            startIdx = 0;
             endIdx = dubbings.size();
             // // 총 페이지 수 계산
             totalPages = 1;
@@ -250,8 +249,8 @@ public class DubbingServiceImpl implements DubbingService {
             DubbingInfoDto dubbingInfoDto = DubbingInfoDto.builder()
                     .dubCode(dubbing.getDubCode())
                     .dubName(dubbing.getDubName())
-                    .isPublic(dubbing.isPublic())
-                    .isComplete(dubbing.isComplete())
+                    .isPublic(dubbing.getIsPublic())
+                    .isComplete(dubbing.getIsComplete())
                     .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
                     .likeCount(dubbing.getLikeCount())
                     .nickname(dubbing.getUser().getNickname())
@@ -280,8 +279,7 @@ public class DubbingServiceImpl implements DubbingService {
         Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
         // 좋아요 여부 확인
         boolean isLiked;
-        if (likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode) == null) isLiked = false;
-        else isLiked = true;
+        isLiked = likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode) != null;
         // response 생성
         DubbingDetailResponse response = DubbingDetailResponse.builder()
                 .dubCode(dubCode)
@@ -338,7 +336,7 @@ public class DubbingServiceImpl implements DubbingService {
         dubbing.setDubName(request.getDubName());
         dubbing.setDubDetail(request.getDubDetail());
         dubbing.setVideoSource(videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode()));
-        dubbing.setPublic(request.isPublic());
+        dubbing.setIsPublic(request.getIsPublic());
         dubbingRepository.save(dubbing);
 
         return ResponseEntity.status(HttpStatus.OK).body("수정 성공");

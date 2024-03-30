@@ -43,7 +43,7 @@ public class Cover {
 
     @Builder.Default
     @Column(name = "is_public")
-    private boolean isPublic = false;
+    private Boolean isPublic = false;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;
@@ -60,6 +60,6 @@ public class Cover {
 
     @Builder.Default
     @Column(name = "is_complete")
-    private boolean isComplete = false;
+    private Boolean isComplete = false;
 
 }

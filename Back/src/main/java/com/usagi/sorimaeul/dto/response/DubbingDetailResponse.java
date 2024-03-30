@@ -20,7 +20,7 @@ public class DubbingDetailResponse {
     private LocalDateTime createdTime;
     private String storagePath;
     private String thumbnailPath;
-    private boolean isLiked;
-    private boolean isComplete;
+    private Boolean isLiked;
+    private Boolean isComplete;
 
 }

@@ -98,7 +98,7 @@ public class CoverServiceImpl implements CoverService {
             for (Like like : likes) {
                 Cover cover = like.getCover();
                 // 공개 설정, 제작 완료된 것만 추가
-                if (cover != null && cover.isPublic() && cover.isComplete()) {
+                if (cover != null && cover.getIsPublic() && cover.getIsComplete()) {
                     covers.add(cover);
                 }
             }
@@ -134,7 +134,7 @@ public class CoverServiceImpl implements CoverService {
                     .coverCode(cover.getCoverCode())
                     .coverName(cover.getCoverName())
                     .storagePath(cover.getStoragePath())
-                    .isPublic(cover.isPublic())
+                    .isPublic(cover.getIsPublic())
                     .likeCount(cover.getLikeCount())
                     .thumbnailPath(cover.getThumbnailPath())
                     .nickname(cover.getUser().getNickname())
@@ -142,7 +142,7 @@ public class CoverServiceImpl implements CoverService {
                     .coverSinger(cover.getCoverSinger())
                     .singer(cover.getSinger())
                     .title(cover.getTitle())
-                    .isComplete(cover.isComplete())
+                    .isComplete(cover.getIsComplete())
                     .createdTime(cover.getCreatedTime())
                     .postTime(cover.getPostTime())
                     .build();
@@ -169,12 +169,11 @@ public class CoverServiceImpl implements CoverService {
         }
         Cover cover = coverRepository.findByCoverCode(coverCode);
         // 비공개인데 작성자가 아닌 경우 BadRequest 반환
-        if (!cover.isPublic() && cover.getUser() != user)
+        if (!cover.getIsPublic() && cover.getUser() != user)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("접근이 불가능한 AI 커버입니다.");
 
         boolean isLiked;
-        if (likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode) == null) isLiked = false;
-        else isLiked = true;
+        isLiked = likeRepository.findByUser_userCodeAndCover_coverCode(userCode, coverCode) != null;
         // 리스폰스 생성
         CoverDetailResponse response = CoverDetailResponse.builder()
                 .coverName(cover.getCoverName())
@@ -188,8 +187,8 @@ public class CoverServiceImpl implements CoverService {
                 .singer(cover.getSinger())
                 .title(cover.getTitle())
                 .isLiked(isLiked)
-                .isComplete(cover.isComplete())
-                .isPublic(cover.isPublic())
+                .isComplete(cover.getIsComplete())
+                .isPublic(cover.getIsPublic())
                 .createdTime(cover.getCreatedTime())
                 .postTime(cover.getPostTime())
                 .build();
@@ -274,15 +273,15 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         // 비공개 -> 공개 설정시 postTime 이 null 이면 postTime 업데이트
-        if (request.isPublic() && !cover.isPublic() && cover.getPostTime() == null) {
+        if (request.getIsPublic() && !cover.getIsPublic() && cover.getPostTime() == null) {
             cover.setPostTime(LocalDateTime.now());
         }
-
+        System.out.println(request.getIsPublic());
         // 커버 수정
         cover.setCoverName(request.getCoverName());
         cover.setCoverDetail(request.getCoverDetail());
         cover.setThumbnailPath(request.getThumbnailPath());
-        cover.setPublic(request.isPublic());
+        cover.setIsPublic(request.getIsPublic());
         coverRepository.save(cover);
 
         return ResponseEntity.status(HttpStatus.OK).body("수정 성공");
@@ -329,7 +328,7 @@ public class CoverServiceImpl implements CoverService {
         s3Service.saveByteToS3(folderPath + fileName, responseFile);
 
         // 완료 표시와 생성 시간 업데이트
-        cover.setComplete(true);
+        cover.setIsComplete(true);
         cover.setCreatedTime(LocalDateTime.now());
         cover.setStoragePath(folderPath + fileName);
         coverRepository.save(cover);
