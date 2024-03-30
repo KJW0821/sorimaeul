@@ -401,8 +401,11 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
+        // 응답 경로 설정
+        String voicePath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+
         // 폴더 경로 설정
-        String folderPath = EC2_BASE_PATH + "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+        String folderPath = EC2_BASE_PATH + "/" + voicePath;
 
         try {
             // 폴더 생성
@@ -414,7 +417,7 @@ public class DubbingServiceImpl implements DubbingService {
             saveFile(folderPath + fileName, recordFile.getBytes());
 
             DubbingRecordResponse response = DubbingRecordResponse.builder()
-                    .voicePath(folderPath + fileName)
+                    .voicePath(voicePath + fileName)
                     .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
 
@@ -445,7 +448,7 @@ public class DubbingServiceImpl implements DubbingService {
         byte[] fileToSend;
         Path path;
         try {
-            path = Paths.get(request.getVoicePath()); // 로컬 파일 경로
+            path = Paths.get(EC2_BASE_PATH + "/" + request.getVoicePath()); // 로컬 파일 경로
             fileToSend = Files.readAllBytes(path);
         } catch (IOException e) {
             e.printStackTrace();
