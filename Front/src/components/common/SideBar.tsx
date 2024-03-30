@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { logout as logoutAPI } from "../../utils/userAPI";
 import { logout as logoutState } from "../../stores/user";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../stores/store";
+import { RootState, persistor } from "../../stores/store";
 import { setAlarmList, setUnreadMsgCnt, toggleSideBar as toggle } from "../../stores/common";
 import { openModal } from "../../stores/modal";
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
@@ -100,8 +100,12 @@ function SideBar() {
   const handleLogout = () => {
     logoutAPI()
     .then(() => {
+      // 로그아웃 시, redux-persist로 저장된 상태 초기화
+      persistor.purge().then(() => {
       dispatch(logoutState());
       navigate("/landing");
+      })
+     
     })
     .catch((err) => {
       console.error("로그아웃 실패;", err);
