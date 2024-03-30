@@ -10,6 +10,7 @@ const ScrollableList = styled.div`
   overflow-y: auto;
   max-height: 200px; 
   background: white;
+  border-radius: 5px;
 `;
 
 const PlaylistItem = styled.div`
@@ -21,6 +22,8 @@ const PlaylistItem = styled.div`
 `;
 
 const PlaylistDate = styled.span`
+  margin-top: 5px;
+  font-size:15px;
   color: #808080; // 글자 색 회색으로 설정
 `;
 
@@ -79,7 +82,7 @@ const addCoverToPlaylist = async (playlistCode: string) => {
             <PlaylistItem key={playlist.playlistCode} className="border-b border-gray-200"
             onClick={() => addCoverToPlaylist(playlist.playlistCode)}>
               
-              {playlist.playlistName} 
+              <span className="mt-2">{playlist.playlistName}</span> 
               <PlaylistDate>
               {formatDate(playlist.createdTime)}
               </PlaylistDate>
