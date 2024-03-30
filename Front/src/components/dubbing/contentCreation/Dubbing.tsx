@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getOriginVoices } from "../../../utils/dubbingAPI";
+import { getOriginVoices, uploadRecord } from "../../../utils/dubbingAPI";
 import { getVoiceModels } from "../../../utils/voiceModelAPI";
 import { s3URL } from "../../../utils/s3";
 import startRecordBtn from "../../../assets/startRecordBtn.png";
@@ -45,6 +45,7 @@ function Dubbing() {
   const [isPlay, setIsPlay] = useState<boolean[]>([]);
   const [isConverted, setIsConverted] = useState<boolean[]>([]);
   const [model, setModel] = useState<number[]>([]);
+  const [pitch, setPitch] = useState("0");
   const [originVoicePaths, setOriginVoicePaths] = useState<string[]>([]);
   const audioRefs = useRef<HTMLAudioElement[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -115,7 +116,10 @@ function Dubbing() {
   const stopRecording = (idx: number) => {
     if (mediaRecorder) {
       mediaRecorder.stop();
-      videoRef.current?.pause();
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
       setRecordState(prev => {
         const newState = [...prev];
         newState[idx] = 2;
@@ -189,8 +193,10 @@ function Dubbing() {
   const uploadAudio = async (idx: number) => {
     if (audioBlob[idx]) {
       const formData = new FormData();
-      formData.append("recordingFile", audioBlob[idx], `dubbing${params.sourceCode}_voice${idx + 1}.wav`);
-      // 업로드 api 호출
+      formData.append("recordFile", audioBlob[idx], `dubbing${params.sourceCode}_voice${idx + 1}.wav`);
+      if (params.sourceCode) {
+        await uploadRecord(params.sourceCode, idx + 1, formData);
+      }
     }
   };
 
@@ -201,7 +207,6 @@ function Dubbing() {
   }, [params.sourceCode])
 
   useEffect(() => {
-    console.log(audioRefs)
     if (audioURL) {
       audioRefs.current = audioRefs.current.map((el, idx) => {
         const newEl = el;
@@ -210,6 +215,10 @@ function Dubbing() {
       });
     }
   }, [audioURL])
+
+  const handlePitch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPitch(e.target.value);
+  };
 
   return (
     <Container>
@@ -265,8 +274,8 @@ function Dubbing() {
                   })}
                   placeholder="모델을 선택하세요" 
                 />
-                <input className="border" type="number" min={-12} max={12} defaultValue={0} />
-                <Button $marginLeft={0} $marginTop={0}>변환</Button>
+                <input onChange={handlePitch} className="border" type="number" min={-12} max={12} defaultValue={0} />
+                <Button onClick={() => uploadAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
                 {
                   isConverted[idx] ?
                   <audio controls src={undefined} />
