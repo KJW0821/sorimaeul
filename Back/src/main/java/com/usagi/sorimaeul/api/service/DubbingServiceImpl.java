@@ -495,18 +495,8 @@ public class DubbingServiceImpl implements DubbingService {
         byte[] convertedFileBytes = responseFile.block();
         s3Service.saveByteToS3(folderPath + fileName, convertedFileBytes);
 
-        VoiceSource voiceSource = VoiceSource.builder()
-                .videoSource(videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode()))
-                .voiceModel(voiceModelRepository.findByModelCode(request.getModelCode()))
-                .voicePath(folderPath + fileName)
-                .voiceIndex(voiceIndex)
-                .build();
-
-        voiceSourceRepository.save(voiceSource);
-
         DubbingRecordConvertResponse response = DubbingRecordConvertResponse.builder()
-                .voiceSourceCode(voiceSource.getVoiceSourceCode()) // 변환된 파일이 저장된 테이블 번호
-                .voicePath(voiceSource.getVoicePath())
+                .voicePath(folderPath+fileName)
                 .build();
 
         return ResponseEntity.ok(response);
