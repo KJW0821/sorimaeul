@@ -10,7 +10,7 @@ const ColorBlock = styled.div`
 `
 
 const Title = styled.h1`
-  font-family: "ClimateCrisisKRVF";
+  font-family: "PyeongChangPeace-Bold";
   font-size: 4rem;
   color: rgba(255, 255, 255, 0.5);
   -webkit-text-stroke: 1px white;
