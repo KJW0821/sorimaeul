@@ -102,6 +102,7 @@ function CoverBox() {
         <CoverInfo>
           <CoverText > ♪ {cover.coverName} - {cover.coverSinger}</CoverText>
           <CoverText> (원곡) {cover.title} - {cover.singer} </CoverText>
+          <span>생성일: {cover.createdTime}</span>
           {/* {
               cover.storagePath &&
               <audio src={`https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${cover.storagePath}`} controls />
