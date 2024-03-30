@@ -50,7 +50,6 @@ const CoverResultPage: React.FC = () => {
 
   return (
     <>
-      <ColorLine />
       {isCompleted ? (
         <CoverPostForm onSubmit={handleSubmit} initialData={data} />
       ) : (
