@@ -64,7 +64,7 @@ export const requestS3 = async ({ filename, file }: RequestS3) => {
         "Content-Type": file.type,
       },
     });
-    return `https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/image/${fileName}`;
+    return `/image/${fileName}`;
   } else {
     const error = new Error();
     error.name = "이미지 처리중 에러가 발생하였습니다.";
