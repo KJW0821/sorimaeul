@@ -549,7 +549,7 @@ public class DubbingServiceImpl implements DubbingService {
 
         Dubbing dubbing = dubbingRepository.findByDubCode(request.getDubCode());
 
-        String savePath = "dub/source_" + dubbing.getVideoSource().getVideoSourceCode() + "/dub_" + dubbing.getDubCode() + "dub_" + dubbing.getDubCode() + ".mp4";
+        String savePath = "dub/source_" + dubbing.getVideoSource().getVideoSourceCode() + "/dub_" + dubbing.getDubCode() + "/dub_" + dubbing.getDubCode() + ".mp4";
         // 로컬 파일 시스템에서 파일 가져오기
         byte[] fileToSave;
         Path path;
