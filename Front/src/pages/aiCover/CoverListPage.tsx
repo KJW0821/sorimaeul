@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cover, CoverListInterface } from "../../components/aiCover/CoverInterface";
+import { Cover } from "../../components/aiCover/CoverInterface";
 import { getCovers, getPopularCovers } from "../../utils/coverAPI";
 import styled from "styled-components";
 import CoverList from "../../components/aiCover/CoverList";
