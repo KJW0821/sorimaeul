@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getOriginVoices, uploadRecord, convertRecord } from "../../../utils/dubbingAPI";
+import { getOriginVoices, uploadRecord, convertRecord, createDubbing } from "../../../utils/dubbingAPI";
 import { getVoiceModels } from "../../../utils/voiceModelAPI";
 import { s3URL } from "../../../utils/s3";
 import startRecordBtn from "../../../assets/startRecordBtn.png";
@@ -33,9 +33,9 @@ function Dubbing() {
   const params = useParams();
   const navigate = useNavigate();
 
+  const [title, setTitle] = useState('');
   const [videoPath, setVideoPath] = useState('');
   const [originVoiceList, setOriginVoiceList] = useState<VoiceData[]>([]);
-  const [modelList, setModelList] = useState<ModelData[]>([]);
   const [modelInput, setModelInput] = useState<{ value: number, label: string }[]>([]);
   const [voicePaths, setVoicePaths] = useState<string[]>([]);
   const [recordState, setRecordState] = useState<number[]>([]); // 0: 녹음 전, 1: 녹음 중, 2: 녹음 완료
@@ -85,7 +85,6 @@ function Dubbing() {
         if (b.existSource) return 1;
         return 0;
       });
-      setModelList(sortedData);
       setModelInput(sortedData.map((el: ModelData) => ({
         value: el.modelCode,
         label: el.modelName
@@ -105,11 +104,30 @@ function Dubbing() {
     }
   };
 
+  const playAll = () => {
+    videoRef.current?.play();
+    mediaRefs.current.forEach(media => media.play());
+    setIsPlayAll(true);
+  };
+
+  const stopAll = () => {
+    mediaRefs.current.forEach(media => {
+      media.pause();
+      media.currentTime = 0;
+    })
+
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+    setIsPlayAll(false);
+  };
+
   const startRecording = (idx: number) => {
-    if (mediaRecorder) {
+    if (mediaRecorder && videoRef.current) {
+      videoRef.current.currentTime = 0;
       mediaRecorder.start();
       videoRef.current?.play();
-      console.log(mediaRefs)
       mediaRefs.current.forEach((media, i) => {
         if (idx !== i) {
           media.play();
@@ -126,16 +144,7 @@ function Dubbing() {
   const stopRecording = (idx: number) => {
     if (mediaRecorder) {
       mediaRecorder.stop();
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0;
-      }
-      mediaRefs.current.forEach((media, index) => {
-        if (idx !== index) {
-          media.pause();
-          media.currentTime = 0;
-        }
-      })
+      stopAll();
       setRecordState(prev => {
         const newState = [...prev];
         newState[idx] = 2;
@@ -160,6 +169,7 @@ function Dubbing() {
   };
 
   const resetRecording = (idx: number) => {
+    stopAll();
     setRecordState(prev => {
       const newState = [...prev];
       newState[idx] = 0;
@@ -179,6 +189,12 @@ function Dubbing() {
 
   const playAudio = (idx: number) => {
     if (audioRefs.current[idx]) {
+      videoRef.current?.play();
+      mediaRefs.current.forEach((media, i) => {
+        if (idx !== i) {
+          media.play();
+        }
+      })
       audioRefs.current[idx].play();
       setIsPlay(prev => {
         const newState = [...prev];
@@ -192,11 +208,13 @@ function Dubbing() {
           newState[idx] = false;
           return newState;
         });
+        stopAll();
       }
     }
   };
 
   const stopAudio = (idx: number) => {
+    stopAll();
     audioRefs.current[idx].pause();
     audioRefs.current[idx].currentTime = 0;
     setIsPlay(prev => {
@@ -262,30 +280,26 @@ function Dubbing() {
     })
   }, [voicePaths])
 
-  const playAll = () => {
-    videoRef.current?.play();
-    mediaRefs.current.forEach(media => media.play());
-    setIsPlayAll(true);
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
 
-  const stopAll = () => {
-    mediaRefs.current.forEach(media => {
-      media.pause();
-      media.currentTime = 0;
-    })
-
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
+  const createDubbingContents = async () => {
+    if (params.sourceCode) {
+      const res = await createDubbing({
+        videoSourceCode: parseInt(params.sourceCode),
+        dubName: title,
+        voicePaths
+      });
+      navigate(`/dubbing/${params.sourceCode}/${res.dubCode}/edit`);
     }
-    setIsPlayAll(false);
-  };
+  }
 
   return (
     <Container>
       <div>
         <label htmlFor="title">제목:</label>
-        <input type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
+        <input onChange={handleTitle} type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
       </div>
       <div className="video-box">
         <video ref={videoRef} src={s3URL.slice(0, -1) + `${videoPath}`} />
@@ -352,7 +366,7 @@ function Dubbing() {
                   max={12} 
                   defaultValue={0} 
                 />
-                <Button onClick={() => convertAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
+                <Button disabled={model[idx] === 0 && audioURL[idx] === ""} onClick={() => convertAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
                 {
                   isConverted[idx] && (isPlayAll ?
                   <img onClick={stopAll} src={stopRecordBtn} alt="" />
@@ -363,7 +377,7 @@ function Dubbing() {
             ))
           }
         </div>
-        <Button $marginLeft={0} $marginTop={0}>제작</Button>
+        <Button onClick={createDubbingContents} disabled={title === ''} $marginLeft={0} $marginTop={0}>제작</Button>
       </div>
     </Container>  
   )
