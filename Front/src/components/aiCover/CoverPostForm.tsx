@@ -3,6 +3,7 @@ import { Cover, CoverResultInterface } from "./CoverInterface";
 import { requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
+import ColorLine from "./ColorLine";
 
 const StyledContainer = styled.div`
   width: 75%;
@@ -207,6 +208,8 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
   };
 
   return (
+    <>
+    <ColorLine />
     <StyledContainer>
       <ContentContainer>
         <MediaSection>
@@ -251,6 +254,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
         </InfoSection>
       </ContentContainer>
     </StyledContainer>
+    </>
   );
 }
 
