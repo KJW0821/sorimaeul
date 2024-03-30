@@ -4,7 +4,7 @@ import { PURGE } from "redux-persist";
 interface Playlist {
   playlistCode: string;
   playlistName: string;
-  createTime: string;
+  createdTime: string;
 }
 
 export interface PlaylistsState {

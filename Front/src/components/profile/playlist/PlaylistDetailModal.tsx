@@ -131,7 +131,7 @@ interface PlaylistDetailInterface {
 
 function PlaylistDetailModal() {
   const dispatch = useDispatch();
-  const { playlistCode, playlistName, createTime } = useSelector((state: RootState) => state.playlists.selectedPlaylist) ?? { playlistCode: '', playlistName: '', createTime: '' };
+  const { playlistCode, playlistName, createdTime } = useSelector((state: RootState) => state.playlists.selectedPlaylist) ?? { playlistCode: '', playlistName: '', createdTime: '' };
   const [data, setData] = useState<PlaylistDetailInterface | null>(null);
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
@@ -149,6 +149,7 @@ function PlaylistDetailModal() {
     }
   }, [playlistCode]);
 
+  // 플레이리스트 삭제
   const deletCoverFromPlaylist = async (coverCode: string) => {
     const res = await deleteCoverFromList(playlistCode, coverCode);
     if (res.status == 200) {
