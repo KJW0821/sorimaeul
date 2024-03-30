@@ -283,6 +283,10 @@ public class ModelServiceImpl implements ModelService {
             builder.part("files", multipartFile.getResource());
         }
         try {
+            // 음성 파일 업로드
+            // state = 2: '학습중'으로 갱신
+            voiceModel.setState(2);
+            voiceModelRepository.save(voiceModel);
             WebClient.create("http://222.107.238.124:7865")
                     .post()
                     .uri("/voice/" + modelCode)
@@ -300,8 +304,8 @@ public class ModelServiceImpl implements ModelService {
                     .bodyToMono(String.class)
                     .block();
 
-            // state = 2: '학습중'으로 갱신
-            voiceModel.setState(2);
+            // state = 3: '학습완료'로 갱신
+            voiceModel.setState(3);
             voiceModelRepository.save(voiceModel);
 
             // 모델 학습 가능 횟수 차감
