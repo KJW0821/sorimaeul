@@ -8,15 +8,20 @@ import { closeModal } from "../../../../stores/modal";
 
 const ScrollableList = styled.div`
   overflow-y: auto;
-  max-height: 200px; // 이 값은 필요에 따라 조정하세요.
+  max-height: 200px; 
+  background: white;
 `;
 
 const PlaylistItem = styled.div`
+  display: flex;
+  justify-content: space-between; // 항목을 양 끝으로 정렬
+  align-items: center;
+  border-bottom: 1px solid #cccccc; // border-gray-200 대신 사용
   padding: 10px;
-  cursor: pointer;
-  &:hover {
-    background-color:  #e0e0e0;
-  }
+`;
+
+const PlaylistDate = styled.span`
+  color: #808080; // 글자 색 회색으로 설정
 `;
 
 export const CloseButton = styled.div`
@@ -28,7 +33,13 @@ export const CloseButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
+
+// 날짜 형식을 변경하는 함수
+function formatDate(dateString: string) {
+  const options: Intl.DateTimeFormatOptions  = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString('ko-KR', options).replace(/\. /g, '.');
+}
 
 function PlaylistSelect () {
   const dispatch = useDispatch();
@@ -60,7 +71,6 @@ const addCoverToPlaylist = async (playlistCode: string) => {
       alert(res.response.data);
   }}
 
-  console.log(covers);
 
   return (
     <>
@@ -69,7 +79,10 @@ const addCoverToPlaylist = async (playlistCode: string) => {
             <PlaylistItem key={playlist.playlistCode} className="border-b border-gray-200"
             onClick={() => addCoverToPlaylist(playlist.playlistCode)}>
               
-              {playlist.playlistName} {playlist.createTime}
+              {playlist.playlistName} 
+              <PlaylistDate>
+              {formatDate(playlist.createdTime)}
+              </PlaylistDate>
             </PlaylistItem>
           ))}
         </ScrollableList>
