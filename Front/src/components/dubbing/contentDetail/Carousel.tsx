@@ -159,7 +159,7 @@ const Carousel: React.FC<{ hotContents: VideoData[]}> = ({ hotContents }) => {
               } 
               alt="medal" 
             />
-            <img className="img" src={s3URL + `/${child.thumbnailPath}`} alt="" />
+            <img className="img" src={s3URL + child.thumbnailPath} alt="" />
             <div className="like-box">
               <img className="smile" src={smiling} alt="like" />
               <p className="like">+ {child.likeCount}</p>

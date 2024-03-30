@@ -69,7 +69,7 @@ const UserDubbingCard: React.FC<{ videoData: VideoData}> = ({ videoData }) => {
 
   return (
     <Container onClick={goDetail}>
-      <img className="thumbnail" src={s3URL + `/${videoData.thumbnailPath}`} alt="thumbnail" />
+      <img className="thumbnail" src={s3URL + videoData.thumbnailPath} alt="thumbnail" />
       <div className="title-box">
         <div className="circle"><img className="profile" src={videoData.profileImage ? videoData.profileImage : defaultProfile} alt="" /></div>
         <p className="title">{videoData.dubName}</p>
