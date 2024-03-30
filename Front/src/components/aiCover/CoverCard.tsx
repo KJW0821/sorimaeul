@@ -6,16 +6,15 @@ import heart from "../../assets/heart.png";
 const CardContainer = styled.div`
   margin-top: 1rem;
   margin-bottom: -2rem;
-  padding: 20px;
-  border-radius: 8px;
-  width: 220px;
+  padding: 7px;
+  width: 250px;
   cursor: pointer;
 `;
 
 const ThumbnailImage = styled.img`
   width: 100%; 
   height: auto; 
-  border-radius: 4px; 
+  border-radius: 2px; 
 `;
 
 const Title = styled.h2`
@@ -63,14 +62,20 @@ const HeartIcon = styled.img`
 `;
 
 const LikeCount = styled.p`
-margin-right: 10px;
+  margin-right: 10px;
   font-size: 1.4rem; 
   margin-top: 4px;
 `;
 
 const SongInfo = styled.p`
+  width: 230px;
+  height: 22px;
+  line-height: 22px;
   font-size: 0.9rem; 
   color: #A3A3A3;
+  overflow: hidden;
+  white-spce: nowrap;
+  text-overflow: ellipsis;
 `;
 
 

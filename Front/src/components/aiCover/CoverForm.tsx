@@ -91,7 +91,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
     youtubeLink: "",
     singer: "",
     title: "",
-    modelCode: 0,
+    modelCode: "",
     pitch: 0,
     coverName: "",
   })
@@ -259,7 +259,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
       <div className="w-5/6 flex">
       <Button $marginTop={2} $color="#FE9D6A" $width={10} $height={3} type="submit"
         disabled={
-          !isValidYoutubeLink(data.youtubeLink) ||!data.youtubeLink || !data.singer || !data.title || data.modelCode === 0 || !data.coverName}>변환하기</Button>
+          !isValidYoutubeLink(data.youtubeLink) ||!data.youtubeLink || !data.singer || !data.title || data.modelCode === "" || !data.coverName}>변환하기</Button>
       </div>
       
 

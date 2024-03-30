@@ -27,7 +27,7 @@ export interface CoverCreateInterface {
   youtubeLink: string;
   singer: string;
   title: string;
-  modelCode: number;
+  modelCode: string;
   pitch: number;
   coverName: string;
 }
@@ -52,11 +52,15 @@ export interface CoverDetailInterface {
   isLiked: number;
 }
 
-export interface CoverUpdateInterface {
+export interface CoverResultInterface {
   coverName: string;
   coverDetail: string;
   thumbnailPath: string;
-  isPublic: boolean;
+  storagePath: string;
+  coverSinger: string;
+  singer: string;
+  title: string;
+  public: boolean;
 }
 
 export interface SongInterface {

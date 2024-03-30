@@ -14,13 +14,20 @@ interface ProfileImageProps {
 
 const ProfileImage = styled.div<ProfileImageProps>`
   background-image: url(${props => props.$image});
-  width: 100px; 
-  height: 100px; 
+  width: 220px; 
+  height: 220px; 
   border-radius: 50%; 
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   background-size: cover;
   background-position: center;
+`;
 
-
+const NicknameSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center; // 중앙 정렬
+  justify-content: center; // 중앙 정렬
+  margin-bottom: 20px; // 여백 추가
 `;
 
 const NicknameContainer = styled.div`
@@ -144,38 +151,35 @@ function UserEditor() {
   </>
 ) : (
   <>
-    {console.log('렌더링되고 있는 이미지 경로:', selectedImagePath)}
     <ProfileImage $image={selectedImagePath} />
   </>
 )}
 <FlexContainer>
-      <NicknameContainer> 
-        {isEditing ? (
-          <>
-            <input
-              type="text"
-              value={newNickname}
-              onChange={handleNickname}
-              placeholder="닉네임 입력"
-            />
-            <NicknameCheckMessage>
-            {isCheckingNickname && "닉네임 중복 확인 중..."}
-            {!isCheckingNickname && !isValidNickname && newNickname && "이미 사용 중인 닉네임입니다."}
-            {!isCheckingNickname && isValidNickname && "사용 가능한 닉네임입니다."}
-            </NicknameCheckMessage>
-          </>
-        ) : (
-          <p>{nickname}</p>
-        )}
-      </NicknameContainer>
+<NicknameSection>
+  <NicknameContainer>
+    {isEditing ? (
+      <>
+        <input
+          type="text"
+          value={newNickname}
+          onChange={handleNickname}
+          placeholder="닉네임 입력"
+        />
+      </>
+    ) : (
+      <p>{nickname}</p>
+    )}
+  </NicknameContainer>
+  <NicknameCheckMessage>
+    {isEditing && isCheckingNickname && "닉네임 중복 확인 중..."}
+    {isEditing && !isCheckingNickname && !isValidNickname && newNickname && "이미 사용 중인 닉네임입니다."}
+    {isEditing && !isCheckingNickname && isValidNickname && "사용 가능한 닉네임입니다."}
+  </NicknameCheckMessage>
+</NicknameSection>
       <ButtonContainer>
       <Button $marginLeft={0} $marginTop={0} onClick={handleEdit}>
         {isEditing ? "변경" : "수정"}
       </Button>
-      {isEditing && (
-        <Button $marginLeft={0} $marginTop={0} onClick={handleCancel}>
-          취소
-        </Button>)}
         </ButtonContainer> 
         </FlexContainer>
         <Line />
