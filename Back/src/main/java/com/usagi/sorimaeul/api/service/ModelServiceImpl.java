@@ -140,8 +140,8 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         if (voiceModel.getUser() != user)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
-        // 학습 상태가 '녹음중'일 때만 학습 가능
-        if (voiceModel.getState() != 0) {
+        // 학습 상태가 '녹음중', '학습전'일 때만 학습 가능
+        if (voiceModel.getState() > 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("녹음중 단계일 때만 업로드 가능합니다.");
         }
         // 모델 학습 가능 횟수 검사
