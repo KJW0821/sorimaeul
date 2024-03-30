@@ -3,16 +3,18 @@ package com.usagi.sorimaeul.api.controller;
 import com.usagi.sorimaeul.api.service.ModelService;
 import com.usagi.sorimaeul.dto.request.ModelTableCreateRequest;
 import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
+import com.usagi.sorimaeul.dto.response.GetScriptResponse;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +29,10 @@ public class ModelController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "음성 모델 테이블 생성", description = "음성 모델 테이블 생성")
-    @ApiResponse(responseCode = "201", description = "음성 모델 테이블 생성 성공")
+    @ApiResponse(responseCode = "201", description = "음성 모델 테이블 생성 성공",
+            content = @Content(schema = @Schema(implementation = ModelTableCreateResponse.class)))
     @PostMapping
-    public ResponseEntity<ModelTableCreateResponse> createModelTable(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> createModelTable(@RequestHeader("Authorization") String token,
                                                                      @RequestBody ModelTableCreateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.createModelTable(request, userCode);
@@ -120,10 +123,33 @@ public class ModelController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
     })
     @PatchMapping("/detail/{modelCode}")
-    public HttpStatus updateModel(@RequestHeader("Authorization") String token,
-                                  @PathVariable int modelCode,
-                                  @RequestBody ModelUpdateRequest request) {
+    public ResponseEntity<String> updateModel(@RequestHeader("Authorization") String token,
+                                              @PathVariable int modelCode,
+                                              @RequestBody ModelUpdateRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return modelService.updateModel(modelCode, userCode, request);
     }
+
+
+    @Operation(summary = "모델 삭제", description = "음성 모델을 삭제한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "모델 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    @DeleteMapping("/detail/{modelCode}")
+    public ResponseEntity<String> deleteModel(@RequestHeader("Authorization") String token,
+                                              @PathVariable int modelCode) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.deleteModel(userCode, modelCode);
+    }
+
+
+    @Operation(summary = "스크립트 조회", description = "모델 학습을 위한 스크립트를 조회한다.")
+    @ApiResponse(responseCode = "200", description = "스크립트 조회 성공")
+    @GetMapping("/script")
+    public ResponseEntity<GetScriptResponse> getScript(@RequestHeader("Authorization") String token) {
+        long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
+        return modelService.getScript(userCode);
+    }
+
 }

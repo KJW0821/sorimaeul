@@ -1,7 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
+import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
 import com.usagi.sorimaeul.entity.BlackList;
 import com.usagi.sorimaeul.entity.RefreshToken;
@@ -162,18 +162,23 @@ public class OAuthService {
     public void logout(String accessToken, String refreshToken) {
         refreshTokenRepository.deleteById(refreshToken);
 
-        BlackList access = BlackList.builder()
-                .token(accessToken)
-                .expiration(jwtTokenProvider.getExpiration(accessToken))
-                .build();
+        if (jwtTokenProvider.validateToken(accessToken)) {
+            BlackList access = BlackList.builder()
+                    .token(accessToken)
+                    .expiration(jwtTokenProvider.getExpiration(accessToken))
+                    .build();
 
-        BlackList refresh = BlackList.builder()
-                .token(refreshToken)
-                .expiration(jwtTokenProvider.getExpiration(refreshToken))
-                .build();
+            blackListRepository.save(access);
+        }
 
-        blackListRepository.save(access);
-        blackListRepository.save(refresh);
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            BlackList refresh = BlackList.builder()
+                    .token(refreshToken)
+                    .expiration(jwtTokenProvider.getExpiration(refreshToken))
+                    .build();
+
+            blackListRepository.save(refresh);
+        }
     }
 
 }

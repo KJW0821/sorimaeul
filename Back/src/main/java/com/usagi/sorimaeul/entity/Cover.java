@@ -41,19 +41,25 @@ public class Cover {
     @Column(name = "storage_path")
     private String storagePath;
 
+    @Builder.Default
     @Column(name = "is_public")
-    private boolean isPublic;
+    private Boolean isPublic = false;
 
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
-    @Column(name = "updated_time")
-    private LocalDateTime updatedTime;
+    @Column(name = "post_time")
+    private LocalDateTime postTime;
 
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
 
+    @Builder.Default
     @Column(name = "like_count")
-    private int likeCount;
+    private int likeCount = 0;
+
+    @Builder.Default
+    @Column(name = "is_complete")
+    private Boolean isComplete = false;
 
 }

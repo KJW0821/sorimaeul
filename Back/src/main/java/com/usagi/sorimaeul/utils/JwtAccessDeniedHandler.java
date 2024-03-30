@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-import java.io.*;
+import java.io.IOException;
 
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 

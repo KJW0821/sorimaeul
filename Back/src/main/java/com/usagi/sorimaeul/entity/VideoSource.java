@@ -1,15 +1,14 @@
 package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,9 +26,16 @@ public class VideoSource {
     @Column(name = "source_name")
     private String sourceName;
 
+    @Column(name = "source_detail")
+    private String sourceDetail;
+
+    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
     @Column(name = "thumbnail_path")
     private String thumbnailPath;
+
+    @Column(name = "video_playtime")
+    private String videoPlaytime;
 }

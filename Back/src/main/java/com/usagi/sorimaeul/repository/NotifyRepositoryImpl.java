@@ -1,6 +1,8 @@
 package com.usagi.sorimaeul.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.usagi.sorimaeul.dto.dto.NotifyDto;
+import com.usagi.sorimaeul.dto.request.SseRequest;
 import com.usagi.sorimaeul.entity.QNotify;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,10 +33,20 @@ public class NotifyRepositoryImpl implements NotifyRepositoryCustom {
 	}
 
 	@Override
-	public void insertNotify(long userCode, Object data) {
+	public void insertNotify(SseRequest request) {
+		long userCode = request.getUserCode();
+		String type = request.getName();
+		NotifyDto data = request.getData();
+
 		queryFactory.insert(qnotify)
-				.columns(qnotify.userCode, qnotify.notifyContent)
-				.values(userCode, data.toString())
+				.columns(qnotify.userCode,
+						qnotify.notifyContent,
+						qnotify.notifyType,
+						qnotify.targetCode)
+				.values(userCode,
+						data.getContent(),
+						type,
+						data.getTargetCode())
 				.execute();
 	}
 

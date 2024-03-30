@@ -4,7 +4,7 @@ import com.usagi.sorimaeul.entity.Notify;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.*;
+import java.util.List;
 
 @Data
 @Builder
