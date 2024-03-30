@@ -1,18 +1,11 @@
 package com.usagi.sorimaeul.api.controller;
 
-import com.usagi.sorimaeul.api.service.CoverService;
 import com.usagi.sorimaeul.api.service.LikeService;
-import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
-import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
-import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
-import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
-import com.usagi.sorimaeul.dto.response.CoverListResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

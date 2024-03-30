@@ -1,13 +1,14 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.RequestBoardService;
-import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.request.RequestCreateRequest;
-import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
+import com.usagi.sorimaeul.dto.response.RequestCreateResponse;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,8 @@ public class RequestController {
     }
 
     @Operation(summary = "문의 게시글 생성", description = "문의 게시글을 생성한다.")
-    @ApiResponse(responseCode = "201", description = "문의 게시글 생성 성공")
+    @ApiResponse(responseCode = "201", description = "문의 게시글 생성 성공",
+            content = @Content(schema = @Schema(implementation = RequestCreateResponse.class)))
     @PostMapping
     public ResponseEntity<?> createRequest(@RequestHeader("Authorization") String token,
                                            @RequestBody RequestCreateRequest request) {

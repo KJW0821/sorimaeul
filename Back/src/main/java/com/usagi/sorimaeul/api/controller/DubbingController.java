@@ -7,13 +7,13 @@ import com.usagi.sorimaeul.dto.request.*;
 import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -149,9 +149,9 @@ public class DubbingController {
 
     @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공"),
-            @ApiResponse(responseCode = "400", description = "더빙 영상 녹음 업로드 실패")
-    })
+            @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공",
+                    content = @Content(schema = @Schema(implementation = DubbingRecordResponse.class))),
+            @ApiResponse(responseCode = "400", description = "더빙 영상 녹음 업로드 실패")})
     @PostMapping("/record/{num}")
     public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
                                                  @PathVariable int num,

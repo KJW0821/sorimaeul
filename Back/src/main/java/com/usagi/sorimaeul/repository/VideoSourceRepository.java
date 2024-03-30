@@ -1,6 +1,5 @@
 package com.usagi.sorimaeul.repository;
 
-import com.usagi.sorimaeul.entity.Like;
 import com.usagi.sorimaeul.entity.VideoSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

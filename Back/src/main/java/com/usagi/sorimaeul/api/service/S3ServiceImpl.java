@@ -1,28 +1,21 @@
 package com.usagi.sorimaeul.api.service;
 
+import com.amazonaws.HttpMethod;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.*;
+import com.usagi.sorimaeul.dto.dto.ResponseS3Dto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import com.amazonaws.services.s3.model.*;
-import com.usagi.sorimaeul.dto.dto.ResponseS3Dto;
-import com.usagi.sorimaeul.api.service.S3Service;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.AmazonS3;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

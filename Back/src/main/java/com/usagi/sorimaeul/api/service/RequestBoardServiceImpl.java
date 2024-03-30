@@ -6,7 +6,6 @@ import com.usagi.sorimaeul.dto.response.RequestCreateResponse;
 import com.usagi.sorimaeul.dto.response.RequestDetailResponse;
 import com.usagi.sorimaeul.dto.response.RequestFAQListResponse;
 import com.usagi.sorimaeul.dto.response.RequestListResponse;
-import com.usagi.sorimaeul.entity.Cover;
 import com.usagi.sorimaeul.entity.RequestBoard;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.repository.RequestBoardRepository;
@@ -14,7 +13,6 @@ import com.usagi.sorimaeul.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

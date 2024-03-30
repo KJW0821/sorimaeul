@@ -4,9 +4,13 @@ import com.usagi.sorimaeul.api.service.CoverService;
 import com.usagi.sorimaeul.dto.request.CoverBoardRequest;
 import com.usagi.sorimaeul.dto.request.CoverCreateRequest;
 import com.usagi.sorimaeul.dto.response.CoverCreateResponse;
+import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.dto.response.CoverListResponse;
+import com.usagi.sorimaeul.dto.response.CoverSourceListResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +40,8 @@ public class CoverController {
 
 
     @Operation(summary = "AI 커버 상세 조회", description = "AI 커버 상세 조회한다.")
-    @ApiResponse(responseCode = "200", description = "AI 커버 상세 조회 성공")
+    @ApiResponse(responseCode = "200", description = "AI 커버 상세 조회 성공",
+            content = @Content(schema = @Schema(implementation = CoverDetailResponse.class)))
     @GetMapping("/{coverCode}")
     public ResponseEntity<?> getCoverDetail(@RequestHeader("Authorization") String token,
                                                             @PathVariable int coverCode) {
@@ -46,7 +51,8 @@ public class CoverController {
 
 
     @Operation(summary = "AI 커버 생성", description = "AI 커버를 생성한다.")
-    @ApiResponse(responseCode = "201", description = "AI 커버 생성 성공")
+    @ApiResponse(responseCode = "201", description = "AI 커버 생성 성공",
+            content = @Content(schema = @Schema(implementation = CoverCreateResponse.class)))
     @PostMapping("/create")
     public ResponseEntity<?> createCover(@RequestHeader("Authorization") String token,
                                                            @RequestBody CoverCreateRequest request) {
@@ -85,7 +91,8 @@ public class CoverController {
 
 
     @Operation(summary = "AI 커버 소스 목록 조회", description = "서버에서 제공하는 AI 커버 소스 목록을 조회한다.")
-    @ApiResponse(responseCode = "200", description = "AI 커버 소스 목록 조회 성공")
+    @ApiResponse(responseCode = "200", description = "AI 커버 소스 목록 조회 성공",
+            content = @Content(schema = @Schema(implementation = CoverSourceListResponse.class)))
     @GetMapping("/source")
     public ResponseEntity<?> getCoverSourceList(@RequestHeader("Authorization") String token) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));

@@ -1,9 +1,6 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.jcraft.jsch.IO;
 import com.usagi.sorimaeul.dto.dto.ResponseS3Dto;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

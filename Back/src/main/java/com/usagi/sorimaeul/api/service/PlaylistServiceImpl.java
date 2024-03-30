@@ -17,7 +17,6 @@ import com.usagi.sorimaeul.repository.PlaylistRepository;
 import com.usagi.sorimaeul.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

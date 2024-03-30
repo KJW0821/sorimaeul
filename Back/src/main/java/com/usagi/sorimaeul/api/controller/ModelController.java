@@ -9,11 +9,12 @@ import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,8 @@ public class ModelController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "음성 모델 테이블 생성", description = "음성 모델 테이블 생성")
-    @ApiResponse(responseCode = "201", description = "음성 모델 테이블 생성 성공")
+    @ApiResponse(responseCode = "201", description = "음성 모델 테이블 생성 성공",
+            content = @Content(schema = @Schema(implementation = ModelTableCreateResponse.class)))
     @PostMapping
     public ResponseEntity<?> createModelTable(@RequestHeader("Authorization") String token,
                                                                      @RequestBody ModelTableCreateRequest request) {

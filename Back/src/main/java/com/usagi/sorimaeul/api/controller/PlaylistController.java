@@ -1,14 +1,15 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.PlaylistService;
-import com.usagi.sorimaeul.dto.dto.PlaylistInfoDto;
 import com.usagi.sorimaeul.dto.request.PlaylistCreateRequest;
 import com.usagi.sorimaeul.dto.request.PlaylistUpdateRequest;
+import com.usagi.sorimaeul.dto.response.PlaylistCreateResponse;
 import com.usagi.sorimaeul.dto.response.PlaylistDetailResponse;
 import com.usagi.sorimaeul.dto.response.PlaylistListResponse;
-import com.usagi.sorimaeul.repository.UserRepository;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +38,8 @@ public class PlaylistController {
 
     @Operation(summary = "플레이리스트 상세 조회 - AI 커버 리스트 조회", description = "플레이리스트 안의 AI 커버 리스트를 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "플레이리스트 상세 조회 성공"),
+            @ApiResponse(responseCode = "200", description = "플레이리스트 상세 조회 성공",
+                    content = @Content(schema = @Schema(implementation = PlaylistDetailResponse.class))),
             @ApiResponse(responseCode = "404", description = "플레이리스트가 존재하지 않습니다.")
     })
     @GetMapping("/{playlistCode}")
@@ -71,7 +73,8 @@ public class PlaylistController {
 
 
     @Operation(summary = "플레이리스트 생성", description = "플레이리스트를 생성한다.")
-    @ApiResponse(responseCode = "201", description = "플레이리스트 생성 성공")
+    @ApiResponse(responseCode = "201", description = "플레이리스트 생성 성공",
+            content = @Content(schema = @Schema(implementation = PlaylistCreateResponse.class)))
     @PostMapping
     public ResponseEntity<?> createPlaylist(@RequestHeader(name = "Authorization") String token,
                                             @RequestBody PlaylistCreateRequest request) {

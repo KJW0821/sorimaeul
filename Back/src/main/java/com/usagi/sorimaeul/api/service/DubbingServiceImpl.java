@@ -10,8 +10,6 @@ import com.usagi.sorimaeul.repository.*;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -28,17 +26,16 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import static com.usagi.sorimaeul.utils.FileUtil.*;
-import static com.usagi.sorimaeul.utils.Const.*;
-
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.usagi.sorimaeul.utils.Const.EC2_BASE_PATH;
+import static com.usagi.sorimaeul.utils.FileUtil.createFolder;
+import static com.usagi.sorimaeul.utils.FileUtil.saveFile;
 
 @Service
 @RequiredArgsConstructor

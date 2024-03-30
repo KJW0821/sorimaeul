@@ -5,8 +5,6 @@ import com.usagi.sorimaeul.dto.request.ModelUpdateRequest;
 import com.usagi.sorimaeul.dto.response.GetScriptResponse;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
-import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

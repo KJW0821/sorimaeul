@@ -1,6 +1,5 @@
 package com.usagi.sorimaeul.repository;
 
-import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.entity.User;
 import com.usagi.sorimaeul.entity.VideoSource;
 import com.usagi.sorimaeul.entity.VoiceModel;
