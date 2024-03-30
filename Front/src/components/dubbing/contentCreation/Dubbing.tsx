@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getOriginVoices, uploadRecord } from "../../../utils/dubbingAPI";
+import { getOriginVoices, uploadRecord, convertRecord } from "../../../utils/dubbingAPI";
 import { getVoiceModels } from "../../../utils/voiceModelAPI";
 import { s3URL } from "../../../utils/s3";
 import startRecordBtn from "../../../assets/startRecordBtn.png";
@@ -45,7 +45,7 @@ function Dubbing() {
   const [isPlay, setIsPlay] = useState<boolean[]>([]);
   const [isConverted, setIsConverted] = useState<boolean[]>([]);
   const [model, setModel] = useState<number[]>([]);
-  const [pitch, setPitch] = useState("0");
+  const [pitch, setPitch] = useState<number[]>([]);
   const [originVoicePaths, setOriginVoicePaths] = useState<string[]>([]);
   const audioRefs = useRef<HTMLAudioElement[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,6 +63,7 @@ function Dubbing() {
         return el.voicePath
       }));
       setModel(Array.from({length: res.voiceSources.length}, () => 0));
+      setPitch(Array.from({length: res.voiceSources.length}, () => 0));
       setRecordState(Array.from({length: res.voiceSources.length}, () => 0));
       setAudioURL(Array.from({length: res.voiceSources.length}, () => ''));
       setAudioBlob(Array.from({length: res.voiceSources.length}, () => new Blob()));
@@ -190,12 +191,18 @@ function Dubbing() {
     });
   };
 
-  const uploadAudio = async (idx: number) => {
+  const convertAudio = async (idx: number) => {
     if (audioBlob[idx]) {
       const formData = new FormData();
       formData.append("recordFile", audioBlob[idx], `dubbing${params.sourceCode}_voice${idx + 1}.wav`);
       if (params.sourceCode) {
-        await uploadRecord(params.sourceCode, idx + 1, formData);
+        const uploadRes = await uploadRecord(params.sourceCode, idx + 1, formData);
+        const convertRes = await convertRecord(idx + 1, {
+          videoSourceCode: parseInt(params.sourceCode),
+          modelCode: model[idx],
+          voicePath: uploadRes.voicePath,
+          pitch: pitch[idx]
+        })
       }
     }
   };
@@ -215,10 +222,6 @@ function Dubbing() {
       });
     }
   }, [audioURL])
-
-  const handlePitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPitch(e.target.value);
-  };
 
   return (
     <Container>
@@ -274,8 +277,21 @@ function Dubbing() {
                   })}
                   placeholder="모델을 선택하세요" 
                 />
-                <input onChange={handlePitch} className="border" type="number" min={-12} max={12} defaultValue={0} />
-                <Button onClick={() => uploadAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
+                <input 
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setPitch(prev => {
+                      const newPitch = [...prev];
+                      newPitch[idx] = parseInt(e.target.value);
+                      return newPitch
+                    })
+                  }}
+                  className="border" 
+                  type="number" 
+                  min={-12} 
+                  max={12} 
+                  defaultValue={0} 
+                />
+                <Button onClick={() => convertAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
                 {
                   isConverted[idx] ?
                   <audio controls src={undefined} />
