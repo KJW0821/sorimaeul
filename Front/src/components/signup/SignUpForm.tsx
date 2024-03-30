@@ -105,7 +105,7 @@ function SignUpForm() {
   const navigate = useNavigate();
   const [inputNickname, setInputNickname] = useState(""); // 입력된 닉네임을 저장할 상태
   const [imagePath, setImagePath] = useState("");
-  const [selectedImagePath, setSelectedImagePath] = useState("");;
+  const [selectedImagePath, setSelectedImagePath] = useState("");
   const [isValidNickname, setIsValidNickname] = useState(false);
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
