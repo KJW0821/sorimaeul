@@ -47,8 +47,10 @@ function Dubbing() {
   const [model, setModel] = useState<number[]>([]);
   const [pitch, setPitch] = useState<number[]>([]);
   const [originVoicePaths, setOriginVoicePaths] = useState<string[]>([]);
+  const [isPlayAll, setIsPlayAll] = useState(false);
   const audioRefs = useRef<HTMLAudioElement[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaRefs = useRef<HTMLAudioElement[]>([]);
   
   const getOriginVoiceData = async () => {
     if (params.sourceCode) {
@@ -70,6 +72,7 @@ function Dubbing() {
       setIsPlay(Array.from({length: res.voiceSources.length}, () => false));
       setIsConverted(Array.from({length: res.voiceSources.length}, () => false));
       audioRefs.current = res.voiceSources.map(() => new Audio());
+      mediaRefs.current = res.voiceSources.map(() => new Audio());
     }
   };
 
@@ -106,6 +109,12 @@ function Dubbing() {
     if (mediaRecorder) {
       mediaRecorder.start();
       videoRef.current?.play();
+      console.log(mediaRefs)
+      mediaRefs.current.forEach((media, i) => {
+        if (idx !== i) {
+          media.play();
+        }
+      })
       setRecordState(prev => {
         const newState = [...prev];
         newState[idx] = 1;
@@ -121,6 +130,12 @@ function Dubbing() {
         videoRef.current.pause();
         videoRef.current.currentTime = 0;
       }
+      mediaRefs.current.forEach((media, index) => {
+        if (idx !== index) {
+          media.pause();
+          media.currentTime = 0;
+        }
+      })
       setRecordState(prev => {
         const newState = [...prev];
         newState[idx] = 2;
@@ -192,6 +207,12 @@ function Dubbing() {
   };
 
   const convertAudio = async (idx: number) => {
+    setIsConverted(prev => {
+      const newState = [...prev];
+      newState[idx] = false;
+      return newState;
+    });
+
     if (audioBlob[idx]) {
       const formData = new FormData();
       formData.append("recordFile", audioBlob[idx], `dubbing${params.sourceCode}_voice${idx + 1}.wav`);
@@ -233,6 +254,33 @@ function Dubbing() {
     }
   }, [audioURL])
 
+  useEffect(() => {
+    mediaRefs.current = mediaRefs.current.map((el, idx) => {
+      const newEl = el;
+      newEl.src = s3URL + voicePaths[idx] + `?${new Date().getTime()}`;
+      return newEl;
+    })
+  }, [voicePaths])
+
+  const playAll = () => {
+    videoRef.current?.play();
+    mediaRefs.current.forEach(media => media.play());
+    setIsPlayAll(true);
+  };
+
+  const stopAll = () => {
+    mediaRefs.current.forEach(media => {
+      media.pause();
+      media.currentTime = 0;
+    })
+
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+    setIsPlayAll(false);
+  };
+
   return (
     <Container>
       <div>
@@ -240,7 +288,7 @@ function Dubbing() {
         <input type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
       </div>
       <div className="video-box">
-        <video ref={videoRef} controls src={s3URL.slice(0, -1) + `${videoPath}`} />
+        <video ref={videoRef} src={s3URL.slice(0, -1) + `${videoPath}`} />
       </div>
       <div>
         <div className="flex gap-4">
@@ -275,6 +323,9 @@ function Dubbing() {
                     }
                   </>
                 }
+                {
+                  recordState[idx] === 2 && <img onClick={() => resetRecording(idx)} src={reRecordBtn} alt="" />
+                }
                 <Select 
                   value = {
                     modelInput.find((option) => option.value === model[idx])
@@ -303,10 +354,10 @@ function Dubbing() {
                 />
                 <Button onClick={() => convertAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
                 {
-                  isConverted[idx] ?
-                  <audio controls src={s3URL + voicePaths[idx]} />
+                  isConverted[idx] && (isPlayAll ?
+                  <img onClick={stopAll} src={stopRecordBtn} alt="" />
                   :
-                  recordState[idx] === 2 && <img onClick={() => resetRecording(idx)} src={reRecordBtn} alt="" />
+                  <img onClick={playAll} src={playRecordBtn} alt="" />)
                 }
               </div>
             ))
