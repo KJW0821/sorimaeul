@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 
 const ListContainer = styled.div`
+  margin-left: 50px;
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
