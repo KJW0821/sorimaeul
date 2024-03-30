@@ -78,6 +78,7 @@ function UserEditor() {
   const [isValidNickname, setIsValidNickname] = useState(true);
   const [selectedImagePath, setSelectedImagePath] = useState(profileImage);
   const [newProfileImg, setNewProfileImg] = useState(profileImage);
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   // 디바운싱으로 닉네임 중복 체크 
   useEffect(() => {
@@ -145,13 +146,13 @@ function UserEditor() {
    {isEditing ? (
   <>
     <label htmlFor="file" className="cursor-pointer">
-      <ProfileImage $image={selectedImagePath}></ProfileImage>
+      <ProfileImage $image={`${baseURL}${selectedImagePath}`}></ProfileImage>
     </label>
     <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
   </>
 ) : (
   <>
-    <ProfileImage $image={selectedImagePath} />
+    <ProfileImage $image={`${baseURL}${selectedImagePath}`} />
   </>
 )}
 <FlexContainer>

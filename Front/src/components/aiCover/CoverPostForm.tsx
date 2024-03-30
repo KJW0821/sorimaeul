@@ -166,6 +166,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     title: '',
     public: false
   });
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
   
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -202,7 +203,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
       <ContentContainer>
         <MediaSection>
           <ThumbnailContainer>
-            <Thumbnail src={data.thumbnailPath} alt="cover thumbnail" />
+            <Thumbnail src={`${baseURL}${data.thumbnailPath}`} alt="cover thumbnail" />
           </ThumbnailContainer>
           <div>
             {data.storagePath && (
