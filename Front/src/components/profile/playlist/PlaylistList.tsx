@@ -17,7 +17,7 @@ const ListContainer = styled.div`
 export function PlaylistList () {
   const dispatch = useDispatch();
   const dataList = useSelector((state: RootState) => state.playlists);
-  const [page, setPages] = useState(1);
+  const [page, setPages] = useState(0);
 
  
   useEffect(() => {
@@ -30,7 +30,7 @@ export function PlaylistList () {
         console.error("플레이리스트 데이터를 가져오는데 실패했습니다.");
       }
     }) ();
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
