@@ -36,7 +36,7 @@ const CoverList = styled.ul`
   padding: 0;
   margin: 0;
   overflow-y: auto; 
-  max-height: 400px; 
+  max-height: 700px; 
 `;
 
 const CoverItem = styled.li`
@@ -161,8 +161,7 @@ function PlaylistDetailModal() {
 
   return (
     <>
-      <Content $width={40} $height={40} $borderRadius={30}>
-        
+      <Content $width={55} $height={55} $borderRadius={30}>     
         <ModalHeader>
           <img src={logo} alt="sorimaeul logo" />
           <p>{playlistName}</p>
