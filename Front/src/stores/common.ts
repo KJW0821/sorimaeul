@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 export interface AlarmData {
   notifyCode: number;
@@ -46,6 +47,9 @@ export const commonSlice = createSlice({
     removeAlarm(state, action) {
       state.alarmList = state.alarmList.filter(el => el.notifyCode !== action.payload)
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
   }
 });
 
