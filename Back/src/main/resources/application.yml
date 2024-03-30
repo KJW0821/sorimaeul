@@ -16,7 +16,7 @@ spring:
       pool-name: Hikari Connection Pool
       # hikariCP property setting
       maximum-pool-size: 10
-      connection-timeout: 3597
+      connection-timeout: 5000
       connection-init-sql: SELECT 1
       idle-timeout: 30000
       max-lifetime: 55000
