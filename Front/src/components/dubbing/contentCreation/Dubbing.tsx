@@ -130,14 +130,14 @@ function Dubbing() {
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           setAudioURL(prev => {
-            const newURL = [...prev];
-            newURL[idx] = URL.createObjectURL(e.data);
-            return newURL;
+            const newState = [...prev];
+            newState[idx] = URL.createObjectURL(e.data);
+            return newState;
           });
           setAudioBlob(prev => {
-            const newBlob = [...prev];
-            newBlob[idx] = e.data;
-            return newBlob;
+            const newState = [...prev];
+            newState[idx] = e.data;
+            return newState;
           });
         }
       };
@@ -151,14 +151,14 @@ function Dubbing() {
       return newState;
     });
     setAudioURL(prev => {
-      const newURL = [...prev];
-      newURL[idx] = '';
-      return newURL;
+      const newState = [...prev];
+      newState[idx] = '';
+      return newState;
     });
     setAudioBlob(prev => {
-      const newBlob = [...prev];
-      newBlob[idx] = new Blob();
-      return newBlob;
+      const newState = [...prev];
+      newState[idx] = new Blob();
+      return newState;
     });
   };
 
@@ -202,7 +202,17 @@ function Dubbing() {
           modelCode: model[idx],
           voicePath: uploadRes.voicePath,
           pitch: pitch[idx]
-        })
+        });
+        setIsConverted(prev => {
+          const newState = [...prev];
+          newState[idx] = true;
+          return newState;
+        });
+        setVoicePaths(prev => {
+          const newState = [...prev];
+          newState[idx] = convertRes.voicePath;
+          return newState;
+        });
       }
     }
   };
@@ -271,18 +281,18 @@ function Dubbing() {
                   }
                   options={modelInput}
                   onChange={(selectedOption) => setModel(prev => {
-                    const newModel = [...prev];
-                    newModel[idx] = selectedOption?.value || 0;
-                    return newModel;
+                    const newState = [...prev];
+                    newState[idx] = selectedOption?.value || 0;
+                    return newState;
                   })}
                   placeholder="모델을 선택하세요" 
                 />
                 <input 
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setPitch(prev => {
-                      const newPitch = [...prev];
-                      newPitch[idx] = parseInt(e.target.value);
-                      return newPitch
+                      const newState = [...prev];
+                      newState[idx] = parseInt(e.target.value);
+                      return newState
                     })
                   }}
                   className="border" 
@@ -294,7 +304,7 @@ function Dubbing() {
                 <Button onClick={() => convertAudio(idx)} $marginLeft={0} $marginTop={0}>변환</Button>
                 {
                   isConverted[idx] ?
-                  <audio controls src={undefined} />
+                  <audio controls src={s3URL + voicePaths[idx]} />
                   :
                   recordState[idx] === 2 && <img onClick={() => resetRecording(idx)} src={reRecordBtn} alt="" />
                 }

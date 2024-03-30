@@ -109,7 +109,7 @@ function SourceVideoInfo() {
       <h1 className="title">{videoInfo?.sourceName}</h1>
       <div className="content-box">
         <div className="video-box">
-          <video className="video" controls src={s3URL + `/${videoInfo?.storagePath}`} />
+          <video className="video" controls src={s3URL + videoInfo?.storagePath} />
         </div>
         <div className="info-box">
           <div className="flex flex-col gap-2">
