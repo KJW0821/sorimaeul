@@ -13,6 +13,7 @@ const Container = styled.div`
   width: 100%; 
 `;
 
+
 const MenuBarContainer = styled.div`
   flex: 0 0 20%; 
   padding-left: 150px;
@@ -74,7 +75,7 @@ function ProfilePage() {
           </LearnCountContainer>
           <MenuBar />
         </MenuBarContainer>
-
+       
         <ContentContainer>
           {ComponentToShow && <ComponentToShow />}
         </ContentContainer>
