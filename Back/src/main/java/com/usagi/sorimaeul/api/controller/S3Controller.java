@@ -1,17 +1,13 @@
 package com.usagi.sorimaeul.api.controller;
 
-import java.io.IOException;
-
 import com.usagi.sorimaeul.api.service.S3Service;
 import com.usagi.sorimaeul.dto.dto.ResponseS3Dto;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor

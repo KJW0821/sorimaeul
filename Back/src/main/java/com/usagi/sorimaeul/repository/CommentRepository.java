@@ -1,7 +1,6 @@
 package com.usagi.sorimaeul.repository;
 
 import com.usagi.sorimaeul.entity.Comment;
-import com.usagi.sorimaeul.entity.Dubbing;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.usagi.sorimaeul.dto.response;
 
 import com.usagi.sorimaeul.dto.dto.VideoSourceInfoDto;
-import com.usagi.sorimaeul.entity.VideoSource;
 import lombok.*;
 
 import java.util.List;

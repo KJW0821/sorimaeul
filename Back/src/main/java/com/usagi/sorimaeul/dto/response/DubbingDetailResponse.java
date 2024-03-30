@@ -1,6 +1,5 @@
 package com.usagi.sorimaeul.dto.response;
 
-import io.netty.handler.codec.socks.SocksRequestType;
 import lombok.*;
 
 import java.time.LocalDateTime;

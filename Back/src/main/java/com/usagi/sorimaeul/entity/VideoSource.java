@@ -1,8 +1,8 @@
 package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 

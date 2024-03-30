@@ -1,7 +1,7 @@
 package com.usagi.sorimaeul.api.service;
 
-import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.dto.OAuthTokenDto;
+import com.usagi.sorimaeul.dto.dto.SocialProfileDto;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
 import com.usagi.sorimaeul.entity.BlackList;
 import com.usagi.sorimaeul.entity.RefreshToken;

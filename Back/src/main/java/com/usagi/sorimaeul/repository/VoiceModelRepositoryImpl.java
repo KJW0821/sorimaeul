@@ -2,11 +2,8 @@ package com.usagi.sorimaeul.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.usagi.sorimaeul.dto.dto.ModelInfoDto;
 import com.usagi.sorimaeul.entity.*;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -3,8 +3,8 @@ package com.usagi.sorimaeul.repository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class EmitterRepository {

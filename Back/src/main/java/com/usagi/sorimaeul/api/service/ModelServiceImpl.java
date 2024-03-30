@@ -9,10 +9,14 @@ import com.usagi.sorimaeul.dto.response.GetScriptResponse;
 import com.usagi.sorimaeul.dto.response.ModelInfoResponse;
 import com.usagi.sorimaeul.dto.response.ModelListResponse;
 import com.usagi.sorimaeul.dto.response.ModelTableCreateResponse;
-import com.usagi.sorimaeul.entity.*;
-import com.usagi.sorimaeul.repository.*;
-import static com.usagi.sorimaeul.utils.Const.*;
-import static com.usagi.sorimaeul.utils.InMemoryMultipartFile.*;
+import com.usagi.sorimaeul.entity.Script;
+import com.usagi.sorimaeul.entity.User;
+import com.usagi.sorimaeul.entity.VideoSource;
+import com.usagi.sorimaeul.entity.VoiceModel;
+import com.usagi.sorimaeul.repository.ScriptRepository;
+import com.usagi.sorimaeul.repository.UserRepository;
+import com.usagi.sorimaeul.repository.VideoSourceRepository;
+import com.usagi.sorimaeul.repository.VoiceModelRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,11 +27,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import static com.usagi.sorimaeul.utils.FileUtil.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.usagi.sorimaeul.utils.Const.EC2_BASE_PATH;
+import static com.usagi.sorimaeul.utils.FileUtil.*;
+import static com.usagi.sorimaeul.utils.InMemoryMultipartFile.createMultipartFilesWithAllowedExtensions;
 
 @Service
 @RequiredArgsConstructor

@@ -1,11 +1,13 @@
 package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.CommentService;
+import com.usagi.sorimaeul.dto.dto.CommentInfoDto;
 import com.usagi.sorimaeul.dto.request.CommentCreateRequest;
 import com.usagi.sorimaeul.dto.response.CommentListResponse;
-import com.usagi.sorimaeul.dto.response.CoverDetailResponse;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +44,8 @@ public class CommentController {
 
 
     @Operation(summary = "AI 커버 댓글 등록", description = "AI 커버 게시글에 댓글을 등록한다.")
-    @ApiResponse(responseCode = "201", description = "AI 커버 게시글에 댓글 등록 성공")
+    @ApiResponse(responseCode = "201", description = "AI 커버 게시글에 댓글 등록 성공",
+            content = @Content(schema = @Schema(implementation = CommentInfoDto.class)))
     @PostMapping("/cover/{coverCode}")
     public ResponseEntity<?> createCoverComment(@RequestHeader("Authorization") String token,
                                                 @PathVariable int coverCode,
@@ -53,7 +56,8 @@ public class CommentController {
 
 
     @Operation(summary = "더빙 댓글 등록", description = "더빙 게시글에 댓글을 등록한다.")
-    @ApiResponse(responseCode = "201", description = "더빙 게시글에 댓글 등록 성공")
+    @ApiResponse(responseCode = "201", description = "더빙 게시글에 댓글 등록 성공",
+            content = @Content(schema = @Schema(implementation = CommentInfoDto.class)))
     @PostMapping("/dub/{dubCode}")
     public ResponseEntity<?> createDubComment(@RequestHeader("Authorization") String token,
                                                 @PathVariable int dubCode,
