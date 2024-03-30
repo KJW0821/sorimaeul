@@ -13,14 +13,14 @@ public interface DubbingRepository extends JpaRepository<Dubbing, Integer> {
 
     List<Dubbing> findByDubName(String dubName);
 
-    List<Dubbing> findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(int videoSourceCode,  boolean isComplete, boolean isPublic);
+    List<Dubbing> findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(int videoSourceCode,  Boolean isComplete, Boolean isPublic);
 
     Dubbing findByDubCode(int dubCode);
 
-    List<Dubbing> findByIsComplete(boolean isComplete);
+    List<Dubbing> findByIsComplete(Boolean isComplete);
 
-    List<Dubbing> findByIsCompleteAndIsPublicAndVideoSource_videoSourceCodeOrderByCreatedTimeDesc(boolean isComplete, boolean isPublic, int videoSourceCode);
+    List<Dubbing> findByIsCompleteAndIsPublicAndVideoSource_videoSourceCodeOrderByCreatedTimeDesc(Boolean isComplete, Boolean isPublic, int videoSourceCode);
 
-    List<Dubbing> findByDubNameAndIsCompleteAndIsPublic(String dubName, boolean isComplete, boolean isPublic);
+    List<Dubbing> findByDubNameAndIsCompleteAndIsPublic(String dubName, Boolean isComplete, Boolean isPublic);
 
 }

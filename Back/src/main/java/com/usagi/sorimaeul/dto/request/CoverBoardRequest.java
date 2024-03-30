@@ -11,6 +11,6 @@ public class CoverBoardRequest {
     private String coverDetail;
     @Nullable
     private String thumbnailPath;
-    private boolean isPublic;
+    private Boolean isPublic;
 
 }

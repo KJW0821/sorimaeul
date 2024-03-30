@@ -21,9 +21,9 @@ public class CoverDetailResponse {
     private String coverSinger;
     private String singer;
     private String title;
-    private boolean isLiked;
-    private boolean isComplete;
-    private boolean isPublic;
+    private Boolean isLiked;
+    private Boolean isComplete;
+    private Boolean isPublic;
     private LocalDateTime createdTime;
     private LocalDateTime postTime;
 

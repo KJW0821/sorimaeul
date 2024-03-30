@@ -13,6 +13,6 @@ public class PlaylistCoverInfoDto {
     private String title;
     private String nickname;
     private String storagePath;
-    private boolean isPublic;
+    private Boolean isPublic;
 
 }
