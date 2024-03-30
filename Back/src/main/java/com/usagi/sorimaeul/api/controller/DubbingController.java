@@ -30,7 +30,8 @@ public class DubbingController {
     @Operation(summary = "더빙 영상 제작", description = "더빙 영상을 제작한다")
     @ApiResponse(responseCode = "201", description = "더빙 영상 제작 성공")
     @PostMapping("/create")
-    public ResponseEntity<DubbingCreateResponse> createDubbing(@RequestHeader("Authorization") String token, DubbingCreateRequest request) {
+    public ResponseEntity<DubbingCreateResponse> createDubbing(@RequestHeader("Authorization") String token,
+                                                               @RequestBody DubbingCreateRequest request) {
         // API 요청 시 헤더 중 Authorization 키에 담긴 값을 받아옴
         // 유저 코드 받아오기
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
