@@ -576,6 +576,9 @@ public class DubbingServiceImpl implements DubbingService {
         // 더빙 영상 S3에 저장하기
         s3Service.saveByteToS3(savePath, fileToSave);
 
+        dubbing.setStoragePath(savePath);
+        dubbingRepository.save(dubbing);
+
         return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
     }
 }
