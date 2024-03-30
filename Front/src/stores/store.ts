@@ -9,6 +9,7 @@ import playlistsSlice, { PlaylistsState } from "./playlists";
 import playlistSlice, { PlaylistSongsState } from "./playlist";
 import modalSlice, { ModalState } from "./modal";
 import commentSlice, { CommentState } from "./comment";
+import audioPlayerSlice , { AudioPlayerState } from "./audioPlayer";
 
 export interface RootState {
   user: UserState;
@@ -19,6 +20,7 @@ export interface RootState {
   playlist: PlaylistSongsState;
   modal: ModalState;
   comment: CommentState;
+  audioPlayer: AudioPlayerState;
 }
 
 const persistConfig = {
@@ -36,7 +38,8 @@ const rootReducer = combineReducers({
   playlists: playlistsSlice,
   playlist: playlistSlice,
   modal: modalSlice,
-  comment: commentSlice
+  comment: commentSlice,
+  audioPlayer: audioPlayerSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
