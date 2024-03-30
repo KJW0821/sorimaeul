@@ -64,3 +64,11 @@ export const getOriginVoices = (sourceCode: string) => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const uploadRecord = (videoSourceCode: string, voiceIndex: number, data: FormData) => {
+  return API.post(URL + `/record/${videoSourceCode}/${voiceIndex}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  })
+};
