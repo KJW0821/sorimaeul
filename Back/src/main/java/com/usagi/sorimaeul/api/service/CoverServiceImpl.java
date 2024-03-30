@@ -242,19 +242,23 @@ public class CoverServiceImpl implements CoverService {
         requestBody.put("coverCode", coverCode);
         requestBody.put("coverName", request.getCoverName());
         requestBody.put("pitch", request.getPitch());
-        WebClient.create("http://222.107.238.124:7866")
-                .post()
-                .uri("/rvc/cover")
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            WebClient.create("http://222.107.238.124:7866")
+                    .post()
+                    .uri("/rvc/cover")
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        CoverCreateResponse response = CoverCreateResponse.builder()
-                .coverCode(coverCode)
-                .build();
+            CoverCreateResponse response = CoverCreateResponse.builder()
+                    .coverCode(coverCode)
+                    .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 커버 생성 실패: " + e.getMessage());
+        }
     }
 
 
