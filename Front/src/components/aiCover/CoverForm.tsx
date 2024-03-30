@@ -234,7 +234,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
       <label className="thirdtitle" htmlFor="modelCode" >원하는 음성 모델을 선택하고, 알맞게 피치를 조절해주세요.</label>
         <Select name="modelCode" id="modelCode" value={data.modelCode} onChange={handleChange}>
           <option value="" > 모델을 선택해주세요. </option>
-          {models.voiceModels.map((model) => (
+          {models && models.voiceModels.map((model) => (
             <option key={model.modelCode} value={model.modelCode}>
               {model.modelName}
             </option>
