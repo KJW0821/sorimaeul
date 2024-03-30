@@ -43,7 +43,11 @@ function Dubbing() {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob[]>([]);
   const [isPlay, setIsPlay] = useState<boolean[]>([]);
+  const [isConverted, setIsConverted] = useState<boolean[]>([]);
+  const [model, setModel] = useState<number[]>([]);
+  const [originVoicePaths, setOriginVoicePaths] = useState<string[]>([]);
   const audioRefs = useRef<HTMLAudioElement[]>([]);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   const getOriginVoiceData = async () => {
     if (params.sourceCode) {
@@ -51,14 +55,19 @@ function Dubbing() {
       console.log(res);
       setVideoPath(res.videoPath);
       setOriginVoiceList(res.voiceSources);
+      setOriginVoicePaths(res.voiceSources.map((el: VoiceData) => {
+        return el.voicePath
+      }));
       setVoicePaths(res.voiceSources.map((el: VoiceData) => {
         return el.voicePath
       }));
-      setVoicePaths(Array.from({length: res.voiceSources.length}, () => ''));
+      setModel(Array.from({length: res.voiceSources.length}, () => 0));
       setRecordState(Array.from({length: res.voiceSources.length}, () => 0));
       setAudioURL(Array.from({length: res.voiceSources.length}, () => ''));
       setAudioBlob(Array.from({length: res.voiceSources.length}, () => new Blob()));
       setIsPlay(Array.from({length: res.voiceSources.length}, () => false));
+      setIsConverted(Array.from({length: res.voiceSources.length}, () => false));
+      audioRefs.current = res.voiceSources.map(() => new Audio());
     }
   };
 
@@ -94,6 +103,7 @@ function Dubbing() {
   const startRecording = (idx: number) => {
     if (mediaRecorder) {
       mediaRecorder.start();
+      videoRef.current?.play();
       setRecordState(prev => {
         const newState = [...prev];
         newState[idx] = 1;
@@ -105,6 +115,7 @@ function Dubbing() {
   const stopRecording = (idx: number) => {
     if (mediaRecorder) {
       mediaRecorder.stop();
+      videoRef.current?.pause();
       setRecordState(prev => {
         const newState = [...prev];
         newState[idx] = 2;
@@ -190,6 +201,7 @@ function Dubbing() {
   }, [params.sourceCode])
 
   useEffect(() => {
+    console.log(audioRefs)
     if (audioURL) {
       audioRefs.current = audioRefs.current.map((el, idx) => {
         const newEl = el;
@@ -203,10 +215,10 @@ function Dubbing() {
     <Container>
       <div>
         <label htmlFor="title">제목:</label>
-        <input type="text" name="title" id="title" placeholder="최대 40글자까지 작성 가능합니다" />
+        <input type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
       </div>
       <div className="video-box">
-        <video controls src={s3URL + `${videoPath}`} />
+        <video ref={videoRef} controls src={s3URL + `${videoPath}`} />
       </div>
       <div>
         <div className="flex gap-4">
@@ -219,14 +231,48 @@ function Dubbing() {
         <hr />
         <div>
           {
-            originVoiceList.map((el) => (
+            originVoiceList.map((el, idx) => (
               <div key={el.voiceIndex} className="flex">
                 <p className="character">{el.voiceName}</p>
-                <img src={startRecordBtn} alt="" />
-                <Select options={modelInput} placeholder="모델을 선택하세요" />
+                {
+                  recordState[idx] === 0 &&
+                  <img onClick={() => startRecording(idx)} className="recordBtn" src={startRecordBtn} alt="startRecordBtn" />
+                }
+                {
+                  recordState[idx] === 1 &&
+                  <img onClick={() => stopRecording(idx)} className="recordBtn" src={stopRecordBtn} alt="stopRecordBtn" />
+                }
+                {
+                  recordState[idx] === 2 &&
+                  <>
+                    {
+                      isPlay[idx] ?
+                      <img onClick={() => stopAudio(idx)} src={stopRecordBtn} className="recordBtn" alt="stopPlaying" />
+                      :
+                      <img onClick={() => playAudio(idx)} className="recordBtn" src={playRecordBtn} alt="playRecordBtn" />
+                    }
+                  </>
+                }
+                <Select 
+                  value = {
+                    modelInput.find((option) => option.value === model[idx])
+                  }
+                  options={modelInput}
+                  onChange={(selectedOption) => setModel(prev => {
+                    const newModel = [...prev];
+                    newModel[idx] = selectedOption?.value || 0;
+                    return newModel;
+                  })}
+                  placeholder="모델을 선택하세요" 
+                />
                 <input className="border" type="number" min={-12} max={12} defaultValue={0} />
                 <Button $marginLeft={0} $marginTop={0}>변환</Button>
-                <audio src={undefined} />
+                {
+                  isConverted[idx] ?
+                  <audio controls src={undefined} />
+                  :
+                  recordState[idx] === 2 && <img onClick={() => resetRecording(idx)} src={reRecordBtn} alt="" />
+                }
               </div>
             ))
           }
