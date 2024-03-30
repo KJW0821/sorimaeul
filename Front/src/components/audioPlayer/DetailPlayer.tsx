@@ -61,7 +61,7 @@ const DetailPlayer: React.FC<CustomAudioPlayerProps> = ({ src }) => {
     <div>
       <audio ref={audioRef} src={src} preload="metadata" />
       <span className="mr-6 text-stone-400">({formatDuration(duration)})</span>
-      <Button className="mr-3" onClick={togglePlayPause}>{isPlaying ? (<img src={playBtn}/>) : (<img src={pauseBtn}/>)}</Button>
+      <Button className="mr-3" onClick={togglePlayPause}>{isPlaying ? (<img src={pauseBtn}/>) : (<img src={playBtn}/>)}</Button>
     </div>
   );
 };
