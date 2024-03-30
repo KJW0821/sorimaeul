@@ -8,6 +8,7 @@ import com.usagi.sorimaeul.dto.response.*;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -38,7 +39,10 @@ public class DubbingController {
     }
 
     @Operation(summary = "더빙 영상 저장", description = "더빙 영상을 S3 서버에 저장한다")
-    @ApiResponse(responseCode = "200", description = "더빙 영상 저장 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 영상 S3 저장 성공"),
+            @ApiResponse(responseCode = "400", description = "더빙 영상 S3 저장 실패")
+    })
     @PostMapping("/save")
     public ResponseEntity<?> saveDubbing(DubbingSaveRequest request) {
         // 유저 코드 받아오기
@@ -108,7 +112,10 @@ public class DubbingController {
     }
 
     @Operation(summary = "더빙 영상 게시글 등록/수정", description = "더빙 영상 게시글을 등록하거나 수정한다.")
-    @ApiResponse(responseCode = "200", description = "더빙 영상 등록/수정 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 영상 등록/수정 성공"),
+            @ApiResponse(responseCode = "400", description = "더빙 영상 등록/수정 실패")
+    })
     @PatchMapping("/{dubCode}")
     public ResponseEntity<?> patchDubbingBoard(@RequestHeader("Authorization") String token,
                                                @PathVariable int dubCode,
@@ -118,7 +125,10 @@ public class DubbingController {
     }
 
     @Operation(summary = "더빙 영상 삭제", description = "더빙 영상을 삭제한다.")
-    @ApiResponse(responseCode = "204", description = "더빙 영상 삭제 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "더빙 영상 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "더빙 영상 삭제 실패")
+    })
     @DeleteMapping("/{dubCode}")
     public ResponseEntity<?> deleteDubbing(@RequestHeader("Authorization") String token,
                                            @PathVariable int dubCode) {
@@ -137,7 +147,10 @@ public class DubbingController {
 
 
     @Operation(summary = "더빙 영상 녹음 업로드", description = "더빙 영상 녹음을 업로드한다.")
-    @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공"),
+            @ApiResponse(responseCode = "400", description = "더빙 영상 녹음 업로드 실패")
+    })
     @PostMapping("/record/{num}")
     public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
                                                  @PathVariable int num,
@@ -159,7 +172,10 @@ public class DubbingController {
     }
 
     @Operation(summary = "더빙 음성 변환", description = "더빙 음성을 변환한다.")
-    @ApiResponse(responseCode = "200", description = "더빙 음성 변환 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 음성 변환 성공"),
+            @ApiResponse(responseCode = "400", description = "더빙 음성 변환 실패")
+    })
     @PostMapping("/convert/{voiceIndex}")
     public ResponseEntity<?> convertDubbingRecord(@RequestHeader("Authorization") String token,
                                                   @PathVariable int voiceIndex,
