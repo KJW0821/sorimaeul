@@ -40,7 +40,6 @@ class Creator:
     # 유튜브 음원 다운로드
     def download(self):
         yt = YouTube(youtubeLink)
-        yt.check_availability()
 
         if yt.length > 600:
             raise TooLongYoutubeException
