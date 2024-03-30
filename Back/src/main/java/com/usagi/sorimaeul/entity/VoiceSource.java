@@ -21,11 +21,14 @@ public class VoiceSource {
     @JoinColumn(name = "video_source_code", referencedColumnName = "video_source_code")
     private VideoSource videoSource;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "model_code", referencedColumnName = "model_code")
     private VoiceModel voiceModel;
 
     @Column(name = "voice_path")
     private String voicePath;
+
+    @Column(name = "voice_index")
+    private int voiceIndex;
 
 }

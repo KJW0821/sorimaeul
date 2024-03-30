@@ -13,5 +13,6 @@ import java.util.List;
 public class CoverListResponse {
 
     private List<CoverInfoDto> covers;
+    private int totalPages;
 
 }

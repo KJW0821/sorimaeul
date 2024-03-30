@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Notify {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "notify_code")
 	private int notifyCode;
 
@@ -26,6 +27,12 @@ public class Notify {
 
 	@Column(name = "notify_content")
 	private String notifyContent;
+
+	@Column(name = "notify_type")
+	private String notifyType;
+
+	@Column(name = "target_code")
+	private int targetCode;
 
 	@Column(name = "is_checked")
 	private int isChecked;

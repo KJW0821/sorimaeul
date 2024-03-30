@@ -31,20 +31,28 @@ public class VoiceModel {
     @Column(name = "model_name")
     private String modelName;
 
-    @Column(name = "storage_path")
-    private String storagePath;
-
     @Column(name = "image_path")
     private String imagePath;
 
+    @Builder.Default
     @Column(name = "state")
-    private int state;
+    private int state = 0;
 
+    @Builder.Default
     @Column(name = "record_count")
-    private Integer recordCount;
+    private Integer recordCount = 0;
 
     @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
+
+    // 해당 매개변수를 받는 생성자 추가
+    public VoiceModel(int modelCode, String modelName, String imagePath, int recordCount, int state) {
+        this.modelCode = modelCode;
+        this.modelName = modelName;
+        this.imagePath = imagePath;
+        this.recordCount = recordCount;
+        this.state = state;
+    }
 
 }

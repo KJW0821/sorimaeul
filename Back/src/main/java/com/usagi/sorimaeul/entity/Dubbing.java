@@ -1,15 +1,15 @@
 package com.usagi.sorimaeul.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,15 +37,24 @@ public class Dubbing {
     @Column(name = "storage_path")
     private String storagePath;
 
+    @Builder.Default
     @Column(name = "is_public")
-    private Boolean isPublic;
+    private Boolean isPublic = false;
 
+    @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
+    @UpdateTimestamp
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
 
+    @Builder.Default
     @Column(name = "like_count")
-    private int likeCount;
+    private int likeCount = 0;
+
+    @Builder.Default
+    @Column(name = "is_complete")
+    private Boolean isComplete = false;
+
 }

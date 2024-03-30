@@ -4,7 +4,8 @@ import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.usagi.sorimaeul.dto.request.UserInfoRequest;
 import com.usagi.sorimaeul.dto.response.UserInfoResponse;
-import com.usagi.sorimaeul.entity.*;
+import com.usagi.sorimaeul.entity.QUser;
+import com.usagi.sorimaeul.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
