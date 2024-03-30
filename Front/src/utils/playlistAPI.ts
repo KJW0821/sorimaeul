@@ -21,7 +21,7 @@ interface ListParams {
   page: number;
 }
 
-export const getPlaylists = (page: number = 1) => {
+export const getPlaylists = (page: number) => {
   const params: ListParams = { page };
   return API.get(URL, { params })
   .then(res => res.data)

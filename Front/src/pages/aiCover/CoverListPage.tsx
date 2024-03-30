@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { CoverListInterface } from "../../components/aiCover/CoverInterface";
+import { Cover } from "../../components/aiCover/CoverInterface";
 import { getCovers, getPopularCovers } from "../../utils/coverAPI";
 import styled from "styled-components";
 import CoverList from "../../components/aiCover/CoverList";
 import PopularCoverList from "../../components/aiCover/PopularCoverList";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
+import Pagination from "../../components/common/Pagination";
 
 
 
@@ -67,28 +68,34 @@ const DetailLine = styled.div`
 // 커버 전체 목록 페이지
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
-  const [popularDataList, setPopularDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataList, setDataList] = useState<Cover[]>([]);
+  const [popularDataList, setPopularDataList] = useState<Cover[]>([]);
+
+  const getCoverList = async () => {
+    const data = await getCovers(page);
+        setDataList(data.covers);
+        setTotalPages(data.totalPages);
+  }
+
+  const getHotCovers = async () => {
+    const popularData = await getPopularCovers();
+    setPopularDataList(
+      popularData.covers);
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await getCovers();
-        setDataList({
-          covers: data.covers,
-          totalPages: data.totalPages
-        });
+    getCoverList();
+  }, [page])
 
-        const popularData = await getPopularCovers();
-        setPopularDataList({
-          covers: popularData.covers,
-          totalPages: popularData.totalPages
-        });
-      } catch (error) {
-        console.error("커버 데이터를 가져오는데 실패했습니다.");
-      }
-    })();
-  }, []);
+  useEffect(() => {
+    getHotCovers();
+  }, [])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <>
@@ -109,6 +116,7 @@ const CoverListPage: React.FC = () => {
         <CoverList data={dataList} />
         </CoverListContainer>
       </Container>
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#FDA06C" />
     </>
   );
 };

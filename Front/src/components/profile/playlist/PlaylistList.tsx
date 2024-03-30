@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getPlaylists } from "../../../utils/playlistAPI";
-import { useEffect} from "react";
+import { useEffect, useState} from "react";
 import { PlaylistCard } from "./PlaylistCard";
 import { setPlaylists, setTotalPages } from "../../../stores/playlists";
 import { RootState } from "../../../stores/store";
@@ -17,12 +17,13 @@ const ListContainer = styled.div`
 export function PlaylistList () {
   const dispatch = useDispatch();
   const dataList = useSelector((state: RootState) => state.playlists);
+  const [page, setPages] = useState(1);
 
  
   useEffect(() => {
     (async () => {
       try {
-        const data = await getPlaylists();
+        const data = await getPlaylists(page);
         dispatch(setPlaylists(data.playlists));
         dispatch(setTotalPages(data.totalPages));
       } catch (err) {
@@ -39,7 +40,7 @@ export function PlaylistList () {
           key={playlist.playlistCode}
           playlistCode={playlist.playlistCode}
           playlistName={playlist.playlistName}
-          createTime={playlist.createTime}
+          createdTime={playlist.createdTime}
         />
       ))}
       </ListContainer>

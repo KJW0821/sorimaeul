@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import CDPlayer from "./CDPlayer";
-import { CoverListInterface } from "./CoverInterface";
+import { Cover } from "./CoverInterface";
 
 const ListContainer = styled.div`
   display: flex;
@@ -17,14 +17,14 @@ const ListContainer = styled.div`
 
 
 interface Props {
-  data: CoverListInterface['data'];
+  data: Cover[];
 }
 const CoverList: React.FC<Props> = ({
   data
 }) => {
   return (
 <ListContainer>
-      {data.covers?.map((cover) => (
+      {data && data.map((cover) => (
         <div key={cover.coverCode} className="w-1/5 h-full"> 
           <CDPlayer cover={cover}/>
         </div>

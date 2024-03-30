@@ -54,10 +54,10 @@ const ButtonBox = styled.div`
 interface Props {
   playlistCode: string,
   playlistName: string,
-  createTime: string,
+  createdTime: string,
 }
 
-export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, createTime }) => {
+export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, createdTime }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(playlistName);
@@ -67,7 +67,7 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
       dispatch(setSelectedPlaylist({
         playlistCode: playlistCode,
         playlistName: playlistName,
-        createTime: createTime
+        createdTime: createdTime
       }));
       dispatch(openModal({
         modalType: "playlistdetail",
@@ -116,7 +116,7 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
       ) : (
         <p>{playlistName}</p>
       )}
-      <p>{createTime}</p>
+      <p>{createdTime}</p>
       <ButtonBox>
         <Button onClick={handleEdit}>
           <img className="icon" src={editIcon} alt="" />
