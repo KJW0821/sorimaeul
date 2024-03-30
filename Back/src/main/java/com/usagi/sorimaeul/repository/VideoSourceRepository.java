@@ -11,7 +11,7 @@ import java.util.List;
 public interface VideoSourceRepository extends JpaRepository<VideoSource, Integer> {
 
     List<VideoSource> findAllByOrderByCreatedTimeDesc();
-    VideoSource findByVideoSourceCode(int videoSourceCode);
+    VideoSource findByVideoSourceCode(Integer videoSourceCode);
 
 //    @Query(value = "SELECT vs.*, COUNT(d.video_source_code) as dubbingCount " +
 //            "FROM video_source_tb vs " +
