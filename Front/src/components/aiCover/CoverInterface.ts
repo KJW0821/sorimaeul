@@ -33,12 +33,6 @@ export interface CoverCreateInterface {
   coverName: string;
 }
 
-export interface CoverListInterface {
-  data: {
-    covers: Cover[];
-    totalPages: number;
-  }
-}
 
 export interface CoverDetailInterface {
   coverName: string;
