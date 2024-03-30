@@ -4,6 +4,8 @@ import { CoverListInterface } from "../../aiCover/CoverInterface";
 import { styled } from "styled-components";
 import { Button } from "../../common/Button";
 import { useNavigate } from "react-router-dom";
+import MenuDescriptionComponent from "../MenuDescription";
+import MenuDescription from "../MenuDescription";
 
 const CoverContainer = styled.div`
   display: flex;
@@ -88,7 +90,10 @@ function CoverBox() {
 
  
   return (
+    <>
+    <MenuDescription bigText={"A"} middleText={"I 커버"} smallText={"나의 AI 커버"} />
     <CoverContainer>
+      
     {dataList && dataList.covers?.map((cover) => (
       <CoverContent key={cover.coverCode} $complete={cover.complete} $public={cover.public}>
         <StatusIndicator $complete={cover.complete} $public={cover.public}>
@@ -116,6 +121,7 @@ function CoverBox() {
       </CoverContent>
     ))}
     </CoverContainer>
+    </>
   )
 }
 
