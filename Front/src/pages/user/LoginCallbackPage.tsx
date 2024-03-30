@@ -64,7 +64,7 @@ const LoginCallbackPage: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center flex-col h-screen">
-      <h1 className="text-xl font-bold mb-4">로그인 중입니다.</h1>
+      <h1 className="text-xl font-bold ">로그인 중입니다.</h1>
       <img src={spinner} alt="로딩중" className="w-1/2"/>
       { status === 200 && <Navigate to={"/"} />}
       { status === 204 && <Navigate to={"/signup"} />}
