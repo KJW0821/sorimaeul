@@ -48,9 +48,9 @@ img {
 `;
 
 const IntroText = styled.div`
-font-family: 'ClimateCrisisKRVF';
+font-family: 'PyeongChangPeace-Bold';
 color: #FFFFFF;
-  font-size: 70px; 
+  font-size: 100px; 
   margin-bottom: 45px; 
   text-align: center; 
   max-width: 80%; 
