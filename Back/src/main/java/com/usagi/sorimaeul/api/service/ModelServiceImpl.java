@@ -236,15 +236,19 @@ public class ModelServiceImpl implements ModelService {
         // GPU 서버에 모델 업로드 요청 보내기
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", modelFiles[0].getResource());
-        WebClient.create("http://222.107.238.124:7865")
-                .post()
-                .uri("/model/" + modelCode)
-                .body(BodyInserters.fromMultipartData(builder.build()))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            WebClient.create("http://222.107.238.124:7865")
+                    .post()
+                    .uri("/model/" + modelCode)
+                    .body(BodyInserters.fromMultipartData(builder.build()))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("모델 업로드 실패: " + e.getMessage());
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
 
     }
 
@@ -278,33 +282,36 @@ public class ModelServiceImpl implements ModelService {
             MultipartFile multipartFile = multipartFiles.get(i);
             builder.part("files", multipartFile.getResource());
         }
+        try {
+            WebClient.create("http://222.107.238.124:7865")
+                    .post()
+                    .uri("/voice/" + modelCode)
+                    .body(BodyInserters.fromMultipartData(builder.build()))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        WebClient.create("http://222.107.238.124:7865")
-                .post()
-                .uri("/voice/" + modelCode)
-                .body(BodyInserters.fromMultipartData(builder.build()))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+            // GPU 서버에 모델 학습 요청 보내기
+            WebClient.create("http://222.107.238.124:7865")
+                    .post()
+                    .uri("/training")
+                    .bodyValue(new ModelTrainingRequest(modelCode, userCode))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        // GPU 서버에 모델 학습 요청 보내기
-        WebClient.create("http://222.107.238.124:7865")
-                .post()
-                .uri("/training")
-                .bodyValue(new ModelTrainingRequest(modelCode, userCode))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+            // state = 2: '학습중'으로 갱신
+            voiceModel.setState(2);
+            voiceModelRepository.save(voiceModel);
 
-        // state = 2: '학습중'으로 갱신
-        voiceModel.setState(2);
-        voiceModelRepository.save(voiceModel);
+            // 모델 학습 가능 횟수 차감
+            user.setLearnCount(user.getLearnCount() - 1);
+            userRepository.save(user);
 
-        // 모델 학습 가능 횟수 차감
-        user.setLearnCount(user.getLearnCount() - 1);
-        userRepository.save(user);
-
-        return ResponseEntity.status(HttpStatus.OK).body("모델 학습 성공!");
+            return ResponseEntity.status(HttpStatus.OK).body("모델 학습 성공!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("모델 학습 실패: " + e.getMessage());
+        }
     }
 
 
