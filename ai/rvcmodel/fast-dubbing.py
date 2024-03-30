@@ -42,7 +42,7 @@ class Request(BaseModel):
 # S3 서버에서 파일 다운로드
 def download_file(url: str, filename: str):
     with open(filename, 'wb') as f:
-        response = requests.get(f"{s3_url}/{url}")
+        response = requests.get(f"{s3_url}{url}")
         if response.status_code == 200:
             f.write(response.content)
         else:
@@ -63,11 +63,12 @@ def create_dubbing(request: Request):
         dub_path = f"{root_path}/{dubCode}"
         video_file = f"{dub_path}/video.mp4"
 
+        logger.info(f"Make directory : {dub_path}")
         os.makedirs(dub_path, exist_ok=True)
 
         download_file(videoURL, video_file)
 
-        video = VideoFileClip(video_file).write_videofile()
+        video = VideoFileClip(video_file)
 
         combine_audio = [video.audio]
 
@@ -119,8 +120,8 @@ def sendNotification(userCode, targetCode, msg):
         logger.info(f"Error occurred: {e}")
 
 
-@app.get("/create-dubbing")
-def create(request, background_tasks: BackgroundTasks):
+@app.post("/create-dubbing")
+def create(request: Request, background_tasks: BackgroundTasks):
     background_tasks.add_task(create_dubbing, request)
     return {"status": 200, "message": "Process accepted"}
 
