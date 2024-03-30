@@ -44,8 +44,8 @@ export const getCovers = (page: number) => {
 }
 
 // AI 마이 페이지 조회
-export const getMyCovers = () => {
-  const params: ListParams = { target: "mine", page: 1};
+export const getMyCovers = (page: number) => {
+  const params: ListParams = { target: "mine", page };
   return API.get("cover", { params })
   .then(res => res.data)
   .catch(err => err)

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getMyCovers } from "../../../utils/coverAPI";
-import { CoverListInterface } from "../../aiCover/CoverInterface";
+import { Cover } from "../../aiCover/CoverInterface";
 import { styled } from "styled-components";
 import { Button } from "../../common/Button";
 import { useNavigate } from "react-router-dom";
-import MenuDescriptionComponent from "../MenuDescription";
 import MenuDescription from "../MenuDescription";
+import Pagination from "../../common/Pagination";
 
 const CoverContainer = styled.div`
   display: flex;
@@ -73,28 +73,30 @@ const CoverText = styled.p`
 
 function CoverBox() {
   const navigate = useNavigate();
-  const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await getMyCovers();
-        setDataList({
-          covers: data.covers,
-          totalPages: data.totalPages
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, []);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataList, setDataList] = useState<Cover[]>([]);
+  
+  const getMyAICover = async () => {
+    const data = await getMyCovers(page);
+    setDataList(data.covers);
+    setTotalPages(data.totalPages);
+  }
 
+  useEffect(() => {
+    getMyAICover();
+  }, [page])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
  
   return (
     <>
     <MenuDescription bigText={"A"} middleText={"I 커버"} smallText={"나의 AI 커버"} />
     <CoverContainer>
       
-    {dataList && dataList.covers?.map((cover) => (
+    {dataList && dataList.map((cover) => (
       <CoverContent key={cover.coverCode} $complete={cover.complete} $public={cover.public}>
         <StatusIndicator $complete={cover.complete} $public={cover.public}>
           <StatusDescription>{cover.complete ? (cover.public ? '공개 ' : '비공개') : '변환 중'}</StatusDescription>
@@ -103,10 +105,6 @@ function CoverBox() {
           <CoverText > ♪ {cover.coverName} - {cover.coverSinger}</CoverText>
           <CoverText> (원곡) {cover.title} - {cover.singer} </CoverText>
           <span>생성일: {cover.createdTime}</span>
-          {/* {
-              cover.storagePath &&
-              <audio src={`https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/${cover.storagePath}`} controls />
-            } */}
         </CoverInfo>
         <Button onClick={() => {
         if (cover.complete && cover.public) {
@@ -122,6 +120,8 @@ function CoverBox() {
       </CoverContent>
     ))}
     </CoverContainer>
+    <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#BFEA44" />
+
     </>
   )
 }
