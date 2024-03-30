@@ -3,6 +3,7 @@ import { Cover, CoverResultInterface } from "./CoverInterface";
 import { requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
+import ColorLine from "./ColorLine";
 
 const StyledContainer = styled.div`
   width: 75%;
@@ -165,7 +166,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     coverSinger: '',
     singer: '',
     title: '',
-    public: false
+    isPublic: false
   });
 
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
@@ -196,7 +197,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     e.preventDefault();
     const formData = {
       ...data,
-      isPublic: data.public,
+      isPublic: data.isPublic,
     };
     onSubmit(formData);
   }
@@ -207,6 +208,8 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
   };
 
   return (
+    <>
+    <ColorLine />
     <StyledContainer>
       <ContentContainer>
         <MediaSection>
@@ -238,12 +241,12 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
               <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
             </FormRow>
             <TextArea id="coverDetail" name="coverDetail" value={data.coverDetail} placeholder="커버에 대한 설명을 입력해주세요" onChange={handleChange} cols={30} rows={10}></TextArea>
-            <Label htmlFor="public">공개 여부</Label>
+            <Label htmlFor="isPublic">공개 여부</Label>
             <input
               type="checkbox"
-              id="public"
-              name="public"
-              checked={data.public}
+              id="isPublic"
+              name="isPublic"
+              checked={data.isPublic}
               onChange={handleChange}
             />
             <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
@@ -251,6 +254,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
         </InfoSection>
       </ContentContainer>
     </StyledContainer>
+    </>
   );
 }
 

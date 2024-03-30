@@ -1,15 +1,15 @@
 import CoverCard from "./CoverCard";
-import { CoverListInterface } from "./CoverInterface"
+import { Cover } from "./CoverInterface"
 
 interface Props {
-  data: CoverListInterface['data'];
+  data: Cover[];
 }
 const CoverList: React.FC<Props> = ({
   data
 }) => {
   return (
     <>
-      {data.covers?.map((cover) => (
+      {data && data.map((cover) => (
         <CoverCard key={cover.coverCode} cover={cover}/>
       ))}
     </>
