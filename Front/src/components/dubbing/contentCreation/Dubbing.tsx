@@ -240,7 +240,7 @@ function Dubbing() {
         <input type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
       </div>
       <div className="video-box">
-        <video ref={videoRef} controls src={s3URL + `${videoPath}`} />
+        <video ref={videoRef} controls src={s3URL.slice(0, -1) + `${videoPath}`} />
       </div>
       <div>
         <div className="flex gap-4">
