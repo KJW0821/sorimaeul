@@ -76,7 +76,7 @@ public class RequestBoardServiceImpl implements RequestBoardService {
         RequestBoard requestDetail = requestBoardRepository.findByBoardCode(boardCode);
 
         RequestDetailResponse response = RequestDetailResponse.builder()
-                .nickname(user.getNickname())
+                .nickname(requestDetail.getUser().getNickname())
                 .title(requestDetail.getTitle())
                 .content((requestDetail.getContent()))
                 .createdTime(requestDetail.getCreatedTime())
