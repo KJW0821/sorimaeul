@@ -54,6 +54,7 @@ const ThumbnailContainer = styled.div`
   margin: 0 auto; 
   border-radius: 50%;
   overflow: hidden; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   &::before {
     content: '';
     position: absolute;
@@ -267,7 +268,6 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
-  const musicPath = `/${data?.storagePath}`
 
   return (
     <>
@@ -282,7 +282,7 @@ const CoverDetailPage: React.FC = () => {
               </ThumbnailContainer>
               <div>
 
-                <audio src={`${baseURL}/${data.storagePath}`} controls />
+                <audio className="mt-10" src={`${baseURL}/${data.storagePath}`} controls />
               </div>
             </MediaSection>
             <InfoSection>
