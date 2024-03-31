@@ -57,6 +57,8 @@ spring:
     multipart:
       max-file-size: 1000MB
       max-request-size: 1000MB
+  jpa:
+    open-in-view: false
 
 
 jwt:
