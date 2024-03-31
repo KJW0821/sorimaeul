@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import backBtn from "../../assets/backBtn.png";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ColorBlock = styled.div`
   width: 100%;
@@ -16,9 +17,22 @@ const ColorBlock = styled.div`
 `
 
 function ColorLine() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const goBack = () => {
+    const paths = location.pathname.split('/').filter(Boolean);
+
+    if (paths.length) {
+      paths.pop();
+    }
+
+    navigate('/' + paths.join('/'));
+  };
+
   return (
     <ColorBlock>
-      <img onClick={() => window.history.back()} className="back" src={backBtn} alt="backButton" />
+      <img onClick={goBack} className="back" src={backBtn} alt="backButton" />
     </ColorBlock>
   )
 }
