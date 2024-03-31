@@ -119,13 +119,14 @@ const Button = styled.button`
   align-items: center;
   justify-content: space-around;
   padding: .2rem;
-  background: white;
+  background: ${({ disabled }) => (disabled ? '#f0f0f0' : 'white')};
   color: #797979;
   width: 4.6rem;
   font-size: 1.125rem;
   height: 2rem;
-  border: 1px solid #797979;
+  border: 1px solid ${({ disabled }) => (disabled ? '#d3d3d3' : '#797979')};
   border-radius: 5px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   .icon {
     height: 100%;
