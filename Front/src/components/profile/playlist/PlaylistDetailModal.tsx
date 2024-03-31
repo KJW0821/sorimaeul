@@ -4,19 +4,18 @@ import { RootState } from "../../../stores/store";
 import { useEffect, useState } from "react";
 import { deleteCoverFromList, getPlaylist } from "../../../utils/playlistAPI";
 import { Content } from "../../common/ModalStyles";
-import logo from "../../../assets/sideSmLogo.png";
+import logo from "../../../assets/logoBig.png";
 import deleteIcon from "../../../assets/deleteIcon.png";
 import { closeModal } from "../../../stores/modal";
 import DetailPlayer from "../../audioPlayer/DetailPlayer";
 
-const ModalHeader = styled.div`
+export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 
   img {
-    width: 60px;
     margin-right: 30px;
   }
   
@@ -30,6 +29,12 @@ const ModalHeader = styled.div`
     color: #BFEA44;
   }
 `;
+
+export const LogoIcon = styled.img`
+  width: 60px;
+  height: 65px;
+`;
+
 
 const CoverList = styled.ul`
   list-style: none;
@@ -163,7 +168,7 @@ function PlaylistDetailModal() {
     <>
       <Content $width={55} $height={55} $borderRadius={30}>     
         <ModalHeader>
-          <img src={logo} alt="sorimaeul logo" />
+          <LogoIcon src={logo}  alt="sorimaeul logo" />
           <p>{playlistName}</p>
           <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
         </ModalHeader>
