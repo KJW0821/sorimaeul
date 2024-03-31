@@ -117,3 +117,17 @@ export const deleteDubbing = (dubCode: string) => {
     .then(res => res)
     .catch(err => console.error(err))
 };
+
+export const likeDubbing = (dubCode: string, isLiked: number) => {
+  const URL = `/like/dub/${dubCode}`;
+
+  if (isLiked) {
+    return API.delete(URL)
+      .then(res => res)
+      .catch(err => console.error(err))
+  } else {
+    return API.get(URL)
+      .then(res => res)
+      .catch(err => console.error(err))
+  }
+};
