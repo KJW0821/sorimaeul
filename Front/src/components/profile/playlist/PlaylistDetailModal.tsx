@@ -128,6 +128,7 @@ export interface CoverInfo {
   title: string;
   storagePath: string;
   nickname: string;
+  isPublic: boolean;
 }
 
 interface PlaylistDetailInterface {
@@ -154,7 +155,7 @@ function PlaylistDetailModal() {
     }
   }, [playlistCode]);
 
-  // 플레이리스트 삭제
+  // 플레이리스트에서 커버 삭제
   const deletCoverFromPlaylist = async (coverCode: string) => {
     const res = await deleteCoverFromList(playlistCode, coverCode);
     if (res.status == 200) {
@@ -184,7 +185,7 @@ function PlaylistDetailModal() {
               <CoverItem key={index}>
                 <span className="text-lime-700">{cover.title}-{cover.singer}({cover.coverSinger})</span>
                 <span className="ml-5 text-lime-600">{cover.nickname} </span>
-                {cover && <DetailPlayer coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
+                {cover && <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
                 <img src={deleteIcon} onClick={()=>deletCoverFromPlaylist(cover.coverCode)} />
 
               </CoverItem>

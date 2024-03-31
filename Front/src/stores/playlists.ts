@@ -7,7 +7,7 @@ interface Cover {
   coverSinger: string;
   singer: string;
   title: string;
-  writer: string;
+  nickname: string;
   storagePath: string;
   isPublic: boolean;
 }
