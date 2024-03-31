@@ -1,6 +1,12 @@
+import ColorLine from "../../components/dubbing/ColorLine";
+import DubbingContentForm from "../../components/dubbing/contentResult/DubbingContentForm";
+
 function DubbingEditPage() {
   return (
-    <div>이것은 더빙 결과/수정 페이지</div>
+    <>
+      <ColorLine />
+      <DubbingContentForm />
+    </>
   )
 }
 
