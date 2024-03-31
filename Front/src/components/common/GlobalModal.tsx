@@ -7,6 +7,8 @@ import AlarmModal from "./AlarmModal";
 import { RootState } from "../../stores/store";
 import { Container, Overlay } from "./ModalStyles";
 import { closeModal } from "../../stores/modal";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 
 
@@ -44,6 +46,15 @@ const MODAL_COMPONENTS = [
 const GlobalModal = () => {
   const { modalType, isOpen } = useSelector((state: RootState) => state.modal);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  // 라우트 변경을 감지하여 페이지 이동이 있으면 모달을 닫는 기능 
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(closeModal());
+    }
+  }, [location]);
+  
   if (!isOpen) return;
 
   const findModal = MODAL_COMPONENTS.find((modal) => {
