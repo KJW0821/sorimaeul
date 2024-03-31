@@ -17,13 +17,12 @@ const ListContainer = styled.div`
 export function PlaylistList () {
   const dispatch = useDispatch();
   const dataList = useSelector((state: RootState) => state.playlists);
-  const [page, setPages] = useState(0);
 
  
   useEffect(() => {
     (async () => {
       try {
-        const data = await getPlaylists(page);
+        const data = await getPlaylists();
         dispatch(setPlaylists(data.playlists));
         dispatch(setTotalPages(data.totalPages));
       } catch (err) {
