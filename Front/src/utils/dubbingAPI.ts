@@ -15,6 +15,12 @@ interface CreatingData {
   voicePaths: string[];
 }
 
+interface UpdatingData {
+  dubName: string;
+  dubDetail: string;
+  isPublic: boolean;
+}
+
 export const getSourceVideoList = (page: number) => {
   return API.get(URL + '/video', {
     params: {
@@ -97,5 +103,11 @@ export const convertRecord = (voiceIndex: number, data: ConvertingData) => {
 export const createDubbing = (data: CreatingData) => {
   return API.post(URL + '/create', data)
     .then(res => res.data)
+    .catch(err => console.error(err))
+};
+
+export const updateDubbing = (dubCode: string, data: UpdatingData) => {
+  return API.patch(URL + `/${dubCode}`, data)
+    .then(res => res)
     .catch(err => console.error(err))
 };
