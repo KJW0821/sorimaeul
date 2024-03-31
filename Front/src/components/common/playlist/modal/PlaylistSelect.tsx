@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { setPlaylists } from "../../../../stores/playlists";
 import { RootState } from "../../../../stores/store";
-import { addCoverToList, getPlaylists } from "../../../../utils/playlistAPI";
-import { closeModal } from "../../../../stores/modal";
+import { getPlaylists } from "../../../../utils/playlistAPI";
 
 const ScrollableList = styled.div`
   overflow-y: auto;
@@ -44,43 +43,35 @@ function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('ko-KR', options).replace(/\. /g, '.');
 }
 
-function PlaylistSelect () {
+interface PlaylistSelectProps {
+  onPlaylistSelect: (playlistCode: string) => void;
+}
+
+const PlaylistSelect: React.FC<PlaylistSelectProps> = ({ onPlaylistSelect }) => {
   const dispatch = useDispatch();
   let dataList = useSelector((state: RootState) => state.playlists.playlists);
-  const coverCode = useSelector((state: RootState) => state.modal.payload.coverCode);
-  const [page, setPages] = useState(1);
   const [covers, setCovers] = useState(dataList);
 
   useEffect(() => {
     (async () => {
       try {
-        const data = await getPlaylists(page);
+        const data = await getPlaylists();
         console.log("플리 조회 목록", data);
-        setPlaylists(data.playlists);
+        console.log(data.playlists);
+        dispatch(setPlaylists(data.playlists));
         setCovers(data.playlists);
       } catch (err) {
         console.error("플레이리스트 데이터를 가져오는데 실패했습니다.")
       }
-  }) ();
-}, [dispatch]);
-
-const addCoverToPlaylist = async (playlistCode: string) => {
-  const res = await addCoverToList(playlistCode, coverCode);
-  if (res.status === 201) {
-    console.log(res);
-    alert(res.data);
-    dispatch(closeModal());
-  } else { 
-      alert(res.response.data);
-  }}
-
+    })();
+  }, [dispatch]);
 
   return (
     <>
       <ScrollableList>
           {covers && covers.map((playlist) => (
             <PlaylistItem key={playlist.playlistCode} className="border-b border-gray-200"
-            onClick={() => addCoverToPlaylist(playlist.playlistCode)}>
+            onClick={() => onPlaylistSelect(playlist.playlistCode)}>
               
               <span className="mt-2">{playlist.playlistName}</span> 
               <PlaylistDate>
@@ -92,5 +83,6 @@ const addCoverToPlaylist = async (playlistCode: string) => {
     </>
   );
 }
+
 
 export default PlaylistSelect;

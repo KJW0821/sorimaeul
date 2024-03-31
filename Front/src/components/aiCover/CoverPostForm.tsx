@@ -4,6 +4,9 @@ import { requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
 import ColorLine from "./ColorLine";
+import deleteIcon from "../../assets/deleteIcon.png";
+import { deleteCover } from "../../utils/coverAPI";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   width: 75%;
@@ -119,13 +122,14 @@ const Button = styled.button`
   align-items: center;
   justify-content: space-around;
   padding: .2rem;
-  background: white;
+  background: ${({ disabled }) => (disabled ? '#f0f0f0' : 'white')};
   color: #797979;
   width: 4.6rem;
   font-size: 1.125rem;
   height: 2rem;
-  border: 1px solid #797979;
+  border: 1px solid ${({ disabled }) => (disabled ? '#d3d3d3' : '#797979')};
   border-radius: 5px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   .icon {
     height: 100%;
@@ -157,8 +161,10 @@ interface Props {
 }
 
 const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
+  const navigate = useNavigate();
   const [selectedImagePath, setSelectedImagePath] = useState("");
   const [data, setData] = useState<CoverResultInterface>(initialData || {
+    coverCode: '',
     coverName: '',
     coverDetail: '',
     thumbnailPath: '',
@@ -168,6 +174,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     title: '',
     isPublic: false
   });
+
 
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
@@ -190,6 +197,22 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
       } catch (err) {
         console.error("Error:", err);
       }
+    }
+  };
+
+  console.log(data);
+  
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      if (data.coverCode) {
+        await deleteCover(data.coverCode);
+        // 삭제 후 이전 페이지로 이동 : 마이페이지 - 커버 확인 페이지로 
+        navigate(-1);
+        console.log("삭제 성공");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -250,6 +273,10 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
               onChange={handleChange}
             />
             <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
+            <Button onClick={handleDelete}>
+            <img className="icon" src={deleteIcon} alt="delete icon" />
+            <p>삭제</p>
+          </Button>
           </StyledForm>
         </InfoSection>
       </ContentContainer>
