@@ -70,3 +70,13 @@ export const getVoiceModels = (sourceCode: string) => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const getMyVoiceModels = (page: number) => {
+  return API.get(URL, {
+    params: {
+      page
+    }
+  })
+    .then(res => res.data)
+    .catch(err => console.error(err))
+};
