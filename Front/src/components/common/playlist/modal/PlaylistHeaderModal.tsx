@@ -56,6 +56,7 @@ const PlaylistHeaderModal: React.FC = () => {
     <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
     </ModalHeader>
     <PlaylistSelect onPlaylistSelect={handlePlaylistSelect}/>
+    
     <SelectedPlaylistInfo />
     </Content>
     </>
