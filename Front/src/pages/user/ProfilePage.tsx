@@ -7,23 +7,24 @@ import CoverBox from "../../components/profile/aiCover/CoverBox";
 import { styled } from "styled-components";
 import UserEditor from "../../components/profile/UserEditor";
 import learnCnt from "../../assets/learnCnt.png";
+import ModelList from "../../components/profile/voiceModel/ModelList";
 
 const Container = styled.div`
   display: flex;
-  width: 100%; 
+  width: 90%;
+  margin: 0 auto; 
 `;
 
 
 const MenuBarContainer = styled.div`
-  flex: 0 0 20%; 
-  padding-left: 150px;
+  width: 20%;
 
   display: flex;
-  flex-direction: column
+  flex-direction: column;
 `;
 
 const ContentContainer = styled.div`
-  flex: 0 0 80%; 
+  width: 80%;
 `;
 
 const LearnCountContainer = styled.div`
@@ -59,6 +60,8 @@ function ProfilePage() {
     case "플레이리스트":
       ComponentToShow = PlaylistBox;
       break;
+    case "나의 음성 모델":
+      ComponentToShow = ModelList;
   }
 
   return (
