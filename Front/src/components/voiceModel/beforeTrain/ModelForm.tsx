@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { initModelInfo } from "../../../stores/voiceModel";
 import { requestS3 } from "../../../utils/s3";
+import { decreaseLearnCount } from "../../../stores/user";
+import loadingLottie from "../../../assets/lottie/loading.json";
+import Lottie from "lottie-react";
 
 const Container = styled.div`
   border-radius: 25px;
@@ -18,6 +21,17 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2rem;
+
+  .loading-box {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .7);
+    z-index: 2;
+    border-radius: 25px;
+  }
 
   .title {
     font-size: 1.875rem;
@@ -89,6 +103,7 @@ function ModelForm() {
   const [modelName, setModelName] = useState('');
   const [imagePath, setImagePath] = useState('');
   const [selectedfile, setSelectedFile] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleModelName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setModelName(() => e.target.value);
@@ -119,11 +134,14 @@ function ModelForm() {
   };
 
   const submitHandler = async () => {
+    setLoading(true);
     if (modelName !== "") {
       const res = await voiceModelAPI.createModel({modelName, imagePath});
+      setLoading(false);
       if (res?.status === 201) {
         console.log(res.data, '모델 생성 완료');
         dispatch(initModelInfo(res.data.modelCode));
+        dispatch(decreaseLearnCount());
         navigate(`/model/${res.data.modelCode}`);
       } else {
         console.log(res);
@@ -135,6 +153,17 @@ function ModelForm() {
 
   return(
     <Container>
+      { loading && 
+        <div className="loading-box">
+          <Lottie 
+            animationData={loadingLottie}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          /> 
+        </div>
+      }
       <h2 className="title">나만의 음성 모델 만들기</h2>
       <hr className="w-5/6" />
       <div className="step">
@@ -152,7 +181,7 @@ function ModelForm() {
         </div>
       </div>
       <div className="w-5/6 flex">
-        <Button onClick={submitHandler} $marginTop={1} $color="#7C87E3" $width={6} $height={2.75}>모델 등록</Button>
+        <Button disabled={modelName === ''} onClick={submitHandler} $marginTop={1} $color="#7C87E3" $width={6} $height={2.75}>모델 등록</Button>
       </div>
     </Container>
   )
