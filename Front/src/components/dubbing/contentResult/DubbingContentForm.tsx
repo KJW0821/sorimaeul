@@ -6,6 +6,7 @@ import editIcon from "../../../assets/editIcon.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserVideo, updateDubbing } from "../../../utils/dubbingAPI";
 import { s3URL } from "../../../utils/s3";
+import DubbingConverting from "../contentCreation/DubbingConverting";
 
 const Container = styled.div`
   display: flex;
@@ -101,6 +102,7 @@ function DubbingContentForm() {
   const [content, setContent] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [videoPath, setVideoPath] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
 
   const getUserVideoData = async () => {
     if (params.dubCode) {
@@ -109,6 +111,7 @@ function DubbingContentForm() {
       setIsPublic(res.isPublic);
       setContent(res.dubDetail);
       setVideoPath(res.storagePath);
+      setIsComplete(res.isComplete);
       setIsLoaded(true);
     }
   };
@@ -145,7 +148,7 @@ function DubbingContentForm() {
   };
 
   return (
-    isLoaded &&
+    isLoaded && isComplete ?
     <Container>
       <div className="flex items-center gap-2">
         <img className="h-full" src={videoImg} alt="video" />
@@ -176,6 +179,8 @@ function DubbingContentForm() {
         </form>
       </Content>
     </Container>
+    :
+    <DubbingConverting />
   )
 }
 
