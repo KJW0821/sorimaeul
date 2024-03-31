@@ -292,6 +292,8 @@ public class DubbingServiceImpl implements DubbingService {
                 .storagePath(dubbing.getStoragePath())
                 .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
                 .isLiked(isLiked)
+                .isPublic(dubbing.getIsPublic())
+                .isComplete(dubbing.getIsComplete())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -568,6 +570,7 @@ public class DubbingServiceImpl implements DubbingService {
         s3Service.saveByteToS3(savePath, fileToSave);
 
         dubbing.setStoragePath(savePath);
+        dubbing.setIsComplete(true);
         dubbingRepository.save(dubbing);
 
         return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
