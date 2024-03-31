@@ -107,14 +107,14 @@ logging:
     root: info
     org:
       springframework:
-        root: info
-        web: info
+        root: debug
+        web: debug
     com:
-      sorimaeul: info
+      sorimaeul: debug
     zaxxer:
       hikari:
         pool:
-          HikariPool: info
+          HikariPool: debug
 
 # S3 Bucket
 cloud:
