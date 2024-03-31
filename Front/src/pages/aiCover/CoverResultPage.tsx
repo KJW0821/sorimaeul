@@ -25,7 +25,7 @@ const CoverResultPage: React.FC = () => {
           const res = await getCover(coverCode);
           setIsCompleted(res.isComplete);
           if (res.isComplete) {
-            setData(res);
+            setData({ ...res, coverCode: coverCode });
           }
         }
       } catch (err) {

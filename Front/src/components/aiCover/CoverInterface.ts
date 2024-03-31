@@ -48,6 +48,7 @@ export interface CoverDetailInterface {
 }
 
 export interface CoverResultInterface {
+  coverCode: string;
   coverName: string;
   coverDetail: string;
   thumbnailPath: string;
