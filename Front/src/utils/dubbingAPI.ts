@@ -111,3 +111,9 @@ export const updateDubbing = (dubCode: string, data: UpdatingData) => {
     .then(res => res)
     .catch(err => console.error(err))
 };
+
+export const deleteDubbing = (dubCode: string) => {
+  return API.delete(URL + `/${dubCode}`)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
