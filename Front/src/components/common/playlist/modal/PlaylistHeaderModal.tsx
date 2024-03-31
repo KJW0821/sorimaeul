@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../stores/store";
 import { setSelectedPlaylist } from "../../../../stores/playlists";
 import { getPlaylist } from "../../../../utils/playlistAPI";
+import SelectedPlaylistInfo from "./SelectedPlaylistInfo";
 
 export const CloseButton = styled.div`
   width: 36px;
@@ -29,7 +30,8 @@ const PlaylistHeaderModal: React.FC = () => {
       // 플레이리스트 안 선택된 플레이리스트 정보 가져오기 
       const selectedPlaylist = playlists.find(playlist => playlist.playlistCode === playlistCode);
       // 선택된 플레이리스트의 커버 목록 가져오기 
-      const playlistCovers = await getPlaylist(playlistCode);
+      const res = await getPlaylist(playlistCode);
+      const playlistCovers = res.playlist;
       // 위의 정보 결합 
       if (selectedPlaylist) {
         const updatedPlaylist = {
@@ -47,13 +49,14 @@ const PlaylistHeaderModal: React.FC = () => {
 
   return (
     <>
-    <Content $width={55} $height={55} $borderRadius={30} $background="black">
+    <Content $width={55} $height={55} $borderRadius={30} $background="white">
     <ModalHeader>
     <LogoIcon src={logo} alt="sorimaeul logo" />
     <p>플레이리스트</p>
     <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
     </ModalHeader>
     <PlaylistSelect onPlaylistSelect={handlePlaylistSelect}/>
+    <SelectedPlaylistInfo />
     </Content>
     </>
   )
