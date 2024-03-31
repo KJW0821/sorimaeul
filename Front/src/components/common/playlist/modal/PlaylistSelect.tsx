@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { setPlaylists } from "../../../../stores/playlists";
 import { RootState } from "../../../../stores/store";
-import { addCoverToList, getPlaylists } from "../../../../utils/playlistAPI";
-import { closeModal } from "../../../../stores/modal";
+import { getPlaylists } from "../../../../utils/playlistAPI";
 
 const ScrollableList = styled.div`
   overflow-y: auto;
