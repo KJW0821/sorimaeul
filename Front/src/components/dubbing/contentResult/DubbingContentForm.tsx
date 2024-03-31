@@ -1,13 +1,17 @@
 import styled from "styled-components";
 import videoImg from "../../../assets/video.png";
 import ToggleButton from "../../common/ToggleButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import editIcon from "../../../assets/editIcon.png";
+import { useNavigate, useParams } from "react-router-dom";
+import { getUserVideo, updateDubbing } from "../../../utils/dubbingAPI";
+import { s3URL } from "../../../utils/s3";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
+  margin: 2rem auto;
 
   .title {
     font-size: 2rem;
@@ -24,11 +28,14 @@ const Content = styled.div`
 
   .video {
     width: 48%;
-    height: 100%;
+    height: 90%;
+    border-radius: 5px;
+    object-fit: cover;
   }
 
   .form {
     width: 48%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     font-size: 1.25rem;
@@ -77,33 +84,89 @@ const Button = styled.button`
   p {
     padding-top: .2rem;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background: #D9D9D9;
+    opacity: .5;
+  }
 `
 
 function DubbingContentForm() {
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState('');
   const [isPublic, setIsPublic] = useState(false);
+  const [content, setContent] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [videoPath, setVideoPath] = useState('');
+
+  const getUserVideoData = async () => {
+    if (params.dubCode) {
+      const res = await getUserVideo(params.dubCode);
+      setTitle(res.dubName);
+      setIsPublic(res.isPublic);
+      setContent(res.dubDetail);
+      setVideoPath(res.storagePath);
+      setIsLoaded(true);
+    }
+  };
+
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  };
+
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+  }
+
+  useEffect(() => {
+    getUserVideoData();
+  }, [params.dubCode])
+
+  const editDubbing = async () => {
+    if (params.dubCode) {
+      await updateDubbing(params.dubCode, {
+        dubName: title,
+        dubDetail: content,
+        isPublic
+      });
+      navigate(`/dubbing/${params.sourceCode}/${params.dubCode}`);
+    }
+  };
+
+  const cancelEdit = () => {
+    navigate(`/dubbing/${params.sourceCode}/${params.dubCode}`);
+  };
 
   return (
+    isLoaded &&
     <Container>
       <div className="flex items-center gap-2">
         <img className="h-full" src={videoImg} alt="video" />
         <h2 className="title">영상 확인</h2>
       </div>
       <Content>
-        <video className="video" controls src="" />
-        <form className="form">
+        <video className="video" controls src={s3URL + videoPath} />
+        <form onSubmit={submitHandler} className="form">
           <div className="flex gap-2 items-center">
             <label className="pt-1" htmlFor="title">제목:</label>
-            <input className="grow pt-1 px-2 border border-gray-300 rounded" type="text" name="title" id="title" />
+            <input onChange={handleTitle} className="grow pt-1 px-2 border border-gray-300 rounded" type="text" name="title" id="title" defaultValue={title} />
           </div>
-          <textarea name="content" id="content" className="content" placeholder="영상 설명을 입력해주세요"></textarea>
+          <textarea onChange={handleContent} name="content" id="content" className="content" wrap="hard" placeholder="영상 설명을 입력해주세요" defaultValue={content}></textarea>
           <div className="button-box">
             <div className="flex gap-2">
               <p className="is-public">공개여부</p>
               <ToggleButton isPublic={isPublic} setIsPublic={setIsPublic} color="#C9F647" />
             </div>
             <div className="flex gap-2">
-              <Button><p>취소</p></Button>
-              <Button>
+              <Button onClick={cancelEdit}><p>취소</p></Button>
+              <Button onClick={editDubbing} disabled={title === '' || content === ''}>
                 <img src={editIcon} alt="" className="icon" />
                 <p>완료</p>
               </Button>
