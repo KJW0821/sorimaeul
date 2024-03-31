@@ -302,7 +302,7 @@ function Dubbing() {
         <input onChange={handleTitle} type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
       </div>
       <div className="video-box">
-        <video ref={videoRef} src={s3URL.slice(0, -1) + `${videoPath}`} />
+        <video ref={videoRef} src={s3URL + `${videoPath}`} />
       </div>
       <div>
         <div className="flex gap-4">
