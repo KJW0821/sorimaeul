@@ -398,10 +398,10 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 응답 경로 설정
-        String voicePath = "dub/source_" + videoSourceCode + "/user_" + user.getUserCode() + "/Unconverted/";
+        String voicePath = "/dub/source_" + videoSourceCode + "/user_" + user.getUserCode() + "/Unconverted/";
 
         // 폴더 경로 설정
-        String folderPath = EC2_BASE_PATH + "/" + voicePath;
+        String folderPath = EC2_BASE_PATH + voicePath;
 
         // 원본 파일명
         String originName = recordFile.getOriginalFilename();
@@ -569,7 +569,7 @@ public class DubbingServiceImpl implements DubbingService {
         // 더빙 영상 S3에 저장하기
         s3Service.saveByteToS3(savePath, fileToSave);
 
-        dubbing.setStoragePath(savePath);
+        dubbing.setStoragePath("/" + savePath);
         dubbing.setIsComplete(true);
         dubbingRepository.save(dubbing);
 
