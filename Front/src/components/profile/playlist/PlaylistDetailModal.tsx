@@ -4,19 +4,18 @@ import { RootState } from "../../../stores/store";
 import { useEffect, useState } from "react";
 import { deleteCoverFromList, getPlaylist } from "../../../utils/playlistAPI";
 import { Content } from "../../common/ModalStyles";
-import logo from "../../../assets/sideSmLogo.png";
+import logo from "../../../assets/logoBig.png";
 import deleteIcon from "../../../assets/deleteIcon.png";
 import { closeModal } from "../../../stores/modal";
 import DetailPlayer from "../../audioPlayer/DetailPlayer";
 
-const ModalHeader = styled.div`
+export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 
   img {
-    width: 60px;
     margin-right: 30px;
   }
   
@@ -30,6 +29,12 @@ const ModalHeader = styled.div`
     color: #BFEA44;
   }
 `;
+
+export const LogoIcon = styled.img`
+  width: 60px;
+  height: 65px;
+`;
+
 
 const CoverList = styled.ul`
   list-style: none;
@@ -123,6 +128,7 @@ export interface CoverInfo {
   title: string;
   storagePath: string;
   nickname: string;
+  isPublic: boolean;
 }
 
 interface PlaylistDetailInterface {
@@ -149,7 +155,7 @@ function PlaylistDetailModal() {
     }
   }, [playlistCode]);
 
-  // 플레이리스트 삭제
+  // 플레이리스트에서 커버 삭제
   const deletCoverFromPlaylist = async (coverCode: string) => {
     const res = await deleteCoverFromList(playlistCode, coverCode);
     if (res.status == 200) {
@@ -163,7 +169,7 @@ function PlaylistDetailModal() {
     <>
       <Content $width={55} $height={55} $borderRadius={30}>     
         <ModalHeader>
-          <img src={logo} alt="sorimaeul logo" />
+          <LogoIcon src={logo}  alt="sorimaeul logo" />
           <p>{playlistName}</p>
           <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
         </ModalHeader>
@@ -179,7 +185,7 @@ function PlaylistDetailModal() {
               <CoverItem key={index}>
                 <span className="text-lime-700">{cover.title}-{cover.singer}({cover.coverSinger})</span>
                 <span className="ml-5 text-lime-600">{cover.nickname} </span>
-                {cover && <DetailPlayer coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
+                {cover && <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
                 <img src={deleteIcon} onClick={()=>deletCoverFromPlaylist(cover.coverCode)} />
 
               </CoverItem>
