@@ -250,13 +250,15 @@ public class CoverServiceImpl implements CoverService {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
-
+            // response 반환
             CoverCreateResponse response = CoverCreateResponse.builder()
                     .coverCode(coverCode)
                     .build();
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+            // 실패했으면 커버 삭제
+            coverRepository.delete(cover);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 커버 생성 실패: " + e.getMessage());
         }
     }
