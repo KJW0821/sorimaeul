@@ -57,7 +57,8 @@ const PlaylistSelect: React.FC<PlaylistSelectProps> = ({ onPlaylistSelect }) => 
       try {
         const data = await getPlaylists();
         console.log("플리 조회 목록", data);
-        setPlaylists(data);
+        console.log(data.playlists);
+        dispatch(setPlaylists(data.playlists));
         setCovers(data.playlists);
       } catch (err) {
         console.error("플레이리스트 데이터를 가져오는데 실패했습니다.")

@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import playlists from "../../../../assets/playlistCheck.png";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../../../stores/modal';
+import { RootState } from '../../../../stores/store';
+import HeaderPlayer from '../../../audioPlayer/HeaderPlayer';
 
 const PlaylistComponent = styled.div`
   box-sizing: border-box;
@@ -22,6 +24,7 @@ const PlaylistComponent = styled.div`
 
 const Playlist: React.FC = () => {
   const dispatch = useDispatch();
+  const selectedPlaylist =  useSelector((state: RootState) => state.playlists.selectedPlaylist);
 
   const openPlaylistHeaderModal = () => {
     dispatch(openModal({
@@ -38,11 +41,7 @@ const Playlist: React.FC = () => {
   return (
     <PlaylistComponent>
       <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
-      {/* {songs.map((song, index) => (
-        <div key={index}>
-          <strong>{song.title}</strong> - {song.artist}
-        </div>
-      ))} */}
+      <HeaderPlayer></HeaderPlayer>
     </PlaylistComponent>
   );
 };
