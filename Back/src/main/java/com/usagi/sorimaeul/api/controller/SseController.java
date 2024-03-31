@@ -1,6 +1,5 @@
 package com.usagi.sorimaeul.api.controller;
 
-import com.usagi.sorimaeul.api.service.NotifyService;
 import com.usagi.sorimaeul.api.service.SseService;
 import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseController {
 
 	private final SseService sseService;
-	private final NotifyService notifyService;
 	private final JwtTokenProvider jwtTokenProvider;
 
 	@Operation(summary = "SSE 연결 요청",

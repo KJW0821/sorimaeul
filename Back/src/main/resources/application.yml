@@ -57,6 +57,8 @@ spring:
     multipart:
       max-file-size: 1000MB
       max-request-size: 1000MB
+  jpa:
+    open-in-view: false
 
 
 jwt:
@@ -105,14 +107,14 @@ logging:
     root: info
     org:
       springframework:
-        root: debug
-        web: debug
+        root: info
+        web: info
     com:
-      sorimaeul: debug
+      sorimaeul: info
     zaxxer:
       hikari:
         pool:
-          HikariPool: debug
+          HikariPool: info
 
 # S3 Bucket
 cloud:
