@@ -67,7 +67,8 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
       dispatch(setSelectedPlaylist({
         playlistCode: playlistCode,
         playlistName: playlistName,
-        createdTime: createdTime
+        createdTime: createdTime,
+        covers: []
       }));
       dispatch(openModal({
         modalType: "playlistdetail",
