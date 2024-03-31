@@ -1,11 +1,25 @@
 import { createSlice, PayloadAction  } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
+
+interface Cover {
+  coverCode: string,
+  coverSinger: string;
+  singer: string;
+  title: string;
+  writer: string;
+  storagePath: string;
+  isPublic: boolean;
+}
+
 interface Playlist {
   playlistCode: string;
   playlistName: string;
   createdTime: string;
+  covers: Cover[];
 }
+
+
 
 export interface PlaylistsState {
   playlists: Playlist[];
