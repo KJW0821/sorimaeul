@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import playBtn from "../../assets/playSong.png";
 import pauseBtn from "../../assets/pauseSong.png";
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../stores/store';
+import { setCurrentAudio } from '../../stores/audioPlayer';
 
 const Button = styled.button`
   position: relative;
@@ -16,23 +19,34 @@ const Button = styled.button`
 // 플레이리스트 상세 조회 시의 플레이어 : 재생(일시정지) 기능 + 오디오의 길이 제공
 interface CustomAudioPlayerProps {
   src: string; // 오디오 파일의 URL
+  coverCode: string;
 }
 
-const DetailPlayer: React.FC<CustomAudioPlayerProps> = ({ src }) => {
+const DetailPlayer: React.FC<CustomAudioPlayerProps> = ({ src, coverCode }) => {
+  const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null); // 오디오 태그를 참조하기 위한 ref
-  const [isPlaying, setIsPlaying] = useState(false); // 재생 상태 관리
+  const currentAudio = useSelector((state: RootState) => state.audioPlayer.currentAudio);
+  const isPlaying = coverCode === currentAudio;
   const [duration, setDuration] = useState(0); // 오디오의 총 길이
 
-  // 재생 및 일시정지 토글 함수
-  const togglePlayPause = () => {
+  // 재생 상태 관리 
+  useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       if (isPlaying) {
-        audio.pause();
-      } else {
         audio.play();
+      } else {
+        audio.pause();
       }
-      setIsPlaying(!isPlaying);
+    }
+  }, [isPlaying]);
+
+  // 재생 및 일시정지 토글 함수
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      dispatch(setCurrentAudio(null));
+    } else {
+      dispatch(setCurrentAudio(coverCode));
     }
   };
 
