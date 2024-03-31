@@ -179,7 +179,7 @@ function PlaylistDetailModal() {
               <CoverItem key={index}>
                 <span className="text-lime-700">{cover.title}-{cover.singer}({cover.coverSinger})</span>
                 <span className="ml-5 text-lime-600">{cover.nickname} </span>
-                {cover && <DetailPlayer src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
+                {cover && <DetailPlayer coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
                 <img src={deleteIcon} onClick={()=>deletCoverFromPlaylist(cover.coverCode)} />
 
               </CoverItem>

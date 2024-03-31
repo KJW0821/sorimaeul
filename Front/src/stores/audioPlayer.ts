@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface AudioPlayerState {
-  currentAudio: string | null; // 현재 재생 중인 오디오의 식별자나 경로를 저장
+  currentAudio: string | null; // 현재 재생 중인 오디오의 coverCode 저장
 }
 
 const initialState: AudioPlayerState = {
