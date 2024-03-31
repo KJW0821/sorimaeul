@@ -1,6 +1,6 @@
 import ColorLine from "../../components/dubbing/ColorLine";
 import styled from "styled-components";
-import { getUserVideo, deleteDubbing } from "../../utils/dubbingAPI";
+import { getUserVideo, deleteDubbing, likeDubbing } from "../../utils/dubbingAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import smile from "../../assets/smiling.png";
@@ -81,6 +81,8 @@ const Container = styled.div`
     font-family: 'GmarketSansLight';
     .description {
       font-size: 1rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
     .date {
       font-size: .75rem;
@@ -155,6 +157,23 @@ function UserDubbingDetailPage() {
     }
   };
 
+  const likeContent = async () => {
+    if (userName !== info?.nickname && params.dubCode && info) {
+      await likeDubbing(params.dubCode, info.isLiked);
+      setInfo((prev: InfoData | null) => {
+        if (prev === null) {
+          return null;
+        }
+        const newInfo = {...prev};
+        return {
+          ...newInfo,
+          isLiked: newInfo.isLiked ? 0 : 1,
+          likeCount: newInfo.isLiked ? newInfo.likeCount - 1 : newInfo.likeCount + 1
+        } as InfoData
+      });
+    }
+  };
+
   useEffect(() => {
     getUserVideoData();
     getComments();
@@ -173,7 +192,7 @@ function UserDubbingDetailPage() {
           </div>
           <div className="flex gap-4 justify-center items-center h-full">
             <div className="like-box">
-              <img className="smile" src={info?.isLiked ? smile : notSmile} alt="smile" />
+              <img onClick={likeContent} className="smile" src={info?.isLiked ? smile : notSmile} alt="smile" />
               <p className="count">+ {info?.likeCount}</p>
             </div>
             {
