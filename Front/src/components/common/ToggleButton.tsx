@@ -59,7 +59,7 @@ const CheckBox = styled.input<{ $color: string }>`
 const ToggleButton: React.FC<{ isPublic: boolean, setIsPublic: React.Dispatch<React.SetStateAction<boolean>>, color: string }> = ({isPublic, setIsPublic, color}) => {
   return (
     <Button $color={color}>
-      <CheckBox $color={color} type="checkbox" onChange={() => setIsPublic(prev => !prev)} />
+      <CheckBox $color={color} type="checkbox" onChange={() => setIsPublic(prev => !prev)} defaultChecked={isPublic} />
       {
         isPublic ?
         <svg style={{maxWidth: "100%"}} width={'2rem'} height={'75%'} viewBox="0 0 42 29" fill="none" xmlns="http://www.w3.org/2000/svg">
