@@ -5,7 +5,7 @@ import HeaderPlayer from '../../../audioPlayer/HeaderPlayer';
 
 
 const HeaderPlayerContainer = styled.div`
-  width: 88%;
+  width: 25%;
   margin-left: auto;
 `;
 

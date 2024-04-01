@@ -17,7 +17,7 @@ const PlaylistComponent = styled.div`
   padding: 1rem; 
 
   margin-left: auto;
-  max-width: 400px; 
+  max-width: 300px; 
   height: 55px; 
   right: 0;
 
@@ -58,7 +58,7 @@ const PlayerContainer = styled.div`
 const IconArea = styled.div`
   marign-left:2rem;
   display: flex;
-  width: 15%;
+  width: 20%;
 `;
 
 const Icon = styled.img`
