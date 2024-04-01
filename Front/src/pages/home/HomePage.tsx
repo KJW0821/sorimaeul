@@ -13,10 +13,13 @@ import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
 import logoimage from '../../assets/logo.png';
 import Playlist from '../../components/common/playlist/header/Playlist';
+import Lottie from 'lottie-react';
+import anime from '../../assets/lottie/mainAnime.json';
+import HomeInfo from './HomeInfo';
 
 const Outer = styled.div`
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden; /* 가로 스크롤바 방지 */
   &::-webkit-scrollbar {
     display: none;
@@ -25,14 +28,13 @@ const Outer = styled.div`
 
 const LogoContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 100%;
-  margin-left: 150px;
-  margin-top: 0;
+  margin-top: -380px;
 `;
 
 const Page1 = styled.div`
-  height: calc(100vh - 0px);
+  height: calc(100vh - 90px);
   display: flex;
   background-color: #f7f6cf;
 `;
@@ -154,6 +156,7 @@ const StyledImage = styled.img<ImageInterface>`
 const MarqueeComponentStyled = styled.div`
   position: absolute;
   bottom: 0;
+  margin-left: -60px;
   height: auto;
   width: 100%;
 `;
@@ -173,7 +176,6 @@ const HomePage: React.FC = () => {
   const DIVIDER_HEIGHT = 5;
   const outerDivRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태 관리
-
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
@@ -233,14 +235,16 @@ const HomePage: React.FC = () => {
     };
   }, []);
 
+  // Platlist 만약에 안되면 calc 높이 조정한거 변경하면 됨.
+
   return (
     <Outer ref={outerDivRef}>
+      <Playlist />
       <Page1>
         <LogoContainer>
-          <Link to="/">
-            <img src={logoimage}></img>
-          </Link>
+          <img src={logoimage}></img>
         </LogoContainer>
+        <Lottie animationData={anime} style={{ width: 2000 }} />
       </Page1>
       <Page2>
         <RightAlignedContainer>
@@ -291,14 +295,14 @@ const HomePage: React.FC = () => {
               alt="AI Cover image4"
             />
           </ImagesContainer>
+          <MarqueeComponentStyled>
+            <TextLine $height={5} className="my-3" />
+            <TextLine />
+            <MarqueeComponent />
+            <TextLine className="my-3" />
+            <TextLine $height={5} className="my-2" />
+          </MarqueeComponentStyled>
         </Temp>
-        <MarqueeComponentStyled>
-          <TextLine $height={5} className="my-3" />
-          <TextLine />
-          <MarqueeComponent />
-          <TextLine className="my-3" />
-          <TextLine $height={5} className="my-2" />
-        </MarqueeComponentStyled>
       </Page3>
     </Outer>
   );
