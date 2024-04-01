@@ -238,14 +238,14 @@ function SideBar() {
             <img onClick={toggleSideBar} src={menu} alt="menu" />
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
-              <img onClick={() => navigate('/model/create')} src={microphone} alt="learning" />
-              <img onClick={() => navigate('/dubbing')} src={voice} alt="dubbing" />
-              <img onClick={() => navigate('/cover')} src={record} alt="aicover" />
-              <img onClick={() => navigate('/FAQ')} src={question} alt="inquiry" />
+              <img onClick={() => navigate('/model/create')} src={location.pathname === '/model/create' ? microphoneActive : microphone} alt="voice-model" />
+              <img onClick={() => navigate('/dubbing')} src={location.pathname === '/dubbing' ? voiceActive : voice} alt="dubbing" />
+              <img onClick={() => navigate('/cover')} src={location.pathname === '/cover' ? recordActive : record} alt="aicover" />
+              <img onClick={() => navigate('/FAQ')} src={location.pathname === '/FAQ' ? questionActive : question} alt="inquiry" />
             </div>
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
-              <img onClick={() => navigate('/profile')} src={user} alt="profile" />
+              <img onClick={() => navigate('/profile')} src={location.pathname === '/profile' ? userActive : user} alt="profile" />
               <div className="relative">
                 <img onClick={openAlarmModal} src={bell} alt="alarm" />
                 <div className="msg-cnt">
