@@ -258,7 +258,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
       <Step>
         <StepContainer>
         <h3 className="subtitle">Step {baseStepNumber + 1}. 모델 선택하기</h3> 
-        <Tooltip message={"피치 조절에 대한 설명이 들어갑니다."}>
+        <Tooltip message={"피치 조절에 대한 설명이 들어갑니다.두 줄이 되면 어떻게 나올지 궁금합니다."}>
         <HelpIcon src={help} />
         </Tooltip>
         </StepContainer>
