@@ -24,7 +24,7 @@ export interface RootState {
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
-  whitelist: ['user', 'playlists', 'comment', 'common'] // 저장할 상태 넣기
+  whitelist: ['user', 'playlists', 'comment', 'common', 'menu'] // 저장할 상태 넣기
 }
 
 // reducer 등록하는 곳
