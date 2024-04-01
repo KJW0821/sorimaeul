@@ -10,6 +10,7 @@ import { setSelectedPlaylist } from "../../../../stores/playlists";
 import { getPlaylist } from "../../../../utils/playlistAPI";
 import SelectedPlaylistInfo from "./SelectedPlaylistInfo";
 
+
 export const CloseButton = styled.div`
   width: 36px;
   height: 34px;
@@ -29,6 +30,7 @@ const PlaylistHeaderModal: React.FC = () => {
     try {
       // 플레이리스트 안 선택된 플레이리스트 정보 가져오기 
       const selectedPlaylist = playlists.find(playlist => playlist.playlistCode === playlistCode);
+      console.log(selectedPlaylist)
       // 선택된 플레이리스트의 커버 목록 가져오기 
       const res = await getPlaylist(playlistCode);
       const playlistCovers = res.playlist;
@@ -52,7 +54,8 @@ const PlaylistHeaderModal: React.FC = () => {
     <Content $width={55} $height={55} $borderRadius={30} $background="white">
     <ModalHeader>
     <LogoIcon src={logo} alt="sorimaeul logo" />
-    <p>플레이리스트</p>
+    <p>플레이리스트 목록</p>
+    
     <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
     </ModalHeader>
     <PlaylistSelect onPlaylistSelect={handlePlaylistSelect}/>
