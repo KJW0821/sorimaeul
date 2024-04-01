@@ -10,9 +10,8 @@ interface HeaderProps {
 
 const HeaderContainer = styled.div<HeaderProps>`
   display: flex;
-  flex-direction: ${(props) => (props.$isMainPage ? 'column' : 'row')};
-  justify-content: ${(props) =>
-    props.$isMainPage ? 'space-between' : 'center'};
+  flex-direction: ${(props) => (props.$isMainPage ? 'row' : 'row')};
+  justify-content: ${(props) => (props.$isMainPage ? 'center' : 'center')};
   align-items: center;
   width: 100%;
   heightL auto;
@@ -26,12 +25,12 @@ const LogoContainer = styled.div<LogoProps>`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-left: ${(props) => (props.$isMainPage ? '0' : '300px')};
-  margin-top: ${(props) => (props.$isMainPage ? '-50px' : '0')};
+  margin-left: ${(props) => (props.$isMainPage ? '300px' : '300px')};
+  margin-top: ${(props) => (props.$isMainPage ? '0' : '0')};
 `;
 
 export const Logo = styled.img<LogoProps>`
-  width: ${(props) => (props.$isMainPage ? '550px' : '300px')};
+  width: ${(props) => (props.$isMainPage ? '300px' : '300px')};
   height: auto;
 `;
 
@@ -40,14 +39,7 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
   const isMainPage = location.pathname === '/'; // 메인 페이지의 경로가 '/'인 경우
   return (
     <HeaderContainer $isMainPage={isMainPage}>
-      {isMainPage ? (
-        <>
-          {/* <Playlist />
-          <Link to="/">
-            <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
-          </Link> */}
-        </>
-      ) : (
+      {
         <>
           <LogoContainer $isMainPage={isMainPage}>
             <Link to="/">
@@ -56,7 +48,7 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
           </LogoContainer>
           <Playlist />
         </>
-      )}
+      }
     </HeaderContainer>
   );
 };

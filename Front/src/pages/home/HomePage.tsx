@@ -131,21 +131,21 @@ const CoverCategory = styled(CategoryBox)`
 
 const ImagesContainer = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 20px;
 `;
 
 interface ImageInterface {
   $rotation: string;
+  $width: string;
 }
 
 const StyledImage = styled.img<ImageInterface>`
   display: flex;
-  width: 450px;
   height: auto;
   border-radius: 10px;
   transform: rotate(${(props) => props.$rotation || '0deg'});
+  width: ${(props) => props.$width};
 `;
 
 const MarqueeComponentStyled = styled.div`
@@ -153,6 +153,7 @@ const MarqueeComponentStyled = styled.div`
   bottom: 0;
   height: auto;
   width: 100%;
+  margin-left: -60px;
 `;
 
 interface TextLineInterface {
@@ -234,7 +235,6 @@ const HomePage: React.FC = () => {
     <Outer ref={outerDivRef}>
       <Page1>
         <LogoContainer>
-          <Playlist />
           <Link to="/">
             <img src={logoimage}></img>
           </Link>
@@ -266,32 +266,29 @@ const HomePage: React.FC = () => {
           <ImagesContainer>
             <StyledImage
               $rotation="-7.7deg"
+              $width="18%"
               src={album1}
               alt="AI Cover image1"
             />
             <StyledImage
               $rotation="4.74deg"
+              $width="18%"
               src={album2}
               alt="AI Cover image2"
             />
             <StyledImage
               $rotation="-8.2deg"
+              $width="18%"
               src={album3}
               alt="AI Cover image3"
             />
             <StyledImage
               $rotation="11.5deg"
+              $width="19%"
               src={album4}
               alt="AI Cover image4"
             />
           </ImagesContainer>
-          <MarqueeComponentStyled>
-            <TextLine $height={5} className="my-3" />
-            <TextLine />
-            <MarqueeComponent />
-            <TextLine className="my-3" />
-            <TextLine $height={5} className="my-2" />
-          </MarqueeComponentStyled>
         </Temp>
       </Page3>
     </Outer>
