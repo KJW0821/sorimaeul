@@ -3,6 +3,11 @@ import { Cover, CoverResultInterface } from "./CoverInterface";
 import { requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
+import ColorLine from "./ColorLine";
+import deleteIcon from "../../assets/deleteIcon.png";
+import { deleteCover } from "../../utils/coverAPI";
+import { useNavigate } from "react-router-dom";
+import ToggleButton from "../common/ToggleButton";
 
 const StyledContainer = styled.div`
   width: 75%;
@@ -118,13 +123,14 @@ const Button = styled.button`
   align-items: center;
   justify-content: space-around;
   padding: .2rem;
-  background: white;
+  background: ${({ disabled }) => (disabled ? '#f0f0f0' : 'white')};
   color: #797979;
   width: 4.6rem;
   font-size: 1.125rem;
   height: 2rem;
-  border: 1px solid #797979;
+  border: 1px solid ${({ disabled }) => (disabled ? '#d3d3d3' : '#797979')};
   border-radius: 5px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   .icon {
     height: 100%;
@@ -156,8 +162,10 @@ interface Props {
 }
 
 const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
+  const navigate = useNavigate();
   const [selectedImagePath, setSelectedImagePath] = useState("");
   const [data, setData] = useState<CoverResultInterface>(initialData || {
+    coverCode: '',
     coverName: '',
     coverDetail: '',
     thumbnailPath: '',
@@ -165,8 +173,9 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     coverSinger: '',
     singer: '',
     title: '',
-    public: false
+    isPublic: false
   });
+  const [isPublic, setIsPublic] = useState(data.isPublic);
 
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
@@ -191,22 +200,45 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
       }
     }
   };
+  
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      if (data.coverCode) {
+        await deleteCover(data.coverCode);
+        // 삭제 후 이전 페이지로 이동 : 마이페이지 - 커버 확인 페이지로 
+        navigate(-1);
+        console.log("삭제 성공");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     const formData = {
       ...data,
-      isPublic: data.public,
+      isPublic, 
     };
     onSubmit(formData);
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name } = e.target;
-    const value = e.target instanceof HTMLInputElement && e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setData({ ...data, [name]: value });
+    const target = e.target as HTMLInputElement; // 타입 단언 사용
+
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+  
+    if (target.type === 'checkbox' && name === 'isPublic') {
+      setIsPublic(target.checked);
+    } else {
+      setData({ ...data, [name]: value });
+    }
   };
 
   return (
+    <>
+    <ColorLine />
     <StyledContainer>
       <ContentContainer>
         <MediaSection>
@@ -238,19 +270,23 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
               <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
             </FormRow>
             <TextArea id="coverDetail" name="coverDetail" value={data.coverDetail} placeholder="커버에 대한 설명을 입력해주세요" onChange={handleChange} cols={30} rows={10}></TextArea>
-            <Label htmlFor="public">공개 여부</Label>
-            <input
-              type="checkbox"
-              id="public"
-              name="public"
-              checked={data.public}
-              onChange={handleChange}
-            />
+            
+            <div className="button-box">
+            <div className="flex gap-2">
+              <p className="is-public">공개여부</p>
+              <ToggleButton isPublic={isPublic} setIsPublic={setIsPublic} color="#C9F647" />
+            </div>
+            </div>
             <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
+            <Button onClick={handleDelete}>
+            <img className="icon" src={deleteIcon} alt="delete icon" />
+            <p>삭제</p>
+          </Button>
           </StyledForm>
         </InfoSection>
       </ContentContainer>
     </StyledContainer>
+    </>
   );
 }
 

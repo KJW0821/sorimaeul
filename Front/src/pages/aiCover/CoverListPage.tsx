@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { CoverListInterface } from "../../components/aiCover/CoverInterface";
+import { Cover } from "../../components/aiCover/CoverInterface";
 import { getCovers, getPopularCovers } from "../../utils/coverAPI";
 import styled from "styled-components";
 import CoverList from "../../components/aiCover/CoverList";
 import PopularCoverList from "../../components/aiCover/PopularCoverList";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
+import Pagination from "../../components/common/Pagination";
 
 
 
@@ -34,20 +35,22 @@ const Title = styled.h1`
 
 const Container = styled.div`
   width: 80%;
-  margin: 0 auto;
+
   
   .title {
     font-size: 2.5rem;
     font-family: 'GmarketSansBold';
-    width: 80%;
+    width: 100%;
   };
 `
 
 const CoverListContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
 `
 
 
@@ -59,36 +62,42 @@ const ButtonContainer = styled.div`
 
 const DetailLine = styled.div`
   height: 2px;
-  width: 1300px;
+  width: 1370px;
   background-color: #A3A3A3;
-  margin: 0.5rem 0;
+  margin: 0.5rem 0 3rem 10rem;
 `;
 
 // 커버 전체 목록 페이지
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [dataList, setDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
-  const [popularDataList, setPopularDataList] = useState<CoverListInterface['data']>({ covers: [], totalPages: 0 });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataList, setDataList] = useState<Cover[]>([]);
+  const [popularDataList, setPopularDataList] = useState<Cover[]>([]);
+
+  const getCoverList = async () => {
+    const data = await getCovers(page);
+        setDataList(data.covers);
+        setTotalPages(data.totalPages);
+  }
+
+  const getHotCovers = async () => {
+    const popularData = await getPopularCovers();
+    setPopularDataList(
+      popularData.covers);
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await getCovers();
-        setDataList({
-          covers: data.covers,
-          totalPages: data.totalPages
-        });
+    getCoverList();
+  }, [page])
 
-        const popularData = await getPopularCovers();
-        setPopularDataList({
-          covers: popularData.covers,
-          totalPages: popularData.totalPages
-        });
-      } catch (error) {
-        console.error("커버 데이터를 가져오는데 실패했습니다.");
-      }
-    })();
-  }, []);
+  useEffect(() => {
+    getHotCovers();
+  }, [])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <>
@@ -109,6 +118,7 @@ const CoverListPage: React.FC = () => {
         <CoverList data={dataList} />
         </CoverListContainer>
       </Container>
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#FDA06C" />
     </>
   );
 };

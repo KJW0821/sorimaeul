@@ -79,7 +79,7 @@ function AlarmModal() {
     if (notifyType === 'train') {
       navigate(`/model/${targetCode}`);
     } else if (notifyType === 'cover') {
-      //커버로 가기
+      navigate(`/cover/${targetCode}`);
     } else {
       //더빙으로 가기
     }

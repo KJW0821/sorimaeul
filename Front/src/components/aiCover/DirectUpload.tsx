@@ -2,8 +2,17 @@ import styled from "styled-components";
 
 const Input = styled.input`
   border: 1px solid #ccc; /* 기본 테두리 색상 */
+  border-radius: 5px;
+  width: 38rem;
+  margin-left: 0.5rem;
+  height: 2.75rem;
+  padding: 0 1rem;
+  outline: none;
+  background-color: white;
+  color: #9F9F9F;
+  display: flex;
   &:focus {
-    border-color: #007bff; /* 포커스 시 테두리 색상 */
+    border-color: #FE9D6B; /* 포커스 시 테두리 색상 */
   }
 `;
 
@@ -25,7 +34,7 @@ function DirectUpload({ link, onLinkChange }: DirectUploadProps) {
       type="text"
       value={link}
       onChange={handleChange}
-      placeholder="YouTube 링크를 입력하세요"
+      placeholder="YouTube 링크를 입력해주세요."
     />
         </label>
         

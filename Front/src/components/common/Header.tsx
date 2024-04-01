@@ -14,7 +14,8 @@ const HeaderContainer = styled.div<HeaderProps>`
   justify-content: ${(props) =>
     props.$isMainPage ? 'space-between' : 'center'};
   align-items: center;
-  // padding: 20px;
+  width: 100%;
+  heightL auto;
 `;
 
 interface LogoProps {
@@ -25,7 +26,7 @@ const LogoContainer = styled.div<LogoProps>`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-left: ${(props) => (props.$isMainPage ? '0' : '150px')};
+  margin-left: ${(props) => (props.$isMainPage ? '0' : '300px')};
   margin-top: ${(props) => (props.$isMainPage ? '-50px' : '0')};
 `;
 

@@ -1,30 +1,28 @@
 import styled from 'styled-components';
 import CDPlayer from "./CDPlayer";
-import { CoverListInterface } from "./CoverInterface";
+import { Cover } from "./CoverInterface";
 
 const ListContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center; 
-  width: 960px;
-  height: 400px;
-  padding: 80px 0; 
-  gap: 20px;
-  margin-left: auto;
-  margin-right: auto;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  gap: 3rem;
+  margin-left: 15.5rem;
 `;
 
 
 
 interface Props {
-  data: CoverListInterface['data'];
+  data: Cover[];
 }
-const CoverList: React.FC<Props> = ({
+const PopularCoverList: React.FC<Props> = ({
   data
 }) => {
   return (
 <ListContainer>
-      {data.covers?.map((cover) => (
+      {data && data.map((cover) => (
         <div key={cover.coverCode} className="w-1/5 h-full"> 
           <CDPlayer cover={cover}/>
         </div>
@@ -33,4 +31,4 @@ const CoverList: React.FC<Props> = ({
   );
 };
 
-export default CoverList;
+export default PopularCoverList;

@@ -1,17 +1,19 @@
 import ColorLine from "../../components/dubbing/ColorLine";
 import styled from "styled-components";
-import { getUserVideo } from "../../utils/dubbingAPI";
-import { useParams } from "react-router-dom";
+import { getUserVideo, deleteDubbing, likeDubbing } from "../../utils/dubbingAPI";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import smile from "../../assets/smiling.png";
+import notSmile from "../../assets/notSmiling.png";
 import defaultProfile from "../../assets/profile.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import editIcon from "../../assets/editIcon.png";
 import CommentComponent from "../../components/common/Comment";
 import { getDubComment } from "../../utils/commentAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCategory, setComments, setSelectedPostId } from "../../stores/comment";
 import { s3URL } from "../../utils/s3";
+import { RootState } from "../../stores/store";
 
 const Container = styled.div`
   width: 75%;
@@ -79,6 +81,8 @@ const Container = styled.div`
     font-family: 'GmarketSansLight';
     .description {
       font-size: 1rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
     .date {
       font-size: .75rem;
@@ -125,6 +129,8 @@ interface InfoData {
 function UserDubbingDetailPage() {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userName = useSelector((state: RootState) => state.user.nickname);
   
   const [info, setInfo] = useState<InfoData | null>(null);
 
@@ -142,7 +148,31 @@ function UserDubbingDetailPage() {
       dispatch(setSelectedPostId(params.dubCode));
       dispatch(setCategory('dub'));
     }
-  }
+  };
+
+  const deleteDubbingContent = async () => {
+    if (params.dubCode) {
+      await deleteDubbing(params.dubCode);
+      navigate(`/dubbing/${params.sourceCode}`);
+    }
+  };
+
+  const likeContent = async () => {
+    if (userName !== info?.nickname && params.dubCode && info) {
+      await likeDubbing(params.dubCode, info.isLiked);
+      setInfo((prev: InfoData | null) => {
+        if (prev === null) {
+          return null;
+        }
+        const newInfo = {...prev};
+        return {
+          ...newInfo,
+          isLiked: newInfo.isLiked ? 0 : 1,
+          likeCount: newInfo.isLiked ? newInfo.likeCount - 1 : newInfo.likeCount + 1
+        } as InfoData
+      });
+    }
+  };
 
   useEffect(() => {
     getUserVideoData();
@@ -154,7 +184,7 @@ function UserDubbingDetailPage() {
       <ColorLine />
       <Container>
         <h1 className="title">{info?.dubName}</h1>
-        <video className="video" controls src={s3URL + `/${info?.storagePath}`} />
+        <video className="video" controls src={s3URL + info?.storagePath} />
         <div className="flex justify-between items-center">
           <div className="profile-box">
             <img className="profile" src={info?.profileImage ? info.profileImage : defaultProfile} alt="" />
@@ -162,19 +192,22 @@ function UserDubbingDetailPage() {
           </div>
           <div className="flex gap-4 justify-center items-center h-full">
             <div className="like-box">
-              <img className="smile" src={smile} alt="smile" />
+              <img onClick={likeContent} className="smile" src={info?.isLiked ? smile : notSmile} alt="smile" />
               <p className="count">+ {info?.likeCount}</p>
             </div>
-            <div className="button-box">
-              <Button>
-                <img className="icon" src={editIcon} alt="" />
-                <p>수정</p>
-              </Button>
-              <Button >
-                <img className="icon" src={deleteIcon} alt="" />
-                <p>삭제</p>
-              </Button>
-            </div>
+            {
+              info?.nickname === userName &&
+              <div className="button-box">
+                <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/${params.dubCode}/edit`)}>
+                  <img className="icon" src={editIcon} alt="" />
+                  <p>수정</p>
+                </Button>
+                <Button onClick={deleteDubbingContent}>
+                  <img className="icon" src={deleteIcon} alt="" />
+                  <p>삭제</p>
+                </Button>
+              </div>
+            }
           </div>
         </div>
         <div className="description-box">

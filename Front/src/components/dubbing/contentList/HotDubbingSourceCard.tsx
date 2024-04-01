@@ -38,7 +38,7 @@ const HotDubbingSourceCard: React.FC<{data: VideoData}> = ({data}) => {
 
   return (
     <Container $isOpen={isOpen} onClick={() => navigate(`/dubbing/${data.videoSourceCode}`)}>
-      <img className="img" src={s3URL + `/${data.thumbnailPath}`} alt="thumbnail" />
+      <img className="img" src={s3URL + data.thumbnailPath} alt="thumbnail" />
       <p className="content-title">{data.sourceName}</p>
     </Container>
   )

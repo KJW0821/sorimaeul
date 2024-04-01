@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getPlaylists } from "../../../utils/playlistAPI";
-import { useEffect} from "react";
+import { useEffect, useState} from "react";
 import { PlaylistCard } from "./PlaylistCard";
 import { setPlaylists, setTotalPages } from "../../../stores/playlists";
 import { RootState } from "../../../stores/store";
@@ -29,7 +29,7 @@ export function PlaylistList () {
         console.error("플레이리스트 데이터를 가져오는데 실패했습니다.");
       }
     }) ();
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -39,7 +39,7 @@ export function PlaylistList () {
           key={playlist.playlistCode}
           playlistCode={playlist.playlistCode}
           playlistName={playlist.playlistName}
-          createTime={playlist.createTime}
+          createdTime={playlist.createdTime}
         />
       ))}
       </ListContainer>

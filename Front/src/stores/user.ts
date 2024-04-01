@@ -34,11 +34,14 @@ export const userSlice = createSlice({
       state.profileImage = "";
       state.learnCount = 0;
     },
+    decreaseLearnCount(state) {
+      state.learnCount -= 1;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, () => initialState);
   }
 });
 
-export const { set, login, logout } = userSlice.actions;
+export const { set, login, logout, decreaseLearnCount } = userSlice.actions;
 export default userSlice.reducer;

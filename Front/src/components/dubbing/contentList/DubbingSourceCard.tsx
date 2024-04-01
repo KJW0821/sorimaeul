@@ -41,7 +41,7 @@ const DubbingSourceCard: React.FC<{data: VideoData}> = ({data}) => {
   return (
     <Container onClick={() => navigate(`/dubbing/${data.videoSourceCode}`)}>
       <div className="img-box">
-        <img className="img" src={s3URL + `/${data.thumbnailPath}`} alt="thumbnail" />
+        <img className="img" src={s3URL + data.thumbnailPath} alt="thumbnail" />
       </div>
       <p className="title">{data.sourceName}</p>
     </Container>
