@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../stores/store";
 import { setLikeType } from "../../../stores/menu";
 import { useEffect, useState } from "react";
+import LikeDubbingList from "./dubbing/LikeDubbingList";
 
 const Container = styled.div`
   width: 100%;
@@ -67,6 +68,12 @@ function LikeContentsBox() {
             <p className="type">커버</p>
           </div>
         </Tab>
+        {
+          likeType === '더빙' ?
+          <LikeDubbingList />
+          :
+          <></>
+        }
       </Container>
     </>
   )
