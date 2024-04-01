@@ -15,7 +15,7 @@ const HeaderContainer = styled.div<HeaderProps>`
     props.$isMainPage ? 'space-between' : 'center'};
   align-items: center;
   width: 100%;
-  heightL auto;
+  height: auto;
 `;
 
 interface LogoProps {

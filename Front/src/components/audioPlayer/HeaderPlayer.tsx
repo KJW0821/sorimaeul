@@ -1,11 +1,31 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import playBtn from "../../assets/playBlack.png";
 import pauseBtn from "../../assets/pauseBlack.png";
 import prevBtn from "../../assets/prev.png";
 import nextBtn from "../../assets/next.png";
+import playlists from "../../assets/playlistCheck.png";
 import styled, { keyframes } from 'styled-components';
+import { openModal } from "../../stores/modal";
+
+const PlaylistComponent = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  border: 1px dashed #000000;
+  border-radius: 50px;
+  padding: 1rem; 
+
+  margin-left: auto;
+  max-width: 400px; 
+  height: 55px; 
+  right: 0;
+
+  .list-icon {
+    width: 10%;
+    height: 100%;
+  }
+`;
 
 const flowText = keyframes`
   0% {
@@ -22,7 +42,8 @@ const FlowingText = styled.div`
 `;
 
 const TextArea = styled.div`
-  width: 33%;
+  margin-top: 0.5rem;
+  width: 65%;
   overflow: hidden;
 `
 
@@ -35,8 +56,9 @@ const PlayerContainer = styled.div`
 `;
 
 const IconArea = styled.div`
+  marign-left:2rem;
   display: flex;
-  width: 18%;
+  width: 15%;
 `;
 
 const Icon = styled.img`
@@ -45,11 +67,10 @@ const Icon = styled.img`
   cursor: pointer;
 `;
 
-const StyledRangeInput = styled.input`
-  width: 38%;
-}`;
+
 
 const HeaderPlayer: React.FC = () => {
+  const dispatch = useDispatch();
   const selectedPlaylist = useSelector((state: RootState) => state.playlists.selectedPlaylist);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -134,12 +155,7 @@ const HeaderPlayer: React.FC = () => {
     }
   };
 
-  const getProgress = () => {
-    if (audio && audio.duration) {
-      return (currentTime / audio.duration) * 100;
-    }
-    return 0;
-  };
+
 
   if (!selectedPlaylist) {
     return <div>플레이리스트를 선택해주세요.</div>;
@@ -148,19 +164,29 @@ const HeaderPlayer: React.FC = () => {
   if (!selectedPlaylist || !selectedPlaylist.covers || selectedPlaylist.covers.length === 0) {
     return <div>재생할 곡이 없습니다.</div>;
   }
+  
+  const openPlaylistHeaderModal = () => {
+    dispatch(openModal({
+      modalType: "playlistheader",
+    }));
+  };
+
+  
 
   return (
+    <PlaylistComponent>
     <PlayerContainer>
+      <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
       <TextArea>
         <FlowingText>{selectedPlaylist.covers[currentTrackIndex].title} - {selectedPlaylist.covers[currentTrackIndex].singer} ({selectedPlaylist.covers[currentTrackIndex].coverSinger}) </FlowingText>
       </TextArea>
-      <StyledRangeInput type="range" min="0" max="100" value={getProgress()} readOnly />
       <IconArea>
         <Icon src={prevBtn} onClick={handlePrevTrack} />
         <div onClick={handlePlayPause}>{isPlaying ? <Icon src={pauseBtn} /> : <Icon src={playBtn} />}</div>
         <Icon src={nextBtn} onClick={handleNextTrack} />
       </IconArea>
     </PlayerContainer>
+    </PlaylistComponent>
   );
 };
 
