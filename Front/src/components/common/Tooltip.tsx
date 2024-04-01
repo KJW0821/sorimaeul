@@ -28,7 +28,7 @@ const ScRTooltip = styled.span`
     padding: 7px;
     background-color: #777;
     color: #fff;
-    font-size: 12px;
+    font-size: 15px;
     border-radius: 4px;
     z-index: 10;
     display: none;
