@@ -86,7 +86,7 @@ public class DubbingController {
     public ResponseEntity<DubbingListResponse> getDubbingList(@RequestHeader("Authorization") String token,
                                                               @RequestParam String target,
                                                               @RequestParam(required = false) String keyword,
-                                                              @RequestParam(required = false) int page,
+                                                              @RequestParam(required = false) Integer page,
                                                               @RequestParam(required = true) int videoSourceCode
     ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
