@@ -17,16 +17,16 @@ const CoverContainer = styled.div`
 
 // 상태에 따른 배경색과 조금 더 진한 배경색 설정
 const getStatusColor = ($isComplete: boolean, $isPublic: boolean = false) => {
-  if (!$isComplete) return { main: '#FAD02E', dark: '#C7961E' }; // 미완료(변환중)
-  if ($isPublic) return { main: '#90EE90', dark: '#5CA85C' }; // 공개(게시)
-  return { main: '#FFB6C1', dark: '#C97891' }; // 비공개(미게시)
+  if (!$isComplete) return { main: '#ECECEC', dark: '#E3FF92' }; // 미완료(변환중)
+  if ($isPublic) return { main: '#fff', dark: '#C9F647' }; // 공개(게시)
+  return { main: '#D9D9D9', dark: '#686868' }; // 비공개(미게시)
 };
 
 const CoverContent = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
   width: 80%;
   height: 60px;
   background: ${({ $isComplete, $isPublic }) => getStatusColor($isComplete, $isPublic).main};
-  border: 1px solid #A0A0A0;
+  box-shadow:0 0 5px #CED6D2;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -125,8 +125,8 @@ function CoverBox() {
               <StatusDescription>{cover.isComplete ? (cover.isPublic ? '공개' : '비공개') : '변환중'}</StatusDescription>
             </StatusIndicator>
             <CoverInfo>
-              <CoverText> ♪ 커버 제목 : {cover.coverName} - {cover.coverSinger}</CoverText>
-              <CoverText> ◎ 원곡 : {cover.title} - {cover.singer} </CoverText>
+              <CoverText> ♪ 커버 제목 : {cover.coverName}  </CoverText>
+              <CoverText> - 커버 가수 : {cover.coverSinger} </CoverText>
 
               {cover.isComplete ? (<CoverText>생성일: {formatDate(cover.createdTime)}</CoverText>) :
                 (<></>)

@@ -65,9 +65,9 @@ const ButtonContainer = styled.div`
 
 const DetailLine = styled.div`
   height: 2px;
-  width: 1500px;
+  width: 84rem;
   background-color: #A3A3A3;
-  margin: 0.8rem 0 3rem 10rem;
+  margin: 0.8rem 0 3rem 15rem;
 `;
 
 // 커버 전체 목록 페이지
