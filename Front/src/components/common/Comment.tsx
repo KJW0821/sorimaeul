@@ -89,6 +89,7 @@ const CommentComponent: React.FC<{ width?: number }> = ({width}) => {
   const logginedUserImg = useSelector((state: RootState) => state.user.profileImage);
   const logginedUser = useSelector((state: RootState) => state.user.nickname);
   const { category, selectedPostId, comments } = useSelector((state: RootState) => state.comment);
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   const deleteCommentFromPost = async (commentCode: string) => {
     const res = await deleteComment(commentCode);
@@ -129,7 +130,7 @@ const CommentComponent: React.FC<{ width?: number }> = ({width}) => {
       </TitleSection>
       <CommentInputSection>
         <div className="rounded-full w-10 h-10 mr-4 overflow-hidden">
-          <img src={logginedUserImg ? logginedUserImg : defaultProfile} className="w-full h-full" alt="Current User ProfileImage" />
+          <img src={logginedUserImg ? `${baseURL}${logginedUserImg}`: defaultProfile} className="w-full h-full" alt="Current User ProfileImage" />
         </div>
         <Form onSubmit={submitHandler}>
           <InputBox
@@ -147,7 +148,7 @@ const CommentComponent: React.FC<{ width?: number }> = ({width}) => {
         {comments && comments.map(({ commentCode, nickname, profileImage, content, time }) => (
           <CommentItem key={commentCode}>
             <div className="rounded-full w-10 h-10 mr-4 overflow-hidden">
-              <img src={profileImage ? profileImage : defaultProfile} className="w-full h-full" alt={nickname} />
+              <img src={profileImage ? `${baseURL}${profileImage}` : defaultProfile} className="w-full h-full" alt={nickname} />
             </div>
             <div style={{ flexGrow: 1 }}>
               <span>{nickname} <span className="text-stone-300 text-xs">{time}</span></span>
