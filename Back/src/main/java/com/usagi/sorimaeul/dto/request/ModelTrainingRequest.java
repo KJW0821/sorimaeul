@@ -13,5 +13,6 @@ public class ModelTrainingRequest {
 
     private int modelCode;
     private long userCode;
+    private String modelName;
 
 }

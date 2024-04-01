@@ -306,14 +306,10 @@ public class ModelServiceImpl implements ModelService {
             WebClient.create("http://222.107.238.124:7865")
                     .post()
                     .uri("/training")
-                    .bodyValue(new ModelTrainingRequest(modelCode, userCode))
+                    .bodyValue(new ModelTrainingRequest(modelCode, userCode, voiceModel.getModelName()))
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
-
-            // state = 3: '학습완료'로 갱신
-            voiceModel.setState(3);
-            voiceModelRepository.save(voiceModel);
 
             // 모델 학습 가능 횟수 차감
             user.setLearnCount(user.getLearnCount() - 1);
@@ -528,6 +524,10 @@ public class ModelServiceImpl implements ModelService {
             voiceModelRepository.deleteById(modelCode);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("모델 생성에 실패하였습니다.");
         } else {
+            // state = 3: '학습완료'로 갱신
+            VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+            voiceModel.setState(3);
+            voiceModelRepository.save(voiceModel);
             return ResponseEntity.status(HttpStatus.OK).body("모델 생성에 성공하였습니다.");
         }
 
