@@ -22,4 +22,6 @@ public interface CoverService {
 
     ResponseEntity<?> getCoverSourceList(long userCode);
 
+    ResponseEntity<String> checkCoverCreate(int coverCode, Boolean isSuccess);
+
 }

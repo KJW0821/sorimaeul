@@ -221,7 +221,7 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 모델은 AI 커버를 생성할 수 있는 상태가 아닙니다. 학습이 완료된 후에 시도해주세요.");
         }
 
-        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime & postTime = null, likeCount 기본값 0
+        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime & postTime = null, likeCount 기본값 0, isSuccess 기본값 false
         Cover cover = Cover.builder()
                 .user(user)
                 .coverName(request.getCoverName())
@@ -334,7 +334,6 @@ public class CoverServiceImpl implements CoverService {
         s3Service.saveByteToS3(folderPath + fileName, responseFile);
 
         // 완료 표시와 생성 시간 업데이트
-        cover.setIsComplete(true);
         cover.setCreatedTime(LocalDateTime.now());
         cover.setStoragePath(folderPath + fileName);
         coverRepository.save(cover);
@@ -368,6 +367,16 @@ public class CoverServiceImpl implements CoverService {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    // AI 커버 생성 성공 여부 확인
+    public ResponseEntity<String> checkCoverCreate(int coverCode, Boolean isSuccess) {
+        if (!isSuccess) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("AI 커버 생성에 실패했습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("AI 커버 생성에 성공했습니다.");
+        }
     }
 
 
