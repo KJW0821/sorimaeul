@@ -152,10 +152,10 @@ const router = createBrowserRouter([
                 element: <CoverResultPage />,
               },
               {
-                path: "board/:id",
-                element: <CoverResultPage />
-              }
-            ]
+                path: 'board/:id',
+                element: <CoverResultPage />,
+              },
+            ],
           },
           {
             path: 'profile',
@@ -184,16 +184,16 @@ const router = createBrowserRouter([
                       },
                       {
                         path: 'edit',
-                        element: <DubbingEditPage />
-                      }
-                    ]
+                        element: <DubbingEditPage />,
+                      },
+                    ],
                   },
                   {
                     path: 'create',
                     element: <UserDubbingCreatePage />,
                   },
                 ],
-              }
+              },
             ],
           },
         ],

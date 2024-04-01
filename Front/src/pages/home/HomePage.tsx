@@ -112,7 +112,7 @@ const CategoryDescription = styled.p`
 const Page3 = styled.div`
   position: relative;
   height: 100vh;
-  width: 1975px;
+  width: 100%;
   display: flex;
   background-color: #f4cfdf;
 `;
@@ -132,7 +132,10 @@ const CoverCategory = styled(CategoryBox)`
 const ImagesContainer = styled.div`
   display: flex;
   align-items: center;
+  justify=content: center;
+  flex-wrap: wrap;
   gap: 20px;
+  padding-left: 70px;
 `;
 
 interface ImageInterface {
@@ -153,7 +156,6 @@ const MarqueeComponentStyled = styled.div`
   bottom: 0;
   height: auto;
   width: 100%;
-  margin-left: -60px;
 `;
 
 interface TextLineInterface {
@@ -266,30 +268,37 @@ const HomePage: React.FC = () => {
           <ImagesContainer>
             <StyledImage
               $rotation="-7.7deg"
-              $width="18%"
+              $width="22%"
               src={album1}
               alt="AI Cover image1"
             />
             <StyledImage
               $rotation="4.74deg"
-              $width="18%"
+              $width="22%"
               src={album2}
               alt="AI Cover image2"
             />
             <StyledImage
               $rotation="-8.2deg"
-              $width="18%"
+              $width="22%"
               src={album3}
               alt="AI Cover image3"
             />
             <StyledImage
               $rotation="11.5deg"
-              $width="19%"
+              $width="22%"
               src={album4}
               alt="AI Cover image4"
             />
           </ImagesContainer>
         </Temp>
+        <MarqueeComponentStyled>
+          <TextLine $height={5} className="my-3" />
+          <TextLine />
+          <MarqueeComponent />
+          <TextLine className="my-3" />
+          <TextLine $height={5} className="my-2" />
+        </MarqueeComponentStyled>
       </Page3>
     </Outer>
   );
