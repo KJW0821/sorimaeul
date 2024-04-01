@@ -376,6 +376,8 @@ public class CoverServiceImpl implements CoverService {
             coverRepository.deleteById(coverCode);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("AI 커버 생성에 실패했습니다.");
         } else {
+            Cover cover = coverRepository.findByCoverCode(coverCode);
+            cover.setIsComplete(true);
             return ResponseEntity.status(HttpStatus.OK).body("AI 커버 생성에 성공했습니다.");
         }
     }
