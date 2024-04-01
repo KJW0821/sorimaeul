@@ -5,6 +5,8 @@ import { Button } from "../common/Button";
 import styled from "styled-components";
 import DirectUpload from "./DirectUpload";
 import Recommendation from "./Recommendation";
+import help from "../../assets/help.png";
+import Tooltip from "../common/Tooltip";
 
 
 const Container = styled.form`
@@ -94,6 +96,17 @@ border-radius: 5px;
   align-items: center;
 `;
 
+const StepContainer = styled.div`
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 10px; /* 요소 사이의 간격 */
+`;
+
+const HelpIcon = styled.img`
+  margin-top: 0.1rem;
+  width: 22px;
+  height: 22px;
+`;
 
 interface Props {
   onSubmit: (data: CoverCreateInterface) => void;
@@ -243,7 +256,13 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
 
 
       <Step>
-        <h3 className="subtitle">Step {baseStepNumber + 1}. 모델 선택하기</h3>
+        <StepContainer>
+        <h3 className="subtitle">Step {baseStepNumber + 1}. 모델 선택하기</h3> 
+        <Tooltip message={"피치 조절에 대한 설명이 들어갑니다."}>
+        <HelpIcon src={help} />
+        </Tooltip>
+        </StepContainer>
+        
         <label className="thirdtitle" htmlFor="modelCode" >원하는 음성 모델을 선택하고, 알맞게 피치를 조절해주세요.</label>
         <Select name="modelCode" id="modelCode" value={data.modelCode} onChange={handleChange}>
           <Option value="" > 모델을 선택해주세요. </Option>
