@@ -40,12 +40,7 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
   return (
     <HeaderContainer $isMainPage={isMainPage}>
       {isMainPage ? (
-        <>
-          {/* <Playlist />
-          <Link to="/">
-            <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
-          </Link> */}
-        </>
+        <></>
       ) : (
         <>
           <LogoContainer $isMainPage={isMainPage}>
@@ -61,3 +56,22 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
 };
 
 export default Header;
+
+//  {isMainPage ? (
+//     <>
+//       {/* <Playlist />
+//       <Link to="/">
+//         <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
+//       </Link> */}
+//       <Playlist />
+//     </>
+//   ) : (
+//     <>
+//       <LogoContainer $isMainPage={isMainPage}>
+//         <Link to="/">
+//           <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
+//         </Link>
+//       </LogoContainer>
+//       <Playlist />
+//     </>
+//   )}
