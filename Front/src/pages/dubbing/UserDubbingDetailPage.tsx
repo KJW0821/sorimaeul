@@ -198,7 +198,7 @@ function UserDubbingDetailPage() {
             {
               info?.nickname === userName &&
               <div className="button-box">
-                <Button onClick={() => navigate(`/dubbing/${params.souceCode}/${params.dubCode}/edit`)}>
+                <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/${params.dubCode}/edit`)}>
                   <img className="icon" src={editIcon} alt="" />
                   <p>수정</p>
                 </Button>
