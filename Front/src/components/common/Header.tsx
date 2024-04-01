@@ -39,7 +39,14 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
   const isMainPage = location.pathname === '/'; // 메인 페이지의 경로가 '/'인 경우
   return (
     <HeaderContainer $isMainPage={isMainPage}>
-      {
+      {isMainPage ? (
+        <>
+          {/* <Playlist />
+          <Link to="/">
+            <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
+          </Link> */}
+        </>
+      ) : (
         <>
           <LogoContainer $isMainPage={isMainPage}>
             <Link to="/">
@@ -48,7 +55,7 @@ const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
           </LogoContainer>
           <Playlist />
         </>
-      }
+      )}
     </HeaderContainer>
   );
 };
