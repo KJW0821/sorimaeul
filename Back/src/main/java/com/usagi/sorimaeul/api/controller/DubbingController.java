@@ -87,7 +87,7 @@ public class DubbingController {
                                                               @RequestParam String target,
                                                               @RequestParam(required = false) String keyword,
                                                               @RequestParam(required = false) Integer page,
-                                                              @RequestParam(required = true) int videoSourceCode
+                                                              @RequestParam(required = false) Integer videoSourceCode
     ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingList(userCode, target, keyword, page, videoSourceCode);

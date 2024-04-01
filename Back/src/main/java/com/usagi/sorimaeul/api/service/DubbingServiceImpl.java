@@ -170,7 +170,7 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 영상 목록 조회
-    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, Integer page, int videoSourceCode) {
+    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, Integer page, Integer videoSourceCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -183,17 +183,24 @@ public class DubbingServiceImpl implements DubbingService {
         int startIdx = 0;
         int endIdx = 0;
         // 총 페이지 수 선언
-        int totalPages = 0;
+        int totalPages = 1;
 
         // 모든 게시물 조회 - 더빙 학원에서만 ( 키워드 검색 없음 )
         if (target.equals("all")) {
             dubbings = dubbingRepository.findByIsCompleteAndIsPublicAndVideoSource_videoSourceCodeOrderByCreatedTimeDesc(true, true, videoSourceCode);
 
-            // 한 페이지 당 8개씩 조회
-            startIdx = (page - 1) * 8;
-            endIdx = Math.min(startIdx + 8, dubbings.size());
-            // // 총 페이지 수 계산
-            totalPages = (int) Math.ceil((double) dubbings.size() / 10);
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 10개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
+                startIdx = Math.min((page - 1) * 8, dubbings.size()) / 8 * 8;
+                endIdx = Math.min(startIdx + 8, dubbings.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = dubbings.size();
+            }
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) dubbings.size() / 8);
         }
 
         // 마이 페이지 - 나의 게시물 조회 ( 키워드 검색 가능 )
@@ -206,9 +213,16 @@ public class DubbingServiceImpl implements DubbingService {
             else {
                 dubbings = dubbingRepository.findByUser_userCodeAndDubNameContainingOrderByCreatedTimeDesc(userCode, keyword);
             }
-
-            startIdx = (page - 1) * 6;
-            endIdx = Math.min(startIdx + 6, dubbings.size());
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
+                startIdx = Math.min((page - 1) * 6, dubbings.size()) / 6 * 6;
+                endIdx = Math.min(startIdx + 6, dubbings.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = dubbings.size();
+            }
             // // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) dubbings.size() / 6);
         }
@@ -224,10 +238,17 @@ public class DubbingServiceImpl implements DubbingService {
                     dubbings.add(dubbing);
                 }
             }
-            // 한 페이지 당 6개 조회
-            startIdx = (page - 1) * 6;
-            endIdx = Math.min(startIdx + 6, dubbings.size());
-            // 총 페이지 수 계산
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
+                startIdx = Math.min((page - 1) * 6, dubbings.size()) / 6 * 6;
+                endIdx = Math.min(startIdx + 6, dubbings.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = dubbings.size();
+            }
+            // // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) dubbings.size() / 6);
         }
 
@@ -236,8 +257,6 @@ public class DubbingServiceImpl implements DubbingService {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
             dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(videoSourceCode, true, true);
             endIdx = dubbings.size();
-            // // 총 페이지 수 계산
-            totalPages = 1;
         }
 
 
