@@ -7,43 +7,49 @@ import CoverBox from "../../components/profile/aiCover/CoverBox";
 import { styled } from "styled-components";
 import UserEditor from "../../components/profile/UserEditor";
 import learnCnt from "../../assets/learnCnt.png";
+import ModelList from "../../components/profile/voiceModel/ModelList";
+import DubbingList from "../../components/profile/dubbing/DubbingList";
+import LikeContentsBox from "../../components/profile/likeContents/LikeContentsBox";
 
 const Container = styled.div`
   display: flex;
-  width: 100%; 
+  width: 90%;
+  margin: 0 auto;
+  justify-content: space-between;
 `;
 
 
 const MenuBarContainer = styled.div`
-  flex: 0 0 20%; 
-  padding-left: 150px;
+  width: 20%;
 
   display: flex;
-  flex-direction: column
+  flex-direction: column;
 `;
 
 const ContentContainer = styled.div`
-  flex: 0 0 80%; 
+  width: 75%;
 `;
 
 const LearnCountContainer = styled.div`
-  width: 191px;
-  height: 32px;
+  width: 100%;
+  height: 2rem;
   background: #C9F647;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  `;
+  padding: .25rem .5rem;
+  gap: .5rem;
+  .img {
+    height: 80%;
+  }
+`;
 
 const LearnCountText = styled.div`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 13px;
-  line-height: 15px;
-  text-align: center;
+  font-size: 0.8125rem;
   color: #000000;
+  padding-top: .25rem;
 `;
 
 function ProfilePage() {
@@ -59,6 +65,14 @@ function ProfilePage() {
     case "플레이리스트":
       ComponentToShow = PlaylistBox;
       break;
+    case "나의 음성 모델":
+      ComponentToShow = ModelList;
+      break;
+    case "더빙 컨텐츠":
+      ComponentToShow = DubbingList;
+      break;
+    case "관심 컨텐츠":
+      ComponentToShow = LikeContentsBox;
   }
 
   return (
@@ -70,7 +84,7 @@ function ProfilePage() {
         <MenuBarContainer>
           <UserEditor />
           <LearnCountContainer>
-            <img src={learnCnt} className="" alt="Learn Count" />
+            <img src={learnCnt} className="img" alt="Learn Count" />
             <LearnCountText>남은 모델 학습 횟수: {learnCount}회</LearnCountText>
           </LearnCountContainer>
           <MenuBar />

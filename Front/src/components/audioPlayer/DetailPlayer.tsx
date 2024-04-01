@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import playBtn from "../../assets/playSong.png";
 import pauseBtn from "../../assets/pauseSong.png";
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../stores/store';
+import { setCurrentAudio } from '../../stores/audioPlayer';
 
 const Button = styled.button`
   position: relative;
@@ -16,23 +19,38 @@ const Button = styled.button`
 // 플레이리스트 상세 조회 시의 플레이어 : 재생(일시정지) 기능 + 오디오의 길이 제공
 interface CustomAudioPlayerProps {
   src: string; // 오디오 파일의 URL
+  coverCode: string;
 }
 
-const DetailPlayer: React.FC<CustomAudioPlayerProps> = ({ src }) => {
+const DetailPlayer:  React.FC<CustomAudioPlayerProps & { isPublic: boolean }> = ({ src, coverCode, isPublic }) => {
+  const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null); // 오디오 태그를 참조하기 위한 ref
-  const [isPlaying, setIsPlaying] = useState(false); // 재생 상태 관리
+  const currentAudio = useSelector((state: RootState) => state.audioPlayer.currentAudio);
+  const isPlaying = coverCode === currentAudio && isPublic;
   const [duration, setDuration] = useState(0); // 오디오의 총 길이
 
-  // 재생 및 일시정지 토글 함수
-  const togglePlayPause = () => {
+  // 재생 상태 관리 
+  useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       if (isPlaying) {
-        audio.pause();
-      } else {
         audio.play();
+      } else {
+        audio.pause();
       }
-      setIsPlaying(!isPlaying);
+    }
+  }, [isPlaying]);
+
+  // 재생 및 일시정지 토글 함수
+  const togglePlayPause = () => {
+    if (isPublic) { // 비공개 여부 검사
+      if (isPlaying) {
+        dispatch(setCurrentAudio(null));
+      } else {
+        dispatch(setCurrentAudio(coverCode));
+      }
+    } else {
+      alert('비공개된 음원입니다.'); // 비공개 곡인 경우 경고 메시지 표시
     }
   };
 
@@ -58,11 +76,20 @@ const DetailPlayer: React.FC<CustomAudioPlayerProps> = ({ src }) => {
   };
 
   return (
-    <div>
+    <>
       <audio ref={audioRef} src={src} preload="metadata" />
-      <span className="mr-6 text-stone-400">({formatDuration(duration)})</span>
-      <Button className="mr-3" onClick={togglePlayPause}>{isPlaying ? (<img src={playBtn}/>) : (<img src={pauseBtn}/>)}</Button>
-    </div>
+      {/* 비공개 음원이 아닌 경우에만 재생 시간 표시 */}
+      {isPublic && <span className="mr-6 text-stone-400">({formatDuration(duration)})</span>}
+      
+      {/* 비공개 음원이 아닐 경우에만 재생 버튼 표시 */}
+      {isPublic && (
+        <Button className="mr-3" onClick={togglePlayPause}>
+          {isPlaying ? <img src={pauseBtn}/> : <img src={playBtn}/>}
+        </Button>
+      )}
+      
+      {!isPublic && <span>비공개된 음원입니다.</span>}
+    </>
   );
 };
 

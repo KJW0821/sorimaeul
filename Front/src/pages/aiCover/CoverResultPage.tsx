@@ -23,10 +23,9 @@ const CoverResultPage: React.FC = () => {
       try {
         if (coverCode) {
           const res = await getCover(coverCode);
-          setIsCompleted(res.complete);
-          if (res.complete) {
-            console.log("조회 확인", res);
-            setData(res);
+          setIsCompleted(res.isComplete);
+          if (res.isComplete) {
+            setData({ ...res, coverCode: coverCode });
           }
         }
       } catch (err) {
@@ -41,7 +40,6 @@ const CoverResultPage: React.FC = () => {
       if (coverCode) {
         const updatedData = await updateCover(coverCode, formData);
         setData(updatedData);
-        console.log(updateCover);
         navigate(`/cover/${coverCode}`);
       }
     } catch (error) {
@@ -52,7 +50,6 @@ const CoverResultPage: React.FC = () => {
 
   return (
     <>
-      <ColorLine />
       {isCompleted ? (
         <CoverPostForm onSubmit={handleSubmit} initialData={data} />
       ) : (

@@ -12,18 +12,23 @@ const CoverTitle = styled.p`
   font-size: 1rem; 
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
 `;
 
 const ThumbnailContainer = styled.div`
   position: relative;
-  width: 100%;
+  width: 190px;
+  height: 190px;
   border-radius: 50%; 
   overflow: hidden;
-`
+  object-fit: cover;
+`;
 
 const ThumbnailImage = styled.img`
   width: 100%; 
-  height: auto; 
+
   border-radius: 50%;
   z-index: 1;
 `;
@@ -48,16 +53,18 @@ const ProfileInfo = styled.div`
 
 const ProfileImage = styled.img`
   width: 30px; 
-  height: 30px;
+  height: 30px
   border-radius: 50%; 
   margin-right: 0.5rem;
 `;
 
 const Nickname = styled.p`
+  width: 180px;
+  height: 20px;
   flex-grow: 1;
-  margin-left: 10px;
-  margin-top: 1rem;
-  
+  margin-left: 5px;
+  margin-top: 0.1rem;
+
   font-size: 14px; 
   color: #575757;
 `;
@@ -70,18 +77,20 @@ const LikeContainer = styled.div`
 const HeartIcon = styled.img`
   width: 20px; 
   height: auto; 
-  margin-right: 10px;
+  margin-right: 4px;
 `;
 
 const LikeCount = styled.p`
   font-size: 0.875rem; 
-  margin-top: 4px;
+  margin-top: 3px;
 `;
 
 const SongInfo = styled.p`
   width: 220px;
   font-size: 0.7rem; 
   color: #A3A3A3;
+  overflow: hidden;
+  white-space:nowrap;
   text-overflow: ellipsis;
 `;
 
@@ -102,16 +111,17 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     title,
   } = cover;
   const navigate = useNavigate();
-  console.log(cover);
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+
   return (
     <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
       <ThumbnailContainer>
-      <ThumbnailImage src={thumbnailPath} alt={title} />
+      <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
       <CenterCircle />
       </ThumbnailContainer>
       <CoverTitle>{coverName}</CoverTitle>
       <ProfileInfo >
-        <ProfileImage src={profileImage} alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
+        <ProfileImage src={`${baseURL}${profileImage}`} alt="Profile" /> 
         <Nickname>{nickname}</Nickname>
         <LikeContainer>
           <HeartIcon src={heart} alt="Like" />

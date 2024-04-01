@@ -14,56 +14,46 @@ interface ProfileImageProps {
 
 const ProfileImage = styled.div<ProfileImageProps>`
   background-image: url(${props => props.$image});
-  width: 220px; 
-  height: 220px; 
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; 
   border-radius: 50%; 
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   background-size: cover;
   background-position: center;
 `;
 
-const NicknameSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center; // 중앙 정렬
-  justify-content: center; // 중앙 정렬
-  margin-bottom: 20px; // 여백 추가
-`;
-
 const NicknameContainer = styled.div`
-flex-grow: 0;
-display: flex;
-align-items: center; 
-justify-content: space-between; 
-margin-bottom: 20px; 
-`;
-
-const ButtonContainer = styled.div`
   display: flex;
-  gap: 10px;
-  margin-left: 10px; 
+  align-items: center; 
+  justify-content: center; 
+  padding-top: .25rem;
+  input {
+    width: 95%;
+  }
 `;
 
 const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 221px; 
+  width: 100%;
+  gap: 1rem;
 `;
 
 // 닉네임 중복 확인 문구 스타일
 const NicknameCheckMessage = styled.p`
-  margin-left: 10px; 
+  
 `;
 
 const FlexContainer = styled.div`
+  width: 100%;
   display: flex;
-  align-items: center; // 버튼과 닉네임을 수직 방향으로 가운데 정렬
+  align-items: flex-start; // 버튼과 닉네임을 수직 방향으로 가운데 정렬
   justify-content: space-between; // 요소들 사이에 공간을 균등하게 배분
 `;
 
 const Line = styled.hr`
-margin-top: 20px;
-margin-bottom: 20px; 
+margin-bottom: 1rem; 
 border: 0;
 height: 1px; 
 background-color: #ccc; 
@@ -143,48 +133,48 @@ function UserEditor() {
 
   return (
     <LayoutContainer>
-   {isEditing ? (
-  <>
-    <label htmlFor="file" className="cursor-pointer">
-      <ProfileImage $image={`${baseURL}${selectedImagePath}`}></ProfileImage>
-    </label>
-    <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
-  </>
-) : (
-  <>
-    <ProfileImage $image={`${baseURL}${selectedImagePath}`} />
-  </>
-)}
-<FlexContainer>
-<NicknameSection>
-  <NicknameContainer>
-    {isEditing ? (
-      <>
-        <input
-          type="text"
-          value={newNickname}
-          onChange={handleNickname}
-          placeholder="닉네임 입력"
-        />
-      </>
-    ) : (
-      <p>{nickname}</p>
-    )}
-  </NicknameContainer>
-  <NicknameCheckMessage>
-    {isEditing && isCheckingNickname && "닉네임 중복 확인 중..."}
-    {isEditing && !isCheckingNickname && !isValidNickname && newNickname && "이미 사용 중인 닉네임입니다."}
-    {isEditing && !isCheckingNickname && isValidNickname && "사용 가능한 닉네임입니다."}
-  </NicknameCheckMessage>
-</NicknameSection>
-      <ButtonContainer>
-      <Button $marginLeft={0} $marginTop={0} onClick={handleEdit}>
-        {isEditing ? "변경" : "수정"}
-      </Button>
-        </ButtonContainer> 
-        </FlexContainer>
-        <Line />
-        </LayoutContainer>);
+      {isEditing ? (
+        <>
+          <label htmlFor="file" className="cursor-pointer">
+            <ProfileImage $image={`${baseURL}${selectedImagePath}`}></ProfileImage>
+          </label>
+          <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
+        </>
+        ) : (
+        <>
+          <ProfileImage $image={`${baseURL}${selectedImagePath}`} />
+        </>
+      )}
+      <FlexContainer>
+        <NicknameContainer>
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={newNickname}
+                onChange={handleNickname}
+                placeholder="닉네임 입력"
+              />
+            </>
+          ) : (
+            <p>{nickname}</p>
+          )}
+        </NicknameContainer>
+        <Button $marginLeft={0} $marginTop={0} onClick={handleEdit}>
+          {isEditing ? "변경" : "수정"}
+        </Button>
+      </FlexContainer>
+      {
+        isEditing &&
+        <NicknameCheckMessage>
+          {isCheckingNickname && "닉네임 중복 확인 중..."}
+          {!isCheckingNickname && !isValidNickname && newNickname && "이미 사용 중인 닉네임입니다."}
+          {!isCheckingNickname && isValidNickname && "사용 가능한 닉네임입니다."}
+        </NicknameCheckMessage>
+      }
+      <Line />
+    </LayoutContainer>
+  );
 }
 
 export default UserEditor;

@@ -6,9 +6,9 @@ import voiceModelSlice, { VoiceModelState } from "./voiceModel";
 import menuSlice, { MenuState }  from "./menu";
 import commonSlice, { CommonState } from "./common";
 import playlistsSlice, { PlaylistsState } from "./playlists";
-import playlistSlice, { PlaylistSongsState } from "./playlist";
 import modalSlice, { ModalState } from "./modal";
 import commentSlice, { CommentState } from "./comment";
+import audioPlayerSlice , { AudioPlayerState } from "./audioPlayer";
 
 export interface RootState {
   user: UserState;
@@ -16,15 +16,15 @@ export interface RootState {
   menu: MenuState;
   common: CommonState;
   playlists: PlaylistsState;
-  playlist: PlaylistSongsState;
   modal: ModalState;
   comment: CommentState;
+  audioPlayer: AudioPlayerState;
 }
 
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
-  whitelist: ['user', 'playlists', 'playlist', 'comment', 'common'] // 저장할 상태 넣기
+  whitelist: ['user', 'playlists', 'comment', 'common', 'menu'] // 저장할 상태 넣기
 }
 
 // reducer 등록하는 곳
@@ -34,9 +34,9 @@ const rootReducer = combineReducers({
   menu: menuSlice,
   common: commonSlice,
   playlists: playlistsSlice,
-  playlist: playlistSlice,
   modal: modalSlice,
-  comment: commentSlice
+  comment: commentSlice,
+  audioPlayer: audioPlayerSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

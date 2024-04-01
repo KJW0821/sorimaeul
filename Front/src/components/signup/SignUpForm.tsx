@@ -107,7 +107,6 @@ function SignUpForm() {
   const [imagePath, setImagePath] = useState("");
   const [selectedImagePath, setSelectedImagePath] = useState("");
   const [isValidNickname, setIsValidNickname] = useState(false);
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
@@ -146,6 +145,7 @@ function SignUpForm() {
       setIsValidNickname(true);
     } else if (response === 1) {
       setIsValidNickname(false);
+      alert("이미 사용 중인 닉네임입니다.");
     }
   };
 
@@ -164,8 +164,6 @@ function SignUpForm() {
       } catch (error) {
         console.error("회원 가입 실패", error);
       }
-    } else {
-      console.log("중복된 닉네임입니다.");
     }
   };
 
@@ -191,6 +189,7 @@ function SignUpForm() {
             <NicknameTitle>닉네임:</NicknameTitle>
             <InputField type="text" value={inputNickname} onChange={handleNickname} />
             <Button onClick={onClickCheckNickname}  $fontFamily='GmarketSansLight' $fontSize={1.2} $marginLeft={0} $marginTop={0}>중복 확인</Button>
+      
           </NicknameContainer>
           <SubmitButtonContainer>
             <Button type="submit" $fontFamily='GmarketSansLight' $fontSize={1.2} $width={5} $height={2.5} $marginLeft={0} $marginTop={0} disabled={!inputNickname || !isValidNickname}>등록</Button>
