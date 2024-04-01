@@ -5,8 +5,7 @@ import { RootState } from "../../stores/store";
 
 const MenuBarContainer = styled.div`
   
-  width: 221px;
-  height: 283px;
+  width: 100%;
   background-color: #ffffff;
   padding: 10px 0;
   border: 1px solid #000000;
