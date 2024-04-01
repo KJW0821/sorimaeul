@@ -30,7 +30,7 @@ const LogoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: -380px;
+  margin-top: -100px;
 `;
 
 const Page1 = styled.div`
@@ -243,6 +243,7 @@ const HomePage: React.FC = () => {
       <Page1>
         <LogoContainer>
           <img src={logoimage}></img>
+          <HomeInfo />
         </LogoContainer>
         <Lottie animationData={anime} style={{ width: 2000 }} />
       </Page1>
