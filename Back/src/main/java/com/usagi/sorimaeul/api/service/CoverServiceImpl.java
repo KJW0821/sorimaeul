@@ -334,7 +334,6 @@ public class CoverServiceImpl implements CoverService {
         s3Service.saveByteToS3(folderPath + fileName, responseFile);
 
         // 완료 표시와 생성 시간 업데이트
-        cover.setIsComplete(true);
         cover.setCreatedTime(LocalDateTime.now());
         cover.setStoragePath(folderPath + fileName);
         coverRepository.save(cover);
@@ -368,6 +367,19 @@ public class CoverServiceImpl implements CoverService {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    // AI 커버 생성 성공 여부 확인
+    public ResponseEntity<String> checkCoverCreate(int coverCode, Boolean isSuccess) {
+        if (!isSuccess) {
+            coverRepository.deleteById(coverCode);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("AI 커버 생성에 실패했습니다.");
+        } else {
+            Cover cover = coverRepository.findByCoverCode(coverCode);
+            cover.setIsComplete(true);
+            return ResponseEntity.status(HttpStatus.OK).body("AI 커버 생성에 성공했습니다.");
+        }
     }
 
 

@@ -575,5 +575,18 @@ public class DubbingServiceImpl implements DubbingService {
 
         return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
     }
+
+
+    // 더빙 생성 성공 여부 확인
+    public ResponseEntity<String> checkDubbingCreate(int dubCode, Boolean isSuccess) {
+        if (!isSuccess) {
+            dubbingRepository.deleteById(dubCode);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("더빙 생성에 실패했습니다.");
+        } else {
+            Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+            dubbing.setIsComplete(true);
+            return ResponseEntity.status(HttpStatus.OK).body("더빙 생성에 성공했습니다.");
+        }
+    }
 }
 

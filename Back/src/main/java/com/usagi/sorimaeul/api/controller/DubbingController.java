@@ -174,4 +174,15 @@ public class DubbingController {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.convertDubbingRecord(userCode, voiceIndex, request);
     }
+
+
+    @Operation(summary = "더빙 생성 성공 여부 확인", description = "더빙 생성 성공 여부를 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 생성 성공!"),
+            @ApiResponse(responseCode = "204", description = "더빙 생성 실패!")
+    })
+    @GetMapping("/check/{dubCode}/{isSuccess}")
+    public ResponseEntity<String> checkDubbingCreate(@PathVariable int dubCode, @PathVariable Boolean isSuccess) {
+        return dubbingService.checkDubbingCreate(dubCode, isSuccess);
+    }
 }
