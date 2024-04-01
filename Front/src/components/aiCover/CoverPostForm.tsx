@@ -7,6 +7,7 @@ import ColorLine from "./ColorLine";
 import deleteIcon from "../../assets/deleteIcon.png";
 import { deleteCover } from "../../utils/coverAPI";
 import { useNavigate } from "react-router-dom";
+import ToggleButton from "../common/ToggleButton";
 
 const StyledContainer = styled.div`
   width: 75%;
@@ -174,7 +175,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     title: '',
     isPublic: false
   });
-
+  const [isPublic, setIsPublic] = useState(data.isPublic);
 
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
@@ -199,8 +200,6 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
       }
     }
   };
-
-  console.log(data);
   
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -220,14 +219,21 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     e.preventDefault();
     const formData = {
       ...data,
-      isPublic: data.isPublic,
+      isPublic, 
     };
     onSubmit(formData);
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name } = e.target;
-    const value = e.target instanceof HTMLInputElement && e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setData({ ...data, [name]: value });
+    const target = e.target as HTMLInputElement; // 타입 단언 사용
+
+    const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+  
+    if (target.type === 'checkbox' && name === 'isPublic') {
+      setIsPublic(target.checked);
+    } else {
+      setData({ ...data, [name]: value });
+    }
   };
 
   return (
@@ -264,14 +270,13 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
               <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
             </FormRow>
             <TextArea id="coverDetail" name="coverDetail" value={data.coverDetail} placeholder="커버에 대한 설명을 입력해주세요" onChange={handleChange} cols={30} rows={10}></TextArea>
-            <Label htmlFor="isPublic">공개 여부</Label>
-            <input
-              type="checkbox"
-              id="isPublic"
-              name="isPublic"
-              checked={data.isPublic}
-              onChange={handleChange}
-            />
+            
+            <div className="button-box">
+            <div className="flex gap-2">
+              <p className="is-public">공개여부</p>
+              <ToggleButton isPublic={isPublic} setIsPublic={setIsPublic} color="#C9F647" />
+            </div>
+            </div>
             <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
             <Button onClick={handleDelete}>
             <img className="icon" src={deleteIcon} alt="delete icon" />
