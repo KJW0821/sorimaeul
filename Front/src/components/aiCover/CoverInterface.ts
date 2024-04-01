@@ -39,6 +39,7 @@ export interface CoverDetailInterface {
   coverDetail: string;
   storagePath: string;
   likeCount: number;
+  profileImage: string;
   thumbnailPath: string;
   nickname: string;
   coverSinger: string;

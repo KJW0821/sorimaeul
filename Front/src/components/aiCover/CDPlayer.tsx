@@ -102,16 +102,17 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     title,
   } = cover;
   const navigate = useNavigate();
-  console.log(cover);
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+
   return (
     <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
       <ThumbnailContainer>
-      <ThumbnailImage src={thumbnailPath} alt={title} />
+      <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
       <CenterCircle />
       </ThumbnailContainer>
       <CoverTitle>{coverName}</CoverTitle>
       <ProfileInfo >
-        <ProfileImage src={profileImage} alt="Profile" /> {/* 프로필 이미지 경로 수정 필요 */}
+        <ProfileImage src={`${baseURL}${profileImage}`} alt="Profile" /> 
         <Nickname>{nickname}</Nickname>
         <LikeContainer>
           <HeartIcon src={heart} alt="Like" />
