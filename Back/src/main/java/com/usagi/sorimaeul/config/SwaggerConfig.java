@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class SwaggerConfiguration {
+public class SwaggerConfig {
+
     private static final String BEARER_TOKEN_PREFIX = "Bearer";
 
     @Bean
@@ -30,7 +31,7 @@ public class SwaggerConfiguration {
         Server localhost = new Server();
         localhost.setUrl("http://localhost:8000/api");
         Server server = new Server();
-        server.setUrl("https://i10e201.p.ssafy.io/api");
+        server.setUrl("https://j10e201.p.ssafy.io/api");
 
         List<Server> servers = new ArrayList<>();
         servers.add(localhost);
@@ -49,4 +50,5 @@ public class SwaggerConfiguration {
                 .description("소리마을 API DOCS")
                 .version("1.0.0");
     }
+
 }
