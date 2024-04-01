@@ -52,6 +52,8 @@ export interface DubbingData {
   thumbnailPath: string;
   isPublic: boolean;
   isComplete: boolean;
+  videoSourceCode: number;
+  nickname: string;
 }
 
 function DubbingList() {
@@ -81,7 +83,7 @@ function DubbingList() {
             dubbingContents &&
             dubbingContents.map(el => (
               <Fragment key={el.dubCode}>
-                <DubbingCard data={el} />
+                <DubbingCard data={el} setDubbingContents={setDubbingContents} />
                 <hr className="w-full border-black" />
               </Fragment>
             ))

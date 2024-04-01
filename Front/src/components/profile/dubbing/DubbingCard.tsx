@@ -3,6 +3,7 @@ import { DubbingData } from "./DubbingList";
 import { Button } from "../../common/Button";
 import { s3URL } from "../../../utils/s3";
 import { useNavigate } from "react-router-dom";
+import { deleteDubbing } from "../../../utils/dubbingAPI";
 
 const Container = styled.div`
   padding: 1rem;
@@ -59,11 +60,25 @@ const Container = styled.div`
   }
 `
 
-const DubbingCard: React.FC<{ data: DubbingData }> = ({data}) => {
+const DubbingCard: React.FC<{ data: DubbingData, setDubbingContents: React.Dispatch<React.SetStateAction<DubbingData[]>> }> = ({data, setDubbingContents}) => {
   const navigate = useNavigate();
 
+  const editContent = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    navigate(`/dubbing/${data.videoSourceCode}/${data.dubCode}/edit`);
+  };
+
+  const deleteContent = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    await deleteDubbing(data.dubCode);
+    setDubbingContents((prev: DubbingData[]) => {
+      const newState = [...prev];
+      return newState.filter(el => el.dubCode !== data.dubCode);
+    })
+  };
+
   return (
-    <Container>
+    <Container onClick={() => navigate(`/dubbing/${data.videoSourceCode}/${data.dubCode}`)}>
       <div className="content">
         <img className="img" src={s3URL + data.thumbnailPath} alt="thumbnail" />
         <div className="text-box">
@@ -79,8 +94,8 @@ const DubbingCard: React.FC<{ data: DubbingData }> = ({data}) => {
       </div>
       <p className="date sm-font">{data.createdTime.split('T')[0]}</p>
       <div className="button">
-        <Button $marginLeft={0} $marginTop={0} $width={3} $height={1.875} $background="#C9F647" $color="black">수정</Button>
-        <Button $marginLeft={0} $marginTop={0} $width={3} $height={1.875}>삭제</Button>
+        <Button onClick={editContent} $marginLeft={0} $marginTop={0} $width={3} $height={1.875} $background="#C9F647" $color="black">수정</Button>
+        <Button onClick={deleteContent} $marginLeft={0} $marginTop={0} $width={3} $height={1.875}>삭제</Button>
       </div>
     </Container>
   )
