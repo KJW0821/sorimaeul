@@ -12,6 +12,7 @@ import logging
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"  # Arrange GPU devices starting from 0
 os.environ["CUDA_VISIBLE_DEVICES"]= "9"  # Set the GPU 9 to use
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 cur_dir = os.getcwd()
@@ -60,10 +61,12 @@ def create_cover(request: Request):
         
         logger.info(f"Response status {response.status_code}")
         msg = f'AI 커버 "{coverName}" 제작이 완료되었습니다.'
+        is_success = "true"
 
     except TooLongYoutubeException as e:
         logger.info(f"Youtube error : {e}")
         msg = f'AI 커버 "{coverName}"의 유튜브 영상 길이가 10분이 넘습니다.'
+        is_success = "false"
     
     except (ex.PytubeError,
             ex.MaxRetriesExceeded,
@@ -79,12 +82,17 @@ def create_cover(request: Request):
             ex.VideoRegionBlocked) as e:
         logger.info(f"Youtube error : {e}")
         msg = f'AI 커버 "{coverName}"의 유튜브에 접근할 수 없습니다.'
+        is_success = "false"
     
     except Exception as e:
         logger.info(f"Error occurred: {e}")
         msg = f'AI 커버 "{coverName}" 제작에 실패했습니다.'
+        is_success = "false"
     
     finally:
+        # 커버 생성 여부 전송
+        response = requests.get(f"https://j10e201.p.ssafy.io/api/cover/check/{coverCode}/{is_success}")
+
         # 알림 전송
         sendNotification(userCode, coverCode, msg)
 
@@ -121,4 +129,4 @@ def cover(request: Request, background_tasks: BackgroundTasks):
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app=app, host='0.0.0.0', port=7866)
+    uvicorn.run(app="infer-cover:app", host='0.0.0.0', port=7866, reload=True)

@@ -10,6 +10,7 @@ import requests
 import logging
 
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
@@ -91,14 +92,21 @@ def create_dubbing(request: Request):
         
         logger.info(f"Response status {response.status_code}")
         msg = f'더빙 영상 "{dubName}" 생성이 완료되었습니다.'
+        is_success = "true"
 
     except Exception as e:
         logger.info(f"Error occured: {e}")
         msg = f'더빙 영상 "{dubName}" 생성에 실패했습니다.'
+        is_success = "false"
     
     finally:
+        # 더빙 영상 생성 여부 전송
+        response = requests.get(f"https://j10e201.p.ssafy.io/api/dub/check/{dubCode}/{is_success}")
+
+        # 알림 전송
         sendNotification(userCode, dubCode, msg)
 
+        # 파일 삭제
         if os.path.exists(dub_path):
             shutil.rmtree(dub_path)
             logger.info(f"Remove {dub_path}")
@@ -128,4 +136,4 @@ def create(request: Request, background_tasks: BackgroundTasks):
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app=app, host='0.0.0.0', port=7864)
+    uvicorn.run(app="fast-dubbing:app", host='0.0.0.0', port=7864, reload=True)
