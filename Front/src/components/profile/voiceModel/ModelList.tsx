@@ -7,7 +7,7 @@ import Pagination from "../../common/Pagination";
 
 const CardList = styled.div`
   display: flex;
-  width: 95%;
+  width: 100%;
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 1rem auto;
