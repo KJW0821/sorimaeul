@@ -23,8 +23,8 @@ const getStatusColor = ($isComplete: boolean, $isPublic: boolean = false) => {
 };
 
 const CoverContent = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
-  width: 864px;
-  height: 50px;
+  width: 80%;
+  height: 60px;
   background: ${({ $isComplete, $isPublic }) => getStatusColor($isComplete, $isPublic).main};
   border: 1px solid #A0A0A0;
   border-radius: 10px;
@@ -32,6 +32,7 @@ const CoverContent = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
   align-items: center;
   padding: 0 10px;
   overflow: hidden;
+  margin-bottom: 1%;
 `;
 
 const StatusIndicator = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
@@ -51,9 +52,12 @@ const StatusIndicator = styled.div<{ $isComplete: boolean; $isPublic?: boolean }
 `;
 
 const StatusDescription = styled.span`
-  font-size: 14px;
-  margin-right: auto; 
-
+  font-size: 1rem;
+  margin-right: 1rem; 
+  text-align: center;
+  display: inline-block;
+  width: 60px;
+  min-width: 60px;
 `;
 
 
@@ -69,14 +73,25 @@ const CoverText = styled.p`
   margin: 10px;
   text-overflow: ellipsis;
   max-width: 70%;
+  font-family: 'GmarketSansLight';
 `;
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  // getMonth()는 0부터 시작하므로 +1을 해줍니다.
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  
+  return `${year}.${month}.${day}`;
+}
 
 function CoverBox() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataList, setDataList] = useState<Cover[]>([]);
-  
+
   const getMyAICover = async () => {
     const data = await getMyCovers(page);
     setDataList(data.covers);
@@ -90,37 +105,38 @@ function CoverBox() {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
- 
+
   return (
     <>
-    <MenuDescription bigText={"A"} middleText={"I 커버"} smallText={"내가 만든 AI 커버"} />
-    <CoverContainer>
-      
-    {dataList && dataList.map((cover) => (
-      <CoverContent key={cover.coverCode} $isComplete={cover.isComplete} $isPublic={cover.isPublic}>
-        <StatusIndicator $isComplete={cover.isComplete} $isPublic={cover.isPublic}>
-          <StatusDescription>{cover.isComplete ? (cover.isPublic ? '공개 ' : '비공개') : '변환 중'}</StatusDescription>
-        </StatusIndicator>
-        <CoverInfo>
-          <CoverText > ♪ {cover.coverName} - {cover.coverSinger}</CoverText>
-          <CoverText> (원곡) {cover.title} - {cover.singer} </CoverText>
-          <span>생성일: {cover.createdTime}</span>
-        </CoverInfo>
-        <Button onClick={() => {
-        if (cover.isComplete && cover.isPublic) {
-        // 공개(게시) 상태면 상세 조회 페이지로 이동
-        navigate(`/cover/${cover.coverCode}`);
-        } else {
-        // 공개되지 않은 상태(비공개 또는 변환 중)면 게시 정보 설정 및 확인 페이지로 이동
-        navigate(`/cover/board/${cover.coverCode}`);
-        }
-}}>
-  관리
-</Button>
-      </CoverContent>
-    ))}
-    </CoverContainer>
-    <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#BFEA44" />
+      <MenuDescription bigText={"A"} middleText={"I 커버"} smallText={"내가 만든 AI 커버"} />
+      <CoverContainer>
+
+        {dataList && dataList.map((cover) => (
+          <CoverContent onClick={() => {
+            if (cover.isComplete && cover.isPublic) {
+              // 공개(게시) 상태면 상세 조회 페이지로 이동
+              navigate(`/cover/${cover.coverCode}`);
+            } else {
+              // 공개되지 않은 상태(비공개 또는 변환 중)면 게시 정보 설정 및 확인 페이지로 이동
+              navigate(`/cover/board/${cover.coverCode}`);
+            }
+          }} key={cover.coverCode} $isComplete={cover.isComplete} $isPublic={cover.isPublic}>
+            <StatusIndicator $isComplete={cover.isComplete} $isPublic={cover.isPublic}>
+              <StatusDescription>{cover.isComplete ? (cover.isPublic ? '공개' : '비공개') : '변환중'}</StatusDescription>
+            </StatusIndicator>
+            <CoverInfo>
+              <CoverText> ♪ 커버 제목 : {cover.coverName} - {cover.coverSinger}</CoverText>
+              <CoverText> ◎ 원곡 : {cover.title} - {cover.singer} </CoverText>
+
+              {cover.isComplete ? (<CoverText>생성일: {formatDate(cover.createdTime)}</CoverText>) :
+                (<></>)
+              }
+
+            </CoverInfo>
+          </CoverContent>
+        ))}
+      </CoverContainer>
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#BFEA44" />
 
     </>
   )
