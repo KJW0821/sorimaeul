@@ -170,7 +170,7 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 영상 목록 조회
-    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page, int videoSourceCode) {
+    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, Integer page, int videoSourceCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
