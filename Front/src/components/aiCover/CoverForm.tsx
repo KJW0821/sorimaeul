@@ -200,9 +200,10 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
               checked={uploadType === 'direct'}
               onChange={handleUploadType}
             />
-            직접 유튜브 링크 입력
-
           </label>
+          <span className="mr-5">직접 유튜브 링크 입력</span>
+
+
           <label>
             <input
               type="radio"
@@ -211,8 +212,9 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
               checked={uploadType === 'recommendation'}
               onChange={handleUploadType}
             />
-            추천 목록에서 선택
           </label>
+          <span>추천 목록에서 선택</span>
+
         </RadioGroup>
       </div>
 
@@ -224,9 +226,9 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
             <h3 className="subtitle">Step 2. 원곡 정보 입력</h3>
             <div>
               <label htmlFor="singer" className="thirdtitle" >원곡 가수명</label>
-              <Input type="text" id="singer" name="singer" value={data.singer} onChange={handleChange} placeholder="원곡 가수명을 입력해주세요."/>
+              <Input type="text" id="singer" name="singer" value={data.singer} onChange={handleChange} placeholder="원곡 가수명을 입력해주세요." />
               <label htmlFor="title" className="thirdtitle">원곡 제목</label>
-              <Input type="text" id="title" name="title" value={data.title} onChange={handleChange} placeholder="원곡 제목을 입력해주세요."/>
+              <Input type="text" id="title" name="title" value={data.title} onChange={handleChange} placeholder="원곡 제목을 입력해주세요." />
             </div>
           </Step>
 
@@ -269,7 +271,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
 
       <Step>
         <h3 className="subtitle">Step {baseStepNumber + 2}. 커버 이름 정하기</h3>
-        <Input type="text" id="coverName" name="coverName" value={data.coverName} onChange={handleChange} placeholder="커버 이름을 입력해주세요."/>
+        <Input type="text" id="coverName" name="coverName" value={data.coverName} onChange={handleChange} placeholder="커버 이름을 입력해주세요." />
       </Step>
 
       <div className="w-5/6 flex">
