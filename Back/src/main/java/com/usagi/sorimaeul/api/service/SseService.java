@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class SseService {
