@@ -399,7 +399,7 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 응답 경로 설정
-        String voicePath = "/dub/source_" + videoSourceCode + "/user_" + user.getUserCode() + "/Unconverted/";
+        String voicePath = "/dub/source_" + videoSourceCode + "/user_" + user.getUserCode() + "/unconverted/";
 
         // 폴더 경로 설정
         String folderPath = EC2_BASE_PATH + voicePath;
@@ -413,7 +413,7 @@ public class DubbingServiceImpl implements DubbingService {
             createFolder(folderPath);
 
             // record_1.wav 형식으로 저장
-            String fileName = num + "." + fileExtension;
+            String fileName = num + fileExtension;
             // 파일 생성
             saveFile(folderPath + fileName, recordFile.getBytes());
 
@@ -440,10 +440,10 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 변환된 파일을 저장할 폴더 경로 설정
-        String folderPath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/converted/";
+        String folderPath = "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/converted/";
 
         // 변환된 파일을 저장할 폴더 경로 설정
-        String folderPathUnconverted = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/unconverted/";
+        String folderPathUnconverted = "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/unconverted/";
 
         // 로컬 파일 시스템에서 파일 가져오기
         byte[] fileToSend;
