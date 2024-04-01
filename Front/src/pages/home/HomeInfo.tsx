@@ -10,7 +10,7 @@ const HomeInfo: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="-mt-16">
       <ReactSimplyCarousel
         activeSlideIndex={activeSlideIndex}
         onRequestChange={setActiveSlideIndex}
