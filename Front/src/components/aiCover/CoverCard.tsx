@@ -4,31 +4,36 @@ import styled from 'styled-components';
 import heart from "../../assets/heart.png";
 
 const CardContainer = styled.div`
-  margin-top: 1rem;
-  margin-bottom: -2rem;
-  padding: 7px;
-  width: 250px;
-  height: 250px;
+  width: 280px;
+  height: auto;
   cursor: pointer;
 `;
 
 const ThumbnailImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 250px;
+  height: 250px;
   border-radius: 2px; 
 `;
 
 const Title = styled.h2`
+  max-width: 250px;
   font-size: 1.2rem;
   margin-top: 0.3rem;
   margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Nickname = styled.p`
+  max-width: 240px;
   flex-grow: 1;
   margin-left: 5px;
   font-size: 1rem; 
   color: #575757;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const ProfileLine = styled.div`
@@ -63,7 +68,7 @@ const HeartIcon = styled.img`
 `;
 
 const LikeCount = styled.p`
-  margin-right: 5px;
+  margin-right: 3rem;
   font-size: 1.2rem; 
   margin-top: 1px;
 `;

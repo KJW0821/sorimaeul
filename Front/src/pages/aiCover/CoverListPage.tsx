@@ -34,13 +34,12 @@ const Title = styled.h1`
 `
 
 const Container = styled.div`
-  width: 80%;
-
-  
+  width: 100%;
   .title {
     font-size: 2.5rem;
     font-family: 'GmarketSansBold';
     width: 100%;
+    margin-left: 10rem;
   };
 `
 
@@ -50,21 +49,25 @@ const CoverListContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
+  padding: 0 20px;
+  margin: 3rem 8rem;
+  gap: 20px;
+  max-width: 1600px;
 `
 
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end; 
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
+  margin-right: 10rem;
 `;
 
 const DetailLine = styled.div`
   height: 2px;
-  width: 1370px;
+  width: 1500px;
   background-color: #A3A3A3;
-  margin: 0.5rem 0 3rem 10rem;
+  margin: 0.8rem 0 3rem 10rem;
 `;
 
 // 커버 전체 목록 페이지

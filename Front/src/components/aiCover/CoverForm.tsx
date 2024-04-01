@@ -65,7 +65,7 @@ const RadioGroup = styled.div`
 
 const Input = styled.input`
   border-radius: 5px;
-  width: 38rem;
+  width: 47rem;
   height: 2.75rem;
   padding: 0 1rem;
   outline: none;
@@ -100,12 +100,14 @@ const StepContainer = styled.div`
   display: flex;
   align-items: center; /* 세로 중앙 정렬 */
   gap: 10px; /* 요소 사이의 간격 */
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 `;
 
 const HelpIcon = styled.img`
-  margin-top: 0.1rem;
-  width: 22px;
-  height: 22px;
+  margin-bottom: 0.3rem;
+  width: 18px;
+  height: 18px;
 `;
 
 interface Props {
@@ -256,12 +258,8 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
 
 
       <Step>
-        <StepContainer>
+        
         <h3 className="subtitle">Step {baseStepNumber + 1}. 모델 선택하기</h3> 
-        <Tooltip message={"피치 조절에 대한 설명이 들어갑니다.두 줄이 되면 어떻게 나올지 궁금합니다."}>
-        <HelpIcon src={help} />
-        </Tooltip>
-        </StepContainer>
         
         <label className="thirdtitle" htmlFor="modelCode" >원하는 음성 모델을 선택하고, 알맞게 피치를 조절해주세요.</label>
         <Select name="modelCode" id="modelCode" value={data.modelCode} onChange={handleChange}>
@@ -272,7 +270,15 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
             </Option>
           ))}
         </Select>
-        <label className="text-stone-500" htmlFor="pitch">피치 조절</label>
+        <StepContainer>
+        <label className="text-stone-500" htmlFor="pitch">피치 조절 
+        </label>
+        <Tooltip message={"피치 조절에 대한 설명이 들어갑니다.두 줄이 되면 어떻게 나올지 궁금합니다."}>
+        <HelpIcon src={help} />
+        </Tooltip>
+        
+        </StepContainer>
+        
         <input type="range" id="pitch" name="pitch" value={data.pitch} min={-12} max={12} step={1} list="markers" onChange={handleChange} />
 
         <datalist id="markers">
