@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
+import playBtn from "../../assets/playBlack.png";
+import pauseBtn from "../../assets/pauseBlack.png";
+import prevBtn from "../../assets/prev.png";
+import nextBtn from "../../assets/next.png";
 
 const HeaderPlayer: React.FC = () => {
   const selectedPlaylist = useSelector((state: RootState) => state.playlists.selectedPlaylist);
@@ -76,9 +80,9 @@ const HeaderPlayer: React.FC = () => {
   return (
     <div>
       <div>현재 재생 중: {selectedPlaylist.covers[currentTrackIndex].title}</div>
-      <button onClick={handlePlayPause}>{isPlaying ? "일시 정지" : "재생"}</button>
-      <button onClick={handlePrevTrack}>이전 곡</button>
-      <button onClick={handleNextTrack}>다음 곡</button>
+      <button onClick={handlePlayPause}>{isPlaying ? <img src={pauseBtn} /> : <img src={playBtn} /> }</button>
+      <img src={prevBtn} onClick={handlePrevTrack} />
+      <img src={nextBtn} onClick={handleNextTrack} />
     </div>
   );
 };
