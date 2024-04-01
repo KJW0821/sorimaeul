@@ -5,13 +5,11 @@ import { Cover } from "./CoverInterface";
 const ListContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center; 
-  width: 960px;
-  height: 400px;
-  padding: 80px 0; 
-  gap: 20px;
-  margin-left: auto;
-  margin-right: auto;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  gap: 3rem;
+  margin-left: 15.5rem;
 `;
 
 
@@ -19,7 +17,7 @@ const ListContainer = styled.div`
 interface Props {
   data: Cover[];
 }
-const CoverList: React.FC<Props> = ({
+const PopularCoverList: React.FC<Props> = ({
   data
 }) => {
   return (
@@ -33,4 +31,4 @@ const CoverList: React.FC<Props> = ({
   );
 };
 
-export default CoverList;
+export default PopularCoverList;
