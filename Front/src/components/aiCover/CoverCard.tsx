@@ -8,25 +8,25 @@ const CardContainer = styled.div`
   margin-bottom: -2rem;
   padding: 7px;
   width: 250px;
+  height: 250px;
   cursor: pointer;
 `;
 
 const ThumbnailImage = styled.img`
-  width: 100%; 
-  height: auto; 
+  width: 100%;
+  height: 100%;
   border-radius: 2px; 
 `;
 
 const Title = styled.h2`
   font-size: 1.2rem;
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
   margin-bottom: 0.5rem;
 `;
 
 const Nickname = styled.p`
   flex-grow: 1;
-  margin-left: 10px;
-  margin-top: 0.5rem;
+  margin-left: 5px;
   font-size: 1rem; 
   color: #575757;
 `;
@@ -56,15 +56,16 @@ const LikeContainer = styled.div`
 `;
 
 const HeartIcon = styled.img`
-  margin-right: 10px;
-  width: 24px; 
+  margin-right: 3px;
+  margin-bottom: 5px;
+  width: 25px; 
   height: auto; 
 `;
 
 const LikeCount = styled.p`
-  margin-right: 10px;
-  font-size: 1.4rem; 
-  margin-top: 4px;
+  margin-right: 5px;
+  font-size: 1.2rem; 
+  margin-top: 1px;
 `;
 
 const SongInfo = styled.p`

@@ -278,7 +278,7 @@ const CoverDetailPage: React.FC = () => {
           <ContentContainer>
             <MediaSection>
               <ThumbnailContainer>
-                <Thumbnail src={`${baseURL}${data.profileImage}`}alt="Cover Thumbnail" />
+                <Thumbnail src={`${baseURL}${data.thumbnailPath}`}alt="Cover Thumbnail" />
               </ThumbnailContainer>
               <div>
 
