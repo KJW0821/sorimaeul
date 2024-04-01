@@ -56,7 +56,7 @@ public class ModelServiceImpl implements ModelService {
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // 모델 테이블 생성
-        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0,
+        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0, , isSuccess 기본값 false
         // record_count = null, created_time = now()
         VoiceModel voiceModel = VoiceModel.builder()
                 .modelName(request.getModelName())
@@ -519,6 +519,20 @@ public class ModelServiceImpl implements ModelService {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+
+    // 모델 생성 성공 여부 확인
+    public ResponseEntity<String> checkModelCreate(int modelCode, Boolean isSuccess) {
+        // 모델 코드로 모델 찾기
+        if (!isSuccess) {
+            voiceModelRepository.deleteById(modelCode);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("모델 생성에 실패하였습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body("모델 생성에 성공하였습니다.");
+        }
+
+    }
+
 
 
     // 녹음 문장 개수(record_count) 갱신

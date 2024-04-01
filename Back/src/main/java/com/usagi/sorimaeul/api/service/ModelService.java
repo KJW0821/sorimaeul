@@ -30,4 +30,6 @@ public interface ModelService {
 
     ResponseEntity<GetScriptResponse> getScript(long userCode);
 
+    ResponseEntity<String> checkModelCreate(int modelCode, Boolean isSuccess);
+
 }
