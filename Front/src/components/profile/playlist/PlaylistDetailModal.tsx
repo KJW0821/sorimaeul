@@ -131,7 +131,7 @@ export interface CoverInfo {
   isPublic: boolean;
 }
 
-interface PlaylistDetailInterface {
+export interface PlaylistDetailInterface {
   playlist: CoverInfo[];
 }
 
