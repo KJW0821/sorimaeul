@@ -12,6 +12,7 @@ import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -349,7 +350,7 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        List<CoverSource> coverSources = coverSourceRepository.findAll();
+        List<CoverSource> coverSources = coverSourceRepository.findAll(Sort.by("singer", "title"));
         List<CoverSourceInfoDto> coverSourceInfoDtos = new ArrayList<>();
         for (CoverSource coverSource : coverSources) {
             CoverSourceInfoDto coverSourceInfoDto = CoverSourceInfoDto.builder()
