@@ -141,3 +141,13 @@ export const getMyDubbings = () => {
     .then(res => res.data.dubbings)
     .catch(err => console.error(err))
 };
+
+export const getLikedDubbings = () => {
+  return API.get(URL, {
+    params: {
+      target: 'like',
+    }
+  })
+    .then(res => res.data.dubbings)
+    .catch(err => console.error(err))
+};
