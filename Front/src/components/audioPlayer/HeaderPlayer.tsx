@@ -56,6 +56,17 @@ const HeaderPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+  const {modalType, isOpen} = useSelector((state: RootState) => state.modal);
+
+  useEffect(() => {
+    if ((modalType === 'playlistdetail' || modalType === 'playlistheader') && isOpen) {
+      if (audio) {
+        audio.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [modalType, isOpen, audio]);
+
 
   useEffect(() => {
     // 선택된 플레이리스트 변경 시 오디오 초기화
@@ -68,6 +79,7 @@ const HeaderPlayer: React.FC = () => {
       setAudio(newAudio);
       setIsPlaying(false);
     }
+    
   }, [selectedPlaylist]);
 
   useEffect(() => {
