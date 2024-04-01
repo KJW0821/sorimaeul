@@ -456,7 +456,7 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 읽는 중 오류가 발생했습니다.");
         }
         // 미변환 음성 파일 S3에 저장하기
-        s3Service.saveByteToS3(folderPathUnconverted + voiceIndex + ".wav", fileToSend);
+        s3Service.saveByteToS3(folderPathUnconverted.substring(1) + voiceIndex + ".wav", fileToSend);
 
         // 최대 버퍼 크기를 16MB로 설정
         int bufferSize = 16 * 1024 * 1024;
@@ -499,7 +499,7 @@ public class DubbingServiceImpl implements DubbingService {
         // 변환된 파일을 s3에 저장
         String fileName = voiceIndex + ".wav";
         byte[] convertedFileBytes = responseFile.block();
-        s3Service.saveByteToS3(folderPath + fileName, convertedFileBytes);
+        s3Service.saveByteToS3(folderPath.substring(1) + fileName, convertedFileBytes);
 
         DubbingRecordConvertResponse response = DubbingRecordConvertResponse.builder()
                 .voicePath(folderPath+fileName)
