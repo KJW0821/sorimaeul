@@ -152,4 +152,15 @@ public class ModelController {
         return modelService.getScript(userCode);
     }
 
+
+    @Operation(summary = "모델 생성 성공 여부 확인", description = "모델 생성 성공 여부를 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모델 생성 성공!"),
+            @ApiResponse(responseCode = "204", description = "모델 생성 실패!")
+    })
+    @GetMapping("/check/{modelCode}/{isSuccess}")
+    public ResponseEntity<String> checkModelCreate(@PathVariable int modelCode, @PathVariable Boolean isSuccess) {
+        return modelService.checkModelCreate(modelCode, isSuccess);
+    }
+
 }

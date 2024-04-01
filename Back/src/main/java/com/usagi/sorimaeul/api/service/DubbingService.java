@@ -17,7 +17,7 @@ public interface DubbingService {
 
     ResponseEntity<Resource> getSourceVideo(long userCode, int videoSourceCode);
 
-    ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page, int videoSourceCode);
+    ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, Integer page, Integer videoSourceCode);
 
     ResponseEntity<DubbingDetailResponse> getDubbingDetail(long userCode, int dubCode);
 
@@ -29,7 +29,9 @@ public interface DubbingService {
 
     ResponseEntity<VideoSourceVoiceResponse> getVideoSourceVoice(long userCode, int videoSourceCode);
 
-    ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
+    ResponseEntity<?> uploadDubbingRecord(long userCode, int num, int videoSourceCode, MultipartFile recordFile);
 
     ResponseEntity<?> convertDubbingRecord(long userCode, int voiceIndex, DubbingRecordConvertRequest request);
+
+    ResponseEntity<String> checkDubbingCreate(int dubCode, Boolean isSuccess);
 }

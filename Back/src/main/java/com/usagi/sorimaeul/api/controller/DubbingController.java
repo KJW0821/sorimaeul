@@ -45,7 +45,7 @@ public class DubbingController {
             @ApiResponse(responseCode = "400", description = "더빙 영상 S3 저장 실패")
     })
     @PostMapping("/save")
-    public ResponseEntity<?> saveDubbing(DubbingSaveRequest request) {
+    public ResponseEntity<?> saveDubbing(@RequestBody DubbingSaveRequest request) {
         // 유저 코드 받아오기
         return dubbingService.saveDubbing(request);
     }
@@ -86,8 +86,8 @@ public class DubbingController {
     public ResponseEntity<DubbingListResponse> getDubbingList(@RequestHeader("Authorization") String token,
                                                               @RequestParam String target,
                                                               @RequestParam(required = false) String keyword,
-                                                              @RequestParam(required = false) int page,
-                                                              @RequestParam(required = true) int videoSourceCode
+                                                              @RequestParam(required = false) Integer page,
+                                                              @RequestParam(required = false) Integer videoSourceCode
     ) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingList(userCode, target, keyword, page, videoSourceCode);
@@ -152,24 +152,14 @@ public class DubbingController {
             @ApiResponse(responseCode = "200", description = "더빙 영상 녹음 업로드 성공",
                     content = @Content(schema = @Schema(implementation = DubbingRecordResponse.class))),
             @ApiResponse(responseCode = "400", description = "더빙 영상 녹음 업로드 실패")})
-    @PostMapping("/record/{num}")
+    @PostMapping("/record/{videoSourceCode}/{num}")
     public ResponseEntity<?> uploadDubbingRecord(@RequestHeader("Authorization") String token,
                                                  @PathVariable int num,
-                                                 @RequestParam("request") String requestJson,
+                                                 @PathVariable int videoSourceCode,
                                                  @RequestParam("recordFile") MultipartFile recordFile) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
 
-        DubbingRecordRequest request;
-        try {
-            // JSON 문자열을 객체로 변환
-            request = new ObjectMapper().readValue(requestJson, DubbingRecordRequest.class);
-        } catch (JsonProcessingException e) {
-            // JSON 파싱 중 발생한 예외를 처리
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("JSON 파싱 오류: " + e.getMessage());
-        }
-
-        return dubbingService.uploadDubbingRecord(userCode, num, request, recordFile);
+        return dubbingService.uploadDubbingRecord(userCode, num, videoSourceCode, recordFile);
     }
 
     @Operation(summary = "더빙 음성 변환", description = "더빙 음성을 변환한다.")
@@ -183,5 +173,16 @@ public class DubbingController {
                                                   @RequestBody DubbingRecordConvertRequest request) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.convertDubbingRecord(userCode, voiceIndex, request);
+    }
+
+
+    @Operation(summary = "더빙 생성 성공 여부 확인", description = "더빙 생성 성공 여부를 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 생성 성공!"),
+            @ApiResponse(responseCode = "204", description = "더빙 생성 실패!")
+    })
+    @GetMapping("/check/{dubCode}/{isSuccess}")
+    public ResponseEntity<String> checkDubbingCreate(@PathVariable int dubCode, @PathVariable Boolean isSuccess) {
+        return dubbingService.checkDubbingCreate(dubCode, isSuccess);
     }
 }

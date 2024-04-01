@@ -9,6 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class DubbingRecordConvertResponse {
 
-    public int voiceSourceCode;
     public String voicePath;
 }

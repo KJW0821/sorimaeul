@@ -170,7 +170,7 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 영상 목록 조회
-    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, int page, int videoSourceCode) {
+    public ResponseEntity<DubbingListResponse> getDubbingList(long userCode, String target, String keyword, Integer page, Integer videoSourceCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -183,17 +183,24 @@ public class DubbingServiceImpl implements DubbingService {
         int startIdx = 0;
         int endIdx = 0;
         // 총 페이지 수 선언
-        int totalPages = 0;
+        int totalPages = 1;
 
         // 모든 게시물 조회 - 더빙 학원에서만 ( 키워드 검색 없음 )
         if (target.equals("all")) {
             dubbings = dubbingRepository.findByIsCompleteAndIsPublicAndVideoSource_videoSourceCodeOrderByCreatedTimeDesc(true, true, videoSourceCode);
 
-            // 한 페이지 당 8개씩 조회
-            startIdx = (page - 1) * 8;
-            endIdx = Math.min(startIdx + 8, dubbings.size());
-            // // 총 페이지 수 계산
-            totalPages = (int) Math.ceil((double) dubbings.size() / 10);
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 10개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
+                startIdx = Math.min((page - 1) * 8, dubbings.size()) / 8 * 8;
+                endIdx = Math.min(startIdx + 8, dubbings.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = dubbings.size();
+            }
+            // 총 페이지 수 계산
+            totalPages = (int) Math.ceil((double) dubbings.size() / 8);
         }
 
         // 마이 페이지 - 나의 게시물 조회 ( 키워드 검색 가능 )
@@ -206,9 +213,16 @@ public class DubbingServiceImpl implements DubbingService {
             else {
                 dubbings = dubbingRepository.findByUser_userCodeAndDubNameContainingOrderByCreatedTimeDesc(userCode, keyword);
             }
-
-            startIdx = (page - 1) * 6;
-            endIdx = Math.min(startIdx + 6, dubbings.size());
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
+                startIdx = Math.min((page - 1) * 6, dubbings.size()) / 6 * 6;
+                endIdx = Math.min(startIdx + 6, dubbings.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = dubbings.size();
+            }
             // // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) dubbings.size() / 6);
         }
@@ -224,10 +238,17 @@ public class DubbingServiceImpl implements DubbingService {
                     dubbings.add(dubbing);
                 }
             }
-            // 한 페이지 당 6개 조회
-            startIdx = (page - 1) * 6;
-            endIdx = Math.min(startIdx + 6, dubbings.size());
-            // 총 페이지 수 계산
+            // page 가 null 이 아니면
+            if (page != null) {
+                // 한 페이지 당 6개씩 조회, 초과 페이지 요청시 마지막 페이지 조회
+                startIdx = Math.min((page - 1) * 6, dubbings.size()) / 6 * 6;
+                endIdx = Math.min(startIdx + 6, dubbings.size());
+            }
+            // page 가 null 이면 전체 조회
+            else {
+                endIdx = dubbings.size();
+            }
+            // // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) dubbings.size() / 6);
         }
 
@@ -236,8 +257,6 @@ public class DubbingServiceImpl implements DubbingService {
             // 좋아요 수를 기준으로 상위 5개 항목을 가져온다.
             dubbings = dubbingRepository.findTop5ByVideoSource_videoSourceCodeAndIsCompleteAndIsPublicOrderByLikeCountDesc(videoSourceCode, true, true);
             endIdx = dubbings.size();
-            // // 총 페이지 수 계산
-            totalPages = 1;
         }
 
 
@@ -248,6 +267,7 @@ public class DubbingServiceImpl implements DubbingService {
             // Dto 에 담기
             DubbingInfoDto dubbingInfoDto = DubbingInfoDto.builder()
                     .dubCode(dubbing.getDubCode())
+                    .videoSourceCode(dubbing.getVideoSource().getVideoSourceCode())
                     .dubName(dubbing.getDubName())
                     .isPublic(dubbing.getIsPublic())
                     .isComplete(dubbing.getIsComplete())
@@ -255,6 +275,7 @@ public class DubbingServiceImpl implements DubbingService {
                     .likeCount(dubbing.getLikeCount())
                     .nickname(dubbing.getUser().getNickname())
                     .profileImage(dubbing.getUser().getProfileImage())
+                    .createdTime(dubbing.getCreatedTime())
                     .build();
 
             // customDubbings에 담기
@@ -292,6 +313,8 @@ public class DubbingServiceImpl implements DubbingService {
                 .storagePath(dubbing.getStoragePath())
                 .thumbnailPath(dubbing.getVideoSource().getThumbnailPath())
                 .isLiked(isLiked)
+                .isPublic(dubbing.getIsPublic())
+                .isComplete(dubbing.getIsComplete())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -335,7 +358,6 @@ public class DubbingServiceImpl implements DubbingService {
         // 더빙 영상 등록/수정
         dubbing.setDubName(request.getDubName());
         dubbing.setDubDetail(request.getDubDetail());
-        dubbing.setVideoSource(videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode()));
         dubbing.setIsPublic(request.getIsPublic());
         dubbingRepository.save(dubbing);
 
@@ -389,7 +411,7 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 음성 녹음 업로드
-    public ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile) {
+    public ResponseEntity<?> uploadDubbingRecord(long userCode, int num, int videoSourceCode, MultipartFile recordFile) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
@@ -397,17 +419,21 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 응답 경로 설정
-        String voicePath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/Unconverted/";
+        String voicePath = "/dub/source_" + videoSourceCode + "/user_" + user.getUserCode() + "/unconverted/";
 
         // 폴더 경로 설정
-        String folderPath = EC2_BASE_PATH + "/" + voicePath;
+        String folderPath = EC2_BASE_PATH + voicePath;
+
+        // 원본 파일명
+        String originName = recordFile.getOriginalFilename();
+        String fileExtension = originName.substring(originName.lastIndexOf("."));
 
         try {
             // 폴더 생성
             createFolder(folderPath);
 
             // record_1.wav 형식으로 저장
-            String fileName = num + ".wav";
+            String fileName = num + fileExtension;
             // 파일 생성
             saveFile(folderPath + fileName, recordFile.getBytes());
 
@@ -434,10 +460,10 @@ public class DubbingServiceImpl implements DubbingService {
         }
 
         // 변환된 파일을 저장할 폴더 경로 설정
-        String folderPath = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/converted/";
+        String folderPath = "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/converted/";
 
         // 변환된 파일을 저장할 폴더 경로 설정
-        String folderPathUnconverted = "dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/unconverted/";
+        String folderPathUnconverted = "/dub/source_" + request.getVideoSourceCode() + "/user_" + user.getUserCode() + "/unconverted/";
 
         // 로컬 파일 시스템에서 파일 가져오기
         byte[] fileToSend;
@@ -450,7 +476,7 @@ public class DubbingServiceImpl implements DubbingService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일을 읽는 중 오류가 발생했습니다.");
         }
         // 미변환 음성 파일 S3에 저장하기
-        s3Service.saveByteToS3(folderPathUnconverted + voiceIndex + ".wav", fileToSend);
+        s3Service.saveByteToS3(folderPathUnconverted.substring(1) + voiceIndex + ".wav", fileToSend);
 
         // 최대 버퍼 크기를 16MB로 설정
         int bufferSize = 16 * 1024 * 1024;
@@ -493,20 +519,10 @@ public class DubbingServiceImpl implements DubbingService {
         // 변환된 파일을 s3에 저장
         String fileName = voiceIndex + ".wav";
         byte[] convertedFileBytes = responseFile.block();
-        s3Service.saveByteToS3(folderPath + fileName, convertedFileBytes);
-
-        VoiceSource voiceSource = VoiceSource.builder()
-                .videoSource(videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode()))
-                .voiceModel(voiceModelRepository.findByModelCode(request.getModelCode()))
-                .voicePath(folderPath + fileName)
-                .voiceIndex(voiceIndex)
-                .build();
-
-        voiceSourceRepository.save(voiceSource);
+        s3Service.saveByteToS3(folderPath.substring(1) + fileName, convertedFileBytes);
 
         DubbingRecordConvertResponse response = DubbingRecordConvertResponse.builder()
-                .voiceSourceCode(voiceSource.getVoiceSourceCode()) // 변환된 파일이 저장된 테이블 번호
-                .voicePath(voiceSource.getVoicePath())
+                .voicePath(folderPath+fileName)
                 .build();
 
         return ResponseEntity.ok(response);
@@ -525,6 +541,9 @@ public class DubbingServiceImpl implements DubbingService {
 
         dubbingRepository.save(dubbing);
 
+        // 음성 제거된 영상 경로
+        String videoPath = "/dub/source_" + request.getVideoSourceCode() + "/origin/video/videoNoVoice.mp4";
+
         // 더빙 영상 제작 요청 보내기 Python 서버로
         WebClient client = WebClient.create("https://j10e201.p.ssafy.io");
 
@@ -532,7 +551,7 @@ public class DubbingServiceImpl implements DubbingService {
                 .userCode(userCode)
                 .dubCode(dubbing.getDubCode())
                 .dubName(dubbing.getDubName())
-                .videoURL(videoSource.getStoragePath())
+                .videoURL(videoPath)
                 .voiceURL(request.getVoicePaths())
                 .build();
 
@@ -559,7 +578,7 @@ public class DubbingServiceImpl implements DubbingService {
 
         Dubbing dubbing = dubbingRepository.findByDubCode(request.getDubCode());
 
-        String savePath = "dub/source_" + dubbing.getVideoSource().getVideoSourceCode() + "/dub_" + dubbing.getDubCode() + "dub_" + dubbing.getDubCode() + ".mp4";
+        String savePath = "dub/source_" + dubbing.getVideoSource().getVideoSourceCode() + "/dub_" + dubbing.getDubCode() + "/dub_" + dubbing.getDubCode() + ".mp4";
         // 로컬 파일 시스템에서 파일 가져오기
         byte[] fileToSave;
         Path path;
@@ -574,7 +593,24 @@ public class DubbingServiceImpl implements DubbingService {
         // 더빙 영상 S3에 저장하기
         s3Service.saveByteToS3(savePath, fileToSave);
 
+        dubbing.setStoragePath("/" + savePath);
+        dubbing.setIsComplete(true);
+        dubbingRepository.save(dubbing);
+
         return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
+    }
+
+
+    // 더빙 생성 성공 여부 확인
+    public ResponseEntity<String> checkDubbingCreate(int dubCode, Boolean isSuccess) {
+        if (!isSuccess) {
+            dubbingRepository.deleteById(dubCode);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("더빙 생성에 실패했습니다.");
+        } else {
+            Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+            dubbing.setIsComplete(true);
+            return ResponseEntity.status(HttpStatus.OK).body("더빙 생성에 성공했습니다.");
+        }
     }
 }
 

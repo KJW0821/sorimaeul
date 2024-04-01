@@ -29,7 +29,7 @@ public class FileUtil {
 
 
     // 허용된 확장자 여부 확인
-    public static final List<String> ALLOWED_EXTENSIONS_AUDIO = Arrays.asList("mp3", "m4a", "wav", "flac", "aac", "aiff");
+    public static final List<String> ALLOWED_EXTENSIONS_AUDIO = Arrays.asList("mp3", "m4a", "wav");
 
     public static final List<String> ALLOWED_EXTENSIONS_MODEL = Arrays.asList("pth", "index");
 
