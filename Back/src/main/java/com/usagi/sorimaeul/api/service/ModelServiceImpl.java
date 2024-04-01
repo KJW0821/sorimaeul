@@ -361,8 +361,8 @@ public class ModelServiceImpl implements ModelService {
             // dto 로 변환
             List<ModelInfoDto> myModelDtos = modelListToDto(myModelList, true, false);
             // 페이지네이션
-            int startIdx = (page - 1) * 4;
-            int endIdx = Math.min(startIdx + 4, myModelList.size());
+            int startIdx = (page - 1) * 6;
+            int endIdx = Math.min(startIdx + 6, myModelList.size());
             mergedModelDtos = myModelDtos.subList(startIdx, endIdx);
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) myModelList.size() / 6);
