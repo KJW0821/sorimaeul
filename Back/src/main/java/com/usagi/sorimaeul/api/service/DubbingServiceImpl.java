@@ -520,6 +520,9 @@ public class DubbingServiceImpl implements DubbingService {
 
         dubbingRepository.save(dubbing);
 
+        // 음성 제거된 영상 경로
+        String videoPath = "/dub/source_" + request.getVideoSourceCode() + "/origin/video/videoNoVoice.mp4";
+
         // 더빙 영상 제작 요청 보내기 Python 서버로
         WebClient client = WebClient.create("https://j10e201.p.ssafy.io");
 
@@ -527,7 +530,7 @@ public class DubbingServiceImpl implements DubbingService {
                 .userCode(userCode)
                 .dubCode(dubbing.getDubCode())
                 .dubName(dubbing.getDubName())
-                .videoURL(videoSource.getStoragePath())
+                .videoURL(videoPath)
                 .voiceURL(request.getVoicePaths())
                 .build();
 
