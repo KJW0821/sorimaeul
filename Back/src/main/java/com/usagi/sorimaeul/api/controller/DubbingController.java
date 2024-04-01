@@ -45,7 +45,7 @@ public class DubbingController {
             @ApiResponse(responseCode = "400", description = "더빙 영상 S3 저장 실패")
     })
     @PostMapping("/save")
-    public ResponseEntity<?> saveDubbing(DubbingSaveRequest request) {
+    public ResponseEntity<?> saveDubbing(@RequestBody DubbingSaveRequest request) {
         // 유저 코드 받아오기
         return dubbingService.saveDubbing(request);
     }
