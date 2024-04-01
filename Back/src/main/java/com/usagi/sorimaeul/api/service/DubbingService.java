@@ -32,4 +32,6 @@ public interface DubbingService {
     ResponseEntity<?> uploadDubbingRecord(long userCode, int num, DubbingRecordRequest request, MultipartFile recordFile);
 
     ResponseEntity<?> convertDubbingRecord(long userCode, int voiceIndex, DubbingRecordConvertRequest request);
+
+    ResponseEntity<String> checkDubbingCreate(int dubCode, Boolean isSuccess);
 }
