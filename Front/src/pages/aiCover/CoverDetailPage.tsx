@@ -278,7 +278,7 @@ const CoverDetailPage: React.FC = () => {
           <ContentContainer>
             <MediaSection>
               <ThumbnailContainer>
-                <Thumbnail src={`${baseURL}${data.thumbnailPath}`} alt="Cover Thumbnail" />
+                <Thumbnail src={`${baseURL}${data.profileImage}`}alt="Cover Thumbnail" />
               </ThumbnailContainer>
               <div>
 
@@ -288,7 +288,7 @@ const CoverDetailPage: React.FC = () => {
             <InfoSection>
               <InfoBox>
                 <Profile >
-                  <ProfileImage src="" alt="Creator Profile Image" />
+                  <ProfileImage src={`${baseURL}${data.profileImage}`} alt="Creator Profile Image" />
                   <p className="nickname"> {data.nickname} </p>
                 </Profile>
                 <DetailLine />

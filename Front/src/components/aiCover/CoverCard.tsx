@@ -90,14 +90,15 @@ const CoverCard: React.FC<Props> = ({
 }) => {
   const { coverCode, coverName, thumbnailPath, profileImage, nickname, likeCount, coverSinger, singer, title } = cover;
   const navigate = useNavigate();
+  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   return (
   <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
-      <ThumbnailImage src={thumbnailPath} alt={title} />
+      <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
       <Title>{coverName}</Title>
       <ProfileLine>
         <ProfileInfo>
-          <ProfileImage src={profileImage} />
+          <ProfileImage src={`${baseURL}${profileImage}`} />
           <Nickname>{nickname}</Nickname>
         </ProfileInfo>
         <LikeContainer>
