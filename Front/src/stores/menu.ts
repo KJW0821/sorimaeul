@@ -4,10 +4,12 @@ type MenuItem = "나의 음성 모델" | "더빙 컨텐츠" | "AI 커버" | "관
 
 export interface MenuState {
   selectedMenu: MenuItem;
+  likeType: string; 
 }
 
 const initialState: MenuState = {
-  selectedMenu: "나의 음성 모델"
+  selectedMenu: "나의 음성 모델",
+  likeType: "더빙"
 }
 
 export const menuSlice = createSlice({
@@ -16,9 +18,12 @@ export const menuSlice = createSlice({
   reducers: {
     setSelectedMenu(state, action) {
       state.selectedMenu = action.payload;
+    },
+    setLikeType(state, action) {
+      state.likeType = action.payload;
     }
   }
 });
 
-export const { setSelectedMenu } = menuSlice.actions;
+export const { setSelectedMenu, setLikeType } = menuSlice.actions;
 export default menuSlice.reducer;
