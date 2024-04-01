@@ -11,7 +11,7 @@ const PlaylistMenuBox = styled.div`
   font-size: 1.6rem;
   display: flex;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   padding: 0.3rem;
   border: 1px solid black;
   border-radius: 5px;
@@ -25,16 +25,16 @@ const PlaylistMenuBox = styled.div`
 
 const ScrollableList = styled.div`
   overflow-y: auto;
-  max-height: 200px; 
-  background: white;
+  max-height: 150px; 
   border-radius: 5px;
 `;
 
 const PlaylistItem = styled.div`
   display: flex;
-  justify-content: space-between; // 항목을 양 끝으로 정렬
+  justify-content: space-between; 
   align-items: center;
-  border-bottom: 1px solid #cccccc; // border-gray-200 대신 사용
+  border-bottom: 1px solid #cccccc; 
+  background-color: white;
   padding: 10px;
 `;
 
@@ -101,7 +101,7 @@ const PlaylistSelect: React.FC<PlaylistSelectProps> = ({ onPlaylistSelect }) => 
       </PlaylistMenuBox>
       {isOpen && (<ScrollableList>
          {covers && covers.map((playlist) => (
-          <PlaylistItem key={playlist.playlistCode} className="border-b border-gray-200"
+          <PlaylistItem key={playlist.playlistCode}
             onClick={() => handelSelect(playlist.playlistCode, playlist.playlistName)}>
 
             <span className="mt-2">{playlist.playlistName}</span>
