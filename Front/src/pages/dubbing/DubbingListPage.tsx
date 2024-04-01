@@ -1,14 +1,22 @@
-import { useEffect, useState } from "react";
-import { getSourceVideoList, getPopularSourceVideoList } from "../../utils/dubbingAPI";
-import styled from "styled-components";
-import DubbingSourceCard from "../../components/dubbing/contentList/DubbingSourceCard";
-import Pagination from "../../components/common/Pagination";
-import HotDubbingSourceCard from "../../components/dubbing/contentList/HotDubbingSourceCard";
+import { useEffect, useState } from 'react';
+import {
+  getSourceVideoList,
+  getPopularSourceVideoList,
+} from '../../utils/dubbingAPI';
+import styled from 'styled-components';
+import DubbingSourceCard from '../../components/dubbing/contentList/DubbingSourceCard';
+import Pagination from '../../components/common/Pagination';
+import HotDubbingSourceCard from '../../components/dubbing/contentList/HotDubbingSourceCard';
 
 const ColorBlock = styled.div`
   width: 100%;
   height: 11rem;
-  background: linear-gradient(90deg, rgba(253, 255, 0, 0.7) 0%, rgba(99, 218, 255, 0.7) 100%), #26BA28;
+  background: linear-gradient(
+      90deg,
+      rgba(253, 255, 0, 0.7) 0%,
+      rgba(99, 218, 255, 0.7) 100%
+    ),
+    #26ba28;
   display: flex;
   align-items: center;
   margin-bottom: 2rem;
@@ -18,14 +26,14 @@ const ColorBlock = styled.div`
     color: white;
     margin-bottom: 0.5rem;
   }
-`
+`;
 
 const Title = styled.h1`
-  font-family: "PyeongChangPeace-Bold";
+  font-family: 'PyeongChangPeace-Bold';
   font-size: 4rem;
   color: rgba(255, 255, 255, 0.5);
   -webkit-text-stroke: 1px white;
-`
+`;
 
 const ContentList = styled.div`
   display: flex;
@@ -39,7 +47,7 @@ const ContentList = styled.div`
   & > div:last-child {
     margin-right: auto;
   }
-`
+`;
 
 const HotContentsContainer = styled.div`
   width: 100%;
@@ -89,15 +97,15 @@ const HotContentsContainer = styled.div`
     display: none;
   }
 
-  @keyframes loop{
+  @keyframes loop {
     from {
-      transform: translateX(0); 
+      transform: translateX(0);
     }
     to {
       transform: translateX(-100%);
     }
   }
-`
+`;
 
 export interface VideoData {
   videoSourceCode: number;
@@ -128,11 +136,11 @@ function DubbingListPage() {
 
   useEffect(() => {
     getSourceVideos();
-  }, [page])
+  }, [page]);
 
   useEffect(() => {
     getHotVideos();
-  }, [])
+  }, []);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -141,7 +149,7 @@ function DubbingListPage() {
   return (
     <>
       <ColorBlock>
-        <div className="flex ml-32 items-end gap-4">  
+        <div className="flex ml-32 items-end gap-4">
           <Title>더빙 극장</Title>
           <p className="description">영상을 선택한 후, 직접 더빙해보세요!</p>
         </div>
@@ -155,12 +163,18 @@ function DubbingListPage() {
             ))}
           </div>
           <div className="video-box">
-            {
-              hotVideoList && 
-              [...hotVideoList, ...hotVideoList.slice(0, 2), ...hotVideoList, ...hotVideoList.slice(0, 2)].map((data, idx) => (
-                <HotDubbingSourceCard key={data.videoSourceCode + idx*100} data={data} />
-              ))
-            }
+            {hotVideoList &&
+              [
+                ...hotVideoList,
+                ...hotVideoList.slice(0, 2),
+                ...hotVideoList,
+                ...hotVideoList.slice(0, 2),
+              ].map((data, idx) => (
+                <HotDubbingSourceCard
+                  key={data.videoSourceCode + idx * 100}
+                  data={data}
+                />
+              ))}
           </div>
           <div className="line">
             {[...new Array(70)].map((_, idx) => (
@@ -170,16 +184,19 @@ function DubbingListPage() {
         </div>
       </HotContentsContainer>
       <ContentList>
-        {
-          videoList &&
+        {videoList &&
           videoList.map((data) => (
             <DubbingSourceCard key={data.videoSourceCode} data={data} />
-          ))
-        }
+          ))}
       </ContentList>
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#26BA28" />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        color="#26BA28"
+      />
     </>
-  )
+  );
 }
 
 export default DubbingListPage;
