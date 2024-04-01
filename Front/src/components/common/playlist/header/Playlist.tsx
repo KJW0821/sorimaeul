@@ -6,25 +6,32 @@ import { RootState } from '../../../../stores/store';
 import HeaderPlayer from '../../../audioPlayer/HeaderPlayer';
 
 const PlaylistComponent = styled.div`
+  display: flex;
   box-sizing: border-box;
   border: 1px dashed #000000;
   border-radius: 50px;
-  padding: 20px; 
+  padding: 1rem; 
   margin: 20px; 
   margin-left: auto;
-  width: 450px; 
+  width: 600px; 
   height: 55px; 
   right: 0;
 
   .list-icon {
-    margin-bottom: 10px;
+    width: 10%;
+    height: 100%;
   }
+`;
+
+const HeaderPlayerContainer = styled.div`
+  width: 88%;
+  margin-left: auto;
 `;
 
 
 const Playlist: React.FC = () => {
   const dispatch = useDispatch();
-  const selectedPlaylist =  useSelector((state: RootState) => state.playlists.selectedPlaylist);
+  const selectedPlaylist = useSelector((state: RootState) => state.playlists.selectedPlaylist);
 
   const openPlaylistHeaderModal = () => {
     dispatch(openModal({
@@ -32,16 +39,12 @@ const Playlist: React.FC = () => {
     }));
   };
 
-  // 더미 데이터
-  // const songs = [
-  //   { title: "노래 제목 1", artist: "가수명 1" },
-
-  // ];
-
   return (
     <PlaylistComponent>
       <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
-      <HeaderPlayer></HeaderPlayer>
+      <HeaderPlayerContainer>
+        <HeaderPlayer/>
+      </HeaderPlayerContainer>
     </PlaylistComponent>
   );
 };
