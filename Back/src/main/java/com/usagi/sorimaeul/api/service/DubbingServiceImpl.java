@@ -248,6 +248,7 @@ public class DubbingServiceImpl implements DubbingService {
             // Dto 에 담기
             DubbingInfoDto dubbingInfoDto = DubbingInfoDto.builder()
                     .dubCode(dubbing.getDubCode())
+                    .videoSourceCode(dubbing.getVideoSource().getVideoSourceCode())
                     .dubName(dubbing.getDubName())
                     .isPublic(dubbing.getIsPublic())
                     .isComplete(dubbing.getIsComplete())
