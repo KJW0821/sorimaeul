@@ -8,7 +8,7 @@ import coverBg from "../../assets/coverBg.png";
 
 const Container = styled.div`
 background: url(${coverBg});
-height: 100%;
+height: 100vh;
 background-size: cover;
 display: flex;
 justify-content: center;
