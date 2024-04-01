@@ -56,7 +56,7 @@ public class ModelServiceImpl implements ModelService {
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // 모델 테이블 생성
-        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0,
+        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0
         // record_count = null, created_time = now()
         VoiceModel voiceModel = VoiceModel.builder()
                 .modelName(request.getModelName())
@@ -140,8 +140,8 @@ public class ModelServiceImpl implements ModelService {
         VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
         if (voiceModel.getUser() != user)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("타인의 모델에는 접근할 수 없습니다.");
-        // 학습 상태가 '녹음중'일 때만 학습 가능
-        if (voiceModel.getState() != 0) {
+        // 학습 상태가 '녹음중', '학습전'일 때만 학습 가능
+        if (voiceModel.getState() > 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("녹음중 단계일 때만 업로드 가능합니다.");
         }
         // 모델 학습 가능 횟수 검사
@@ -233,18 +233,28 @@ public class ModelServiceImpl implements ModelService {
             }
         }
 
+
+
         // GPU 서버에 모델 업로드 요청 보내기
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", modelFiles[0].getResource());
-        WebClient.create("http://222.107.238.124:7865")
-                .post()
-                .uri("/model/" + modelCode)
-                .body(BodyInserters.fromMultipartData(builder.build()))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            WebClient.create("http://222.107.238.124:7865")
+                    .post()
+                    .uri("/model/" + modelCode)
+                    .body(BodyInserters.fromMultipartData(builder.build()))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
+            // state = 3 : '학습완료'로 DB 갱신
+            voiceModel.setState(3);
+            voiceModelRepository.save(voiceModel);
+            return ResponseEntity.status(HttpStatus.OK).body("모델 업로드 성공!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("모델 업로드 실패: " + e.getMessage());
+        }
+
 
     }
 
@@ -278,33 +288,37 @@ public class ModelServiceImpl implements ModelService {
             MultipartFile multipartFile = multipartFiles.get(i);
             builder.part("files", multipartFile.getResource());
         }
+        try {
+            // state = 2: '학습중'으로 갱신
+            voiceModel.setState(2);
+            voiceModelRepository.save(voiceModel);
 
-        WebClient.create("http://222.107.238.124:7865")
-                .post()
-                .uri("/voice/" + modelCode)
-                .body(BodyInserters.fromMultipartData(builder.build()))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+            // 음성 파일 업로드
+            WebClient.create("http://222.107.238.124:7865")
+                    .post()
+                    .uri("/voice/" + modelCode)
+                    .body(BodyInserters.fromMultipartData(builder.build()))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        // GPU 서버에 모델 학습 요청 보내기
-        WebClient.create("http://222.107.238.124:7865")
-                .post()
-                .uri("/training")
-                .bodyValue(new ModelTrainingRequest(modelCode, userCode))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+            // GPU 서버에 모델 학습 요청 보내기
+            WebClient.create("http://222.107.238.124:7865")
+                    .post()
+                    .uri("/training")
+                    .bodyValue(new ModelTrainingRequest(modelCode, userCode, voiceModel.getModelName()))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-        // state = 2: '학습중'으로 갱신
-        voiceModel.setState(2);
-        voiceModelRepository.save(voiceModel);
+            // 모델 학습 가능 횟수 차감
+            user.setLearnCount(user.getLearnCount() - 1);
+            userRepository.save(user);
 
-        // 모델 학습 가능 횟수 차감
-        user.setLearnCount(user.getLearnCount() - 1);
-        userRepository.save(user);
-
-        return ResponseEntity.status(HttpStatus.OK).body("모델 학습 성공!");
+            return ResponseEntity.status(HttpStatus.OK).body("모델 학습 성공!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("모델 학습 실패: " + e.getMessage());
+        }
     }
 
 
@@ -343,8 +357,8 @@ public class ModelServiceImpl implements ModelService {
             // dto 로 변환
             List<ModelInfoDto> myModelDtos = modelListToDto(myModelList, true, false);
             // 페이지네이션
-            int startIdx = (page - 1) * 4;
-            int endIdx = Math.min(startIdx + 4, myModelList.size());
+            int startIdx = (page - 1) * 6;
+            int endIdx = Math.min(startIdx + 6, myModelList.size());
             mergedModelDtos = myModelDtos.subList(startIdx, endIdx);
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) myModelList.size() / 6);
@@ -501,6 +515,24 @@ public class ModelServiceImpl implements ModelService {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+
+    // 모델 생성 성공 여부 확인
+    public ResponseEntity<String> checkModelCreate(int modelCode, Boolean isSuccess) {
+        // 모델 코드로 모델 찾기
+        if (!isSuccess) {
+            voiceModelRepository.deleteById(modelCode);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("모델 생성에 실패하였습니다.");
+        } else {
+            // state = 3: '학습완료'로 갱신
+            VoiceModel voiceModel = voiceModelRepository.findByModelCode(modelCode);
+            voiceModel.setState(3);
+            voiceModelRepository.save(voiceModel);
+            return ResponseEntity.status(HttpStatus.OK).body("모델 생성에 성공하였습니다.");
+        }
+
+    }
+
 
 
     // 녹음 문장 개수(record_count) 갱신

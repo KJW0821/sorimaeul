@@ -12,6 +12,7 @@ import com.usagi.sorimaeul.entity.*;
 import com.usagi.sorimaeul.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -242,19 +243,25 @@ public class CoverServiceImpl implements CoverService {
         requestBody.put("coverCode", coverCode);
         requestBody.put("coverName", request.getCoverName());
         requestBody.put("pitch", request.getPitch());
-        WebClient.create("http://222.107.238.124:7866")
-                .post()
-                .uri("/rvc/cover")
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            WebClient.create("http://222.107.238.124:7866")
+                    .post()
+                    .uri("/rvc/cover")
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            // response 반환
+            CoverCreateResponse response = CoverCreateResponse.builder()
+                    .coverCode(coverCode)
+                    .build();
 
-        CoverCreateResponse response = CoverCreateResponse.builder()
-                .coverCode(coverCode)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            // 실패했으면 커버 삭제
+            coverRepository.delete(cover);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 커버 생성 실패: " + e.getMessage());
+        }
     }
 
 
@@ -328,7 +335,6 @@ public class CoverServiceImpl implements CoverService {
         s3Service.saveByteToS3(folderPath + fileName, responseFile);
 
         // 완료 표시와 생성 시간 업데이트
-        cover.setIsComplete(true);
         cover.setCreatedTime(LocalDateTime.now());
         cover.setStoragePath(folderPath + fileName);
         coverRepository.save(cover);
@@ -344,7 +350,7 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        List<CoverSource> coverSources = coverSourceRepository.findAll();
+        List<CoverSource> coverSources = coverSourceRepository.findAll(Sort.by("singer", "title"));
         List<CoverSourceInfoDto> coverSourceInfoDtos = new ArrayList<>();
         for (CoverSource coverSource : coverSources) {
             CoverSourceInfoDto coverSourceInfoDto = CoverSourceInfoDto.builder()
@@ -362,6 +368,19 @@ public class CoverServiceImpl implements CoverService {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    // AI 커버 생성 성공 여부 확인
+    public ResponseEntity<String> checkCoverCreate(int coverCode, Boolean isSuccess) {
+        if (!isSuccess) {
+            coverRepository.deleteById(coverCode);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("AI 커버 생성에 실패했습니다.");
+        } else {
+            Cover cover = coverRepository.findByCoverCode(coverCode);
+            cover.setIsComplete(true);
+            return ResponseEntity.status(HttpStatus.OK).body("AI 커버 생성에 성공했습니다.");
+        }
     }
 
 

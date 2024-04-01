@@ -7,6 +7,5 @@ public class DubbingBoardRequest {
 
     private String dubName;
     private String dubDetail;
-    private int videoSourceCode;
     private Boolean isPublic;
 }

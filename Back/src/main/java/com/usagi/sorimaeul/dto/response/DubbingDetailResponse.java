@@ -22,5 +22,6 @@ public class DubbingDetailResponse {
     private String thumbnailPath;
     private Boolean isLiked;
     private Boolean isComplete;
+    private Boolean isPublic;
 
 }
