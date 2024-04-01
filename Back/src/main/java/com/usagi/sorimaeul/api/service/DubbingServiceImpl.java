@@ -255,6 +255,7 @@ public class DubbingServiceImpl implements DubbingService {
                     .likeCount(dubbing.getLikeCount())
                     .nickname(dubbing.getUser().getNickname())
                     .profileImage(dubbing.getUser().getProfileImage())
+                    .createdTime(dubbing.getCreatedTime())
                     .build();
 
             // customDubbings에 담기
