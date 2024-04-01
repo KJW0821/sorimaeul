@@ -93,7 +93,7 @@ function CoverBox() {
  
   return (
     <>
-    <MenuDescription bigText={"A"} middleText={"I 커버"} smallText={"나의 AI 커버"} />
+    <MenuDescription bigText={"A"} middleText={"I 커버"} smallText={"내가 만든 AI 커버"} />
     <CoverContainer>
       
     {dataList && dataList.map((cover) => (
