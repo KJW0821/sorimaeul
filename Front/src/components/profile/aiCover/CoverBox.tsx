@@ -11,7 +11,7 @@ const CoverContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px 0;
+  margin: 2.5rem 0;
   gap: 15px;
 `;
 
