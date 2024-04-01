@@ -1,5 +1,8 @@
+import { Fragment, useEffect, useState } from "react";
 import MenuDescription from "../MenuDescription";
 import styled from "styled-components";
+import { getMyDubbings } from "../../../utils/dubbingAPI";
+import DubbingCard from "./DubbingCard";
 
 const Container = styled.div`
   width: 90%;
@@ -12,17 +15,20 @@ const Container = styled.div`
     display: flex;
     border-top: 1px solid black;
     border-bottom: 1px solid #BBBBBB;
-    padding: .5rem;
+    padding: .5rem 1rem;
+    justify-content: space-between;
     .content {
       width: 60%;
     }
 
     .state {
       width: 12%;
+      text-align: center;
     }
 
     .date {
       width: 14%;
+      text-align: center;
     }
 
     .button {
@@ -30,6 +36,13 @@ const Container = styled.div`
     }
   }
 `;
+
+const List = styled.div`
+  height: 21rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+`
 
 export interface DubbingData {
   dubCode: string;
@@ -42,6 +55,17 @@ export interface DubbingData {
 }
 
 function DubbingList() {
+  const [dubbingContents, setDubbingContents] = useState<DubbingData[]>([]);
+
+  const getMyDubbingContents = async () => {
+    const res = await getMyDubbings();
+    setDubbingContents(res);
+  };
+
+  useEffect(() => {
+    getMyDubbingContents();
+  }, [])
+
   return (
     <>
        <MenuDescription bigText={"더"} middleText={"빙 컨텐츠"} smallText={"내가 만든 더빙 숏폼"} />
@@ -52,7 +76,17 @@ function DubbingList() {
           <p className="date">게시 날짜</p>
           <p className="button"></p>
         </div>
-
+        <List>
+          {
+            dubbingContents &&
+            dubbingContents.map(el => (
+              <Fragment key={el.dubCode}>
+                <DubbingCard data={el} />
+                <hr className="w-full border-black" />
+              </Fragment>
+            ))
+          }
+        </List>
        </Container>
     </>
   )
