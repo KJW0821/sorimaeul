@@ -56,7 +56,7 @@ public class ModelServiceImpl implements ModelService {
         if (user.getLearnCount() < 1) return ResponseEntity.badRequest().body("모델 학습 가능 횟수가 부족합니다. 상점 페이지에서 구매후 다시 시도해주세요.");
 
         // 모델 테이블 생성
-        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0, , isSuccess 기본값 false
+        // modelCode = auto_increment, video_code = null, image_path = null, state = 기본값 0
         // record_count = null, created_time = now()
         VoiceModel voiceModel = VoiceModel.builder()
                 .modelName(request.getModelName())

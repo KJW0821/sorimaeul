@@ -221,7 +221,7 @@ public class CoverServiceImpl implements CoverService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 모델은 AI 커버를 생성할 수 있는 상태가 아닙니다. 학습이 완료된 후에 시도해주세요.");
         }
 
-        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime & postTime = null, likeCount 기본값 0, isSuccess 기본값 false
+        // coverCode 자동 생성, coverDetail, thumbnailPath 나중에 입력, createdTime & postTime = null, likeCount 기본값 0
         Cover cover = Cover.builder()
                 .user(user)
                 .coverName(request.getCoverName())
