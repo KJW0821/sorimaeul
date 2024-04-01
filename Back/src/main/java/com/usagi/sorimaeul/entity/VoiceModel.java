@@ -39,6 +39,10 @@ public class VoiceModel {
     private int state = 0;
 
     @Builder.Default
+    @Column(name = "is_success")
+    private Boolean isSuccess = false;
+
+    @Builder.Default
     @Column(name = "record_count")
     private Integer recordCount = 0;
 

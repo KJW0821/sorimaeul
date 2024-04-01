@@ -41,6 +41,11 @@ public class Dubbing {
     @Column(name = "is_public")
     private Boolean isPublic = false;
 
+    @Builder.Default
+    @Column(name = "is_success")
+    private Boolean isSuccess = false;
+
+
     @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
