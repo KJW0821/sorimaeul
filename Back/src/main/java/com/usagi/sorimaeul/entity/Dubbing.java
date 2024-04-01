@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class Dubbing {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dub_code")
     private int dubCode;
 
