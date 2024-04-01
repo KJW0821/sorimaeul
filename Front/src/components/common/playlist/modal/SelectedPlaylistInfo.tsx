@@ -14,7 +14,8 @@ const PlaylistItem = styled.li`
   align-items: center;
   border: 3px solid #cccccc; 
   border-radius: 10px;
-  margin: 1rem;
+  overflow-y: hidden;
+  margin: 7px;
   
   background-color: white;
   padding: 0.25rem;
