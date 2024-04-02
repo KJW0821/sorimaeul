@@ -29,7 +29,7 @@ function ModelList() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [modelList, setModelList] = useState<ModelData[]>();
+  const [modelList, setModelList] = useState<ModelData[]>([]);
 
   const getModelList = async () => {
     const res = await getMyVoiceModels(page);
@@ -50,15 +50,17 @@ function ModelList() {
       <MenuDescription bigText={"나"} middleText={"의 음성 모델"} smallText={""} />
       {
         modelList &&
-        <CardList>
-          {
-            modelList.map((el) => (
-              <ModelCard data={el} />
-            ))
-          }
-        </CardList>
+        <>
+          <CardList>
+            {
+              modelList.map((el) => (
+                <ModelCard key={el.modelCode} data={el} setModelList={setModelList} />
+              ))
+            }
+          </CardList>
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#C9F647" />
+        </>
       }
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#C9F647" />
     </>
   )
 }
