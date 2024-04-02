@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { s3URL } from "../../../../utils/s3";
 import { DubbingData } from "../../dubbing/DubbingList";
 import styled from "styled-components";
@@ -14,7 +15,9 @@ const Container = styled.div`
   .thumbnail {
     border-radius: 2px;
     width: 100%;
-    height: 10.5rem;
+    height: 9rem;
+    max-height: 9rem;
+    object-fit: cover;
   }
 
   .title {
@@ -33,10 +36,12 @@ const Container = styled.div`
 `
 
 const LikeDubbingCard: React.FC<{ data: DubbingData }> = ({data}) => {
+  const navigate = useNavigate();
+  
   return (
-    <Container>
+    <Container onClick={() => navigate(`/dubbing/${data.videoSourceCode}/${data.dubCode}`)}>
       <img src={s3URL + data.thumbnailPath} alt="" className="thumbnail" />
-      <div className="p-2">
+      <div className="mt-auto">
         <p className="title">{data.dubName}</p>
         <p className="info">{data.nickname}</p>
       </div>
