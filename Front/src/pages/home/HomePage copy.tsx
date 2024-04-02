@@ -11,6 +11,7 @@ import album3 from '../../assets/album3.jpg';
 import album4 from '../../assets/album4.jpg';
 import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
+import HomeInfo from './HomeInfo';
 
 const Outer = styled.div`
   height: 100vh;

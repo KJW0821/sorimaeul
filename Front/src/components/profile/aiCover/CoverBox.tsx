@@ -11,22 +11,22 @@ const CoverContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px 0;
+  margin: 2.5rem 0;
   gap: 15px;
 `;
 
-// 상태에 따른 배경색과 조금 더 진한 배경색 설정
+// 상태에 따른 배경색과 조금 더 진한 강조색 설정
 const getStatusColor = ($isComplete: boolean, $isPublic: boolean = false) => {
-  if (!$isComplete) return { main: '#FAD02E', dark: '#C7961E' }; // 미완료(변환중)
-  if ($isPublic) return { main: '#90EE90', dark: '#5CA85C' }; // 공개(게시)
-  return { main: '#FFB6C1', dark: '#C97891' }; // 비공개(미게시)
+  if (!$isComplete) return { main: '#ECECEC', dark: '#E3FF92' }; // 미완료(변환중)
+  if ($isPublic) return { main: '#fff', dark: '#C9F647' }; // 공개(게시)
+  return { main: '#D9D9D9', dark: '#686868' }; // 비공개(미게시)
 };
 
 const CoverContent = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
   width: 80%;
   height: 60px;
   background: ${({ $isComplete, $isPublic }) => getStatusColor($isComplete, $isPublic).main};
-  border: 1px solid #A0A0A0;
+  box-shadow:0 0 5px #CED6D2;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -38,8 +38,6 @@ const CoverContent = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
 const StatusIndicator = styled.div<{ $isComplete: boolean; $isPublic?: boolean }>`
   display: flex;
   align-items: center;
-  margin-right: 10px;
-
   &::before {
     content: '';
     display: block;
@@ -47,14 +45,13 @@ const StatusIndicator = styled.div<{ $isComplete: boolean; $isPublic?: boolean }
     height: 10px;
     border-radius: 50%;
     background: ${({ $isComplete, $isPublic }) => getStatusColor($isComplete, $isPublic ?? false).dark};
-    margin-right: 5px;
   }
 `;
 
 const StatusDescription = styled.span`
+  margin-left: 1rem;
   font-size: 1rem;
-  margin-right: 1rem; 
-  text-align: center;
+  text-align: left;
   display: inline-block;
   width: 60px;
   min-width: 60px;
@@ -64,17 +61,23 @@ const StatusDescription = styled.span`
 const CoverInfo = styled.div`
   display: flex;
   flex: 1;
+  justify-content: space-between;
   overflow: hidden;
+  font-family: 'GmarketSansLight';
 `;
 
 const CoverText = styled.p`
   white-space: nowrap;
   overflow: hidden;
-  margin: 10px;
   text-overflow: ellipsis;
   max-width: 70%;
-  font-family: 'GmarketSansLight';
 `;
+
+
+const CoverDate = styled.div`
+  color: #868686;
+`;
+
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -125,10 +128,9 @@ function CoverBox() {
               <StatusDescription>{cover.isComplete ? (cover.isPublic ? '공개' : '비공개') : '변환중'}</StatusDescription>
             </StatusIndicator>
             <CoverInfo>
-              <CoverText> ♪ 커버 제목 : {cover.coverName} - {cover.coverSinger}</CoverText>
-              <CoverText> ◎ 원곡 : {cover.title} - {cover.singer} </CoverText>
+              <CoverText> ♪ 커버 제목 : {cover.coverName}  - 커버 가수 : {cover.coverSinger} </CoverText>
 
-              {cover.isComplete ? (<CoverText>생성일: {formatDate(cover.createdTime)}</CoverText>) :
+              {cover.isComplete ? (<CoverDate>생성일: {formatDate(cover.createdTime)}</CoverDate>) :
                 (<></>)
               }
 

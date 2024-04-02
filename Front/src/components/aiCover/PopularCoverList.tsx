@@ -7,9 +7,9 @@ const ListContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 90%;
+  width: 75%;
   gap: 3rem;
-  margin-left: 15.5rem;
+  margin-left: 16rem;
 `;
 
 

@@ -5,6 +5,7 @@ import { RootState } from "../../../stores/store";
 import { setLikeType } from "../../../stores/menu";
 import { useEffect, useState } from "react";
 import LikeDubbingList from "./dubbing/LikeDubbingList";
+import LikeCoverList from "./aiCover/LikeCoverList";
 
 const Container = styled.div`
   width: 100%;
@@ -72,7 +73,7 @@ function LikeContentsBox() {
           likeType === '더빙' ?
           <LikeDubbingList />
           :
-          <></>
+          <LikeCoverList />
         }
       </Container>
     </>

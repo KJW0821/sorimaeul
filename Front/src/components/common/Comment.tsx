@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
+import { s3URL } from "../../utils/s3";
 import deleteIcon from "../../assets/deleteIcon.png";
 import { createCoverComment, createDubComment, deleteComment } from "../../utils/commentAPI";
 import { addComment, removeComment } from "../../stores/comment";
@@ -130,7 +131,7 @@ const CommentComponent: React.FC<{ width?: number }> = ({width}) => {
       </TitleSection>
       <CommentInputSection>
         <div className="rounded-full w-10 h-10 mr-4 overflow-hidden">
-          <img src={logginedUserImg ? `${baseURL}${logginedUserImg}`: defaultProfile} className="w-full h-full" alt="Current User ProfileImage" />
+          <img src={logginedUserImg ? s3URL + logginedUserImg : defaultProfile} className="w-full h-full" alt="Current User ProfileImage" />
         </div>
         <Form onSubmit={submitHandler}>
           <InputBox

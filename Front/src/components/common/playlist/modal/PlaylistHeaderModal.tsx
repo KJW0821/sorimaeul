@@ -51,7 +51,7 @@ const PlaylistHeaderModal: React.FC = () => {
 
   return (
     <>
-    <Content $width={55} $height={55} $borderRadius={30} $background="white">
+    <Content $width={55} $height={55} $borderRadius={30} $background="black">
     <ModalHeader>
     <LogoIcon src={logo} alt="sorimaeul logo" />
     <p>플레이리스트 목록</p>

@@ -4,6 +4,7 @@ import { RootState } from "../../../stores/store";
 import { useEffect, useState } from "react";
 import { deleteCoverFromList, getPlaylist } from "../../../utils/playlistAPI";
 import { Content } from "../../common/ModalStyles";
+import { s3URL } from "../../../utils/s3";
 import logo from "../../../assets/logoBig.png";
 import deleteIcon from "../../../assets/deleteIcon.png";
 import { closeModal } from "../../../stores/modal";
@@ -131,7 +132,7 @@ export interface CoverInfo {
   isPublic: boolean;
 }
 
-interface PlaylistDetailInterface {
+export interface PlaylistDetailInterface {
   playlist: CoverInfo[];
 }
 
@@ -139,7 +140,6 @@ function PlaylistDetailModal() {
   const dispatch = useDispatch();
   const { playlistCode, playlistName, createdTime } = useSelector((state: RootState) => state.playlists.selectedPlaylist) ?? { playlistCode: '', playlistName: '', createdTime: '' };
   const [data, setData] = useState<PlaylistDetailInterface | null>(null);
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   useEffect(() => {
     if (playlistCode) {
@@ -185,7 +185,7 @@ function PlaylistDetailModal() {
               <CoverItem key={index}>
                 <span className="text-lime-700">{cover.title}-{cover.singer}({cover.coverSinger})</span>
                 <span className="ml-5 text-lime-600">{cover.nickname} </span>
-                {cover && <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>}
+                {cover && <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + `/${cover.storagePath}`}></DetailPlayer>}
                 <img src={deleteIcon} onClick={()=>deletCoverFromPlaylist(cover.coverCode)} />
 
               </CoverItem>
