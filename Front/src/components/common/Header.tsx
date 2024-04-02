@@ -14,7 +14,7 @@ const HeaderContainer = styled.div<HeaderProps>`
   justify-content: ${(props) => (props.$isMainPage ? 'center' : 'center')};
   align-items: center;
   width: 100%;
-  height: auto;
+  height: 6.25rem;
 `;
 
 interface LogoProps {
