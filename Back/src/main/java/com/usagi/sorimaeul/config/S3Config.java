@@ -36,4 +36,5 @@ public class S3Config {
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentialsProvider()))
                 .build();
     }
+
 }

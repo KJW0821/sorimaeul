@@ -94,9 +94,12 @@ public class DubbingController {
     }
 
     @Operation(summary = "더빙 영상 상세 조회", description = "더빙 영상을 상세 조회한다.")
-    @ApiResponse(responseCode = "200", description = "더빙 영상 상세 조회 성공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "더빙 영상 상세 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "더빙 영상 상세 조회 실패")
+    })
     @GetMapping("/{dubCode}")
-    public ResponseEntity<DubbingDetailResponse> getDubbingDetail(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> getDubbingDetail(@RequestHeader("Authorization") String token,
                                                                   @PathVariable int dubCode) {
         long userCode = Long.parseLong(jwtTokenProvider.getPayload(token.substring(7)));
         return dubbingService.getDubbingDetail(userCode, dubCode);

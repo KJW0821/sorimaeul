@@ -291,13 +291,18 @@ public class DubbingServiceImpl implements DubbingService {
     }
 
     // 더빙 영상 상세 조회
-    public ResponseEntity<DubbingDetailResponse> getDubbingDetail(long userCode, int dubCode) {
+    public ResponseEntity<?> getDubbingDetail(long userCode, int dubCode) {
         // 사용자 정보 확인
         User user = userRepository.getUser(userCode);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         Dubbing dubbing = dubbingRepository.findByDubCode(dubCode);
+        // 비공개일 때 작성자가 아닌 경우 잘못된 접근 오류 반환
+        if (!dubbing.getIsPublic() && dubbing.getUser() != user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 접근입니다.");
+        }
+
         // 좋아요 여부 확인
         boolean isLiked;
         isLiked = likeRepository.findByUser_userCodeAndDubbing_dubCode(userCode, dubCode) != null;
