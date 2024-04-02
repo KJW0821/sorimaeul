@@ -88,7 +88,7 @@ const DetailPlayer:  React.FC<CustomAudioPlayerProps & { isPublic: boolean }> = 
         </Button>
       )}
       
-      {!isPublic && <span>비공개된 음원입니다.</span>}
+      {!isPublic && <span className='text-stone-500'>비공개된 음원입니다.</span>}
     </>
   );
 };
