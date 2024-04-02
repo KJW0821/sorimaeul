@@ -131,7 +131,7 @@ const DubbingBox = styled.div`
     position: absolute;
     right: 0;
     height: 100%;
-    width: 21.2%;
+    width: 15%;
   }
 `
 
@@ -164,6 +164,7 @@ function Dubbing() {
   const [audioBlob, setAudioBlob] = useState<Blob[]>([]);
   const [isPlay, setIsPlay] = useState<boolean[]>([]);
   const [isConverted, setIsConverted] = useState<boolean>(false);
+  const [isConverting, setIsConverting] = useState<boolean[]>([]);
   const [model, setModel] = useState<number[]>([]);
   const [pitch, setPitch] = useState<number[]>([]);
   const [originVoicePaths, setOriginVoicePaths] = useState<string[]>([]);
@@ -192,6 +193,7 @@ function Dubbing() {
       setAudioBlob(Array.from({length: res.voiceSources.length}, () => new Blob()));
       setIsPlay(Array.from({length: res.voiceSources.length}, () => false));
       setConvertList(Array.from({length: res.voiceSources.length}, () => false));
+      setIsConverting(Array.from({length: res.voiceSources.length}, () => false));
       audioRefs.current = res.voiceSources.map(() => new Audio());
       mediaRefs.current = res.voiceSources.map(() => new Audio());
     }
@@ -358,6 +360,11 @@ function Dubbing() {
         return newState;
       });
     } else {
+      setIsConverting(prev => {
+        const newState = [...prev];
+        newState[idx] = true;
+        return newState;
+      });
       setIsConverted(false);
       setConvertList(prev => {
         const newState = [...prev];
@@ -375,6 +382,11 @@ function Dubbing() {
             modelCode: model[idx],
             voicePath: uploadRes.voicePath,
             pitch: pitch[idx]
+          });
+          setIsConverting(prev => {
+            const newState = [...prev];
+            newState[idx] = false;
+            return newState;
           });
           setIsConverted(true);
           setVoicePaths(prev => {
@@ -526,7 +538,7 @@ function Dubbing() {
                 <div className="convert-section flex justify-center items-center">
                   <Button 
                     className="convert-btn"
-                    disabled={model[idx] === 0 || audioURL[idx] === ""} 
+                    disabled={model[idx] === 0 || audioURL[idx] === "" || isConverting[idx]} 
                     onClick={() => convertAudio(idx)} 
                     $marginLeft={0} 
                     $marginTop={0}
@@ -534,7 +546,7 @@ function Dubbing() {
                     $color="black"
                   >
                     {
-                      convertList[idx] ? '초기화' : '변환'
+                      isConverting[idx] ? '변환중' : convertList[idx] ? '초기화' : '변환'
                     }
                   </Button>
                 </div>

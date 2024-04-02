@@ -119,7 +119,7 @@ function SourceVideoInfo() {
           <div className="flex justify-between items-center">
             <div className="flex flex-col">
               <p className="playtime">영상 길이: {videoInfo?.videoPlaytime}</p>
-              <p className="date">업로드: {videoInfo?.createdTime}</p>
+              <p className="date">업로드: {videoInfo?.createdTime.split('T')[0]}</p>
             </div>
             <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} $marginTop={0} $marginLeft={0} $background="black" $color="#BFFF0A" $width={7} $height={2.5} $fontSize={1.3}>더빙하기</Button>
           </div>
