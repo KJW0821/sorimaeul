@@ -4,6 +4,7 @@ import defaultImg from "../../../assets/wave1.png";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../common/Button";
 import { deleteModel } from "../../../utils/voiceModelAPI";
+import { s3URL } from "../../../utils/s3";
 
 const Container = styled.div`
   flex: 0 0 48%;
@@ -85,7 +86,7 @@ const ModelCard: React.FC<{ data: ModelData, setModelList: React.Dispatch<React.
   return (
     <Container onClick={() => navigate(`/model/${data.modelCode}`)}>
       <div className="img-box">
-        <img className="img" src={data.imagePath ? data.imagePath : defaultImg} alt="" />
+        <img className="img" src={data.imagePath ? s3URL + data.imagePath : defaultImg} alt="" />
       </div>
       <InfoBox>
         <div className="flex justify-between">
