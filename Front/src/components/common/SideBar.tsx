@@ -213,9 +213,12 @@ function SideBar() {
               <div className="col" onClick={openAlarmModal}>
                 <img src={bell} alt="alarm" />
                 <p>알림</p>
-                <div className="col-msg-cnt">
-                  {msgCnt}
-                </div>
+                {
+                  msgCnt &&
+                  <div className="col-msg-cnt">
+                    {msgCnt}
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -248,9 +251,12 @@ function SideBar() {
               <img onClick={() => navigate('/profile')} src={location.pathname === '/profile' ? userActive : user} alt="profile" />
               <div className="relative">
                 <img onClick={openAlarmModal} src={bell} alt="alarm" />
-                <div className="msg-cnt">
-                  {msgCnt}
-                </div>
+                {
+                  msgCnt &&
+                  <div className="msg-cnt">
+                    {msgCnt}
+                  </div>
+                }
               </div>
             </div>
           </div>
