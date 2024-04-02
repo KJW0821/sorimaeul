@@ -86,3 +86,9 @@ export const deleteModel = (modelCode: number) => {
     .then(res => res)
     .catch(err => console.error(err))
 };
+
+export const updateModel = (modelCode: string, data: { modelName: string, imagePath: string }) => {
+  return API.patch(URL + `/detail/${modelCode}`, data)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
