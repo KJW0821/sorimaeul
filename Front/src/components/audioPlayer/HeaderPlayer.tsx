@@ -7,6 +7,7 @@ import prevBtn from "../../assets/prev.png";
 import nextBtn from "../../assets/next.png";
 import playlists from "../../assets/playlistCheck.png";
 import styled, { keyframes } from 'styled-components';
+import { s3URL } from "../../utils/s3";
 import { openModal } from "../../stores/modal";
 
 const PlaylistComponent = styled.div`
@@ -76,8 +77,7 @@ const HeaderPlayer: React.FC = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
-  const {modalType, isOpen} = useSelector((state: RootState) => state.modal);
+  const { modalType, isOpen } = useSelector((state: RootState) => state.modal);
 
   useEffect(() => {
     if ((modalType === 'playlistdetail' || modalType === 'playlistheader') && isOpen) {
@@ -96,16 +96,16 @@ const HeaderPlayer: React.FC = () => {
       if (audio) {
         audio.pause();
       }
-      const newAudio = new Audio(`${baseURL}/${selectedPlaylist.covers[0].storagePath}`);
+      const newAudio = new Audio(s3URL + selectedPlaylist.covers[0].storagePath);
       setAudio(newAudio);
       setIsPlaying(false);
     }
-    
+
   }, [selectedPlaylist]);
 
   useEffect(() => {
     if (selectedPlaylist && selectedPlaylist.covers && selectedPlaylist.covers.length > 0 && audio) {
-      audio.src = `${baseURL}/${selectedPlaylist.covers[currentTrackIndex].storagePath}`;
+      audio.src = s3URL + selectedPlaylist.covers[currentTrackIndex].storagePath
       if (isPlaying) {
         audio.play().catch((error) => console.error("Audio play failed", error));
       }
@@ -156,36 +156,52 @@ const HeaderPlayer: React.FC = () => {
   };
 
 
-
-  if (!selectedPlaylist) {
-    return <div>플레이리스트를 선택해주세요.</div>;
-  }
-
-  if (!selectedPlaylist || !selectedPlaylist.covers || selectedPlaylist.covers.length === 0) {
-    return <div>재생할 곡이 없습니다.</div>;
-  }
-  
   const openPlaylistHeaderModal = () => {
     dispatch(openModal({
       modalType: "playlistheader",
     }));
   };
 
-  
+  if (!selectedPlaylist) {
+    return (
+      <PlaylistComponent>
+        <PlayerContainer>
+          <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
+          <div>플레이리스트를 선택해주세요.</div>
+        </PlayerContainer>
+      </PlaylistComponent>
+    )
+  }
+
+  if (!selectedPlaylist || !selectedPlaylist.covers || selectedPlaylist.covers.length === 0) {
+    return (
+      <PlaylistComponent>
+        <PlayerContainer>
+          <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
+          <div className="mr-10">커버를 추가해주세요.</div>
+        </PlayerContainer>
+      </PlaylistComponent>
+
+    )
+  }
+
+
+
+
 
   return (
     <PlaylistComponent>
-    <PlayerContainer>
-      <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
-      <TextArea>
-        <FlowingText>{selectedPlaylist.covers[currentTrackIndex].title} - {selectedPlaylist.covers[currentTrackIndex].singer} ({selectedPlaylist.covers[currentTrackIndex].coverSinger}) </FlowingText>
-      </TextArea>
-      <IconArea>
-        <Icon src={prevBtn} onClick={handlePrevTrack} />
-        <div onClick={handlePlayPause}>{isPlaying ? <Icon src={pauseBtn} /> : <Icon src={playBtn} />}</div>
-        <Icon src={nextBtn} onClick={handleNextTrack} />
-      </IconArea>
-    </PlayerContainer>
+      <PlayerContainer>
+        <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
+        <TextArea>
+          <FlowingText>{selectedPlaylist.covers[currentTrackIndex].title} - {selectedPlaylist.covers[currentTrackIndex].singer} ({selectedPlaylist.covers[currentTrackIndex].coverSinger}) </FlowingText>
+        </TextArea>
+        <IconArea>
+          <Icon src={prevBtn} onClick={handlePrevTrack} />
+          <div onClick={handlePlayPause}>{isPlaying ? <Icon src={pauseBtn} /> : <Icon src={playBtn} />}</div>
+          <Icon src={nextBtn} onClick={handleNextTrack} />
+        </IconArea>
+      </PlayerContainer>
     </PlaylistComponent>
   );
 };

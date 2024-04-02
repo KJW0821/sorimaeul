@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { Cover } from './CoverInterface';
+import { useNavigate } from "react-router-dom";
+import { Cover } from "./CoverInterface"
+import { defaultCover, s3URL } from "../../utils/s3";
 import styled from 'styled-components';
 import heart from '../../assets/heart.png';
+import defaultProfile from "../../assets/profile.png";
 
 const CardContainer = styled.div`
   width: 280px;
@@ -101,19 +103,17 @@ const CoverCard: React.FC<Props> = ({ cover }) => {
     title,
   } = cover;
   const navigate = useNavigate();
-  const baseURL = 'https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com';
 
   return (
-    <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
-      <ThumbnailImage
-        src={`${baseURL}${thumbnailPath}`}
-        alt={title}
-        style={{ borderRadius: '50%' }}
-      />
+  <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
+    { thumbnailPath ? ( <ThumbnailImage src={s3URL + thumbnailPath} alt={title} />) : (
+       <ThumbnailImage src={defaultCover} alt={title} />
+    )}
+     
       <Title>{coverName}</Title>
       <ProfileLine>
         <ProfileInfo>
-          <ProfileImage src={`${baseURL}${profileImage}`} />
+          <ProfileImage src={profileImage ? (s3URL + profileImage) : (defaultProfile)} />
           <Nickname>{nickname}</Nickname>
         </ProfileInfo>
         <LikeContainer>

@@ -187,7 +187,7 @@ function UserDubbingDetailPage() {
         <video className="video" controls src={s3URL + info?.storagePath} />
         <div className="flex justify-between items-center">
           <div className="profile-box">
-            <img className="profile" src={info?.profileImage ? info.profileImage : defaultProfile} alt="" />
+            <img className="profile" src={info?.profileImage ? s3URL + info.profileImage : defaultProfile} alt="" />
             <p>{info?.nickname}</p>
           </div>
           <div className="flex gap-4 justify-center items-center h-full">

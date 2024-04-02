@@ -1,7 +1,10 @@
-import styled from 'styled-components';
-import { Cover } from './CoverInterface';
-import { useNavigate } from 'react-router';
-import heart from '../../assets/heart.png';
+import styled from "styled-components";
+import { Cover } from "./CoverInterface";
+import { useNavigate } from "react-router";
+import { defaultCover, s3URL } from "../../utils/s3";
+import heart from "../../assets/heart.png";
+import defaultProfile from "../../assets/profile.png";
+
 
 const CDContainer = styled.div`
   cursor: pointer;
@@ -110,21 +113,18 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     title,
   } = cover;
   const navigate = useNavigate();
-  const baseURL = 'https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com';
 
   return (
     <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
       <ThumbnailContainer>
-        <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
-        <CenterCircle />
+        {thumbnailPath ? (
+           <ThumbnailImage src={ s3URL + thumbnailPath} alt={title} />
+        ) : (<ThumbnailImage src={defaultCover} />)}
+      <CenterCircle />
       </ThumbnailContainer>
       <CoverTitle>{coverName}</CoverTitle>
-      <ProfileInfo>
-        <ProfileImage
-          src={`${baseURL}${profileImage}`}
-          alt="Profile"
-          style={{ borderRadius: '50%' }}
-        />
+      <ProfileInfo >
+        <ProfileImage src={  profileImage? s3URL + profileImage : defaultProfile } alt="Profile" /> 
         <Nickname>{nickname}</Nickname>
         <LikeContainer>
           <HeartIcon src={heart} alt="Like" />
