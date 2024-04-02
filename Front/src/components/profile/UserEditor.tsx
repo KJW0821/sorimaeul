@@ -42,7 +42,7 @@ const LayoutContainer = styled.div`
 
 // 닉네임 중복 확인 문구 스타일
 const NicknameCheckMessage = styled.p`
-  
+  color: #A3A3A3 ;
 `;
 
 const FlexContainer = styled.div`
@@ -66,7 +66,7 @@ function UserEditor() {
   const [newNickname, setNewNickname] = useState(nickname);
   const [isCheckingNickname, setIsCheckingNickname] = useState(false);
   const [isValidNickname, setIsValidNickname] = useState(true);
-  const [selectedImagePath, setSelectedImagePath] = useState(profileImage);
+  const [selectedImagePath, setSelectedImagePath] = useState('');
   const [newProfileImg, setNewProfileImg] = useState(profileImage);
 
   // 디바운싱으로 닉네임 중복 체크 
@@ -129,7 +129,7 @@ function UserEditor() {
       {isEditing ? (
         <>
           <label htmlFor="file" className="cursor-pointer">
-            <ProfileImage $image={ selectedImagePath? selectedImagePath : defaultProfile}></ProfileImage>
+            <ProfileImage $image={ selectedImagePath? selectedImagePath :(profileImage ? s3URL + profileImage : defaultProfile)}></ProfileImage>
           </label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
         </>
