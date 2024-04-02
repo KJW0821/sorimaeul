@@ -77,7 +77,7 @@ const HeaderPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
-  const {modalType, isOpen} = useSelector((state: RootState) => state.modal);
+  const { modalType, isOpen } = useSelector((state: RootState) => state.modal);
 
   useEffect(() => {
     if ((modalType === 'playlistdetail' || modalType === 'playlistheader') && isOpen) {
@@ -100,7 +100,7 @@ const HeaderPlayer: React.FC = () => {
       setAudio(newAudio);
       setIsPlaying(false);
     }
-    
+
   }, [selectedPlaylist]);
 
   useEffect(() => {
@@ -156,36 +156,52 @@ const HeaderPlayer: React.FC = () => {
   };
 
 
-
-  if (!selectedPlaylist) {
-    return <div>플레이리스트를 선택해주세요.</div>;
-  }
-
-  if (!selectedPlaylist || !selectedPlaylist.covers || selectedPlaylist.covers.length === 0) {
-    return <div>재생할 곡이 없습니다.</div>;
-  }
-  
   const openPlaylistHeaderModal = () => {
     dispatch(openModal({
       modalType: "playlistheader",
     }));
   };
 
-  
+  if (!selectedPlaylist) {
+    return (
+      <PlaylistComponent>
+        <PlayerContainer>
+          <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
+          <div>플레이리스트를 선택해주세요.</div>
+        </PlayerContainer>
+      </PlaylistComponent>
+    )
+  }
+
+  if (!selectedPlaylist || !selectedPlaylist.covers || selectedPlaylist.covers.length === 0) {
+    return (
+      <PlaylistComponent>
+        <PlayerContainer>
+          <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
+          <div className="mr-10">커버를 추가해주세요.</div>
+        </PlayerContainer>
+      </PlaylistComponent>
+
+    )
+  }
+
+
+
+
 
   return (
     <PlaylistComponent>
-    <PlayerContainer>
-      <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
-      <TextArea>
-        <FlowingText>{selectedPlaylist.covers[currentTrackIndex].title} - {selectedPlaylist.covers[currentTrackIndex].singer} ({selectedPlaylist.covers[currentTrackIndex].coverSinger}) </FlowingText>
-      </TextArea>
-      <IconArea>
-        <Icon src={prevBtn} onClick={handlePrevTrack} />
-        <div onClick={handlePlayPause}>{isPlaying ? <Icon src={pauseBtn} /> : <Icon src={playBtn} />}</div>
-        <Icon src={nextBtn} onClick={handleNextTrack} />
-      </IconArea>
-    </PlayerContainer>
+      <PlayerContainer>
+        <img className="list-icon" onClick={openPlaylistHeaderModal} src={playlists} alt="Show Playlists Icon" />
+        <TextArea>
+          <FlowingText>{selectedPlaylist.covers[currentTrackIndex].title} - {selectedPlaylist.covers[currentTrackIndex].singer} ({selectedPlaylist.covers[currentTrackIndex].coverSinger}) </FlowingText>
+        </TextArea>
+        <IconArea>
+          <Icon src={prevBtn} onClick={handlePrevTrack} />
+          <div onClick={handlePlayPause}>{isPlaying ? <Icon src={pauseBtn} /> : <Icon src={playBtn} />}</div>
+          <Icon src={nextBtn} onClick={handleNextTrack} />
+        </IconArea>
+      </PlayerContainer>
     </PlaylistComponent>
   );
 };
