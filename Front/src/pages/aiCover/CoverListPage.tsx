@@ -37,11 +37,9 @@ const Title = styled.h1`
 `;
 
 const Container = styled.div`
-  width: 100%;
   .title {
     font-size: 2.5rem;
     font-family: 'GmarketSansBold';
-    width: 100%;
     margin-left: 10rem;
   }
 `;
