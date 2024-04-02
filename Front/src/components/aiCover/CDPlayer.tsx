@@ -1,19 +1,18 @@
-import styled from "styled-components";
-import { Cover } from "./CoverInterface";
-import { useNavigate } from "react-router";
-import heart from "../../assets/heart.png";
-
+import styled from 'styled-components';
+import { Cover } from './CoverInterface';
+import { useNavigate } from 'react-router';
+import heart from '../../assets/heart.png';
 
 const CDContainer = styled.div`
   cursor: pointer;
 `;
 
 const CoverTitle = styled.p`
-  font-size: 1rem; 
+  font-size: 1rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   overflow: hidden;
-  white-space:nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
 `;
 
@@ -21,13 +20,13 @@ const ThumbnailContainer = styled.div`
   position: relative;
   width: 190px;
   height: 190px;
-  border-radius: 50%; 
+  border-radius: 50%;
   overflow: hidden;
   object-fit: cover;
 `;
 
 const ThumbnailImage = styled.img`
-  width: 100%; 
+  width: 100%;
 
   border-radius: 50%;
   z-index: 1;
@@ -38,10 +37,10 @@ const CenterCircle = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50px; 
-  height: 50px; 
-  border-radius: 50%; 
-  background: white; 
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
   z-index: 2;
 `;
 
@@ -65,7 +64,7 @@ const Nickname = styled.p`
   margin-left: 5px;
   margin-top: 0.1rem;
 
-  font-size: 14px; 
+  font-size: 14px;
   color: #575757;
 `;
 
@@ -75,22 +74,22 @@ const LikeContainer = styled.div`
 `;
 
 const HeartIcon = styled.img`
-  width: 20px; 
-  height: auto; 
+  width: 20px;
+  height: auto;
   margin-right: 4px;
 `;
 
 const LikeCount = styled.p`
-  font-size: 0.875rem; 
+  font-size: 0.875rem;
   margin-top: 3px;
 `;
 
 const SongInfo = styled.p`
   width: 220px;
-  font-size: 0.7rem; 
-  color: #A3A3A3;
+  font-size: 0.7rem;
+  color: #a3a3a3;
   overflow: hidden;
-  white-space:nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
 `;
 
@@ -111,17 +110,21 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
     title,
   } = cover;
   const navigate = useNavigate();
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+  const baseURL = 'https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com';
 
   return (
     <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
       <ThumbnailContainer>
-      <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
-      <CenterCircle />
+        <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
+        <CenterCircle />
       </ThumbnailContainer>
       <CoverTitle>{coverName}</CoverTitle>
-      <ProfileInfo >
-        <ProfileImage src={`${baseURL}${profileImage}`} alt="Profile" /> 
+      <ProfileInfo>
+        <ProfileImage
+          src={`${baseURL}${profileImage}`}
+          alt="Profile"
+          style={{ borderRadius: '50%' }}
+        />
         <Nickname>{nickname}</Nickname>
         <LikeContainer>
           <HeartIcon src={heart} alt="Like" />
