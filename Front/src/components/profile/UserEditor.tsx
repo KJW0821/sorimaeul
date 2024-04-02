@@ -5,7 +5,7 @@ import { Button } from "../common/Button";
 import { RootState } from "../../stores/store";
 import { checkNickname, editUserInfo } from "../../utils/userAPI";
 import { set } from "../../stores/user";
-import { requestS3 } from "../../utils/s3";
+import { requestS3, s3URL } from "../../utils/s3";
 
 
 interface ProfileImageProps {
@@ -68,7 +68,6 @@ function UserEditor() {
   const [isValidNickname, setIsValidNickname] = useState(true);
   const [selectedImagePath, setSelectedImagePath] = useState(profileImage);
   const [newProfileImg, setNewProfileImg] = useState(profileImage);
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   // 디바운싱으로 닉네임 중복 체크 
   useEffect(() => {
@@ -136,13 +135,13 @@ function UserEditor() {
       {isEditing ? (
         <>
           <label htmlFor="file" className="cursor-pointer">
-            <ProfileImage $image={`${baseURL}${selectedImagePath}`}></ProfileImage>
+            <ProfileImage $image={s3URL+selectedImagePath}></ProfileImage>
           </label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
         </>
         ) : (
         <>
-          <ProfileImage $image={`${baseURL}${selectedImagePath}`} />
+          <ProfileImage $image={s3URL+selectedImagePath} />
         </>
       )}
       <FlexContainer>

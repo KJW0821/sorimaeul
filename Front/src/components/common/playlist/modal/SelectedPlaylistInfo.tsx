@@ -5,6 +5,7 @@ import deleteIcon from "../../../../assets/deleteIcon.png";
 import { styled } from "styled-components";
 import { deleteCoverFromList, getPlaylist } from "../../../../utils/playlistAPI";
 import { useEffect, useState } from "react";
+import { s3URL } from "../../../../utils/s3";
 import { PlaylistDetailInterface } from "../../../profile/playlist/PlaylistDetailModal";
 import { setSelectedPlaylist } from "../../../../stores/playlists";
 
@@ -53,7 +54,6 @@ const CoverItem = styled.li`
 
 function SelectedPlaylistInfo() {
   const selectedPlaylist = useSelector((state: RootState) => state.playlists.selectedPlaylist);
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
   const [data, setData] = useState<PlaylistDetailInterface | null>(null);
   const playlistCode = selectedPlaylist?.playlistCode;
 
@@ -99,7 +99,7 @@ function SelectedPlaylistInfo() {
           <PlaylistItem key={index}>
             <CoverItem>
             <span>{cover.title} - {cover.singer} ({cover.coverSinger}) {cover.isPublic}</span>
-            {cover.nickname} <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={`${baseURL}/${cover.storagePath}`}></DetailPlayer>
+            {cover.nickname} <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + cover.storagePath}></DetailPlayer>
             <img src={deleteIcon} className="mt-3" onClick={() => deletCoverFromPlaylist(cover.coverCode)} />
             </CoverItem>
             <span></span>

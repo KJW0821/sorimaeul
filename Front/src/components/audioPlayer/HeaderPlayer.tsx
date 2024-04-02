@@ -7,6 +7,7 @@ import prevBtn from "../../assets/prev.png";
 import nextBtn from "../../assets/next.png";
 import playlists from "../../assets/playlistCheck.png";
 import styled, { keyframes } from 'styled-components';
+import { s3URL } from "../../utils/s3";
 import { openModal } from "../../stores/modal";
 
 const PlaylistComponent = styled.div`
@@ -76,7 +77,6 @@ const HeaderPlayer: React.FC = () => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
   const { modalType, isOpen } = useSelector((state: RootState) => state.modal);
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const HeaderPlayer: React.FC = () => {
       if (audio) {
         audio.pause();
       }
-      const newAudio = new Audio(`${baseURL}/${selectedPlaylist.covers[0].storagePath}`);
+      const newAudio = new Audio(s3URL + selectedPlaylist.covers[0].storagePath);
       setAudio(newAudio);
       setIsPlaying(false);
     }
@@ -105,7 +105,7 @@ const HeaderPlayer: React.FC = () => {
 
   useEffect(() => {
     if (selectedPlaylist && selectedPlaylist.covers && selectedPlaylist.covers.length > 0 && audio) {
-      audio.src = `${baseURL}/${selectedPlaylist.covers[currentTrackIndex].storagePath}`;
+      audio.src = s3URL + selectedPlaylist.covers[currentTrackIndex].storagePath
       if (isPlaying) {
         audio.play().catch((error) => console.error("Audio play failed", error));
       }

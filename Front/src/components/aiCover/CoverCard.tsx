@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Cover } from "./CoverInterface"
+import { s3URL } from "../../utils/s3";
 import styled from 'styled-components';
 import heart from "../../assets/heart.png";
 
@@ -96,15 +97,14 @@ const CoverCard: React.FC<Props> = ({
 }) => {
   const { coverCode, coverName, thumbnailPath, profileImage, nickname, likeCount, coverSinger, singer, title } = cover;
   const navigate = useNavigate();
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   return (
   <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
-      <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
+      <ThumbnailImage src={ s3URL + thumbnailPath} alt={title} />
       <Title>{coverName}</Title>
       <ProfileLine>
         <ProfileInfo>
-          <ProfileImage src={`${baseURL}${profileImage}`} />
+          <ProfileImage src={s3URL + profileImage} />
           <Nickname>{nickname}</Nickname>
         </ProfileInfo>
         <LikeContainer>
