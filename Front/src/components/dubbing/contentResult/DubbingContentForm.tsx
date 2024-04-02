@@ -93,6 +93,57 @@ const Button = styled.button`
   }
 `
 
+const TooltipBox = styled.span`
+  position: relative;
+  height: 2rem;
+  .tooltip {
+    position: absolute;
+    right: 0;
+    bottom: -160%;
+    padding: .5rem;
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+    border-radius: 5px;
+    z-index: 10;
+    display: none;
+    min-width: 15rem;
+    text-align: center;
+    border: 1px solid #C9F647;
+  }
+  .tooltip::after {
+    border-color: white transparent;
+    border-style: solid;
+    border-width: 0 6px 8px 6.5px;
+    content: "";
+    display: block;
+    left: 95%;
+    transform: translateX(-95%);
+    position: absolute;
+    top: -6px;
+    width: 0;
+    z-index: 1;
+  }
+  .tooltip::before {
+    border-color: #C9F647 transparent;
+    border-style: solid;
+    border-width: 0 6px 8px 6.5px;
+    content: "";
+    display: block;
+    left: 95%;
+    transform: translateX(-95%);
+    position: absolute;
+    top: -8px;
+    width: 0;
+    z-index: 0;
+  }
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+`
+
 function DubbingContentForm() {
   const params = useParams();
   const navigate = useNavigate();
@@ -109,7 +160,7 @@ function DubbingContentForm() {
       const res = await getUserVideo(params.dubCode);
       setTitle(res.dubName);
       setIsPublic(res.isPublic);
-      setContent(res.dubDetail);
+      setContent(res.dubDetail || '');
       setVideoPath(res.storagePath);
       setIsComplete(res.isComplete);
       setIsLoaded(true);
@@ -147,6 +198,10 @@ function DubbingContentForm() {
     navigate(`/dubbing/${params.sourceCode}/${params.dubCode}`);
   };
 
+  useEffect(() => {
+    console.log(Boolean(title), Boolean(content))
+  }, [content])
+
   return (
     isLoaded && isComplete ?
     <Container>
@@ -161,7 +216,7 @@ function DubbingContentForm() {
             <label className="pt-1" htmlFor="title">제목:</label>
             <input onChange={handleTitle} className="grow pt-1 px-2 border border-gray-300 rounded" type="text" name="title" id="title" defaultValue={title} />
           </div>
-          <textarea onChange={handleContent} name="content" id="content" className="content" wrap="hard" placeholder="영상 설명을 입력해주세요" defaultValue={content}></textarea>
+          <textarea onChange={handleContent} name="content" id="content" className="content" wrap="hard" placeholder="영상 설명을 입력해주세요" defaultValue={content || ''}></textarea>
           <div className="button-box">
             <div className="flex gap-2">
               <p className="is-public">공개여부</p>
@@ -169,10 +224,16 @@ function DubbingContentForm() {
             </div>
             <div className="flex gap-2">
               <Button onClick={cancelEdit}><p>취소</p></Button>
-              <Button onClick={editDubbing} disabled={title === '' || content === ''}>
-                <img src={editIcon} alt="" className="icon" />
-                <p>완료</p>
-              </Button>
+              <TooltipBox>
+                <Button onClick={editDubbing} disabled={title === '' || content === ''}>
+                  <img src={editIcon} alt="" className="icon" />
+                  <p>완료</p>
+                </Button>
+                {
+                  title === '' || content === '' &&
+                  <p className="tooltip">⚠️영상 설명을 적어주세요</p>
+                }
+              </TooltipBox>
             </div>
           </div>
           <p className="description">tip. 비공개로 등록된 컨텐츠는 마이페이지에서 확인 가능합니다.</p>
@@ -180,7 +241,7 @@ function DubbingContentForm() {
       </Content>
     </Container>
     :
-    <DubbingConverting />
+    isLoaded && <DubbingConverting />
   )
 }
 
