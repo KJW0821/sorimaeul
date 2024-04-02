@@ -96,7 +96,7 @@ const HeaderPlayer: React.FC = () => {
       if (audio) {
         audio.pause();
       }
-      const newAudio = new Audio(s3URL + selectedPlaylist.covers[0].storagePath);
+      const newAudio = new Audio(s3URL + `/${selectedPlaylist.covers[0].storagePath}`);
       setAudio(newAudio);
       setIsPlaying(false);
     }
@@ -105,7 +105,7 @@ const HeaderPlayer: React.FC = () => {
 
   useEffect(() => {
     if (selectedPlaylist && selectedPlaylist.covers && selectedPlaylist.covers.length > 0 && audio) {
-      audio.src = s3URL + selectedPlaylist.covers[currentTrackIndex].storagePath
+      audio.src = s3URL + `/${selectedPlaylist.covers[currentTrackIndex].storagePath}`
       if (isPlaying) {
         audio.play().catch((error) => console.error("Audio play failed", error));
       }
