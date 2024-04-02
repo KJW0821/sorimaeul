@@ -135,7 +135,7 @@ function UserEditor() {
         </>
         ) : (
         <>
-          <ProfileImage $image={ selectedImagePath? selectedImagePath : defaultProfile} />
+          <ProfileImage $image={ profileImage? s3URL + profileImage : defaultProfile} />
         </>
       )}
       <FlexContainer>
