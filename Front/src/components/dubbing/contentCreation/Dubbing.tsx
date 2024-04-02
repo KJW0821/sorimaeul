@@ -61,7 +61,7 @@ const DubbingBox = styled.div`
   gap: .5rem;
 
   .character-section {
-    width: 10.6%;
+    width: 16.8%;
   }
 
   .record-section {
@@ -77,7 +77,7 @@ const DubbingBox = styled.div`
   }
 
   .check-section {
-    width: 21.2%;
+    width: 15%;
   }
 
   .convert-section {
