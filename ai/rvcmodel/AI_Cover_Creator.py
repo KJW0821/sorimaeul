@@ -1,4 +1,4 @@
-from pytube import YouTube
+from yt_dlp import YoutubeDL
 from pydub import AudioSegment
 import myinfer as mif
 import numpy as np
@@ -39,19 +39,36 @@ class Creator:
 
     # 유튜브 음원 다운로드
     def download(self):
-        yt = YouTube(youtubeLink)
+        urls = [youtubeLink]
 
-        if yt.length > 600:
+        # ydl_opts 설정
+        ydl_opts = {
+            'quiet': True,  # 출력을 최소화
+            'force_generic_extractor': True,  # 제네릭 추출기 강제 사용
+        }
+
+        # YoutubeDL 객체 생성
+        yt = YoutubeDL(ydl_opts)
+
+        # 영상 정보 가져오기
+        info = yt.extract_info(youtubeLink, download=False)
+
+        if info.get('duration') > 600:
             raise TooLongYoutubeException
 
-        logger.info(f"Start download youtube : {yt.title}")
+        logger.info(f"Start download youtube : {info.get('title')}")
 
-        filename = f"{coverCode}.wav"
-        path = f"{cover_path}/{userCode}"
+        ydl_opts = {
+            'format': 'wav/bestaudio/best',
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'wav',
+            }],
+            'outtmpl': f'{cover_path}/{userCode}/{coverCode}/origin/{coverCode}.wav'
+        }
 
-        filter = yt.streams.filter(adaptive=True, file_extension="mp4", only_audio=True)
-        filter.first().download(filename=filename,
-                                output_path=f"{path}/{coverCode}/origin")
+        yt = YoutubeDL(ydl_opts)
+        yt.download(urls)
 
 
     # 음원에서 보컬, MR 분리
@@ -111,8 +128,10 @@ class Creator:
                     key = key + 12
                 elif key > 8:
                     key = key - 12
-            bass_audio = self.pitch_shift(bass_audio, key)
-            other_audio = self.pitch_shift(other_audio, key)
+            
+            if key != 0:
+                bass_audio = self.pitch_shift(bass_audio, key)
+                other_audio = self.pitch_shift(other_audio, key)
 
         mixed_audio = drums_audio.overlay(bass_audio).overlay(other_audio).overlay(infer_audio)
 
