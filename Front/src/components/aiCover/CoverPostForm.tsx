@@ -250,7 +250,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
                 {selectedImagePath ? (
                   <Thumbnail src={selectedImagePath} />
                 ) : (
-                  <Thumbnail src={defaultCover} />
+                  <Thumbnail src={data.thumbnailPath? s3URL + data.thumbnailPath :  defaultCover} />
                 )}
               </ThumbnailContainer>
             </label>
