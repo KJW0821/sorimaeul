@@ -37,7 +37,7 @@ function LikeDubbingList() {
       {
         dubbingList &&
         dubbingList.map(el => (
-          <LikeDubbingCard data={el} />
+          <LikeDubbingCard key={el.dubCode} data={el} />
         ))
       }
     </Container>
