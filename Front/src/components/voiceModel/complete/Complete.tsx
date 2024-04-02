@@ -2,7 +2,7 @@ import styled from "styled-components";
 import dubbing from "../../../assets/dubbingModel.png";
 import cover from "../../../assets/coverModel.png";
 import setting from "../../../assets/settingModel.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Container = styled.div`
   color: white;
@@ -57,6 +57,7 @@ const MenuBox = styled.div`
 
 function Complete() {
   const navigate = useNavigate();
+  const params = useParams();
 
   return (
     <Container>
@@ -70,7 +71,7 @@ function Complete() {
             <img src={dubbing} className="img" />
           </div>
         </div>
-        <div className="menu">
+        <div className="menu" onClick={() => navigate(`/model/${params.code}/edit`)}>
           <div className="box">
             <p className="type">내 음성 모델 관리</p>
             <img src={setting} className="img" />
