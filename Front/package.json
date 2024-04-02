@@ -29,6 +29,7 @@
     "tailwind-styled-components": "^2.2.0"
   },
   "devDependencies": {
+    "@svgr/rollup": "^8.1.0",
     "@types/event-source-polyfill": "^1.0.5",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
