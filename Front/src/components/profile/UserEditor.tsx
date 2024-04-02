@@ -6,7 +6,7 @@ import { RootState } from "../../stores/store";
 import { checkNickname, editUserInfo } from "../../utils/userAPI";
 import { set } from "../../stores/user";
 import { requestS3, s3URL } from "../../utils/s3";
-
+import defaultProfile from "../../assets/profile.png";
 
 interface ProfileImageProps {
   $image: string;
@@ -123,25 +123,19 @@ function UserEditor() {
     setIsEditing(!isEditing); // 수정 상태 토글
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    setNewNickname(nickname); // 닉네임 초기화
-    setSelectedImagePath(profileImage); // 이미지 경로 초기화
-    setNewProfileImg(profileImage); // 새 프로필 이미지 초기화
-  };
 
   return (
     <LayoutContainer>
       {isEditing ? (
         <>
           <label htmlFor="file" className="cursor-pointer">
-            <ProfileImage $image={s3URL+selectedImagePath}></ProfileImage>
+            <ProfileImage $image={ selectedImagePath? s3URL+selectedImagePath : defaultProfile}></ProfileImage>
           </label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
         </>
         ) : (
         <>
-          <ProfileImage $image={s3URL+selectedImagePath} />
+          <ProfileImage $image={ selectedImagePath? s3URL+selectedImagePath : defaultProfile} />
         </>
       )}
       <FlexContainer>

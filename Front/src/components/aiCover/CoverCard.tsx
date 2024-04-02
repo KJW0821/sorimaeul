@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Cover } from "./CoverInterface"
-import { s3URL } from "../../utils/s3";
+import { defaultCover, s3URL } from "../../utils/s3";
 import styled from 'styled-components';
 import heart from "../../assets/heart.png";
 
@@ -100,7 +100,10 @@ const CoverCard: React.FC<Props> = ({
 
   return (
   <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
-      <ThumbnailImage src={ s3URL + thumbnailPath} alt={title} />
+    { thumbnailPath ? ( <ThumbnailImage src={s3URL + thumbnailPath} alt={title} />) : (
+       <ThumbnailImage src={defaultCover} alt={title} />
+    )}
+     
       <Title>{coverName}</Title>
       <ProfileLine>
         <ProfileInfo>

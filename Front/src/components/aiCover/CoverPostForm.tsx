@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Cover, CoverResultInterface } from "./CoverInterface";
-import { requestS3 } from "../../utils/s3";
+import { defaultCover, requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
 import ColorLine from "./ColorLine";
@@ -170,7 +170,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     coverCode: '',
     coverName: '',
     coverDetail: '',
-    thumbnailPath: '/image/coverImg.jpg',
+    thumbnailPath: '',
     storagePath: '',
     coverSinger: '',
     singer: '',
@@ -249,7 +249,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
             {selectedImagePath ? (
               <Thumbnail src={selectedImagePath}/>
             ) : (
-              <Thumbnail src={s3URL + data.thumbnailPath} />
+              <Thumbnail src={defaultCover} />
             )}
             </ThumbnailContainer>
             </label>

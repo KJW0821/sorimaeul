@@ -8,7 +8,7 @@ import { openModal } from "../../stores/modal";
 import CommentComponent from "../../components/common/Comment";
 import { getCoverComment } from "../../utils/commentAPI";
 import { setCategory, setComments, setSelectedPostId } from "../../stores/comment";
-import { s3URL } from "../../utils/s3";
+import { defaultCover, s3URL } from "../../utils/s3";
 import ColorLine from "../../components/aiCover/ColorLine";
 import styled from "styled-components";
 import heart from "../../assets/heart.png";
@@ -279,7 +279,10 @@ const CoverDetailPage: React.FC = () => {
           <ContentContainer>
             <MediaSection>
               <ThumbnailContainer>
-                <Thumbnail src={s3URL + data.thumbnailPath}alt="Cover Thumbnail" />
+                { data.thumbnailPath ? (
+                  <Thumbnail src={s3URL + data.thumbnailPath} alt="Cover Thumbnail" />
+                ) : (<Thumbnail src={defaultCover} alt="Cover Thumbnail"/>) }
+                
               </ThumbnailContainer>
               <div>
 
