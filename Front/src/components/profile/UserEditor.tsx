@@ -129,13 +129,13 @@ function UserEditor() {
       {isEditing ? (
         <>
           <label htmlFor="file" className="cursor-pointer">
-            <ProfileImage $image={ selectedImagePath? s3URL+selectedImagePath : defaultProfile}></ProfileImage>
+            <ProfileImage $image={ selectedImagePath? selectedImagePath : defaultProfile}></ProfileImage>
           </label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
         </>
         ) : (
         <>
-          <ProfileImage $image={ selectedImagePath? s3URL+selectedImagePath : defaultProfile} />
+          <ProfileImage $image={ selectedImagePath? selectedImagePath : defaultProfile} />
         </>
       )}
       <FlexContainer>
