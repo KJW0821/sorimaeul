@@ -2,6 +2,8 @@ import { ModelData } from "./ModelList";
 import styled from "styled-components";
 import defaultImg from "../../../assets/wave1.png";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../common/Button";
+import { deleteModel } from "../../../utils/voiceModelAPI";
 
 const Container = styled.div`
   flex: 0 0 48%;
@@ -16,10 +18,15 @@ const Container = styled.div`
   border-radius: 1.875rem;
   margin-bottom: 1rem;
 
-  .img {
-    width: 6.375rem;
-    height: 6.375rem;
+  .img-box {
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
+    overflow: hidden;
+  }
+  .img {
+    width: 100%;
+    height: 100%;
   }
 `
 
@@ -29,9 +36,19 @@ const InfoBox = styled.div`
   flex-direction: column;
   margin-left: 1.5rem;
   gap: .5rem;
+  width: 100%;
 
   .title {
+    width: 66%;
     font-size: 1.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    line-height: 1.2;
+    word-wrap: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2 ;
+    -webkit-box-orient: vertical;
   }
 
   .sm-font {
@@ -53,16 +70,27 @@ const InfoBox = styled.div`
   }
 `
 
-const ModelCard: React.FC<{ data: ModelData }> = ({data}) => {
+const ModelCard: React.FC<{ data: ModelData, setModelList: React.Dispatch<React.SetStateAction<ModelData[]>> }> = ({data, setModelList}) => {
   const navigate = useNavigate();
+
+  const deleteMyModel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    await deleteModel(data.modelCode);
+    setModelList(prev => {
+      const newState = [...prev];
+      return newState.filter(el => el.modelCode !== data.modelCode)
+    });
+  }
 
   return (
     <Container onClick={() => navigate(`/model/${data.modelCode}`)}>
-      <img className="img" src={data.imagePath ? data.imagePath : defaultImg} alt="" />
+      <div className="img-box">
+        <img className="img" src={data.imagePath ? data.imagePath : defaultImg} alt="" />
+      </div>
       <InfoBox>
-        <div className="flex justify-between items-end">
-          <p className="title">{data.modelName}</p>
-          <p className="sm-font gray">
+        <div className="flex justify-between">
+          <p className="title w-7/12">{data.modelName}</p>
+          <p className="sm-font gray grow text-right h-full">
             {
               data.state === 0 && '녹음중' 
               || 
@@ -75,8 +103,11 @@ const ModelCard: React.FC<{ data: ModelData }> = ({data}) => {
           </p>
         </div>
         <hr />
-        <div className="progress-box">
-          <p className="sm-font">녹음 진행률: {(Math.round((data.recordCount/200)*1000*100))/1000}% ({data.recordCount}/200)</p>
+        <div className="flex justify-between">
+          <div className="progress-box">
+            <p className="sm-font">녹음 진행률: {(Math.round((data.recordCount/200)*1000*100))/1000}% ({data.recordCount}/200)</p>
+          </div>
+          <Button onClick={deleteMyModel}>삭제</Button>
         </div>
       </InfoBox>
     </Container>
