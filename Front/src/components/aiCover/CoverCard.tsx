@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import { Cover } from "./CoverInterface"
+import { useNavigate } from 'react-router-dom';
+import { Cover } from './CoverInterface';
 import styled from 'styled-components';
-import heart from "../../assets/heart.png";
+import heart from '../../assets/heart.png';
 
 const CardContainer = styled.div`
   width: 280px;
@@ -12,7 +12,7 @@ const CardContainer = styled.div`
 const ThumbnailImage = styled.img`
   width: 250px;
   height: 250px;
-  border-radius: 2px; 
+  border-radius: 2px;
 `;
 
 const Title = styled.h2`
@@ -29,7 +29,7 @@ const Nickname = styled.p`
   max-width: 240px;
   flex-grow: 1;
   margin-left: 5px;
-  font-size: 1rem; 
+  font-size: 1rem;
   color: #575757;
   white-space: nowrap;
   overflow: hidden;
@@ -49,9 +49,9 @@ const ProfileInfo = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 30px; 
+  width: 30px;
   height: 30px;
-  border-radius: 50%; 
+  border-radius: 50%;
   margin-right: 0.5rem;
 `;
 
@@ -63,13 +63,13 @@ const LikeContainer = styled.div`
 const HeartIcon = styled.img`
   margin-right: 3px;
   margin-bottom: 5px;
-  width: 25px; 
-  height: auto; 
+  width: 25px;
+  height: auto;
 `;
 
 const LikeCount = styled.p`
   margin-right: 3rem;
-  font-size: 1.2rem; 
+  font-size: 1.2rem;
   margin-top: 1px;
 `;
 
@@ -77,30 +77,39 @@ const SongInfo = styled.p`
   width: 230px;
   height: 22px;
   line-height: 22px;
-  font-size: 0.9rem; 
-  color: #A3A3A3;
+  font-size: 0.9rem;
+  color: #a3a3a3;
   overflow: hidden;
   white-spce: nowrap;
   text-overflow: ellipsis;
 `;
 
-
-
-
 interface Props {
   cover: Cover;
 }
 
-const CoverCard: React.FC<Props> = ({
-  cover
-}) => {
-  const { coverCode, coverName, thumbnailPath, profileImage, nickname, likeCount, coverSinger, singer, title } = cover;
+const CoverCard: React.FC<Props> = ({ cover }) => {
+  const {
+    coverCode,
+    coverName,
+    thumbnailPath,
+    profileImage,
+    nickname,
+    likeCount,
+    coverSinger,
+    singer,
+    title,
+  } = cover;
   const navigate = useNavigate();
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+  const baseURL = 'https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com';
 
   return (
-  <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
-      <ThumbnailImage src={`${baseURL}${thumbnailPath}`} alt={title} />
+    <CardContainer onClick={() => navigate(`/cover/${coverCode}`)}>
+      <ThumbnailImage
+        src={`${baseURL}${thumbnailPath}`}
+        alt={title}
+        style={{ borderRadius: '50%' }}
+      />
       <Title>{coverName}</Title>
       <ProfileLine>
         <ProfileInfo>
@@ -112,7 +121,9 @@ const CoverCard: React.FC<Props> = ({
           <LikeCount>{likeCount}</LikeCount>
         </LikeContainer>
       </ProfileLine>
-      <SongInfo>{singer} - {title} ({coverSinger})</SongInfo>
+      <SongInfo>
+        {singer} - {title} ({coverSinger})
+      </SongInfo>
     </CardContainer>
   );
 };

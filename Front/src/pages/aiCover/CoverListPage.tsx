@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
-import { Cover } from "../../components/aiCover/CoverInterface";
-import { getCovers, getPopularCovers } from "../../utils/coverAPI";
-import styled from "styled-components";
-import CoverList from "../../components/aiCover/CoverList";
-import PopularCoverList from "../../components/aiCover/PopularCoverList";
-import { useNavigate } from "react-router";
-import { Button } from "../../components/common/Button";
-import Pagination from "../../components/common/Pagination";
-
-
-
+import { useEffect, useState } from 'react';
+import { Cover } from '../../components/aiCover/CoverInterface';
+import { getCovers, getPopularCovers } from '../../utils/coverAPI';
+import styled from 'styled-components';
+import CoverList from '../../components/aiCover/CoverList';
+import PopularCoverList from '../../components/aiCover/PopularCoverList';
+import { useNavigate } from 'react-router';
+import { Button } from '../../components/common/Button';
+import Pagination from '../../components/common/Pagination';
 
 const ColorBlock = styled.div`
   width: 100%;
   height: 11rem;
-  background: linear-gradient(90deg, rgba(225, 165, 255, 0.5) 0%, rgba(229, 151, 249, 0.5) 12.97%, rgba(255, 55, 211, 0.5) 100%), #FDFF00;
+  background: linear-gradient(
+      90deg,
+      rgba(225, 165, 255, 0.5) 0%,
+      rgba(229, 151, 249, 0.5) 12.97%,
+      rgba(255, 55, 211, 0.5) 100%
+    ),
+    #fdff00;
   display: flex;
   align-items: center;
   margin-bottom: 2rem;
@@ -24,14 +27,14 @@ const ColorBlock = styled.div`
     color: white;
     margin-bottom: 0.5rem;
   }
-`
+`;
 
 const Title = styled.h1`
-  font-family: "PyeongChangPeace-Bold";
+  font-family: 'PyeongChangPeace-Bold';
   font-size: 4rem;
   color: rgba(255, 255, 255, 0.5);
   -webkit-text-stroke: 1px white;
-`
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -40,8 +43,8 @@ const Container = styled.div`
     font-family: 'GmarketSansBold';
     width: 100%;
     margin-left: 10rem;
-  };
-`
+  }
+`;
 
 const CoverListContainer = styled.div`
   display: flex;
@@ -52,13 +55,12 @@ const CoverListContainer = styled.div`
   padding: 0 20px;
   margin: 3rem 8rem;
   gap: 20px;
-  max-width: 1600px;
-`
-
+  width: 90%;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   margin-bottom: 5rem;
   margin-right: 10rem;
 `;
@@ -66,7 +68,7 @@ const ButtonContainer = styled.div`
 const DetailLine = styled.div`
   height: 2px;
   width: 84rem;
-  background-color: #A3A3A3;
+  background-color: #a3a3a3;
   margin: 0.8rem 0 3rem 15rem;
 `;
 
@@ -80,23 +82,22 @@ const CoverListPage: React.FC = () => {
 
   const getCoverList = async () => {
     const data = await getCovers(page);
-        setDataList(data.covers);
-        setTotalPages(data.totalPages);
-  }
+    setDataList(data.covers);
+    setTotalPages(data.totalPages);
+  };
 
   const getHotCovers = async () => {
     const popularData = await getPopularCovers();
-    setPopularDataList(
-      popularData.covers);
+    setPopularDataList(popularData.covers);
   };
 
   useEffect(() => {
     getCoverList();
-  }, [page])
+  }, [page]);
 
   useEffect(() => {
     getHotCovers();
-  }, [])
+  }, []);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -113,15 +114,26 @@ const CoverListPage: React.FC = () => {
       <Container>
         <h2 className="title">Hot Contents</h2>
         <ButtonContainer>
-          <Button onClick={() => navigate("/cover/create")} $marginLeft={0} $marginTop={0}>나만의 커버 만들기</Button>
+          <Button
+            onClick={() => navigate('/cover/create')}
+            $marginLeft={0}
+            $marginTop={0}
+          >
+            나만의 커버 만들기
+          </Button>
         </ButtonContainer>
         <PopularCoverList data={popularDataList} />
         <DetailLine />
         <CoverListContainer>
-        <CoverList data={dataList} />
+          <CoverList data={dataList} />
         </CoverListContainer>
       </Container>
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} color="#FDA06C" />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        color="#FDA06C"
+      />
     </>
   );
 };
