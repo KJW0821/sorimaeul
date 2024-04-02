@@ -8,6 +8,7 @@ import { openModal } from "../../stores/modal";
 import CommentComponent from "../../components/common/Comment";
 import { getCoverComment } from "../../utils/commentAPI";
 import { setCategory, setComments, setSelectedPostId } from "../../stores/comment";
+import { defaultCover, s3URL } from "../../utils/s3";
 import ColorLine from "../../components/aiCover/ColorLine";
 import styled from "styled-components";
 import heart from "../../assets/heart.png";
@@ -15,6 +16,7 @@ import inactiveHeart from "../../assets/inactiveHeart.png";
 import sumOrange from "../../assets/sumOrange.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import editIcon from "../../assets/editIcon.png";
+
 
 // 상세 조회 페이지
 const StyledContainer = styled.div`
@@ -205,7 +207,6 @@ const CoverDetailPage: React.FC = () => {
   const [likeCount, setLikeCount] = useState(0);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   useEffect(() => {
     (async () => {
@@ -278,17 +279,20 @@ const CoverDetailPage: React.FC = () => {
           <ContentContainer>
             <MediaSection>
               <ThumbnailContainer>
-                <Thumbnail src={`${baseURL}${data.thumbnailPath}`}alt="Cover Thumbnail" />
+                { data.thumbnailPath ? (
+                  <Thumbnail src={s3URL + data.thumbnailPath} alt="Cover Thumbnail" />
+                ) : (<Thumbnail src={defaultCover} alt="Cover Thumbnail"/>) }
+                
               </ThumbnailContainer>
               <div>
 
-                <audio className="mt-10" src={`${baseURL}/${data.storagePath}`} controls />
+                <audio className="mt-10" src={s3URL + data.storagePath} controls />
               </div>
             </MediaSection>
             <InfoSection>
               <InfoBox>
                 <Profile >
-                  <ProfileImage src={`${baseURL}${data.profileImage}`} alt="Creator Profile Image" />
+                  <ProfileImage src={s3URL + data.profileImage} alt="Creator Profile Image" />
                   <p className="nickname"> {data.nickname} </p>
                 </Profile>
                 <DetailLine />

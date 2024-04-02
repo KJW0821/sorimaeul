@@ -296,17 +296,13 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
             ))}
         </Select>
         <StepContainer>
-          <label className="text-stone-500" htmlFor="pitch">
-            피치 조절
-          </label>
-          {data.pitch}
-          <Tooltip
-            message={
-              '피치 조절에 대한 설명이 들어갑니다.두 줄이 되면 어떻게 나올지 궁금합니다.'
-            }
-          >
-            <HelpIcon src={help} />
-          </Tooltip>
+        <label className="text-stone-500" htmlFor="pitch">피치 조절 
+        </label>
+        {data.pitch}
+        <Tooltip message={"남성과 여성은 일반적으로 4 ~ 6키가 차이납니다. 예를 들어 남성 음성으로 여성곡을 커버하시려는 경우,  -4 ~ 6사이의 피치 조절을 추천드립니다."}>
+        <HelpIcon src={help} />
+        </Tooltip>
+        
         </StepContainer>
 
         <input
@@ -321,19 +317,19 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
           onChange={handleChange}
         />
         <datalist className="datalist" id="markers">
-          <option value="-12" label="-12" />
-          <option value="-11" label="-11" />
+          <option value="-12"/>
+          <option value="-11"/>
           <option value="-10" />
           <option value="-9" />
           <option value="-8" />
           <option value="-7" />
-          <option value="-6" label="-6" />
+          <option value="-6"/>
           <option value="-5" />
           <option value="-4" />
           <option value="-3" />
           <option value="-2" />
           <option value="-1" />
-          <option value="0" label="0" />
+          <option value="0" />
           <option value="1" />
           <option value="2" />
           <option value="3" />
