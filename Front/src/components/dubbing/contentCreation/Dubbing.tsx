@@ -10,6 +10,7 @@ import { ReactComponent as StartDubBtn } from "../../../assets/startDubBtn.svg";
 import { ReactComponent as StopDubBtn } from "../../../assets/stopDubBtn.svg";
 import { ReactComponent as PlayDubBtn } from "../../../assets/playDubBtn.svg";
 import { ReactComponent as ReDubBtn } from "../../../assets/reDubBtn.svg";
+import Tooltip from "../../common/Tooltip";
 
 const Container = styled.div`
   width: 85%;
@@ -132,6 +133,57 @@ const DubbingBox = styled.div`
     right: 0;
     height: 100%;
     width: 15%;
+  }
+`
+
+const TooltipBox = styled.span`
+  position: relative;
+  height: 2rem;
+  .tooltip {
+    position: absolute;
+    left: 45%;
+    top: -130%;
+    padding: .5rem;
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+    border-radius: 5px;
+    z-index: 10;
+    display: none;
+    min-width: 15rem;
+    text-align: center;
+    border: 1px solid #C9F647;
+  }
+  .tooltip::after {
+    border-color: white transparent;
+    border-style: solid;
+    border-width: 8px 6px 0 6.5px;
+    content: "";
+    display: block;
+    left: 5%;
+    transform: translateX(-5%);
+    position: absolute;
+    bottom: -6px;
+    width: 0;
+    z-index: 1;
+  }
+  .tooltip::before {
+    border-color: #C9F647 transparent;
+    border-style: solid;
+    border-width: 8px 6px 0 6.5px;
+    content: "";
+    display: block;
+    left: 5%;
+    transform: translateX(-5%);
+    position: absolute;
+    bottom: -8px;
+    width: 0;
+    z-index: 0;
+  }
+  &:hover {
+    .tooltip {
+      display: block;
+    }
   }
 `
 
@@ -563,9 +615,12 @@ function Dubbing() {
             }
           </div>
         </div>
-        <div className="w-full flex justify-center items-center">
-          <Button onClick={createDubbingContents} disabled={title === ''} $marginLeft={0} $marginTop={1} $width={5.25} $height={2} $color="#C9F647">제작</Button>
-        </div>
+        <TooltipBox>
+          <div className="w-full flex justify-center items-center">
+            <Button onClick={createDubbingContents} disabled={title === ''} $marginLeft={0} $marginTop={1} $width={5.25} $height={2} $color="#C9F647">제작</Button>
+          </div>
+          <p className="tooltip">⚠️ 제목을 적어주세요</p>
+        </TooltipBox>
       </DubbingBox>
     </Container>  
   )
