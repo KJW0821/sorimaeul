@@ -43,12 +43,20 @@ export const getCovers = (page: number) => {
   .catch(err => err)
 }
 
-// AI 마이 페이지 조회
+// AI 마이 페이지 조회 - mine
 export const getMyCovers = (page: number) => {
   const params: ListParams = { target: "mine", page };
   return API.get("cover", { params })
   .then(res => res.data)
   .catch(err => err)
+}
+// AI 마이페이지 조회 - like
+export const getLikeCovers = () => {
+  return API.get("cover", { params: {
+    target: "like"
+  } })
+  .then(res => res.data.covers)
+  .catch(err => console.error(err))
 }
 
 // AI 인기 목록 조회
