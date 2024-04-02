@@ -3,6 +3,7 @@ import { Line } from "../../common/Line";
 import { useNavigate } from "react-router-dom";
 import React, { Fragment } from "react";
 import { RequestData } from "../../../pages/inquiry/RequestListPage";
+import { calcDate } from "../../../utils/calcDate";
 
 const List = styled.div`
   width: 100%;
@@ -37,7 +38,7 @@ const RequestList: React.FC<{ data: RequestData[] }> = ({data}) => {
           <Fragment key={el.boardCode}>
             <div onClick={() => navigate(`/request/${el.boardCode}`)} className="flex items-center justify-center">
               <p className="title w-3/4">{el.title}</p>
-              <p className="date w-1/6">{el.createdTime}</p>
+              <p className="date w-1/6">{calcDate(new Date(el.createdTime))}</p>
             </div>
             <Line $color="#A3A3A3" />
           </Fragment>

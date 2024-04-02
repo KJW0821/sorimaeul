@@ -81,7 +81,7 @@ function RequestDetailPage() {
           <h2 className="title">{data.title}</h2>
           <Line />
           <div className="mb-4 flex flex-col gap-4">
-            <p className="date">{data.createdTime}</p>
+            <p className="date">{data.createdTime.split('T')[0]}</p>
             <div className="content">{data.content}</div>
           </div>
           <Line />
