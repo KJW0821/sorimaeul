@@ -7,10 +7,18 @@ import { checkNickname, editUserInfo } from "../../utils/userAPI";
 import { set } from "../../stores/user";
 import { requestS3, s3URL } from "../../utils/s3";
 import defaultProfile from "../../assets/profile.png";
+import imgEditor from "../../assets/ImgEditor.png";
 
 interface ProfileImageProps {
   $image: string;
 }
+
+const ProfileArea = styled.div`
+position: relative;
+width: 100%;
+height: auto;
+display: inline-block;
+`;
 
 const ProfileImage = styled.div<ProfileImageProps>`
   background-image: url(${props => props.$image});
@@ -22,6 +30,14 @@ const ProfileImage = styled.div<ProfileImageProps>`
   background-size: cover;
   background-position: center;
 `;
+
+const EditIcon = styled.img`
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 15%;
+  cursor: pointer;
+`
 
 const NicknameContainer = styled.div`
   display: flex;
@@ -42,7 +58,7 @@ const LayoutContainer = styled.div`
 
 // 닉네임 중복 확인 문구 스타일
 const NicknameCheckMessage = styled.p`
-  
+  color: #A3A3A3 ;
 `;
 
 const FlexContainer = styled.div`
@@ -66,7 +82,7 @@ function UserEditor() {
   const [newNickname, setNewNickname] = useState(nickname);
   const [isCheckingNickname, setIsCheckingNickname] = useState(false);
   const [isValidNickname, setIsValidNickname] = useState(true);
-  const [selectedImagePath, setSelectedImagePath] = useState(profileImage);
+  const [selectedImagePath, setSelectedImagePath] = useState('');
   const [newProfileImg, setNewProfileImg] = useState(profileImage);
 
   // 디바운싱으로 닉네임 중복 체크 
@@ -129,13 +145,16 @@ function UserEditor() {
       {isEditing ? (
         <>
           <label htmlFor="file" className="cursor-pointer">
-            <ProfileImage $image={ selectedImagePath? selectedImagePath : defaultProfile}></ProfileImage>
+            <ProfileArea>
+            <ProfileImage $image={ selectedImagePath? selectedImagePath :(profileImage ? s3URL + profileImage : defaultProfile)}></ProfileImage>
+            <EditIcon src={imgEditor}/>
+            </ProfileArea>
           </label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
         </>
         ) : (
         <>
-          <ProfileImage $image={ selectedImagePath? selectedImagePath : defaultProfile} />
+          <ProfileImage $image={ profileImage? s3URL + profileImage : defaultProfile} />
         </>
       )}
       <FlexContainer>
