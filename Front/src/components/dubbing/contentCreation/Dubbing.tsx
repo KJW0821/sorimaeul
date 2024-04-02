@@ -18,6 +18,11 @@ const Container = styled.div`
   flex-direction: column;
   gap: 1rem;
   margin: 2rem auto;
+
+  .sm-font {
+    font-size: .8rem;
+    margin-top: -0.5rem;
+  }
 `
 
 const InputBox = styled.div`
@@ -500,6 +505,7 @@ function Dubbing() {
         <label className="title" htmlFor="title">제목:</label>
         <input className="title-input" onChange={handleTitle} type="text" name="title" id="title" maxLength={40} placeholder="최대 40글자까지 작성 가능합니다" />
       </InputBox>
+      <p className="sm-font">* 제목은 필수로 입력해야합니다.</p>
       <VideoBox>
         <video ref={videoRef} src={s3URL + `${videoPath}`} />
       </VideoBox>
