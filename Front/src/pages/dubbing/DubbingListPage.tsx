@@ -166,9 +166,7 @@ function DubbingListPage() {
             {hotVideoList &&
               [
                 ...hotVideoList,
-                ...hotVideoList.slice(0, 2),
                 ...hotVideoList,
-                ...hotVideoList.slice(0, 2),
               ].map((data, idx) => (
                 <HotDubbingSourceCard
                   key={data.videoSourceCode + idx * 100}
