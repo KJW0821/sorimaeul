@@ -125,8 +125,8 @@ function UploadRecordMethod() {
     <Container $isUploaded={getFormDataSize(files) > 0}>
       <div className="guide">
         <p>이미 녹음된 음성 파일을 모델 학습에 이용합니다.</p>
-        <p>최소 1시간 이상의 분량이 권장됩니다.</p>
-        <p>(녹음본 분량이 커질수록 학습에 용이합니다.)</p>
+        <p>10분 이상의 분량이 권장됩니다.</p>
+        <p>(목소리를 제외한 잡은 및 공백이 없어야 학습에 용이합니다.)</p>
       </div>
       <div className="file-controller">
         {
