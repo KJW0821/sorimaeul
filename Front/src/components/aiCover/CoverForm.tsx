@@ -299,7 +299,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
         <label className="text-stone-500" htmlFor="pitch">피치 조절 
         </label>
         {data.pitch}
-        <Tooltip message={"남성과 여성은 일반적으로 4 ~ 6키가 차이납니다. 예를 들어 남성 음성으로 여성곡을 커버하시려는 경우,  -4 ~ 6사이의 피치 조절을 추천드립니다."}>
+        <Tooltip message={"남성과 여성은 일반적으로 4 ~ 6키가 차이납니다. 예를 들어 남성 음성으로 여성곡을 커버하시려는 경우,  -4 ~ -6사이의 피치 조절을 추천드립니다."}>
         <HelpIcon src={help} />
         </Tooltip>
         
