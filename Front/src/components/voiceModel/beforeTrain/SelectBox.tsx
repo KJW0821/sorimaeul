@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { selectMethod } from "../../../stores/voiceModel";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -31,9 +32,14 @@ const Container = styled.div`
 function SelectBox() {
   const dispatch = useDispatch();
 
+
   const methodChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(selectMethod(e.target.id));
   };
+
+  useEffect(() => {
+    dispatch(selectMethod('self'));
+  }, [])
 
   return (
     <Container>
