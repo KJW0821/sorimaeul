@@ -8,6 +8,7 @@ import { closeModal } from "../../stores/modal";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { calcDate } from "../../utils/calcDate";
+import { getUserVideo } from "../../utils/dubbingAPI";
 
 const Container = styled.div`
   width: 34.125rem;
@@ -76,7 +77,7 @@ function AlarmModal() {
     dispatch(removeAlarm(notifyCode));
   };
 
-  const goDetail = (notifyType: string, targetCode: number, notifyCode: number, notifyContent: string) => {
+  const goDetail = async (notifyType: string, targetCode: number, notifyCode: number, notifyContent: string) => {
     checkAlarm(notifyCode);
     dispatch(checkAlarmState(notifyCode));
     if (!notifyContent.includes("실패했습니다")) {
@@ -85,7 +86,8 @@ function AlarmModal() {
       } else if (notifyType === 'cover') {
         navigate(`/cover/board/${targetCode}`);
       } else {
-        navigate('/dubbing');
+        const res = await getUserVideo(`${targetCode}`);
+        navigate(`/dubbing/${res.videoSourceCode}/${targetCode}/edit`);
       }
       dispatch(closeModal());
     }
