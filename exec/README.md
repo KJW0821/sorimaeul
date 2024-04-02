@@ -39,7 +39,7 @@
     - React 18.2.0
     - Redux 5.0.1
     - Tailwind CSS 3.4.1
-    - NodeJS 20.10.0
+    - Node.js 20.10.0
   - Back-End
     - Java 17 (Azul Zulu version 17.0.9)
     - Spring boot 3.2.2
@@ -52,9 +52,9 @@
 
 ### 외부 서비스
 
-- Kakao OAuth
-- Google OAuth
-- AWS S3 Bucket
+- Kakao OAuth: [Kakao developers](https://developers.kakao.com/)
+- Google OAuth: [Google Cloud](https://console.cloud.google.com/)
+- AWS S3 Bucket: [AWS S3](https://s3.console.aws.amazon.com/)
 
 ## 2. 빌드 및 배포
 
