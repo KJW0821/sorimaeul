@@ -99,7 +99,7 @@ function SelectedPlaylistInfo() {
           <PlaylistItem key={index}>
             <CoverItem>
             <span>{cover.title} - {cover.singer} ({cover.coverSinger}) {cover.isPublic}</span>
-            {cover.nickname} <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + cover.storagePath}></DetailPlayer>
+            {cover.nickname} <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + `/${cover.storagePath}`}></DetailPlayer>
             <img src={deleteIcon} className="mt-3" onClick={() => deletCoverFromPlaylist(cover.coverCode)} />
             </CoverItem>
             <span></span>
