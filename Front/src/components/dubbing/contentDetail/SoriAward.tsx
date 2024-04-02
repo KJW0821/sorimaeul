@@ -5,6 +5,8 @@ import { Fragment, useEffect, useState } from "react";
 import Carousel from "./Carousel";
 import { useParams } from "react-router-dom";
 import defaultProfile from "../../../assets/profile.png";
+import { s3URL } from "../../../utils/s3";
+
 
 const AwardBox = styled.div`
   width: 100%;
@@ -158,7 +160,7 @@ function SoriAward() {
                     <li className="name">
                       <p>{idx + 1}. </p> 
                       <div className="profile-box">
-                        <img className="profile" src={el.profileImage ? el.profileImage : defaultProfile} alt="" /> 
+                        <img className="profile" src={el.profileImage ? s3URL + el.profileImage : defaultProfile} alt="" /> 
                       </div>
                       <p>{el.nickname}</p>
                     </li>
