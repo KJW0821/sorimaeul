@@ -13,10 +13,13 @@ import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
 import logoimage from '../../assets/logo.png';
 import Playlist from '../../components/common/playlist/header/Playlist';
+import Lottie from 'lottie-react';
+import anime from '../../assets/lottie/mainAnime.json';
+import HomeInfo from './HomeInfo';
 
 const Outer = styled.div`
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden; /* 가로 스크롤바 방지 */
   &::-webkit-scrollbar {
     display: none;
@@ -25,14 +28,13 @@ const Outer = styled.div`
 
 const LogoContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 100%;
-  margin-left: 150px;
-  margin-top: 0;
+  margin-top: -100px;
 `;
 
 const Page1 = styled.div`
-  height: calc(100vh - 0px);
+  height: calc(100vh - 90px);
   display: flex;
   background-color: #f7f6cf;
 `;
@@ -112,7 +114,7 @@ const CategoryDescription = styled.p`
 const Page3 = styled.div`
   position: relative;
   height: 100vh;
-  width: 1975px;
+  width: 100%;
   display: flex;
   background-color: #f4cfdf;
 `;
@@ -131,26 +133,30 @@ const CoverCategory = styled(CategoryBox)`
 
 const ImagesContainer = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify=content: center;
+  flex-wrap: wrap;
   gap: 20px;
+  padding-left: 70px;
 `;
 
 interface ImageInterface {
   $rotation: string;
+  $width: string;
 }
 
 const StyledImage = styled.img<ImageInterface>`
   display: flex;
-  width: 450px;
   height: auto;
   border-radius: 10px;
   transform: rotate(${(props) => props.$rotation || '0deg'});
+  width: ${(props) => props.$width};
 `;
 
 const MarqueeComponentStyled = styled.div`
   position: absolute;
   bottom: 0;
+  margin-left: -60px;
   height: auto;
   width: 100%;
 `;
@@ -170,7 +176,6 @@ const HomePage: React.FC = () => {
   const DIVIDER_HEIGHT = 5;
   const outerDivRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태 관리
-
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
@@ -230,15 +235,17 @@ const HomePage: React.FC = () => {
     };
   }, []);
 
+  // Platlist 만약에 안되면 calc 높이 조정한거 변경하면 됨.
+
   return (
     <Outer ref={outerDivRef}>
+      <Playlist />
       <Page1>
         <LogoContainer>
-          <Playlist />
-          <Link to="/">
-            <img src={logoimage}></img>
-          </Link>
+          <img src={logoimage}></img>
+          <HomeInfo />
         </LogoContainer>
+        <Lottie animationData={anime} style={{ width: 2000 }} />
       </Page1>
       <Page2>
         <RightAlignedContainer>
@@ -266,21 +273,25 @@ const HomePage: React.FC = () => {
           <ImagesContainer>
             <StyledImage
               $rotation="-7.7deg"
+              $width="22%"
               src={album1}
               alt="AI Cover image1"
             />
             <StyledImage
               $rotation="4.74deg"
+              $width="22%"
               src={album2}
               alt="AI Cover image2"
             />
             <StyledImage
               $rotation="-8.2deg"
+              $width="22%"
               src={album3}
               alt="AI Cover image3"
             />
             <StyledImage
               $rotation="11.5deg"
+              $width="22%"
               src={album4}
               alt="AI Cover image4"
             />

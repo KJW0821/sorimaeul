@@ -10,8 +10,13 @@ import user from '../../assets/user.png';
 import voice from '../../assets/voice.png';
 import bgLogo from '../../assets/sideBgLogo.png';
 import foldBtn from '../../assets/foldBtn.png';
+import microphoneActive from "../../assets/activeVoice.png";
+import recordActive from "../../assets/activeCover.png";
+import questionActive from "../../assets/activeFAQ.png";
+import userActive from "../../assets/activeProfile.png";
+import voiceActive from "../../assets/activeDub.png";
 import { Line } from "./Line";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { logout as logoutAPI } from "../../utils/userAPI";
 import { logout as logoutState } from "../../stores/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -88,6 +93,7 @@ const Container = styled.div<{$isOpen: boolean}>`
 function SideBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const isOpen = useSelector((state: RootState) => state.common.isOpen);
   const isUser = useSelector((state: RootState) => state.user.loggedIn);
   const msgCnt = useSelector((state: RootState) => state.common.unreadMsgCnt);
@@ -182,26 +188,26 @@ function SideBar() {
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center w-full">
               <div onClick={() => navigate('/model/create')} className="col">
-                <img src={microphone} alt="learning" />
+              <img src={location.pathname === '/model/create' ? microphoneActive : microphone} alt="voice-model" />
                 <p>음성 학습</p>
               </div>
               <div onClick={() => navigate('/dubbing')} className="col">
-                <img src={voice} alt="dubbing" />
+                <img src={location.pathname === '/dubbing' ? voiceActive : voice} alt="dubbing" />
                 <p>더빙 학원</p>
               </div>
               <div onClick={() => navigate('/cover')} className="col">
-                <img src={record} alt="aicover" />
+                <img src={location.pathname === '/cover' ? recordActive : record} alt="aicover" />
                 <p>AI 커버</p>
               </div>
               <div className="col" onClick={() => navigate('/FAQ')}>
-                <img src={question} alt="inquiry" />
+                <img src={location.pathname === '/FAQ' ? questionActive : question} alt="inquiry" />
                 <p>FAQ</p>
               </div>
             </div>
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center w-full">
               <div onClick={() => navigate('/profile')}  className="col">
-                <img src={user} alt="profile" />
+                <img src={location.pathname === '/profile' ? userActive : user} alt="profile" />
                 <p>마이페이지</p>
               </div>
               <div className="col" onClick={openAlarmModal}>
@@ -232,14 +238,14 @@ function SideBar() {
             <img onClick={toggleSideBar} src={menu} alt="menu" />
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
-              <img onClick={() => navigate('/model/create')} src={microphone} alt="learning" />
-              <img onClick={() => navigate('/dubbing')} src={voice} alt="dubbing" />
-              <img onClick={() => navigate('/cover')} src={record} alt="aicover" />
-              <img onClick={() => navigate('/FAQ')} src={question} alt="inquiry" />
+              <img onClick={() => navigate('/model/create')} src={location.pathname === '/model/create' ? microphoneActive : microphone} alt="voice-model" />
+              <img onClick={() => navigate('/dubbing')} src={location.pathname === '/dubbing' ? voiceActive : voice} alt="dubbing" />
+              <img onClick={() => navigate('/cover')} src={location.pathname === '/cover' ? recordActive : record} alt="aicover" />
+              <img onClick={() => navigate('/FAQ')} src={location.pathname === '/FAQ' ? questionActive : question} alt="inquiry" />
             </div>
             <Line $color="white" />
             <div className="flex flex-col gap-2 items-center">
-              <img onClick={() => navigate('/profile')} src={user} alt="profile" />
+              <img onClick={() => navigate('/profile')} src={location.pathname === '/profile' ? userActive : user} alt="profile" />
               <div className="relative">
                 <img onClick={openAlarmModal} src={bell} alt="alarm" />
                 <div className="msg-cnt">

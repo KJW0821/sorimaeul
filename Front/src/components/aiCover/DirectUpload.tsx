@@ -4,7 +4,7 @@ const Input = styled.input`
   border: 1px solid #ccc; /* 기본 테두리 색상 */
   border-radius: 5px;
   width: 38rem;
-  margin-left: 0.5rem;
+  margin-left: 2rem;
   height: 2.75rem;
   padding: 0 1rem;
   outline: none;
@@ -28,15 +28,14 @@ function DirectUpload({ link, onLinkChange }: DirectUploadProps) {
 
   return (
     <>
-        <label>
-          YouTube 링크:
+
           <Input
       type="text"
       value={link}
       onChange={handleChange}
       placeholder="YouTube 링크를 입력해주세요."
     />
-        </label>
+
         
     </>
   );

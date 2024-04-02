@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components"; 
-import { getPopularSourceVideoList } from "../../utils/dubbingAPI";
-import { VideoData } from "../../pages/dubbing/DubbingListPage";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { getPopularSourceVideoList } from '../../utils/dubbingAPI';
+import { VideoData } from '../../pages/dubbing/DubbingListPage';
 
 const Card = styled.div`
   width: 300px;

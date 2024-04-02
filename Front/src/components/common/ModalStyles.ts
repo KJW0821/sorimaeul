@@ -40,4 +40,5 @@ export const Content = styled.section<ContentInterface>`
   border-radius: ${(props) => props.$borderRadius? `${props.$borderRadius}px` : "15px"};
   padding: ${(props) => props.$padding? `${props.$padding}rem` : "2rem"};
   z-index: 1;
+  overflow-y: auto;
 `;
