@@ -7,6 +7,7 @@ import { checkAlarmState, removeAlarm, setUnreadMsgCnt } from "../../stores/comm
 import { closeModal } from "../../stores/modal";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { calcDate } from "../../utils/calcDate";
 
 const Container = styled.div`
   width: 34.125rem;
@@ -41,25 +42,27 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     gap: .5rem;
-    .alarm {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid #E5E7DF;
-      border-radius: 10px;
-      padding: .5rem;
-      .content {
-        padding-top: .15rem;
-        font-size: 1rem;
-        width: 75%;
-      }
-      .date {
-        padding-top: .35rem;
-        font-size: 0.75rem;
-        font-family: 'GmarketSansLight';
-      }
-    }
+  }
+`
+
+const Alarm = styled.div<{ $isChecked: number }>`
+  width: 95%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: ${(props) => `1px solid #${props.$isChecked ? 'E5E7DF' : 'BFFF0A'}`};
+  border-radius: 10px;
+  padding: .5rem;
+
+  .content {
+    padding-top: .15rem;
+    font-size: 1rem;
+    width: 75%;
+  }
+  .date {
+    padding-top: .35rem;
+    font-size: 0.75rem;
+    font-family: 'GmarketSansLight';
   }
 `
 
@@ -73,17 +76,19 @@ function AlarmModal() {
     dispatch(removeAlarm(notifyCode));
   };
 
-  const goDetail = (notifyType: string, targetCode: number, notifyCode: number) => {
+  const goDetail = (notifyType: string, targetCode: number, notifyCode: number, notifyContent: string) => {
     checkAlarm(notifyCode);
     dispatch(checkAlarmState(notifyCode));
-    if (notifyType === 'train') {
-      navigate(`/model/${targetCode}`);
-    } else if (notifyType === 'cover') {
-      navigate(`/cover/${targetCode}`);
-    } else {
-      //더빙으로 가기
+    if (!notifyContent.includes("실패했습니다")) {
+      if (notifyType === 'train') {
+        navigate(`/model/${targetCode}`);
+      } else if (notifyType === 'cover') {
+        navigate(`/cover/board/${targetCode}`);
+      } else {
+        navigate('/dubbing');
+      }
+      dispatch(closeModal());
     }
-    dispatch(closeModal());
   };
 
   useEffect(() => {
@@ -100,10 +105,13 @@ function AlarmModal() {
         {
           alarmList &&
           alarmList.map(el => (
-            <div onClick={() => goDetail(el.notifyType, el.targetCode, el.notifyCode)} className="alarm" key={el.notifyCode}>
+            <Alarm $isChecked={el.isChecked} onClick={() => goDetail(el.notifyType, el.targetCode, el.notifyCode, el.notifyContent)} key={el.notifyCode}>
               <p className="content">{el.notifyContent}</p>
               <div className="flex gap-3 justify-center items-center">
-                <p className="date">{el.createdTime.split('T')[0]}</p>
+                <div>
+                  <p className="date font-black">{ el.isChecked ? '읽음' : '읽지 않음'}</p>
+                  <p className="date">{calcDate(new Date(el.createdTime))}</p>
+                </div>
                 <img 
                   onClick={(e) => {
                     e.stopPropagation();
@@ -113,7 +121,7 @@ function AlarmModal() {
                   alt="" 
                 />
               </div>
-            </div>
+            </Alarm>
           ))
         }
       </div>
