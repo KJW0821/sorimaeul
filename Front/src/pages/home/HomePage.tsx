@@ -34,7 +34,7 @@ const LogoContainer = styled.div`
 `;
 
 const Page1 = styled.div`
-  height: calc(100vh - 90px);
+  height: calc(100vh - 50px);
   display: flex;
   background-color: #f7f6cf;
 `;
