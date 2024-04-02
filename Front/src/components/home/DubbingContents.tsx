@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getPopularSourceVideoList } from '../../utils/dubbingAPI';
 import { VideoData } from '../../pages/dubbing/DubbingListPage';
+import { s3URL } from '../../utils/s3';
+
 
 const Card = styled.div`
   width: 300px;
@@ -39,7 +41,7 @@ const DubbingContents: React.FC = () => {
     <>
       {hotVideoList.map((video, index) => (
         <Card key={index}>
-          <Thumbnail src={video.thumbnailPath} alt="Thumbnail" />
+          <Thumbnail src={s3URL + video.thumbnailPath} alt="Thumbnail" />
           <SourceName>{video.sourceName}</SourceName>
         </Card>
       ))}
