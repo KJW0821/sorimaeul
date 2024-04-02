@@ -7,10 +7,18 @@ import { checkNickname, editUserInfo } from "../../utils/userAPI";
 import { set } from "../../stores/user";
 import { requestS3, s3URL } from "../../utils/s3";
 import defaultProfile from "../../assets/profile.png";
+import imgEditor from "../../assets/ImgEditor.png";
 
 interface ProfileImageProps {
   $image: string;
 }
+
+const ProfileArea = styled.div`
+position: relative;
+width: 100%;
+height: auto;
+display: inline-block;
+`;
 
 const ProfileImage = styled.div<ProfileImageProps>`
   background-image: url(${props => props.$image});
@@ -22,6 +30,14 @@ const ProfileImage = styled.div<ProfileImageProps>`
   background-size: cover;
   background-position: center;
 `;
+
+const EditIcon = styled.img`
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 15%;
+  cursor: pointer;
+`
 
 const NicknameContainer = styled.div`
   display: flex;
@@ -129,7 +145,10 @@ function UserEditor() {
       {isEditing ? (
         <>
           <label htmlFor="file" className="cursor-pointer">
+            <ProfileArea>
             <ProfileImage $image={ selectedImagePath? selectedImagePath :(profileImage ? s3URL + profileImage : defaultProfile)}></ProfileImage>
+            <EditIcon src={imgEditor}/>
+            </ProfileArea>
           </label>
           <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
         </>
