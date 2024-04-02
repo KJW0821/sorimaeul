@@ -73,7 +73,7 @@ const ThumbnailContainer = styled.div`
 
 const Thumbnail = styled.img`
   width: 100%; 
-  height: auto;
+  height: 100%;
   display: block;
   position: relative;
   z-index: 1; 
