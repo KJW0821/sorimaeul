@@ -51,6 +51,13 @@ const ButtonBox = styled.div`
   }
 `;
 
+
+// 날짜 형식을 변경하는 함수
+function formatDate(dateString: string) {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString('ko-KR', options).replace(/\. /g, '.');
+}
+
 interface Props {
   playlistCode: string,
   playlistName: string,
@@ -117,7 +124,7 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
       ) : (
         <p>{playlistName}</p>
       )}
-      <p>{createdTime}</p>
+      <p className='text-stone-400'>{formatDate(createdTime)}</p>
       <ButtonBox>
         <Button onClick={handleEdit}>
           <img className="icon" src={editIcon} alt="" />
