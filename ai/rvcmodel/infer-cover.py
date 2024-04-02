@@ -3,8 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from AI_Cover_Creator import Creator, TooLongYoutubeException
 
-import pytube.exceptions as ex
-
 import os, shutil
 import requests
 import logging
@@ -66,22 +64,6 @@ def create_cover(request: Request):
     except TooLongYoutubeException as e:
         logger.info(f"Youtube error : {e}")
         msg = f'AI 커버 "{coverName}"의 유튜브 영상 길이가 10분이 넘습니다.'
-        is_success = "false"
-    
-    except (ex.PytubeError,
-            ex.MaxRetriesExceeded,
-            ex.HTMLParseError,
-            ex.ExtractError,
-            ex.RegexMatchError,
-            ex.VideoUnavailable,
-            ex.AgeRestrictedError,
-            ex.LiveStreamError,
-            ex.VideoPrivate,
-            ex.RecordingUnavailable,
-            ex.MembersOnly,
-            ex.VideoRegionBlocked) as e:
-        logger.info(f"Youtube error : {e}")
-        msg = f'AI 커버 "{coverName}"의 유튜브에 접근할 수 없습니다.'
         is_success = "false"
     
     except Exception as e:
