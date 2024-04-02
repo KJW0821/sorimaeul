@@ -3,6 +3,8 @@ import API from "./axios";
 import axios from "axios";
 
 export const s3URL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
+export const defaultCover = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/image/coverImg.jpg";
+export const defaultModel = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/image/modelImg.jpg";
 
 export const resizeFile = async (file: File) =>
   new Promise<File>((res) => {

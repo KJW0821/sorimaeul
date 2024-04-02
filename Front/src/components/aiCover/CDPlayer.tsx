@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Cover } from "./CoverInterface";
 import { useNavigate } from "react-router";
-import { s3URL } from "../../utils/s3";
+import { defaultCover, s3URL } from "../../utils/s3";
 import heart from "../../assets/heart.png";
 
 
@@ -116,7 +116,9 @@ const CDPlayer: React.FC<Props> = ({ cover }) => {
   return (
     <CDContainer onClick={() => navigate(`/cover/${coverCode}`)}>
       <ThumbnailContainer>
-      <ThumbnailImage src={ s3URL + thumbnailPath} alt={title} />
+        {thumbnailPath ? (
+           <ThumbnailImage src={ s3URL + thumbnailPath} alt={title} />
+        ) : (<ThumbnailImage src={defaultCover} />)}
       <CenterCircle />
       </ThumbnailContainer>
       <CoverTitle>{coverName}</CoverTitle>
