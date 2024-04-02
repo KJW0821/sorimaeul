@@ -12,7 +12,7 @@ import { ReactComponent as PlayDubBtn } from "../../../assets/playDubBtn.svg";
 import { ReactComponent as ReDubBtn } from "../../../assets/reDubBtn.svg";
 
 const Container = styled.div`
-  width: 90%;
+  width: 85%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -50,6 +50,7 @@ const VideoBox = styled.div`
     width: 100%;
     height: 100%;
     max-height: 38.25rem;
+    object-fit: cover;
   }
 `
 
