@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import hidden from "../../assets/hidden.svg";
 import { ReactComponent as Icon } from "../../assets/public.svg";
 
 const Button = styled.div<{ $color: string }>`
