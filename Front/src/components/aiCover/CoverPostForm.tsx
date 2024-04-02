@@ -4,7 +4,9 @@ import { requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
 import ColorLine from "./ColorLine";
+import { s3URL } from "../../utils/s3";
 import deleteIcon from "../../assets/deleteIcon.png";
+import coverImg from "../../assets/coverImg.jpg";
 import { deleteCover } from "../../utils/coverAPI";
 import { useNavigate } from "react-router-dom";
 import ToggleButton from "../common/ToggleButton";
@@ -168,7 +170,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     coverCode: '',
     coverName: '',
     coverDetail: '',
-    thumbnailPath: '',
+    thumbnailPath: '/image/coverImg.jpg',
     storagePath: '',
     coverSinger: '',
     singer: '',
@@ -176,8 +178,6 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     isPublic: false
   });
   const [isPublic, setIsPublic] = useState(data.isPublic);
-
-  const baseURL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
 
   const handleImagePath = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -248,17 +248,14 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
               <ThumbnailContainer>
             {selectedImagePath ? (
               <Thumbnail src={selectedImagePath}/>
-            ) : data.thumbnailPath ? (
-              <Thumbnail src={`${baseURL}${data.thumbnailPath}`} />
             ) : (
-              // `thumbnailPath`가 `null`이거나 비어 있는 경우 기본 이미지 표시
-             <Thumbnail src="/path/to/default/image.png" />
+              <Thumbnail src={s3URL + data.thumbnailPath} />
             )}
             </ThumbnailContainer>
             </label>
             <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
             {data.storagePath && (
-              <audio className="mt-10" src={`${baseURL}/${data.storagePath}`} controls></audio>
+              <audio className="mt-10" src={s3URL + data.storagePath} controls></audio>
             )}
 
         </MediaSection>
