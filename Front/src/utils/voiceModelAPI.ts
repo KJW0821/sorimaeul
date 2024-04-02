@@ -80,3 +80,9 @@ export const getMyVoiceModels = (page: number) => {
     .then(res => res.data)
     .catch(err => console.error(err))
 };
+
+export const deleteModel = (modelCode: number) => {
+  return API.delete(URL + `/detail/${modelCode}`)
+    .then(res => res)
+    .catch(err => console.error(err))
+};
