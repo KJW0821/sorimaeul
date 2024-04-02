@@ -136,4 +136,4 @@ def create(request: Request, background_tasks: BackgroundTasks):
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app="fast-dubbing:app", host='0.0.0.0', port=7864, reload=True)
+    uvicorn.run(app="encode-dubbing:app", host='0.0.0.0', port=7864, reload=True)
