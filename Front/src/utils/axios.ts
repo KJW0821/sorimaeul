@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie, removeCookie, setCookie } from './cookie';
 import { logout } from '../stores/user';
 
-export const isProduction = false;
+export const isProduction = true;
 
 // 백엔드 서버 기본 url 지정
 export const URL = isProduction
