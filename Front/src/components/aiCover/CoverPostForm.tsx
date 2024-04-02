@@ -255,7 +255,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
             </label>
             <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
             {data.storagePath && (
-              <audio className="mt-10" src={s3URL + data.storagePath} controls></audio>
+              <audio className="mt-10" src={s3URL + `/${data.storagePath}`} controls></audio>
             )}
 
         </MediaSection>

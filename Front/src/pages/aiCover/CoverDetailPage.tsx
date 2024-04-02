@@ -286,7 +286,7 @@ const CoverDetailPage: React.FC = () => {
               </ThumbnailContainer>
               <div>
 
-                <audio className="mt-10" src={s3URL + data.storagePath} controls />
+                <audio className="mt-10" src={s3URL + `/${data.storagePath}`} controls />
               </div>
             </MediaSection>
             <InfoSection>
