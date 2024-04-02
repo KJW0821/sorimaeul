@@ -182,40 +182,43 @@ function UserDubbingDetailPage() {
   return (
     <>
       <ColorLine />
-      <Container>
-        <h1 className="title">{info?.dubName}</h1>
-        <video className="video" controls src={s3URL + info?.storagePath} />
-        <div className="flex justify-between items-center">
-          <div className="profile-box">
-            <img className="profile" src={info?.profileImage ? s3URL + info.profileImage : defaultProfile} alt="" />
-            <p>{info?.nickname}</p>
-          </div>
-          <div className="flex gap-4 justify-center items-center h-full">
-            <div className="like-box">
-              <img onClick={likeContent} className="smile" src={info?.isLiked ? smile : notSmile} alt="smile" />
-              <p className="count">+ {info?.likeCount}</p>
+      {
+        info &&
+        <Container>
+          <h1 className="title">{info.dubName}</h1>
+          <video className="video" controls src={s3URL + info.storagePath} />
+          <div className="flex justify-between items-center">
+            <div className="profile-box">
+              <img className="profile" src={info.profileImage ? s3URL + info.profileImage : defaultProfile} alt="" />
+              <p>{info?.nickname}</p>
             </div>
-            {
-              info?.nickname === userName &&
-              <div className="button-box">
-                <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/${params.dubCode}/edit`)}>
-                  <img className="icon" src={editIcon} alt="" />
-                  <p>수정</p>
-                </Button>
-                <Button onClick={deleteDubbingContent}>
-                  <img className="icon" src={deleteIcon} alt="" />
-                  <p>삭제</p>
-                </Button>
+            <div className="flex gap-4 justify-center items-center h-full">
+              <div className="like-box">
+                <img onClick={likeContent} className="smile" src={info.isLiked ? smile : notSmile} alt="smile" />
+                <p className="count">+ {info.likeCount}</p>
               </div>
-            }
+              {
+                info?.nickname === userName &&
+                <div className="button-box">
+                  <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/${params.dubCode}/edit`)}>
+                    <img className="icon" src={editIcon} alt="" />
+                    <p>수정</p>
+                  </Button>
+                  <Button onClick={deleteDubbingContent}>
+                    <img className="icon" src={deleteIcon} alt="" />
+                    <p>삭제</p>
+                  </Button>
+                </div>
+              }
+            </div>
           </div>
-        </div>
-        <div className="description-box">
-          <p className="description">{info?.dubDetail}</p>
-          <p className="date">{info?.createdTime}</p>
-        </div>
-        <CommentComponent width={100} />
-      </Container> 
+          <div className="description-box">
+            <p className="description">{info.dubDetail}</p>
+            <p className="date">{info.createdTime}</p>
+          </div>
+          <CommentComponent width={100} />
+        </Container> 
+      }
     </>
   )
 }
