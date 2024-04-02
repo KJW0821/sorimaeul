@@ -147,7 +147,7 @@ function UploadRecordMethod() {
             </div>
             <div>
               <label htmlFor="files">+ 파일 추가</label>
-              <input onChange={handleFiles} type="file" id="files" name="files" accept="audio/wav" multiple />
+              <input onChange={handleFiles} type="file" id="files" name="files" accept=".wav, .mp3, .m4a" multiple />
             </div>
           </div>
           :
@@ -155,7 +155,7 @@ function UploadRecordMethod() {
             <img src={uploadFile} alt="uploadFile" />
             <p>wav 파일이 권장됩니다.</p>
             <label htmlFor="files"></label>
-            <input onChange={handleFiles} type="file" id="files" name="files" accept="audio/wav" multiple />
+            <input onChange={handleFiles} type="file" id="files" name="files" accept=".wav, .mp3, .m4a" multiple />
           </>
         }
       </div>
