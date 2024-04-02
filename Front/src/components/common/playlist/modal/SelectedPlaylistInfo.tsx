@@ -30,7 +30,7 @@ const PlaylistItem = styled.li`
   }
 `;
 
-const CoverItem = styled.li`
+const CoverItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
