@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCategory, setComments, setSelectedPostId } from "../../stores/comment";
 import { s3URL } from "../../utils/s3";
 import { RootState } from "../../stores/store";
+import DubbingConverting from "../../components/dubbing/contentCreation/DubbingConverting";
 
 const Container = styled.div`
   width: 75%;
@@ -183,7 +184,7 @@ function UserDubbingDetailPage() {
     <>
       <ColorLine />
       {
-        info &&
+        info && info.storagePath ?
         <Container>
           <h1 className="title">{info.dubName}</h1>
           <video className="video" controls src={s3URL + info.storagePath} />
@@ -218,6 +219,8 @@ function UserDubbingDetailPage() {
           </div>
           <CommentComponent width={100} />
         </Container> 
+        :
+        <DubbingConverting />
       }
     </>
   )

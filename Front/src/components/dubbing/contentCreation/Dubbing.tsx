@@ -625,7 +625,10 @@ function Dubbing() {
           <div className="w-full flex justify-center items-center">
             <Button onClick={createDubbingContents} disabled={title === ''} $marginLeft={0} $marginTop={1} $width={5.25} $height={2} $color="#C9F647">제작</Button>
           </div>
-          <p className="tooltip">⚠️ 제목을 적어주세요</p>
+          {
+            title === '' &&
+            <p className="tooltip">⚠️ 제목을 적어주세요</p>
+          }
         </TooltipBox>
       </DubbingBox>
     </Container>  
