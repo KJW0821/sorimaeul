@@ -4,15 +4,16 @@
 
 ### 카카오 및 구글 소셜 로그인 가능
 
-  <img src="./images/readme/login.PNG"  />
+<details>
+<summary>기본 화면</summary>
+   <img src="./images/readme/login.png"  />
+</details>
 
 ## 2. 메인 페이지
 
-### 기본 화면
+### 기본 화면 / 나만의 플레이리스트 곡 재생가능
 
-### 나만의 플레이리스트 곡 재생가능
-
-  <img src="./images/readme/playlist.png"  />
+### gif 추가예정
 
 ## 3. 목소리 학습
 
@@ -56,9 +57,10 @@
 
 <details>
 
+<summary>요청 게시판</summary>
+
 ### 관리자에게 요청 가능
 
-<summary>요청 게시판</summary>
    <img src="./images/readme/request.png"  />
 </details>
 
