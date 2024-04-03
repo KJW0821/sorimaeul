@@ -239,7 +239,6 @@ const HomePage: React.FC = () => {
 
   return (
     <Outer ref={outerDivRef}>
-      <Playlist />
       <Page1>
         <LogoContainer>
           <img src={logoimage}></img>

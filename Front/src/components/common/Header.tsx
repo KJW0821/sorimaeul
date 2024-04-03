@@ -4,53 +4,45 @@ import styled from 'styled-components';
 import Playlist from './playlist/header/Playlist';
 import logoimage from '../../assets/logo.png';
 
-interface HeaderProps {
-  $isMainPage: boolean;
-}
 
-const HeaderContainer = styled.div<HeaderProps>`
+const HeaderContainer = styled.div`
   display: flex;
-  flex-direction: ${(props) => (props.$isMainPage ? 'row' : 'row')};
-  justify-content: ${(props) => (props.$isMainPage ? 'center' : 'center')};
+  flex-direction:'row';
+  justify-content:  'center';
   align-items: center;
   width: 100%;
   height: 6.25rem;
 `;
 
-interface LogoProps {
-  $isMainPage: boolean;
-}
 
-const LogoContainer = styled.div<LogoProps>`
+const LogoContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-left: ${(props) => (props.$isMainPage ? '300px' : '300px')};
-  margin-top: ${(props) => (props.$isMainPage ? '0' : '0')};
+  margin-left:  '300px';
+  margin-top:  '0';
 `;
 
-export const Logo = styled.img<LogoProps>`
-  width: ${(props) => (props.$isMainPage ? '300px' : '300px')};
+export const Logo = styled.img`
+  width: 300px;
   height: auto;
 `;
 
-const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
+const Header: React.FC = () => {
   const location = useLocation();
   const isMainPage = location.pathname === '/'; // 메인 페이지의 경로가 '/'인 경우
   return (
-    <HeaderContainer $isMainPage={isMainPage}>
-      {isMainPage ? (
-        <></>
-      ) : (
+    <HeaderContainer>
+    
         <>
-          <LogoContainer $isMainPage={isMainPage}>
+          <LogoContainer>
             <Link to="/">
-              <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
+              <Logo src={logoimage}/>
             </Link>
           </LogoContainer>
           <Playlist />
         </>
-      )}
+
     </HeaderContainer>
   );
 };
