@@ -30,7 +30,7 @@ const LogoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: -300px;
+  margin-top: -100px;
 `;
 
 const Page1 = styled.div`
@@ -115,7 +115,6 @@ const Page3 = styled.div`
   height: 100vh;
   width: 100%;
   display: flex;
-  background-color: #f4cfdf;
 `;
 
 const Temp = styled.div`
@@ -150,6 +149,7 @@ const StyledImage = styled.img<ImageInterface>`
   border-radius: 10px;
   transform: rotate(${(props) => props.$rotation || '0deg'});
   width: ${(props) => props.$width};
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
 `;
 
 const MarqueeComponentStyled = styled.div`
@@ -277,7 +277,7 @@ const HomePage: React.FC = () => {
       <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
         <LogoContainer>
-          <img src={logoimage}></img>
+          <img src={logoimage} className='w-2/1'></img>
           <HomeInfo />
         </LogoContainer>
         <Lottie animationData={anime} style={{ width: 2000 }} />
