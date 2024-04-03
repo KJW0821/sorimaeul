@@ -25,12 +25,13 @@
 - 개발 환경
   - IDE
     - Visual Studio Code 1.85.1
-    - IntelliJ IDEA 2023.3.3 (Community Edition)
+    - IntelliJ IDEA 2023.3.2 (Community Edition)
   - 서버
     - AWS EC2
       - Ubuntu 20.04.6 LTS
       - Nginx 1.18.0
       - OpenSSL 1.1.1f
+      - Zenkins 2.448
     - AWS S3 Bucket
     - GPU server
       - Ubuntu 20.04.4 LTS
