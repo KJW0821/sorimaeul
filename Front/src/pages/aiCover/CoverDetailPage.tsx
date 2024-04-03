@@ -270,13 +270,22 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
+  function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    // getMonth()는 0부터 시작하므로 +1을 해줍니다.
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    
+    return `${year}.${month}.${day}`;
+  }
 
   return (
     <>
       <ColorLine />
       {data &&
         <StyledContainer>
-          <Title> {data.coverName} </Title>
+          <Title> {data.coverName}</Title>
           <ContentContainer>
             <MediaSection>
               <ThumbnailContainer>
@@ -286,7 +295,6 @@ const CoverDetailPage: React.FC = () => {
                 
               </ThumbnailContainer>
               <div>
-
                 <audio className="mt-10" src={s3URL + `/${data.storagePath}`} controls />
               </div>
             </MediaSection>
@@ -294,7 +302,10 @@ const CoverDetailPage: React.FC = () => {
               <InfoBox>
                 <Profile >
                   <ProfileImage src={data.profileImage? s3URL + data.profileImage : defaultProfile} alt="Creator Profile Image" />
+                  <div className="flex-end">
                   <p className="nickname"> {data.nickname} </p>
+                  <p className="text-stone-300">{formatDate(data.postTime)}</p>
+                  </div>
                 </Profile>
                 <DetailLine />
                 <CoverDetail> {data.coverDetail} </CoverDetail>

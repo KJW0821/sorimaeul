@@ -46,6 +46,7 @@ export interface CoverDetailInterface {
   singer: string;
   title: string;
   isLiked: number;
+  postTime: string;
 }
 
 export interface CoverResultInterface {
