@@ -30,13 +30,12 @@ const LogoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: -100px;
+  margin-top: -300px;
 `;
 
 const Page1 = styled.div`
   height: calc(100vh - 0px);
   display: flex;
-  background-color: #f7f6cf;
 `;
 
 const Page2 = styled.div`
