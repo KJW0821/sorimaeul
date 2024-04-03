@@ -13,8 +13,8 @@ import { requestS3 } from "../../../utils/s3";
 const Container = styled.div`
   border-radius: 25px;
   background-color: rgba(214, 214, 214, 0.66);
-  width: 65%;
-  padding: 4rem 1rem;
+  width: 45%;
+  padding: 2rem 1rem;
   backdrop-filter: blur(.5rem);
   display: flex;
   flex-direction: column;
@@ -29,9 +29,9 @@ const Container = styled.div`
   }
 
   .img-box {
-    width: 40%;
+    width: 35%;
     height: 0;
-    padding-bottom: 40%;
+    padding-bottom: 35%;
     position: relative;
     border-radius: 50%;
     .img {

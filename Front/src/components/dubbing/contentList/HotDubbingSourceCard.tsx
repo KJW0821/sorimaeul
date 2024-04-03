@@ -11,6 +11,7 @@ const Container = styled.div<{ $isOpen: boolean }>`
   height: 100%;
   position: relative;
   padding: 0 .5rem;
+  cursor: pointer;
   
   .img {
     height: 100%;
