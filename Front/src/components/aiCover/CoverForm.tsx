@@ -50,12 +50,20 @@ const Step = styled.div`
   }
 `;
 
-const RadioGroup = styled.div`
+const RadioBox = styled.div`
+  width: 65%;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+`
+
+const RadioGroup = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
   color: #757575;
   font-size: 1.24rem;
+  gap: 2rem;
 
   .label {
     display: flex;
@@ -66,7 +74,7 @@ const RadioGroup = styled.div`
 
 const Input = styled.input`
   border-radius: 5px;
-  width: 47rem;
+  width: 100%;
   height: 2.75rem;
   padding: 0 1rem;
   outline: none;
@@ -80,6 +88,10 @@ const Input = styled.input`
 
 const Select = styled.select`
   border: 1px solid #ccc;
+  height: 2.75rem;
+  border-radius: 5px;
+  padding: 0 .75rem;
+  color: #9f9f9f;
   &:focus {
     border-color: #fe9d6a;
   }
@@ -114,6 +126,12 @@ const HelpIcon = styled.img`
   width: 18px;
   height: 18px;
 `;
+
+const ButtonBox = styled.div`
+  width: 65%;
+  display: flex;
+  justify-content: flex-end;
+`
 
 interface Props {
   onSubmit: (data: CoverCreateInterface) => void;
@@ -213,31 +231,35 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
         <h3 className="subtitle">Step 1. 노래 업로드</h3>
       </Step>
 
-      <div className="flex items-center gap-2">
+      <RadioBox>
         <RadioGroup>
-          <label>
-            <input
-              type="radio"
-              name="uploadType"
-              value="direct"
-              checked={uploadType === 'direct'}
-              onChange={handleUploadType}
-            />
-          </label>
-          <span className="mr-5">직접 유튜브 링크 입력</span>
+          <div className="flex gap-2">
+            <label>
+              <input
+                type="radio"
+                name="uploadType"
+                value="direct"
+                checked={uploadType === 'direct'}
+                onChange={handleUploadType}
+              />
+            </label>
+            <span>직접 유튜브 링크 입력</span>
+          </div>
 
-          <label>
-            <input
-              type="radio"
-              name="uploadType"
-              value="recommendation"
-              checked={uploadType === 'recommendation'}
-              onChange={handleUploadType}
-            />
-          </label>
-          <span>추천 목록에서 선택</span>
+          <div className="flex gap-2">
+            <label>
+              <input
+                type="radio"
+                name="uploadType"
+                value="recommendation"
+                checked={uploadType === 'recommendation'}
+                onChange={handleUploadType}
+              />
+            </label>
+            <span>추천 목록에서 선택</span>
+          </div>
         </RadioGroup>
-      </div>
+      </RadioBox>
 
       {uploadType === 'direct' && (
         <>
@@ -359,9 +381,9 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
         />
       </Step>
 
-      <div className="w-5/6 flex">
+      <ButtonBox>
         <Button
-          $marginTop={2}
+          $marginTop={1}
           $color="#FE9D6A"
           $width={10}
           $height={3}
@@ -377,7 +399,7 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
         >
           변환하기
         </Button>
-      </div>
+      </ButtonBox>
     </Container>
   );
 };

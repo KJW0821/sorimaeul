@@ -7,8 +7,11 @@ interface Props {
 }
 
 const CardContainer = styled.div`
-  width: 18%;
-  height: 400px;
+  width: 19%;
+  flex: 0 0 19%;
+  height: 350px;
+  box-sizing: border-box;
+  margin: 0.5%;
 `;
 
 const CoverList: React.FC<Props> = ({ data }) => {

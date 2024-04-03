@@ -3,8 +3,7 @@ import styled from "styled-components";
 const Input = styled.input`
   border: 1px solid #ccc; /* 기본 테두리 색상 */
   border-radius: 5px;
-  width: 38rem;
-  margin-left: 2rem;
+  width: 65%;
   height: 2.75rem;
   padding: 0 1rem;
   outline: none;
