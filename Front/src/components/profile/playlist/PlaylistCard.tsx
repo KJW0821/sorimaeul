@@ -9,9 +9,15 @@ import deleteIcon from "../../../assets/deleteIcon.png";
 import editIcon from "../../../assets/editIcon.png";
 
 const CardContainer = styled.div`
-  width: 20rem;
+  width: 24%;
   height: 20rem;
+  flex: 0 0 24%;
   cursor: pointer; /* 추가: 커서 스타일 변경 */
+  box-sizing: border-box;
+  margin: 0.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 // input 스타일 컴포넌트 추가
