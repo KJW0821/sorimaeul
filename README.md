@@ -153,11 +153,12 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 <br>
 
 ### 🌐 Server
-> - Ubuntu 20.04.6 LTS
-> - AWS S3 Bucket
-> - Jenkins 2.443
+> - AWS EC2
+>   - Ubuntu 20.04.6 LTS
+>   - Jenkins 2.443
 >   - Nginx 1.18.0
 >   - OpenSSL 1.1.1f
+> - AWS S3 Bucket
 > - GPU server
 >   - Ubuntu 20.04.4 LTS
 >   - Device: NVIDIA Corporation GV100GL (Tesla V100 PCle 32GB) <br>
