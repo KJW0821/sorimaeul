@@ -36,7 +36,6 @@ const LogoContainer = styled.div`
 const Page1 = styled.div`
   height: calc(100vh - 0px);
   display: flex;
-  background-color: #f7f6cf;
 `;
 
 const Page2 = styled.div`
@@ -44,7 +43,6 @@ const Page2 = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  background-color: #b6d8f2;
 `;
 const GoBtnImg = styled.img`
   position: absolute;
@@ -81,10 +79,38 @@ const BackgroundTape = styled.img<MarginProps>`
 
 const RightAlignedContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
   padding-right: 20px;
-  width: 100%;
+  width: 90%;
   position: relative;
+  margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+`;
+
+
+const DubContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DubTextContainer = styled.div`
+  flex: 0.8;
+  margin-right: auto;
+`;
+
+const DubText = styled.div`
+  font-size: 95px;
+  font-family: 'PyeongChangPeace-Bold';
+`;
+
+const DubSubtext = styled.div`
+  margin-top: 18%;
+  margin-bottom: 2%;
+  width: 600px;
+  line-height: 63px;
+  font-size: 35px;
+  font-family: GmarketSansLight;
 `;
 
 const DubbingCategory = styled(CategoryBox)`
@@ -92,13 +118,6 @@ const DubbingCategory = styled(CategoryBox)`
   margin-top: 100px;
   margin-right: 280px;
   z-index: 2;
-`;
-
-const DubbingContentsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
 `;
 
 const CategoryDescription = styled.p`
@@ -116,7 +135,6 @@ const Page3 = styled.div`
   height: 100vh;
   width: 100%;
   display: flex;
-  background-color: #f4cfdf;
 `;
 
 const Temp = styled.div`
@@ -151,6 +169,7 @@ const StyledImage = styled.img<ImageInterface>`
   border-radius: 10px;
   transform: rotate(${(props) => props.$rotation || '0deg'});
   width: ${(props) => props.$width};
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
 `;
 
 const MarqueeComponentStyled = styled.div`
@@ -277,23 +296,29 @@ const HomePage: React.FC = () => {
     <Outer ref={outerDivRef}>
       <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
-        <LogoContainer>
-          <img src={logoimage}></img>
+        {/* <LogoContainer>
+          <img src={logoimage} className='w-2/1'></img>
           <HomeInfo />
-        </LogoContainer>
-        <Lottie animationData={anime} style={{ width: 2000 }} />
+        </LogoContainer> */}
+        {/* <Lottie animationData={anime} style={{ width: 2000 }} /> */}
       </Page1>
       <Page2>
         <RightAlignedContainer>
-          <DubbingCategory onClick={() => navigate('/dubbing')}>
-            더빙 극장
-            <GoBtnImg src={goBtnImg} alt="Button Image" />
-          </DubbingCategory>
-          <DubbingContentsWrapper>
+          <DubTextContainer>
+            <DubSubtext>원하는 영상을 마음껏 더빙해봐요!</DubSubtext>
+            <DubText>
+              인기 컨텐츠들을<br /> 더빙하고<br />
+              소리 어워드에<br /> 도전해보세요!</DubText>
+          </DubTextContainer>
+          <DubContainer>
+            <DubbingCategory onClick={() => navigate('/dubbing')}>
+              더빙 극장
+              <GoBtnImg src={goBtnImg} alt="Button Image" />
+            </DubbingCategory>
             <DubbingContents />
-          </DubbingContentsWrapper>
-          <Line />
-          <BackgroundTape src={tape} alt="Tape Image" />
+
+            <BackgroundTape src={tape} alt="Tape Image" />
+          </DubContainer>
         </RightAlignedContainer>
       </Page2>
       <Page3>

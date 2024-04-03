@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 import HeaderPlayer from '../../../audioPlayer/HeaderPlayer';
 
 
@@ -14,9 +13,6 @@ const HeaderPlayerContainer = styled.div`
 
 
 const Playlist: React.FC = () => {
-
-
-
   return (
     <>
       <HeaderPlayerContainer>
