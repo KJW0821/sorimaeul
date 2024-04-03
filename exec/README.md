@@ -68,22 +68,24 @@
   ```
 
 - Back/src/main/resources/application.yml
+
   - Base
     ```yml
     server:
-      port : { port number }
+      port : {port number}
       servlet :
-        context-path: { base endpoint }
+        context-path: {base endpoint}
     ```
+
   - MySQL
 
     ```yml
     spring:
       datasource:
-      url: { MySQL server URL }
+      url: {MySQL server URL}
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: { MySQL username }
-      password: { MySQL password }
+      username: {MySQL username}
+      password: {MySQL password}
       pool-name: Hikari Connection Pool
       # hikariCP property setting
       maximum-pool-size: 10
@@ -99,9 +101,9 @@
     ```yml
     jwt:
       redis:
-        host: { host }
-        port: { Redis port }
-        password: { Redis password }
+        host: {host}
+        port: {Redis port}
+        password: {Redis password}
     ```
 
   - JWT
@@ -109,7 +111,7 @@
     ```yml
     jwt:
       token:
-        secret-key: { key } 
+        secret-key: {key} 
       access-token:
         expire-length: 1800000
       refresh-token:
@@ -142,19 +144,21 @@
                   user-info-uri: https://kapi.kakao.com/v2/user/me
                   user-name-attribute: id
     ```
+
   - Swagger
+
     ```yml
     springdoc:
-      packages-to-scan: com.{ groupname }.{ projectname }.api.controller
+      packages-to-scan: com.usagi.sorimaeul.api.controller
       swagger-ui:
-        path: { endpoint }
+        path: /api-docs
         groups-order: DESC
         tags-sorter: alpha
         operations-sorter: alpha
         disabled-swagger-default-url: true
         display-request-duration: true
       api-docs:
-        path: { endpoint }/json
+        path: /api-docs/json
         groups:
           enabled: true
       show-actuator: true
@@ -163,21 +167,23 @@
       default-consumes-media-type: application/json;charset=UTF-8
       default-produces-media-type: application/json;charset=UTF-8
     ```
+
   - S3 Bucket
 
     ```yml
     cloud:
       aws:
         s3:
-          bucket: { AWS S3 Bucket URL }
+          bucket: {AWS S3 Bucket URL}
         region:
-          static: { AWS S3 Bucket region }
+          static: {AWS S3 Bucket region}
         credentials:
-          access-key: { AWS S3 Bucket key }
-          secret-key: { AWS S3 Bucket secert }
+          access-key: {AWS S3 Bucket key}
+          secret-key: {AWS S3 Bucket secert}
         stack:
           auto: false
     ```
+    
   - Loggin level
 
     ```yml
@@ -291,7 +297,7 @@
 
 - Front-End
   - CI/CD : Jenkins pipeline
-    ```
+    ```shell
     pipeline {
         agent any
         stages {
@@ -349,7 +355,7 @@
     ```
 
   - Shell Script
-    ```
+    ```shell
     fpid=$(pgrep -f dist)
     if [ -n "${fpid}" ]
     then
@@ -369,7 +375,7 @@
 - Back-End
 
   - CI/CD : Jenkins pipeline
-    ```
+    ```shell
     pipeline {
       agent any
       tools {
@@ -406,7 +412,7 @@
     ```
 
   - Shell Script
-    ```
+    ```shell
     #!/bin/bash
 
     # 프로세스 종료 함수
