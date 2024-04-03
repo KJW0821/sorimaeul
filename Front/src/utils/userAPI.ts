@@ -51,6 +51,8 @@ export const logout = () => {
 // 회원 정보 수정 
 export const editUserInfo = (nickname: string, profileImage: string)  => {
   return API.patch("user", { nickname, profileImage })
-  .then(res => res.data)
-  .catch(err => console.error(err))
+  .then(res => res)
+  .catch(err => {
+    throw err;
+  })
 }
