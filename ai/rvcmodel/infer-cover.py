@@ -2,6 +2,7 @@ from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from AI_Cover_Creator import Creator, TooLongYoutubeException
+from dotenv import load_dotenv
 
 import os, shutil
 import requests
@@ -15,6 +16,9 @@ logger = logging.getLogger(__name__)
 
 cur_dir = os.getcwd()
 cover_path = f"{cur_dir}/cover"
+
+load_dotenv(os.path.join(cur_dir, ".env"))
+base_url = os.environ["BASE_URL"]
 
 app = FastAPI()
 
@@ -54,7 +58,7 @@ def create_cover(request: Request):
         upload = {'file': file}
         
         logger.info("Cover upload")
-        response = requests.post(f"https://j10e201.p.ssafy.io/api/cover/save/{coverCode}", files=upload)
+        response = requests.post(f"{base_url}/api/cover/save/{coverCode}", files=upload)
         response.raise_for_status()
         
         logger.info(f"Response status {response.status_code}")
@@ -73,7 +77,7 @@ def create_cover(request: Request):
     
     finally:
         # 커버 생성 여부 전송
-        response = requests.get(f"https://j10e201.p.ssafy.io/api/cover/check/{coverCode}/{is_success}")
+        response = requests.get(f"{base_url}/api/cover/check/{coverCode}/{is_success}")
 
         # 알림 전송
         sendNotification(userCode, coverCode, msg)
@@ -90,7 +94,7 @@ def create_cover(request: Request):
 def sendNotification(userCode, targetCode, msg):
     logger.info("Send notification")
     try:
-        response = requests.post(f"https://j10e201.p.ssafy.io/api/notify/send",
+        response = requests.post(f"{base_url}/api/notify/send",
                                  json={"userCode":userCode,
                                        "name":"cover",
                                        "data": {

@@ -6,12 +6,17 @@ import onetrain
 import requests
 import logging
 import librosa
-from typing import List 
+from typing import List
+from dotenv import load_dotenv
 
 from queue import Queue
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"  # Arrange GPU devices starting from 0
 os.environ["CUDA_VISIBLE_DEVICES"]= "9"  # Set the GPU 2 to use
+
+cur_dir = os.getcwd()
+load_dotenv(os.path.join(cur_dir, ".env"))
+base_url = os.environ["BASE_URL"]
 
 app = FastAPI()
 
@@ -82,7 +87,7 @@ queue = Queue()
 def sendNotification(userCode, targetCode, msg):
     logger.info("Send notification")
     try:
-        response = requests.post(f"https://j10e201.p.ssafy.io/api/notify/send",
+        response = requests.post(f"{base_url}/api/notify/send",
                                  json={"userCode":userCode,
                                        "name":"train",
                                        "data": {
@@ -170,7 +175,7 @@ def worker(modelcode, usercode, modelname, exp_dir1, trainset_dir4, total_epoch1
     
     finally:
         # 모델 생성 여부 전송
-        response = requests.get(f"https://j10e201.p.ssafy.io/api/dub/check/{modelcode}/{is_success}")
+        response = requests.get(f"{base_url}/api/dub/check/{modelcode}/{is_success}")
 
         sendNotification(usercode, modelcode, msg)
 

@@ -1,19 +1,19 @@
-# from fastapi import FastAPI
+from fastapi import FastAPI
 from pydantic import BaseModel
 from pytube import YouTube
-# from simple_diarizer.diarizer import Diarizer
-# from simple_diarizer.utils import convert_wavfile
+from simple_diarizer.diarizer import Diarizer
+from simple_diarizer.utils import convert_wavfile
 from moviepy.editor import VideoFileClip, AudioFileClip
 
 import os, sys
-# import tempfile
-# import librosa
-# import soundfile as sf
+import tempfile
+import librosa
+import soundfile as sf
 
 youtubeURL = sys.argv[1]
 name = sys.argv[2]
 
-# app = FastAPI()
+app = FastAPI()
 
 root_path = r'./youtube'
 
@@ -36,7 +36,7 @@ def diarizer(request: DataInput):
 
     split(name)
 
-    # diarize(name, num)
+    diarize(name, num)
 
     video = VideoFileClip(f"{root_path}/{name}/{name}_video_only.mp4")
     audio = AudioFileClip(f"{root_path}/{name}/accompaniment.wav")
@@ -79,49 +79,49 @@ def split(name):
 
     print('finish split')
 
-# def diarize(name, num):
-#     print('start diarizing')
+def diarize(name, num):
+    print('start diarizing')
 
-#     audio_path = f'{root_path}/{name}/vocals.wav'
+    audio_path = f'{root_path}/{name}/vocals.wav'
 
-#     with tempfile.TemporaryDirectory() as outdir:
-#         voice = audio_path
+    with tempfile.TemporaryDirectory() as outdir:
+        voice = audio_path
 
-#         wav_file = convert_wavfile(voice, f"{outdir}/{name}_converted.wav")
+        wav_file = convert_wavfile(voice, f"{outdir}/{name}_converted.wav")
 
-#         diar = Diarizer(
-#             embed_model='xvec', # supported types: ['xvec', 'ecapa']
-#             cluster_method='sc', # supported types: ['ahc', 'sc']
-#             window=1.5, # size of window to extract embeddings (in seconds)
-#             period=0.75 # hop of window (in seconds)
-#         )
+        diar = Diarizer(
+            embed_model='xvec', # supported types: ['xvec', 'ecapa']
+            cluster_method='sc', # supported types: ['ahc', 'sc']
+            window=1.5, # size of window to extract embeddings (in seconds)
+            period=0.75 # hop of window (in seconds)
+        )
 
-#         segments = diar.diarize(wav_file,
-#                             num_speakers=num,
-#                             outfile=f"{outdir}/{name}.rttm"
-#         )
+        segments = diar.diarize(wav_file,
+                            num_speakers=num,
+                            outfile=f"{outdir}/{name}.rttm"
+        )
 
-#     sample_rate = 16000
+    sample_rate = 16000
 
-#     y, sr = librosa.load(audio_path, sr=sample_rate)
+    y, sr = librosa.load(audio_path, sr=sample_rate)
 
-#     duration = librosa.get_duration(y=y, sr=sample_rate)
+    duration = librosa.get_duration(y=y, sr=sample_rate)
 
-#     for i in range(0, num):
-#         ny = [0.0 for j in range(round(sr * duration))]
+    for i in range(0, num):
+        ny = [0.0 for j in range(round(sr * duration))]
 
-#         for seg in segments:
-#             if seg['label'] == i:
-#                 start = seg['start_sample']
-#                 end = seg['end_sample']
-#                 for j in range(start, end):
-#                     ny[j] = y[j]
+        for seg in segments:
+            if seg['label'] == i:
+                start = seg['start_sample']
+                end = seg['end_sample']
+                for j in range(start, end):
+                    ny[j] = y[j]
 
-#         sf.write(f"{root_path}/{name}/{name}_label{i}.wav", ny, sr, format='WAV')
+        sf.write(f"{root_path}/{name}/{name}_label{i}.wav", ny, sr, format='WAV')
     
-#     print('finish diarizing')
+    print('finish diarizing')
 
 if __name__ == '__main__':
-    # import uvicorn
-    # uvicorn.run(app=app, host='0.0.0.0', port=7654)
+    import uvicorn
+    uvicorn.run(app=app, host='0.0.0.0', port=7654)
     diarizer(data)
