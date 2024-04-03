@@ -276,11 +276,11 @@ const HomePage: React.FC = () => {
     <Outer ref={outerDivRef}>
       <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
-        <LogoContainer>
+        {/* <LogoContainer>
           <img src={logoimage} className='w-2/1'></img>
           <HomeInfo />
-        </LogoContainer>
-        <Lottie animationData={anime} style={{ width: 2000 }} />
+        </LogoContainer> */}
+        {/* <Lottie animationData={anime} style={{ width: 2000 }} /> */}
       </Page1>
       <Page2>
         <RightAlignedContainer>
