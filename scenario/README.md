@@ -34,8 +34,6 @@
 
 ## 5. AI 커버
 
-### 기본 화면
-
 <details>
 <summary>기본 화면</summary>
   <img src="./images/readme/covermain.png"  />
