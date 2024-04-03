@@ -42,7 +42,7 @@
     - Node.js 20.10.0
   - Back-End
     - Java 17 (Azul Zulu version 17.0.9)
-    - Spring boot 3.2.2
+    - Spring boot 3.2.3
     - MySQL 8.0.35
     - Redis 7.2.4
   - AI
@@ -61,18 +61,36 @@
 ### 환경 변수 설정
 
 - Front/.env
+  ```
+  VITE\_API\_URL={Base URL}
+  VITE_S3_URL={AWS S3 Bucket URL}
+  ```
 
 - Back/src/main/resources/application.yml
-
+  - Base
+    ```yml
+    server:
+      port : { port number }
+      servlet :
+        context-path: { base endpoint }
+    ```
   - MySQL
 
     ```yml
     spring:
       datasource:
-        url: { MySQL server URL }
-        hikari:
-          username: { MySQL username }
-          password: { MySQL password }
+      url: { MySQL server URL }
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: { MySQL username }
+      password: { MySQL password }
+      pool-name: Hikari Connection Pool
+      # hikariCP property setting
+      maximum-pool-size: 10
+      connection-timeout: 5000
+      connection-init-sql: SELECT 1
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
     ```
 
   - Redis
@@ -80,7 +98,7 @@
     ```yml
     jwt:
       redis:
-        host: { BASE_URL }
+        host: { host }
         port: { Redis port }
         password: { Redis password }
     ```
@@ -90,7 +108,11 @@
     ```yml
     jwt:
       token:
-        secret-key: {key} (HS256으로 해독 가능한 키, Base64 인코딩, 512 byte 이상)
+        secret-key: { key } 
+      access-token:
+        expire-length: 1800000
+      refresh-token:
+        expire-length: 1209600000
     ```
 
   - OAuth
@@ -103,14 +125,43 @@
             registration:
               kakao:
                 client-id: {Kakao API key}
+                client-authentication-method: POST
                 client-secret: {Kakao API secret}
                 redirect-uri: {BASE_URL}/login-callback/kakao
+                authorization-grant-type: authorization_code
+                client_name: kakao
               google:
                 client-id: {Google API key}
                 client-secret: {Google API secret}
                 redirect-uri: {Base URL}/login-callback/google
+              provider:
+                kakao:
+                  authorization-uri: https://kauth.kakao.com/oauth/authorize
+                  token-uri: https://kauth.kakao.com/oauth/token
+                  user-info-uri: https://kapi.kakao.com/v2/user/me
+                  user-name-attribute: id
     ```
-
+  - Swagger
+    ```yml
+    springdoc:
+      packages-to-scan: com.{ groupname }.{ projectname }.api.controller
+      swagger-ui:
+        path: { endpoint }
+        groups-order: DESC
+        tags-sorter: alpha
+        operations-sorter: alpha
+        disabled-swagger-default-url: true
+        display-request-duration: true
+      api-docs:
+        path: { endpoint }/json
+        groups:
+          enabled: true
+      show-actuator: true
+      cache:
+        disabled: true
+      default-consumes-media-type: application/json;charset=UTF-8
+      default-produces-media-type: application/json;charset=UTF-8
+    ```
   - S3 Bucket
 
     ```yml
@@ -123,7 +174,37 @@
         credentials:
           access-key: { AWS S3 Bucket key }
           secret-key: { AWS S3 Bucket secert }
+        stack:
+          auto: false
     ```
+  - Loggin level
+
+    ```yml
+    logging:
+      level:
+        root: info
+        org:
+          springframework:
+            root: debug
+            web: debug
+        com:
+          sorimaeul: debug
+        zaxxer:
+          hikari:
+            pool:
+              HikariPool: debug
+    ```
+
+  - File Upload
+
+    ```yml
+    file:
+      multipart:
+        maxUploadSize: 1000000
+        maxUploadSizePerFile: 1000000
+    ```
+
+
 
 - ai/rvcmodel/.env
   ```env
@@ -134,8 +215,15 @@
 ### 빌드
 
 - Front-End
-
+  ```bash
+  $ npm install
+  $ npm run build
+  ```
 - Back-End
+  ```bash
+  $ chmod +x ./gradlew
+  $ ./gradlew clean build
+  ```
 
 - AI
 
@@ -201,8 +289,158 @@
 ### 배포
 
 - Front-End
+  - CI/CD : Jenkins pipeline
+    ```
+    pipeline {
+        agent any
+        stages {
+            stage('Git Clone') {
+                steps {
+                    git branch: 'front', url: <git url>, credentialsId: <credential>
+                }
+            }
+            stage('Setup Environment Variables') {
+                steps {
+                    dir("./Front") {
+                        sh """
+                        echo "<VARIABLE_KEY>=${env.VARIABLE_KEY}" > .env  # init
+                        echo "<VARIABLE_KEY>=${env.VARIABLE_KEY}" >> .env  # add
+                        """
+                    }
+                }
+            }
+            stage('FE-build') {
+                steps {
+                    dir("./Front") {
+                        nodejs(nodeJSInstallationName: 'MyNode') {
+                            sh '''
+                            npm install
+                            npm run build
+                            '''
+                        }
+                    }
+                }
+            }
+            stage('Compression') {
+                steps {
+                    dir("./Front") {
+                        sh '''
+                        rm -rf node_modules
+                        rm package-lock.json
+                        tar -cvf build.tar dist
+                        '''
+                    }
+                }
+            }
+            stage('Deploy') {
+                steps {
+                    sshagent(credentials: ['aws_key']) {
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no <aws host> uptime
+                            scp <tar file path> <aws host>:<path>
+                            ssh -t <aws host> ./deployFE.sh
+                        '''
+                    }
+                }
+            }
+        } 
+    }
+    ```
+
+  - Shell Script
+    ```
+    fpid=$(pgrep -f dist)
+    if [ -n "${fpid}" ]
+    then
+            kill -15 ${fpid}
+            echo kill process ${fpid}
+    else
+            echo no process
+    fi
+
+    sleep 3
+
+    rm -rf <project path>/dist
+    tar -xvf <project path>/build.tar -C <project path>
+    nohup serve -s <project path>/dist -l <port> >> application-FE.log 2> /dev/null &
+    ```
 
 - Back-End
+
+  - CI/CD : Jenkins pipeline
+    ```
+    pipeline {
+      agent any
+      tools {
+          gradle 'MyGradle'
+      }
+      stages {
+          stage('Git Clone') {
+              steps {
+                  git branch: 'back', url: <git url>, credentialsId: <credential>
+              }
+          }
+          stage('BE-Build') {
+              steps {
+                  dir("./Back") {
+                      // gradlew 파일에 실행 권한 부여
+                      sh 'chmod +x ./gradlew'
+                      sh "./gradlew clean build"
+                  }
+              }
+          }
+          stage('Deploy') {
+              steps {
+                  sshagent(credentials: ['aws_key']) {
+                      sh '''
+                          ssh -o StrictHostKeyChecking=no <aws host> uptime
+                          scp <jar file path> <aws host>:<path>
+                          ssh -t <aws host> ./deployBE.sh
+                      '''
+                  }
+              }
+          }
+      }
+    }
+    ```
+
+  - Shell Script
+    ```
+    #!/bin/bash
+
+    # 프로세스 종료 함수
+    stop_process() {
+        pid=$(pgrep -f SNAPSHOT)
+        if [ -n "${pid}" ]; then
+            echo "Stopping process ${pid}..."
+            if kill -15 ${pid}; then
+                echo "Process ${pid} successfully stopped."
+            else
+                echo "Failed to stop process ${pid}."
+                exit 1  # 종료
+            fi
+        else
+            echo "No process to stop."
+        fi
+    }
+
+    # 프로세스 종료
+    stop_process
+
+    # 프로세스 종료 확인
+    while true; do
+        pid=$(pgrep -f SNAPSHOT)
+        if [ -z "${pid}" ]; then
+            echo "Process stopped. Starting jar file..."
+            chmod +x <jar file path>
+            nohup java -jar <jar file path> --jasypt.encryptor.password=<password> >> applicationBE.log 2>&1 /dev/null &
+            break
+        else
+            echo "Process still running, PID: ${pid}. Waiting..."
+            sleep 5
+        fi
+    done
+    ```
 
 - AI
 
