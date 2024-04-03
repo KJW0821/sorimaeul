@@ -309,6 +309,7 @@ public class DubbingServiceImpl implements DubbingService {
         // response 생성
         DubbingDetailResponse response = DubbingDetailResponse.builder()
                 .dubCode(dubCode)
+                .videoSourceCode(dubbing.getVideoSource().getVideoSourceCode())
                 .dubName(dubbing.getDubName())
                 .dubDetail(dubbing.getDubDetail())
                 .nickname(dubbing.getUser().getNickname())

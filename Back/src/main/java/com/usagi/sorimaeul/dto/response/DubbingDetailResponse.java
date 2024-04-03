@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class DubbingDetailResponse {
 
     private int dubCode;
+    private int videoSourceCode;
     private String dubName;
     private String dubDetail;
     private String nickname;

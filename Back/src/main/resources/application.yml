@@ -5,31 +5,20 @@ server:
 
 
 spring:
-  profiles:
-    active: dev
   # DataBase Settings : hikariCP : https://github.com/brettwooldridge/HikariCP
   datasource:
-    hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: ENC(6D5UHgUn8PlWmRpNCLfvPg==)
-      password: ENC(HchKvSrfF8OBFm/PILKNjD+EfHY5+hPi)
-      pool-name: Hikari Connection Pool
-      # hikariCP property setting
-      maximum-pool-size: 10
-      connection-timeout: 5000
-      connection-init-sql: SELECT 1
-      idle-timeout: 30000
-      max-lifetime: 55000
-      auto-commit: true
-    tomcat:
-      max-active: 10
-      initial-size: 2
-      max-idle: 2
-      min-idle: 1
-      test-while-idle: true
-      time-between-eviction-runs-millis: 3600000
-      min-evictable-idle-time-millis: 7200000
-      test-on-borrow: true
+    url: ENC(PmNLzkIntvtI13MnbMrp0EGR4XWwLaXFg4pyF9/rgK++oRs/DVLyD7zxssTdNIHxK963gst9/1shqurZu0+RzZHZfSBE5vhXAKVfF2B3cFvU+q6LG+HYWuCQ7A5zDGKdJD0egPDgb1/+3Dy3ph9O7Q==)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ENC(6D5UHgUn8PlWmRpNCLfvPg==)
+    password: ENC(HchKvSrfF8OBFm/PILKNjD+EfHY5+hPi)
+    pool-name: Hikari Connection Pool
+    # hikariCP property setting
+    maximum-pool-size: 10
+    connection-timeout: 5000
+    connection-init-sql: SELECT 1
+    idle-timeout: 600000
+    max-lifetime: 1800000
+    auto-commit: true
   security:
     user:
       name: admin
@@ -40,13 +29,15 @@ spring:
         registration:
           kakao:
             client-id: ENC(EJ8R1u3WY1/eiBujSWUlblHBbl5VFKiv5gXbj3/jW6XD6lD/2bToFgwIDRogBCrb)
-            client-authentication-method: POST
             client-secret: ENC(1v20Lih3Z5U+RWLNzTZs7c+dzbumLWoTxFcXfsrg/p5ggRN/FK17dfIGjHMMb9X1)
+            redirect-uri: ENC(oKcA9YF7w470WY85J0p9ZC9TY2voUSOoKytSyKYso8hOXgztnoHPIxbn+CupGIfLQNy36sloAfo=)
+            client-authentication-method: POST
             authorization-grant-type: authorization_code
             client_name: kakao
           google:
             client-id: ENC(DdZKFBof+WHnQmwtGFwGPh2YI37ny9HAmjl05JgJIgsqrwmcZDhGwopw7kkgzPmmMXidTFxniStRwPnf7ZuXTxpThtN35EsAGyC8f2ADNbfAxyhDDVZPxw==)
             client-secret: ENC(kqrGdtIp2XQURxr9qQrdVBsi75M2pPLK7Ur0+6iCFmNwvQHJg5Ma99Fpzo/FM51T)
+            redirect-uri: ENC(hhbgr30JoQvlb20FlOXkt8MoN+LQKQ39IGVZohemt+/PH0EayLZvGP+sipmBvRCEokIAiM9gLv/psCThU1SXCw==)
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -69,6 +60,7 @@ jwt:
   refresh-token:
     expire-length: 1209600000
   redis:
+    host: localhost
     port: 6379
     password: ENC(fbVzkxQrgWvOBja+l//F2trn+HeA7ekU)
 
@@ -122,7 +114,7 @@ cloud:
     s3:
       bucket: ENC(qLX/RiwHx0Ef9X9zUIjVVVEgKBNDBn2N)
     region:
-      static: ap-northeast-2
+      static: ENC(axFWnpgpOVL8nKkRkXhqWPPnqRpVfrbd)
     credentials:
       access-key: ENC(HIq7IcwId5myQ/2gPhvGjqgI8Obvf2x8cmPnE2Yhj2Q=)
       secret-key: ENC(3J0px/WljbwFjoLuCUricjoXUWSipL9a9n8YoiipM0eZ7ZeDal9TYPYAO07uOTTTcWFgl1BUUjY=)

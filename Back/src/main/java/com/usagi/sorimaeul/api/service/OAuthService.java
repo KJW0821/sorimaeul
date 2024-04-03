@@ -139,10 +139,14 @@ public class OAuthService {
 
     public TokenResponse reissue(String refreshToken) {
         RefreshToken token = refreshTokenRepository.findById(refreshToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+                .orElse(null);
+
+        if (token == null) {
+            return null;
+        }
 
         if (!jwtTokenProvider.validateToken(token.getRefreshToken())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            return null;
         }
 
         long userCode = token.getUserCode();
