@@ -88,7 +88,7 @@ const DubbingCard: React.FC<{ data: DubbingData, setDubbingContents: React.Dispa
         </div>
       </div>
       <div className="state">
-        <Icon width="25%" height="100%" fill="#C9F647" />
+        <Icon width="25%" height="100%" fill={data.isPublic ? "#C9F647" : "#D9D9D9"} />
         <p className="sm-font">{data.isPublic ? '공개' : '비공개'}</p>
       </div>
       <p className="date sm-font">{data.createdTime.split('T')[0]}</p>
