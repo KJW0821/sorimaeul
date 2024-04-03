@@ -53,9 +53,8 @@ const CircleContainer = styled.div`
 `;
 
 interface CircleProps {
-  size: string;
-  hoverBackground: string;
-  zIndex: number;
+  $size: string;
+  $hoverBackground: string;
 }
 
 const TextInside = styled.div`
@@ -76,9 +75,9 @@ const TextUnder = styled.div`
 `;
 
 const Circle = styled.div<CircleProps>`
-  width: ${props => props.size};
+  width: ${props => props.$size};
   height: 400px;
-  padding-top: ${props => props.size};
+  padding-top: ${props => props.$size};
   border-radius: 20%;
   background: #F3F4F6;
   position: relative;
@@ -88,11 +87,9 @@ const Circle = styled.div<CircleProps>`
   justify-content: center;
   align-items: center;
   flex-direction: column; 
-  z-index: ${props => props.zIndex};
   transition: background 0.5s ease;
   &:hover {
-    z-index: 3; 
-    background: ${props => props.hoverBackground}
+    background: ${props => props.$hoverBackground}
   }
   cursor: pointer;
 `;
@@ -366,25 +363,22 @@ const HomePage: React.FC = () => {
       <Page1>
         <Page1Text>소리마을에서 Creator가 되어보세요!</Page1Text>
         <CircleContainer>
-          <Circle size="27%"
-            hoverBackground="linear-gradient(90deg, rgba(253, 255, 0, 0.7) 0%, rgba(99, 218, 255, 0.7) 100%), #26BA28"
-            zIndex={1}
+          <Circle $size="27%"
+            $hoverBackground="linear-gradient(90deg, rgba(253, 255, 0, 0.7) 0%, rgba(99, 218, 255, 0.7) 100%), #26BA28"
             onClick={() => navigate('dubbing')}>
             <IconImage src={mainDub} alt="dub icon" />
             <TextInside>더빙 </TextInside>
             <TextUnder>재밌는 동영상<br/> 내 맘대로 더빙해요!</TextUnder>
           </Circle>
-          <Circle size="33%"
-            hoverBackground=" linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;"
-            zIndex={2}
+          <Circle $size="33%"
+            $hoverBackground=" linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;"
             onClick={() => navigate('/model/create')}>
             <IconImage src={mainVoice} alt="voice train icon" />
             <TextInside>음성 학습 </TextInside>
             <TextUnder>딱 20분 녹음하고<br/>내 목소리 모델을 만들어요!</TextUnder>
           </Circle>
-          <Circle size="27%"
-            hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
-            zIndex={1} 
+          <Circle $size="27%"
+            $hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
             onClick={() => navigate('/cover/create')}>
             <IconImage src={mainCover} alt="cover icon" />
             <TextInside>커버</TextInside>
