@@ -29,6 +29,7 @@ cur_dir = os.getcwd()
 root_path = f"{cur_dir}/sorimaeul-data/dub"
 
 load_dotenv(os.path.join(cur_dir, ".env"))
+base_url = os.environ["BASE_URL"]
 s3_url = os.environ["S3_URL"]
 
 
@@ -86,7 +87,7 @@ def create_dubbing(request: Request):
         video.write_videofile(dub_file, codec='libx264', audio_codec='libmp3lame')
         logger.info(f"Write video {dub_file}")
 
-        response = requests.post("https://j10e201.p.ssafy.io/api/dub/save",
+        response = requests.post(f"{base_url}/api/dub/save",
                                  json={"dubCode":dubCode, "path":dub_file})
         response.raise_for_status()
         
@@ -101,7 +102,7 @@ def create_dubbing(request: Request):
     
     finally:
         # 더빙 영상 생성 여부 전송
-        response = requests.get(f"https://j10e201.p.ssafy.io/api/dub/check/{dubCode}/{is_success}")
+        response = requests.get(f"{base_url}/api/dub/check/{dubCode}/{is_success}")
 
         # 알림 전송
         sendNotification(userCode, dubCode, msg)
@@ -116,7 +117,7 @@ def create_dubbing(request: Request):
 def sendNotification(userCode, targetCode, msg):
     logger.info("Send notification")
     try:
-        response = requests.post(f"https://j10e201.p.ssafy.io/api/notify/send",
+        response = requests.post(f"{base_url}/api/notify/send",
                                  json={"userCode":userCode,
                                        "name":"dubbing",
                                        "data": {
