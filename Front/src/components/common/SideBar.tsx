@@ -156,7 +156,7 @@ function SideBar() {
         getAlarmData();
       });
 
-      eventSource.addEventListener("cover", (e: any) => {
+      eventSource.addEventListener("dubbing", (e: any) => {
         console.log(JSON.parse(e.data));
         getAlarmData();
       });
