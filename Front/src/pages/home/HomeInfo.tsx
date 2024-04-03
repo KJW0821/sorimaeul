@@ -66,16 +66,16 @@ const HomeInfo: React.FC = () => {
         easing="linear"
       >
         {/* here you can also pass any other element attributes. Also, you can use your custom components as slides */}
-        <div style={{ width: 800, height: 450, background: '#ff80ed' }}>
+        <div style={{ width: 1000, height: 420, background: '#ff80ed' }}>
         <img src={carousel1} alt="slide 0" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
-        <div style={{ width: 800, height: 450, background: '#065535' }}>
+        <div style={{ width: 1000, height: 420, background: '#065535' }}>
         <img src={carousel2} alt="slide 0" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
-        <div style={{ width: 800, height: 450, background: '#000000' }}>
+        <div style={{ width: 1000, height: 420, background: '#000000' }}>
         <img src={carousel3} alt="slide 0" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
-        <div style={{ width: 800, height: 450, background: '#133337' }}>
+        <div style={{ width: 1000, height: 420, background: '#133337' }}>
         <img src={carousel4} alt="slide 0" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </div>
       </ReactSimplyCarousel>
