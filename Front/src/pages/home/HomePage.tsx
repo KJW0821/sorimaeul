@@ -16,6 +16,9 @@ import Lottie from 'lottie-react';
 import anime from '../../assets/lottie/mainAnime.json';
 import HomeInfo from './HomeInfo';
 import { useLocation } from 'react-router-dom';
+import mainVoice from '../../assets/mainVoice.png';
+import mainDub from "../../assets/mainDub.png";
+import mainCover from "../../assets/mainCover.png";
 
 const Outer = styled.div`
   height: 100vh;
@@ -36,6 +39,80 @@ const LogoContainer = styled.div`
 const Page1 = styled.div`
   height: calc(100vh - 0px);
   display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+
+const CircleContainer = styled.div`
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+
+interface CircleProps {
+  size: string;
+  hoverBackground: string;
+  zIndex: number;
+}
+
+const TextInside = styled.div`
+  position: absolute;
+  top: 55%;
+  font-family: 'GmarketSansBold';
+  font-size: 40px;
+  margin-top: 30px; 
+  text-align: center;
+`;
+
+const TextUnder = styled.div`
+  position: absolute;
+  top: 70%;
+  font-size: 25px;
+  margin-top: 30px; 
+  text-align: center;
+`;
+
+const Circle = styled.div<CircleProps>`
+  width: ${props => props.size};
+  height: 400px;
+  padding-top: ${props => props.size};
+  border-radius: 20%;
+  background: #F3F4F6;
+  position: relative;
+  margin: 0 20px;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; 
+  z-index: ${props => props.zIndex};
+  transition: background 0.5s ease;
+  &:hover {
+    z-index: 3; 
+    background: ${props => props.hoverBackground}
+  }
+  cursor: pointer;
+`;
+
+const IconImage = styled.img`
+  position: absolute;
+  top: 10%;
+  width: 50%; 
+  height: auto;
+`;
+
+
+
+const Page1Text = styled.div`
+  position: absolute;
+  top: 80px;
+  left: 50%; 
+  transform: translateX(-50%);
+  font-size: 45px;
+  font-family: 'PyeongChangPeace-Bold';
 `;
 
 const Page2 = styled.div`
@@ -58,14 +135,6 @@ interface MarginProps {
   $marginRight?: number;
 }
 
-const Line = styled.div`
-  position: absolute;
-  width: '627px';
-  height: 0px;
-  border: 1px solid #000000;
-  margin-top: '175px';
-  margin-right: '50px';
-`;
 
 const BackgroundTape = styled.img<MarginProps>`
   position: absolute;
@@ -151,7 +220,7 @@ const CoverCategory = styled(CategoryBox)`
 const ImagesContainer = styled.div`
   display: flex;
   align-items: center;
-  justify=content: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
   padding-left: 70px;
@@ -295,23 +364,41 @@ const HomePage: React.FC = () => {
     <Outer ref={outerDivRef}>
       <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
-        {/* <LogoContainer>
-          <img src={logoimage} className='w-2/1'></img>
-          <HomeInfo />
-        </LogoContainer> */}
-        {/* <Lottie animationData={anime} style={{ width: 2000 }} /> */}
+        <Page1Text>소리마을에서 Creator가 되어보세요!</Page1Text>
+        <CircleContainer>
+          <Circle size="27%"
+            hoverBackground="linear-gradient(90deg, rgba(253, 255, 0, 0.7) 0%, rgba(99, 218, 255, 0.7) 100%), #26BA28"
+            zIndex={1}
+            onClick={() => navigate('dubbing')}>
+            <IconImage src={mainDub} alt="dub icon" />
+            <TextInside>더빙 </TextInside>
+            <TextUnder>재밌는 동영상<br/> 내 맘대로 더빙해요!</TextUnder>
+          </Circle>
+          <Circle size="33%"
+            hoverBackground=" linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;"
+            zIndex={2}
+            onClick={() => navigate('/model/create')}>
+            <IconImage src={mainVoice} alt="voice train icon" />
+            <TextInside>음성 학습 </TextInside>
+            <TextUnder>딱 20분 녹음하고<br/>내 목소리 모델을 만들어요!</TextUnder>
+          </Circle>
+          <Circle size="27%"
+            hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
+            zIndex={1} 
+            onClick={() => navigate('/cover/create')}>
+            <IconImage src={mainCover} alt="cover icon" />
+            <TextInside>커버</TextInside>
+            <TextUnder>클릭 한번으로<br/>AI 커버 만들어요!</TextUnder>
+          </Circle>
+        </CircleContainer>
       </Page1>
       <Page2>
         <RightAlignedContainer>
           <DubTextContainer>
             <DubSubtext>원하는 영상을 마음껏 더빙해봐요!</DubSubtext>
             <DubText>
-              인기 컨텐츠들을
-              <br /> 더빙하고
-              <br />
-              소리 어워드에
-              <br /> 도전해보세요!
-            </DubText>
+              인기 컨텐츠를<br /> 더빙하고<br />
+              소리 어워드에<br /> 도전해보세요!</DubText>
           </DubTextContainer>
           <DubContainer>
             <DubbingCategory onClick={() => navigate('/dubbing')}>
