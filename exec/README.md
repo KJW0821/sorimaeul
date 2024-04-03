@@ -253,9 +253,9 @@
       ```
 
       - 이후 tools 폴더 내에 생성된 파일들을 각 위치로 이동
-      - ai/rvcmodel/assets/hubert/hubert_base.pt
-      - ai/rvcmodel/assets/pretrained
-      - ai/rvcmodel/assets/uvr5_weights
+        - ai/rvcmodel/assets/hubert/hubert_base.pt
+        - ai/rvcmodel/assets/pretrained
+        - ai/rvcmodel/assets/uvr5_weights
 
     - `ai/rvcmodel/assets/rmvpe` 폴더에 RMVPE 피치 추출 파일 다운로드 ([rmvpe.pt](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/rmvpe.pt))
 
