@@ -132,13 +132,14 @@ const router = createBrowserRouter([
                   },
                   {
                     path: 'edit',
-                    element: <ModelEditPage />
-                  },{
+                    element: <ModelEditPage />,
+                  },
+                  {
                     path: 'record',
                     element: <RecordingPage />,
-                  }
-                ]
-              }
+                  },
+                ],
+              },
             ],
           },
           {
