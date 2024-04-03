@@ -63,10 +63,14 @@ public class OAuthController {
             @ApiResponse(responseCode = "401", description = "만료된 리프레시 토큰")
     })
     @GetMapping("/reissue")
-    public ResponseEntity<TokenResponse> reissue(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String token) {
         String refreshToken = token.substring(7);
         TokenResponse response = oAuthService.reissue(refreshToken);
-        return ResponseEntity.ok(response);
+        if (response != null) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT token expired");
+        }
     }
 
 }
