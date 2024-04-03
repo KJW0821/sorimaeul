@@ -35,7 +35,7 @@ public class RequestBoardServiceImpl implements RequestBoardService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         // 배열 선언
-        List<RequestBoard> requests = requestBoardRepository.findByTypeCodeOrderByCreatedTime(typeCode);
+        List<RequestBoard> requests = requestBoardRepository.findByTypeCodeOrderByCreatedTimeDesc(typeCode);
         List<RequestInfoDto> customRequests = new ArrayList<>();
 
         // 인덱스 선언

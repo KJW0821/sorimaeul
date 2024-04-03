@@ -9,7 +9,7 @@ public interface RequestBoardRepository extends JpaRepository<RequestBoard, Inte
 
     RequestBoard findByBoardCode(int boardCode);
 
-    List<RequestBoard> findByTypeCodeOrderByCreatedTime(int typeCode);
+    List<RequestBoard> findByTypeCodeOrderByCreatedTimeDesc(int typeCode);
 
     List<RequestBoard> findByTypeCode(int typeCode);
 }
