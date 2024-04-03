@@ -25,7 +25,7 @@ import { setAlarmList, setUnreadMsgCnt, toggleSideBar as toggle } from "../../st
 import { openModal } from "../../stores/modal";
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { useEffect } from 'react';
-import { isProduction } from '../../utils/axios';
+import { URL, isProduction } from '../../utils/axios';
 import { getCookie } from '../../utils/cookie';
 import { getAlarmList } from "../../utils/alarm";
 
@@ -132,7 +132,7 @@ function SideBar() {
   useEffect(() => {
     if (isUser) {
       const eventSource = new EventSource(
-        `${isProduction ? "https://j10e201.p.ssafy.io/api" : "http://localhost:8000/api"}/sse/connect`, 
+        `${URL}/sse/connect`, 
         {
           headers: {
             Authorization: getCookie('accessToken')
