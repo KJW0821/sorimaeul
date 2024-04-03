@@ -54,7 +54,7 @@ const Container = styled.div<{ $learnState: number }>`
 const Box = styled.div`
   border-radius: 25px;
   background-color: rgba(214, 214, 214, 0.66);
-  width: 65%;
+  width: 55%;
   padding: 4rem 1rem;
   backdrop-filter: blur(.5rem);
   display: flex;
