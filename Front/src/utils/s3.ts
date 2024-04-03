@@ -2,9 +2,9 @@ import Resizer from "react-image-file-resizer";
 import API from "./axios";
 import axios from "axios";
 
-export const s3URL = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com";
-export const defaultCover = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/image/coverImg.jpg";
-export const defaultModel = "https://usagi-sorimaeul.s3.ap-northeast-2.amazonaws.com/image/modelImg.jpg";
+export const s3URL = import.meta.env.VITE_S3_URL;
+export const defaultCover = s3URL+"/image/coverImg.jpg";
+export const defaultModel = s3URL+"/image/modelImg.jpg";
 
 export const resizeFile = async (file: File) =>
   new Promise<File>((res) => {

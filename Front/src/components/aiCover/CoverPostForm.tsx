@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Cover, CoverResultInterface } from "./CoverInterface";
+import { CoverResultInterface } from "./CoverInterface";
 import { defaultCover, requestS3 } from "../../utils/s3";
 import { styled } from "styled-components";
 import musicIcon from "../../assets/music.png";
 import ColorLine from "./ColorLine";
 import { s3URL } from "../../utils/s3";
 import deleteIcon from "../../assets/deleteIcon.png";
-import coverImg from "../../assets/coverImg.jpg";
 import { deleteCover } from "../../utils/coverAPI";
 import { useNavigate } from "react-router-dom";
 import ToggleButton from "../common/ToggleButton";
@@ -72,7 +71,7 @@ position: relative;
 
 const Thumbnail = styled.img`
 width: 100%; 
-height: auto;
+height: 100%;
 display: block;
 position: relative;
 z-index: 1; 
@@ -101,17 +100,17 @@ const FormRow = styled.div`
 
 const InputField = styled.input`
   padding: 0.5rem;
-  width: 87%;
+  width: 88%;
   border: 1px solid #ccc;
   border-radius: 5px;
 `;
 
 const TextArea = styled.textarea`
-  padding: 0.5rem;
+  padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #EEEEEE;
-  height: 200px;
+  height: 300px;
 `;
 
 const Label = styled.label`
@@ -144,12 +143,14 @@ const Button = styled.button`
 `
 const ButtonBox = styled.div`
     display: flex;
-    gap: .5rem;
     justify-content: flex-end;
-    margin-right: 220px;
-    .icon {
-      height: 80%;
-    }
+    gap: 0.5rem;
+`;
+
+const Description = styled.p`
+  font-size: 1rem;
+  font-family: 'GmarketSansLight';
+  text-align: right;
 `;
 
 
@@ -200,7 +201,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
       }
     }
   };
-  
+
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
@@ -219,7 +220,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
     e.preventDefault();
     const formData = {
       ...data,
-      isPublic, 
+      isPublic,
     };
     onSubmit(formData);
   }
@@ -228,7 +229,7 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
 
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-  
+
     if (target.type === 'checkbox' && name === 'isPublic') {
       setIsPublic(target.checked);
     } else {
@@ -238,51 +239,54 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
 
   return (
     <>
-    <ColorLine />
-    <StyledContainer>
-      <ContentContainer>
-        <MediaSection>
-          
+      <ColorLine />
+      <StyledContainer>
+        <ContentContainer>
+          <MediaSection>
+
             {/* 이미지 존재 여부에 따른 처리 */}
             <label htmlFor="file" className="cursor-pointer">
               <ThumbnailContainer>
-            {selectedImagePath ? (
-              <Thumbnail src={selectedImagePath}/>
-            ) : (
-              <Thumbnail src={defaultCover} />
-            )}
-            </ThumbnailContainer>
+                {selectedImagePath ? (
+                  <Thumbnail src={selectedImagePath} />
+                ) : (
+                  <Thumbnail src={data.thumbnailPath? s3URL + data.thumbnailPath :  defaultCover} />
+                )}
+              </ThumbnailContainer>
             </label>
             <input type="file" id="file" accept="image/*" onChange={handleImagePath} className="hidden" />
             {data.storagePath && (
               <audio className="mt-10" src={s3URL + `/${data.storagePath}`} controls></audio>
             )}
 
-        </MediaSection>
-        <InfoSection>
-          <StyledForm onSubmit={submitHandler}>
-            <Title><Icon src={musicIcon} alt="music icon" />AI 커버 확인</Title>
-            <FormRow>
-              <Label htmlFor="coverName">제목:</Label>
-              <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
-            </FormRow>
-            <TextArea id="coverDetail" name="coverDetail" value={data.coverDetail} placeholder="커버에 대한 설명을 입력해주세요" onChange={handleChange} cols={30} rows={10}></TextArea>
-            
-            <div className="button-box">
-            <div className="flex gap-2">
-              <p className="is-public">공개여부</p>
-              <ToggleButton isPublic={isPublic} setIsPublic={setIsPublic} color="#C9F647" />
-            </div>
-            </div>
-            <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
-            <Button onClick={handleDelete}>
-            <img className="icon" src={deleteIcon} alt="delete icon" />
-            <p>삭제</p>
-          </Button>
-          </StyledForm>
-        </InfoSection>
-      </ContentContainer>
-    </StyledContainer>
+          </MediaSection>
+          <InfoSection>
+            <StyledForm onSubmit={submitHandler}>
+              <Title><Icon src={musicIcon} alt="music icon" />AI 커버 확인</Title>
+              <FormRow>
+                <Label htmlFor="coverName">제목:</Label>
+                <InputField type="text" id="coverName" name="coverName" value={data.coverName} placeholder="커버 게시 제목을 입력해주세요" onChange={handleChange} />
+              </FormRow>
+              <TextArea id="coverDetail" name="coverDetail" value={data.coverDetail} placeholder="커버에 대한 설명을 입력해주세요" onChange={handleChange} cols={30} rows={10}></TextArea>
+              <div className="flex justify-between">
+                <div className="flex gap-2">
+                  <p className="is-public">공개여부</p>
+                  <ToggleButton isPublic={isPublic} setIsPublic={setIsPublic} color="#FF8E53" />
+                </div>
+                <ButtonBox className="button-box">
+                  <Button type="submit" disabled={!data.coverName || !data.coverDetail}>설정</Button>
+                  <Button onClick={handleDelete}>
+                    <img className="icon" src={deleteIcon} alt="delete icon" />
+                    <p>삭제</p>
+                  </Button>
+                </ButtonBox>
+              </div>
+
+            </StyledForm>
+            <Description>tip. 비공개로 등록된 컨텐츠는 마이페이지에서 확인 가능합니다.</Description>
+          </InfoSection>
+        </ContentContainer>
+      </StyledContainer>
     </>
   );
 }

@@ -9,9 +9,15 @@ import deleteIcon from "../../../assets/deleteIcon.png";
 import editIcon from "../../../assets/editIcon.png";
 
 const CardContainer = styled.div`
-  width: 20rem;
+  width: 24%;
   height: 20rem;
+  flex: 0 0 24%;
   cursor: pointer; /* 추가: 커서 스타일 변경 */
+  box-sizing: border-box;
+  margin: 0.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 // input 스타일 컴포넌트 추가
@@ -50,6 +56,13 @@ const ButtonBox = styled.div`
     height: 80%;
   }
 `;
+
+
+// 날짜 형식을 변경하는 함수
+function formatDate(dateString: string) {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString('ko-KR', options).replace(/\. /g, '.');
+}
 
 interface Props {
   playlistCode: string,
@@ -117,7 +130,7 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
       ) : (
         <p>{playlistName}</p>
       )}
-      <p>{createdTime}</p>
+      <p className='text-stone-400'>{formatDate(createdTime)}</p>
       <ButtonBox>
         <Button onClick={handleEdit}>
           <img className="icon" src={editIcon} alt="" />

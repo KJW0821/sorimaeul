@@ -8,6 +8,12 @@ import defaultProfile from "../../assets/profile.png";
 
 const CDContainer = styled.div`
   cursor: pointer;
+  width: 18.5%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CoverTitle = styled.p`
@@ -48,9 +54,11 @@ const CenterCircle = styled.div`
 `;
 
 const ProfileInfo = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 4px;
+  justify-content: space-between;
 `;
 
 const ProfileImage = styled.img`
@@ -61,12 +69,8 @@ const ProfileImage = styled.img`
 `;
 
 const Nickname = styled.p`
-  width: 180px;
   height: 20px;
   flex-grow: 1;
-  margin-left: 5px;
-  margin-top: 0.1rem;
-
   font-size: 14px;
   color: #575757;
 `;
@@ -88,7 +92,7 @@ const LikeCount = styled.p`
 `;
 
 const SongInfo = styled.p`
-  width: 220px;
+  width: 100%;
   font-size: 0.7rem;
   color: #a3a3a3;
   overflow: hidden;

@@ -7,8 +7,11 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { setModelInfo, setIsStart } from "../../stores/voiceModel";
 import { RootState } from "../../stores/store";
-import SoundWave from "../../components/voiceModel/training/SoundWave";
 import { Button } from "../../components/common/Button";
+import loadingLottie from "../../assets/lottie/loading.json";
+import trainingLottie from "../../assets/lottie/training.json";
+import Lottie from "lottie-react";
+import Complete from "../../components/voiceModel/complete/Complete";
 
 const Container = styled.div<{ $learnState: number }>`
   background: ${(props) => {
@@ -18,16 +21,40 @@ const Container = styled.div<{ $learnState: number }>`
       return 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(180deg, rgba(211, 123, 255, 0) 0%, rgba(211, 123, 255, 0.8) 100%), #000000'
     }
   }};
-  height: 100vh;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
+  .loading-box {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .7);
+    z-index: 2;
+  }
+
+  .training {
+    height: calc(100vh - 6.25rem);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .complete-box {
+    height: calc(100vh - 6.25rem);
+    width: 100%;
+  }
 `
 const Box = styled.div`
   border-radius: 25px;
   background-color: rgba(214, 214, 214, 0.66);
-  width: 65%;
+  width: 55%;
   padding: 4rem 1rem;
   backdrop-filter: blur(.5rem);
   display: flex;
@@ -35,6 +62,7 @@ const Box = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  margin: 2rem;
 
   .title {
     font-size: 1.875rem;
@@ -64,6 +92,7 @@ function ModelDetailPage() {
   const dispatch = useDispatch();
   const params = useParams();
   const modelInfo = useSelector((state: RootState) => state.voiceModel);
+  const isLoading = useSelector((state: RootState) => state.voiceModel.isStart);
 
   const getData = async () => {
     if (params.code) {
@@ -76,12 +105,23 @@ function ModelDetailPage() {
     getData();
   }, [params.code, modelInfo.learnState])
 
-  const startLearning = async () => {
+  const startLearning = () => {
     dispatch(setIsStart(true));
   }
 
   return (
     <Container $learnState={modelInfo.learnState}>
+      { isLoading && 
+        <div className="loading-box">
+          <Lottie 
+            animationData={loadingLottie}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          /> 
+        </div>
+      }
       {
         (modelInfo.learnState === 0 || modelInfo.learnState === 1) &&
         <Box>
@@ -116,16 +156,21 @@ function ModelDetailPage() {
       }
       {
         modelInfo.learnState === 2 &&
-        <div>
-          <p className="text-white">음성 학습이 진행중입니다.</p>
-          <hr className="border-white" />
-          <SoundWave />
+        <div className="training">
+          <p className="text-white text-3xl text-center">음성 학습이 진행중입니다.</p>
+          <Lottie 
+            animationData={trainingLottie}
+            style={{
+              width: "70%",
+              height: "70%",
+            }}
+          /> 
         </div>
       }
       {
         modelInfo.learnState === 3 &&
-        <div>
-          <p className="text-white">음성 학습이 완료되었습니다.</p>
+        <div className="complete-box">
+          <Complete />
         </div>
       }
     </Container>

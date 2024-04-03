@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { CategoryBox } from '../../components/home/HomeStyles';
+import { CategoryBox, PlayBox } from '../../components/home/HomeStyles';
 import goBtnImg from '../../assets/goBtn.png';
 import { Link, useNavigate } from 'react-router-dom';
 import tape from '../../assets/tape.png';
@@ -12,10 +12,10 @@ import album4 from '../../assets/album4.jpg';
 import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
 import logoimage from '../../assets/logo.png';
-import Playlist from '../../components/common/playlist/header/Playlist';
 import Lottie from 'lottie-react';
 import anime from '../../assets/lottie/mainAnime.json';
 import HomeInfo from './HomeInfo';
+import { useLocation } from 'react-router-dom';
 
 const Outer = styled.div`
   height: 100vh;
@@ -34,7 +34,7 @@ const LogoContainer = styled.div`
 `;
 
 const Page1 = styled.div`
-  height: calc(100vh - 90px);
+  height: calc(100vh - 0px);
   display: flex;
   background-color: #f7f6cf;
 `;
@@ -161,6 +161,13 @@ const MarqueeComponentStyled = styled.div`
   width: 100%;
 `;
 
+const PlayButton = styled(PlayBox)`
+  position: absolute;
+  top: 150px; /* 상단에서 20px의 여백 */
+  right: 20px; /* 우측에서 20px의 여백 */
+  z-index: 10;
+`;
+
 interface TextLineInterface {
   $height?: number;
   $margin?: number;
@@ -235,11 +242,40 @@ const HomePage: React.FC = () => {
     };
   }, []);
 
-  // Platlist 만약에 안되면 calc 높이 조정한거 변경하면 됨.
+  const location = useLocation();
+
+  const handleScrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+    });
+  };
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      handleScrollToBottom();
+    }
+  }, [location]);
+
+  const [scrollUp, setScrollUp] = useState(false);
+
+  const MusicClick = () => {
+    if (scrollUp) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+    setScrollUp(!scrollUp);
+  };
 
   return (
     <Outer ref={outerDivRef}>
-      <Playlist />
+      <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
         <LogoContainer>
           <img src={logoimage}></img>

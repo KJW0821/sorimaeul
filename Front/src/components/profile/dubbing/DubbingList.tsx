@@ -80,13 +80,17 @@ function DubbingList() {
         </div>
         <List>
           {
-            dubbingContents &&
+            dubbingContents.length ?
             dubbingContents.map(el => (
               <Fragment key={el.dubCode}>
                 <DubbingCard data={el} setDubbingContents={setDubbingContents} />
                 <hr className="w-full border-black" />
               </Fragment>
             ))
+            :
+            <div className="w-full flex justify-center items-center grow">
+              제작한 컨텐츠가 없습니다.
+            </div>
           }
         </List>
        </Container>

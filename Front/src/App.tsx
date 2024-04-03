@@ -37,6 +37,7 @@ import Header from './components/common/Header';
 import { PersistGate } from 'redux-persist/integration/react';
 import UserDubbingCreatePage from './pages/dubbing/UserDubbingCreatePage';
 import DubbingEditPage from './pages/dubbing/DubbingEditPage';
+import ModelEditPage from './pages/voiceModel/ModelEditPage';
 
 const Content = styled.div<{ $isOpen: boolean }>`
   padding-left: ${(props) => (props.$isOpen ? '314px' : '60px')};
@@ -124,11 +125,20 @@ const router = createBrowserRouter([
               },
               {
                 path: ':code',
-                element: <ModelDetailPage />,
-              },
-              {
-                path: ':code/record',
-                element: <RecordingPage />,
+                children: [
+                  {
+                    index: true,
+                    element: <ModelDetailPage />,
+                  },
+                  {
+                    path: 'edit',
+                    element: <ModelEditPage />,
+                  },
+                  {
+                    path: 'record',
+                    element: <RecordingPage />,
+                  },
+                ],
               },
             ],
           },

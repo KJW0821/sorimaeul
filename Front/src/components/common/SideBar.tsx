@@ -25,7 +25,7 @@ import { setAlarmList, setUnreadMsgCnt, toggleSideBar as toggle } from "../../st
 import { openModal } from "../../stores/modal";
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { useEffect } from 'react';
-import { isProduction } from '../../utils/axios';
+import { URL, isProduction } from '../../utils/axios';
 import { getCookie } from '../../utils/cookie';
 import { getAlarmList } from "../../utils/alarm";
 
@@ -132,7 +132,7 @@ function SideBar() {
   useEffect(() => {
     if (isUser) {
       const eventSource = new EventSource(
-        `${isProduction ? "https://j10e201.p.ssafy.io/api" : "http://localhost:8000/api"}/sse/connect`, 
+        `${URL}/sse/connect`, 
         {
           headers: {
             Authorization: getCookie('accessToken')
@@ -193,7 +193,7 @@ function SideBar() {
               </div>
               <div onClick={() => navigate('/dubbing')} className="col">
                 <img src={location.pathname === '/dubbing' ? voiceActive : voice} alt="dubbing" />
-                <p>더빙 학원</p>
+                <p>더빙 극장</p>
               </div>
               <div onClick={() => navigate('/cover')} className="col">
                 <img src={location.pathname === '/cover' ? recordActive : record} alt="aicover" />
@@ -213,9 +213,12 @@ function SideBar() {
               <div className="col" onClick={openAlarmModal}>
                 <img src={bell} alt="alarm" />
                 <p>알림</p>
-                <div className="col-msg-cnt">
-                  {msgCnt}
-                </div>
+                {
+                  msgCnt &&
+                  <div className="col-msg-cnt">
+                    {msgCnt}
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -248,9 +251,12 @@ function SideBar() {
               <img onClick={() => navigate('/profile')} src={location.pathname === '/profile' ? userActive : user} alt="profile" />
               <div className="relative">
                 <img onClick={openAlarmModal} src={bell} alt="alarm" />
-                <div className="msg-cnt">
-                  {msgCnt}
-                </div>
+                {
+                  msgCnt &&
+                  <div className="msg-cnt">
+                    {msgCnt}
+                  </div>
+                }
               </div>
             </div>
           </div>
