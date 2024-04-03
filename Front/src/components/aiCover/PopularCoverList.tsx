@@ -19,9 +19,9 @@ const PopularCoverList: React.FC<Props> = ({
   data
 }) => {
   return (
-<ListContainer>
+<ListContainer >
       {data && data.map((cover) => (
-        <CDPlayer cover={cover}/>
+        <CDPlayer key={cover.coverCode} cover={cover}/>
       ))}
 </ListContainer>
   );
