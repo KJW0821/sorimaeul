@@ -17,8 +17,8 @@ const DubbingContentsWrapper = styled.div`
 
 const Card = styled.div`
   position: relative;
-  width: 400px;
-  height: 260px;
+  width: 35vh;
+  height: 30vh;
   margin: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
@@ -39,7 +39,11 @@ const Gradient = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 `;
 
 const SourceName = styled.div`
@@ -49,7 +53,7 @@ const SourceName = styled.div`
   padding: 15px;
   font-size: 24px;
   text-align: center;
-  color: #FFE928;
+  color: #ffe928;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -72,14 +76,17 @@ const DubbingContents: React.FC = () => {
 
   return (
     <>
-    <DubbingContentsWrapper>
-      {hotVideoList.slice(0, 4).map((video, index) => (
-        <Card key={index} onClick={() => navigate(`/dubbing/${video.videoSourceCode}`)}>
-          <Thumbnail src={s3URL + video.thumbnailPath} alt="Thumbnail" />
-          <Gradient />
-          <SourceName>{video.sourceName}</SourceName>
-        </Card>
-      ))}
+      <DubbingContentsWrapper>
+        {hotVideoList.slice(0, 4).map((video, index) => (
+          <Card
+            key={index}
+            onClick={() => navigate(`/dubbing/${video.videoSourceCode}`)}
+          >
+            <Thumbnail src={s3URL + video.thumbnailPath} alt="Thumbnail" />
+            <Gradient />
+            <SourceName>{video.sourceName}</SourceName>
+          </Card>
+        ))}
       </DubbingContentsWrapper>
     </>
   );
