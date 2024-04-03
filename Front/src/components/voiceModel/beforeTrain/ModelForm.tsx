@@ -11,8 +11,8 @@ import { decreaseLearnCount } from "../../../stores/user";
 const Container = styled.div`
   border-radius: 25px;
   background-color: rgba(214, 214, 214, 0.66);
-  width: 65%;
-  padding: 4rem 1rem;
+  width: 45%;
+  padding: 2rem 1rem;
   backdrop-filter: blur(.5rem);
   display: flex;
   flex-direction: column;
@@ -38,11 +38,7 @@ const Container = styled.div`
       padding-top: 0.4rem;
       font-family: 'GmarketSansBold';
       .sm-font {
-        font-size: .75rem;
-      }
-
-      .purple {
-        color: #AC69FF;
+        font-size: 1rem;
       }
     }
 
@@ -147,13 +143,13 @@ function ModelForm() {
       <h2 className="title">나만의 음성 모델 만들기</h2>
       <hr className="w-5/6" />
       <div className="step">
-        <h3 className="subtitle">Step 1. 이름 짓기<span className="sm-font purple ml-4">* 필수</span></h3>
+        <h3 className="subtitle">Step 1. 이름 짓기<span className="sm-font ml-4 text-black">* 필수</span></h3>
         <div className="flex items-center gap-2">
           <input onChange={handleModelName} className="input" type="text" placeholder="음성 모델명을 입력해주세요" />
         </div>
       </div>
       <div className="step">
-        <h3 className="subtitle">Step 2. 썹네일 업로드<span className="sm-font ml-4">* 선택</span></h3>
+        <h3 className="subtitle">Step 2. 썹네일 업로드<span className="sm-font ml-4 text-black">* 선택</span></h3>
         <div className="flex items-center gap-2">
           <p className="input over-text">{ selectedfile ? selectedfile : '음성 모델 썸네일을 업로드해주세요' }</p>
           <label htmlFor="file">업로드</label>

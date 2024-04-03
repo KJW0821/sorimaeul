@@ -4,7 +4,7 @@ import ModelForm from "../../components/voiceModel/beforeTrain/ModelForm";
 
 const Container = styled.div`
   background: url(${modelBg});
-  height: 100vh;
+  height: calc(100vh - 6.25rem);
   background-size: cover;
   display: flex;
   justify-content: center;
