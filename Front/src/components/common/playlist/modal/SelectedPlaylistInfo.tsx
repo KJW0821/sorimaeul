@@ -16,7 +16,7 @@ const PlaylistItem = styled.li`
   border: 3px solid #cccccc; 
   border-radius: 10px;
   overflow-y: hidden;
-  margin: 7px;
+  height: 2.75rem;
   
   background-color: white;
   padding: 0.25rem;
@@ -30,13 +30,16 @@ const PlaylistItem = styled.li`
   }
 `;
 
-const CoverItem = styled.li`
+const CoverItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
   width: 100%;
-  margin-top: 0.25rem;
+
+  span {
+    padding-top: 0.25rem;
+  }
 
   span:first-child {
     flex: 1; // 커버명과 가수명이 더 많은 공간을 차지하도록 설정
@@ -88,21 +91,21 @@ function SelectedPlaylistInfo() {
 
   // selectedPlaylist가 정의되지 않았을 경우를 대비한 처리
   if (!selectedPlaylist || !selectedPlaylist.covers) {
-    return <div>선택된 플레이리스트가 없습니다.</div>;
+    return <div className="text-white">선택된 플레이리스트가 없습니다.</div>;
   }
 
   return (
-    <div>
-      <h2>플레이리스트 커버 목록</h2>
-      <ul>
+    <div className="mt-2">
+      <h2 className="text-white">플레이리스트 커버 목록</h2>
+      <ul className="flex flex-col gap-2 mt-2">
         {selectedPlaylist.covers.map((cover, index) => (
           <PlaylistItem key={index}>
             <CoverItem>
             <span>{cover.title} - {cover.singer} ({cover.coverSinger}) {cover.isPublic}</span>
-            {cover.nickname} <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + `/${cover.storagePath}`}></DetailPlayer>
-            <img src={deleteIcon} className="mt-3" onClick={() => deletCoverFromPlaylist(cover.coverCode)} />
+            <span>{cover.nickname}</span> 
+            <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + `/${cover.storagePath}`}></DetailPlayer>
+            <img src={deleteIcon} className="ml-2" onClick={() => deletCoverFromPlaylist(cover.coverCode)} />
             </CoverItem>
-            <span></span>
           </PlaylistItem>
         ))}
       </ul>

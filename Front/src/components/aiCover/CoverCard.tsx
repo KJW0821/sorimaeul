@@ -6,19 +6,19 @@ import heart from '../../assets/heart.png';
 import defaultProfile from "../../assets/profile.png";
 
 const CardContainer = styled.div`
-  width: 280px;
+  width: 100%;
   height: auto;
   cursor: pointer;
 `;
 
 const ThumbnailImage = styled.img`
-  width: 250px;
+  width: 100%;
   height: 250px;
   border-radius: 2px;
 `;
 
 const Title = styled.h2`
-  max-width: 250px;
+  width: 100%;
   font-size: 1.2rem;
   margin-top: 0.3rem;
   margin-bottom: 0.5rem;
@@ -28,7 +28,6 @@ const Title = styled.h2`
 `;
 
 const Nickname = styled.p`
-  max-width: 240px;
   flex-grow: 1;
   margin-left: 5px;
   font-size: 1rem;
@@ -70,19 +69,18 @@ const HeartIcon = styled.img`
 `;
 
 const LikeCount = styled.p`
-  margin-right: 3rem;
   font-size: 1.2rem;
   margin-top: 1px;
 `;
 
 const SongInfo = styled.p`
-  width: 230px;
+  width: 100%;
   height: 22px;
   line-height: 22px;
   font-size: 0.9rem;
   color: #a3a3a3;
   overflow: hidden;
-  white-spce: nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
 `;
 

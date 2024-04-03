@@ -7,31 +7,18 @@ import { useDispatch } from "react-redux";
 import { initModelInfo } from "../../../stores/voiceModel";
 import { requestS3 } from "../../../utils/s3";
 import { decreaseLearnCount } from "../../../stores/user";
-import loadingLottie from "../../../assets/lottie/loading.json";
-import Lottie from "lottie-react";
 
 const Container = styled.div`
   border-radius: 25px;
   background-color: rgba(214, 214, 214, 0.66);
-  width: 65%;
-  padding: 4rem 1rem;
+  width: 45%;
+  padding: 2rem 1rem;
   backdrop-filter: blur(.5rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-
-  .loading-box {
-    position: absolute;
-    right: 0;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, .7);
-    z-index: 2;
-    border-radius: 25px;
-  }
 
   .title {
     font-size: 1.875rem;
@@ -50,6 +37,9 @@ const Container = styled.div`
       color: white;
       padding-top: 0.4rem;
       font-family: 'GmarketSansBold';
+      .sm-font {
+        font-size: 1rem;
+      }
     }
 
     .input {
@@ -103,7 +93,6 @@ function ModelForm() {
   const [modelName, setModelName] = useState('');
   const [imagePath, setImagePath] = useState('');
   const [selectedfile, setSelectedFile] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const handleModelName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setModelName(() => e.target.value);
@@ -134,10 +123,8 @@ function ModelForm() {
   };
 
   const submitHandler = async () => {
-    setLoading(true);
     if (modelName !== "") {
       const res = await voiceModelAPI.createModel({modelName, imagePath});
-      setLoading(false);
       if (res?.status === 201) {
         console.log(res.data, '모델 생성 완료');
         dispatch(initModelInfo(res.data.modelCode));
@@ -153,27 +140,16 @@ function ModelForm() {
 
   return(
     <Container>
-      { loading && 
-        <div className="loading-box">
-          <Lottie 
-            animationData={loadingLottie}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          /> 
-        </div>
-      }
       <h2 className="title">나만의 음성 모델 만들기</h2>
       <hr className="w-5/6" />
       <div className="step">
-        <h3 className="subtitle">Step 1. 이름 짓기</h3>
+        <h3 className="subtitle">Step 1. 이름 짓기<span className="sm-font ml-4 text-black">* 필수</span></h3>
         <div className="flex items-center gap-2">
           <input onChange={handleModelName} className="input" type="text" placeholder="음성 모델명을 입력해주세요" />
         </div>
       </div>
       <div className="step">
-        <h3 className="subtitle">Step 2. 썹네일 업로드</h3>
+        <h3 className="subtitle">Step 2. 썹네일 업로드<span className="sm-font ml-4 text-black">* 선택</span></h3>
         <div className="flex items-center gap-2">
           <p className="input over-text">{ selectedfile ? selectedfile : '음성 모델 썸네일을 업로드해주세요' }</p>
           <label htmlFor="file">업로드</label>

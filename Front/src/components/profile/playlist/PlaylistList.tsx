@@ -8,10 +8,17 @@ import styled from 'styled-components';
 
 
 const ListContainer = styled.div`
-  margin-left: 50px;
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
-  gap: 15px;
+  justify-content: space-between;
+  margin: 1rem auto;
+  height: 29.5rem;
+  overflow-y: auto;
+
+  & > div:last-child {
+    margin-right: auto;
+  }
 `;
 
 export function PlaylistList () {
@@ -32,7 +39,6 @@ export function PlaylistList () {
   }, []);
 
   return (
-    <>
     <ListContainer>
       {dataList.playlists.map((playlist) => (
         <PlaylistCard
@@ -42,7 +48,6 @@ export function PlaylistList () {
           createdTime={playlist.createdTime}
         />
       ))}
-      </ListContainer>
-    </>
+    </ListContainer>
   );
 }

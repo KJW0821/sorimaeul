@@ -17,6 +17,7 @@ const Container = styled.div<{ $isUploaded: boolean }>`
     font-size: 0.875rem;
   }
   .file-controller {
+    width: 49%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -59,6 +60,7 @@ function UploadModelMethod() {
   const isStart = useSelector((state: RootState) => state.voiceModel.isStart);
   const modelCode = useSelector((state: RootState) => state.voiceModel.modelCode);
   const [file, setFile] = useState<FormData>(new FormData());
+  const [idxFile, setIdxFile] = useState<File | null>(null);
 
   const getFormDataSize = (formData: FormData) => [...formData].reduce((size, el) => size + 1, 0);
 
@@ -73,8 +75,19 @@ function UploadModelMethod() {
     }
   }
 
+  const handleIdxFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const uploadFile = e.target.files[0];
+      setIdxFile(uploadFile);
+    }
+  };
+
   const deleteFile = () => {
     setFile(() => new FormData())
+  };
+
+  const deleteIdxFile = () => {
+    setIdxFile(null);
   };
 
   useEffect(() => {
@@ -105,32 +118,54 @@ function UploadModelMethod() {
       <div className="guide">
         <p>외부 학습 모델을 등록합니다.</p>
       </div>
-      <div className="file-controller">
-        {
-          getFormDataSize(file) > 0 ?
-          <div className="w-full h-full flex flex-col p-4 gap-2">
-            <div className="flex flex-col overflow-auto gap-2">
-              {
-                [...file.values()].map((el, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    {
-                      el instanceof File &&
-                      <p className="name">{el.name}</p>
-                    }
-                    <p className="delete-btn" onClick={deleteFile}>x</p>
-                  </div>
-                ))
-              }
+      <div className="flex justify-between">
+        <div className="file-controller">
+          {
+            getFormDataSize(file) > 0 ?
+            <div className="w-full h-full flex flex-col p-4 gap-2">
+              <div className="flex flex-col overflow-auto gap-2">
+                {
+                  [...file.values()].map((el, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      {
+                        el instanceof File &&
+                        <p className="name">{el.name}</p>
+                      }
+                      <p className="delete-btn" onClick={deleteFile}>x</p>
+                    </div>
+                  ))
+                }
+              </div>
             </div>
-          </div>
-          :
-          <>
-            <img src={uploadFile} alt="uploadFile" />
-            <p>.pth 파일</p>
-            <label htmlFor="files"></label>
-            <input onChange={handleFiles} type="file" id="files" name="files" accept=".pth, .index" />
-          </>
-        }
+            :
+            <>
+              <img src={uploadFile} alt="uploadFile" />
+              <p>.pth 파일</p>
+              <label htmlFor="files"></label>
+              <input onChange={handleFiles} type="file" id="files" name="files" accept=".pth" />
+            </>
+          }
+        </div>
+        <div className="file-controller">
+          {
+            idxFile ?
+            <div className="w-full h-full flex flex-col p-4 gap-2">
+              <div className="flex flex-col overflow-auto gap-2">
+                <div className="flex items-center gap-2">
+                  <p className="name">{idxFile.name}</p>
+                  <p className="delete-btn" onClick={deleteIdxFile}>x</p>
+                    </div>
+              </div>
+            </div>
+            :
+            <>
+              <img src={uploadFile} alt="uploadFile" />
+              <p>.idx 파일</p>
+              <label htmlFor="files"></label>
+              <input onChange={handleIdxFile} type="file" id="files" name="files" accept=".index" />
+            </>
+          }
+        </div>
       </div>
     </Container>
   )

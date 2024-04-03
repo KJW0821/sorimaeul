@@ -16,6 +16,7 @@ import inactiveHeart from "../../assets/inactiveHeart.png";
 import sumOrange from "../../assets/sumOrange.png";
 import deleteIcon from "../../assets/deleteIcon.png";
 import editIcon from "../../assets/editIcon.png";
+import defaultProfile from "../../assets/profile.png";
 
 
 // 상세 조회 페이지
@@ -73,7 +74,7 @@ const ThumbnailContainer = styled.div`
 
 const Thumbnail = styled.img`
   width: 100%; 
-  height: auto;
+  height: 100%;
   display: block;
   position: relative;
   z-index: 1; 
@@ -292,7 +293,7 @@ const CoverDetailPage: React.FC = () => {
             <InfoSection>
               <InfoBox>
                 <Profile >
-                  <ProfileImage src={s3URL + data.profileImage} alt="Creator Profile Image" />
+                  <ProfileImage src={data.profileImage? s3URL + data.profileImage : defaultProfile} alt="Creator Profile Image" />
                   <p className="nickname"> {data.nickname} </p>
                 </Profile>
                 <DetailLine />

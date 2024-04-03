@@ -3,6 +3,7 @@ import { VideoData } from "./SoriAward";
 import defaultProfile from "../../../assets/profile.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { s3URL } from "../../../utils/s3";
+import { calcDate } from "../../../utils/calcDate";
 
 const Container = styled.div`
   width: 23%;
@@ -24,7 +25,7 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     gap: .75rem;
-    margin-bottom: .5rem;
+    margin-bottom: auto;
     .circle {
       height: 1.5rem;
       width: 1.5rem;
@@ -75,7 +76,10 @@ const UserDubbingCard: React.FC<{ videoData: VideoData}> = ({ videoData }) => {
         <p className="title">{videoData.dubName}</p>
       </div>
       <p className="info">작성자 {videoData.nickname}</p>
-      <p className="info">좋아요 {videoData.likeCount}개</p>
+      <div className="flex justify-between">
+        <p className="info">좋아요 {videoData.likeCount}개</p>
+        <p className="info">{calcDate(new Date(videoData.createdTime))}</p>
+      </div>
     </Container>
   )
 }

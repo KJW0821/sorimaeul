@@ -1,56 +1,32 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Playlist from './playlist/header/Playlist';
 import logoimage from '../../assets/logo.png';
 
-interface HeaderProps {
-  $isMainPage: boolean;
-}
 
-const HeaderContainer = styled.div<HeaderProps>`
-  display: flex;
-  flex-direction: ${(props) => (props.$isMainPage ? 'row' : 'row')};
-  justify-content: ${(props) => (props.$isMainPage ? 'center' : 'center')};
-  align-items: center;
-  width: 100%;
-  height: auto;
-`;
-
-interface LogoProps {
-  $isMainPage: boolean;
-}
-
-const LogoContainer = styled.div<LogoProps>`
+const HeaderContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
-  margin-left: ${(props) => (props.$isMainPage ? '300px' : '300px')};
-  margin-top: ${(props) => (props.$isMainPage ? '0' : '0')};
+  height: 6.25rem;
+  position: relative;
 `;
 
-export const Logo = styled.img<LogoProps>`
-  width: ${(props) => (props.$isMainPage ? '300px' : '300px')};
+export const Logo = styled.img`
+  width: 300px;
   height: auto;
 `;
 
-const Header: React.FC<{ mainPage?: boolean }> = ({ mainPage }) => {
+const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isMainPage = location.pathname === '/'; // 메인 페이지의 경로가 '/'인 경우
   return (
-    <HeaderContainer $isMainPage={isMainPage}>
-      {isMainPage ? (
-        <></>
-      ) : (
-        <>
-          <LogoContainer $isMainPage={isMainPage}>
-            <Link to="/">
-              <Logo src={logoimage} $isMainPage={isMainPage}></Logo>
-            </Link>
-          </LogoContainer>
-          <Playlist />
-        </>
-      )}
+    <HeaderContainer>
+      <Logo onClick={() => navigate('/')} src={logoimage}/>
+      <Playlist />
     </HeaderContainer>
   );
 };
