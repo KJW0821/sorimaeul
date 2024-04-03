@@ -76,9 +76,9 @@ const HotContentsContainer = styled.div`
       overflow: hidden;
       justify-content: space-between;
       .hole {
-        width: calc(100% / 90);
-        min-width: calc(100% / 90);
-        height: 70%;
+        width: calc(100% / 92);
+        min-width: calc(100% / 92);
+        height: 60%;
         background: white;
         border-radius: 3px;
       }
