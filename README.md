@@ -41,6 +41,7 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 | 소셜 로그인을 지원합니다. | 서비스에 대한 간략한 소개 페이지 |
 
 <hr>
+<br><br>
 
 ### 음성 모델 학습 페이지
 | ![Alt text](assets/음성학습.png) | ![Alt text](assets/음성학습_모델_녹음.gif) |
@@ -52,6 +53,7 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 | 녹음 파일을 직접 업로드하여 학습할 수 있습니다.|만들어진 모델을 업로드할 수 있습니다.|
 
 <hr>
+<br><br>
 
 ### 더빙 극장
 | ![더빙 원본 영상 조회](assets/더빙극장_컨텐츠_조회.gif) | ![더빙 게시글 조회](assets/더빙극장_게시글_조회.gif) |
@@ -66,6 +68,7 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 | 녹음된 음성을 원하는 음성 모델로 변환할 수 있습니다. 변환된 음성을 들어볼 수 있으며, 마음에 들지 않는다면 다른 모델, 다른 피치로 다시 변환할 수 있습니다.|더빙 영상을 생성합니다. 따로 녹음을 하지 않은 등장인물은 기본 음성으로 저장됩니다.|
 
 <hr>
+<br><br>
 
 ### AI 커버
 | ![AI 커버 조회](assets/AI커버_게시글_조회.gif)  | ![AI 커버 생성](assets/AI커버_커버_생성.gif) |
@@ -74,6 +77,7 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 | 'Hot Contents'와 다른 사용자가 올린 AI 커버 게시글을 조회할 수 있습니다. | 직접 Youtube 링크를 올리거나 사이트에서 제공하는 곡을 선택하여 음성 모델 목소리로 변환할 수 있습니다. |
 
 <hr>
+<br><br>
 
 ### 플레이리스트
 | ![플레이리스트 생성](assets/플레이리스트_생성.gif) | ![플레이리스트 곡 추가](assets/플레이리스트_AI커버_추가.gif) |
@@ -84,6 +88,7 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 | **재생할 플레이리스트 선택** | **플레이리스트 재생** |
 | 재생을 원하는 플레이리스트를 선택 |플레이리스트에 담겨있는 곡들을 재생합니다. |
 <hr>
+<br><br>
 
 ### 마이페이지
 | ![마이페이지/음성 모델](assets/마이페이지_모델.gif) | ![마이페이지/더빙](assets/마이페이지_더빙.gif) |
@@ -98,6 +103,7 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 |나의 플레이리스트를 생성, 조회할 수 있고 플레이리스트에 들어있는 AI 커버를 재생해볼 수 있습니다.|
 
 <hr>
+<br><br>
 
 ### 문의 게시판 + 알림
 | ![문의 게시판](assets/문의게시판.gif) | ![알림](assets/알림.gif) |
@@ -114,16 +120,22 @@ AI 트랜드 소개, AI 음성 시장, 콘텐츠 문화(AI 커버 채널 구독�
 > 커뮤니케이션 : Mattermost, Notion, KakaoTalk <br>
 > 디자인 : Figma
 
+<br>
+
 ### 💻 IDE
 > Visual Studio Code 1.85.1 <br> 
 > IntelliJ 11.0.19
 
+<br>
+
 ### 🛢 Back-End
 
-IntelliJ IDEA 2023.3.2 (Community Edition)
-Java 17 (Azul Zulu version 17.0.9)
-Spring boot 3.2.2
-MySQL 8.0.36
+> IntelliJ IDEA 2023.3.2 (Community Edition) <br>
+> Java 17 (Azul Zulu version 17.0.9) <br>
+> Spring boot 3.2.2 <br>
+> MySQL 8.0.36
+
+<br>
 
 ### 📱 Front-End
 > React 18.2.0 <br>
@@ -131,20 +143,25 @@ MySQL 8.0.36
 > Tailwind CSS 3.4.1 <br>
 > Node.js 20.10.0
 
+<br>
+
 ### 👨‍💻 AI
 > Python 3.9.13 <br>
 > CUDA Toolkit 11.7.1 <br>
 > Anaconda 4.10.3 
 
+<br>
+
 ### 🌐 Server
-> Ubuntu 20.04.6 LTS <br>
-> Nginx 1.18.0 <br>
-> OpenSSL 1.1.1f <br>
-> AWS S3 Bucket <br>
-> GPU server <br>
-> Ubuntu 20.04.4 LTS <br>
-> Device: NVIDIA Corporation GV100GL (Tesla V100 PCle 32GB) <br>
-> Jenkins 2.443
+> - Ubuntu 20.04.6 LTS
+> - AWS S3 Bucket
+> - Jenkins 2.443
+>   - Nginx 1.18.0
+>   - OpenSSL 1.1.1f
+> - GPU server
+>   - Ubuntu 20.04.4 LTS
+>   - Device: NVIDIA Corporation GV100GL (Tesla V100 PCle 32GB) <br>
+
 
 <br><br>
 
@@ -155,22 +172,23 @@ MySQL 8.0.36
 
 
 # 📄 설계 문서
-### 요구사항 정의서
+## 요구사항 정의서
 ![요구사항](assets/요구사항.png)
 <br><br>
 
-### 기능 정의서
+## 기능 정의서
 ![기능정의서](assets/기능정의서.png)
 <br><br>
 
-### SWagger
+## Swagger
 ![Swagger](assets/Swagger.png)
+<br><br>
 
-### API 명세서
+## API 명세서
 ![API 명세서](assets/API_명세서.png)
 <br><br>
 
-### ERD
+## ERD
 ![ERD](assets/ERD.png)
 <br><br>
 
