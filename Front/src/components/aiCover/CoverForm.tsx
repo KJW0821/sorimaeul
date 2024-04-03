@@ -153,10 +153,6 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
   const baseStepNumber = uploadType === 'recommendation' ? 1 : 2;
   const [youtubeLink, setYoutubeLink] = useState('');
 
-  // data 상태 확인을 위한 출력 코드 - 추후 제거 필요
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   useEffect(() => {
     (async () => {
@@ -174,7 +170,6 @@ const CoverForm: React.FC<Props> = ({ onSubmit }) => {
   ) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
-    console.log(data);
   };
 
   const handleUploadType = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -100,10 +100,8 @@ function ModelForm() {
 
   const handleImagePath = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(e.target.files?.[0])
     if (file) {
       const reader = new FileReader();
-      console.log(file.name)
       setSelectedFile(file.name);
       reader.readAsDataURL(file);
       try {
@@ -126,7 +124,6 @@ function ModelForm() {
     if (modelName !== "") {
       const res = await voiceModelAPI.createModel({modelName, imagePath});
       if (res?.status === 201) {
-        console.log(res.data, '모델 생성 완료');
         dispatch(initModelInfo(res.data.modelCode));
         dispatch(decreaseLearnCount());
         navigate(`/model/${res.data.modelCode}`);
