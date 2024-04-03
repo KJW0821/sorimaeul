@@ -76,16 +76,16 @@ function SelectedPlaylistInfo() {
   }, [selectedPlaylist]);
 
   // 플레이리스트에서 커버 삭제
-  const deletCoverFromPlaylist = async (coverCode: string) => {
-    if (!playlistCode) return;
+  // const deletCoverFromPlaylist = async (coverCode: string) => {
+  //   if (!playlistCode) return;
 
-    const res = await deleteCoverFromList(playlistCode, coverCode);
-    if (res.status == 200) {
-      const updateData = await getPlaylist(playlistCode);
-      setData(updateData);
-      setSelectedPlaylist(updateData);
-    }
-  }
+  //   const res = await deleteCoverFromList(playlistCode, coverCode);
+  //   if (res.status == 200) {
+  //     const updateData = await getPlaylist(playlistCode);
+  //     setData(updateData);
+  //     setSelectedPlaylist(updateData);
+  //   }
+  // }
 
   // selectedPlaylist가 정의되지 않았을 경우를 대비한 처리
   if (!selectedPlaylist || !selectedPlaylist.covers) {
@@ -102,7 +102,7 @@ function SelectedPlaylistInfo() {
             <span>{cover.title} - {cover.singer} ({cover.coverSinger}) {cover.isPublic}</span>
             <span>{cover.nickname}</span> 
             <DetailPlayer isPublic={cover.isPublic} coverCode={cover.coverCode} src={s3URL + `/${cover.storagePath}`}></DetailPlayer>
-            <img src={deleteIcon} className="ml-2" onClick={() => deletCoverFromPlaylist(cover.coverCode)} />
+            {/* <img src={deleteIcon} className="ml-2" onClick={() => deletCoverFromPlaylist(cover.coverCode)} /> */}
             </CoverItem>
           </PlaylistItem>
         ))}
