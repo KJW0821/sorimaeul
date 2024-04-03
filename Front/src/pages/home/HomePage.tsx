@@ -19,6 +19,8 @@ import { useLocation } from 'react-router-dom';
 import mainVoice from '../../assets/mainVoice.png';
 import mainDub from "../../assets/mainDub.png";
 import mainCover from "../../assets/mainCover.png";
+import { FadeIn } from '../../components/animation/FadeComponent';
+import { motion } from 'framer-motion';
 
 const Outer = styled.div`
   height: 100vh;
@@ -29,13 +31,6 @@ const Outer = styled.div`
   }
 `;
 
-const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: -100px;
-`;
-
 const Page1 = styled.div`
   height: calc(100vh - 0px);
   display: flex;
@@ -44,12 +39,15 @@ const Page1 = styled.div`
   position: relative;
 `;
 
-const CircleContainer = styled.div`
-  width: 90%;
+const CircleContainer = styled(motion.div)`
+  padding: 20px; /* 그림자가 잘리지 않도록 padding 추가 */
+  margin: -20px; /* padding으로 인한 컨테이너 크기 증가를 상쇄 */
+  width: calc(90% - 40px); /* padding을 고려한 실제 너비 조정 */
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: hidden;
 `;
 
 interface CircleProps {
@@ -249,6 +247,8 @@ const PlayButton = styled(PlayBox)`
   position: absolute;
   top: 150px; /* 상단에서 20px의 여백 */
   right: 20px; /* 우측에서 20px의 여백 */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
   z-index: 10;
 `;
 
@@ -361,30 +361,36 @@ const HomePage: React.FC = () => {
     <Outer ref={outerDivRef}>
       <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
-        <Page1Text>소리마을에서 Creator가 되어보세요!</Page1Text>
-        <CircleContainer>
+        <FadeIn>
+          <Page1Text>소리마을에서 Creator가 되어보세요!</Page1Text>
+        </FadeIn>
+        <CircleContainer
+          initial={{ y: '100vh' }}
+          animate={{ y: 0 }}
+          transition={{ duration: 1.5, type: 'spring' }}>
           <Circle $size="27%"
             $hoverBackground="linear-gradient(90deg, rgba(253, 255, 0, 0.7) 0%, rgba(99, 218, 255, 0.7) 100%), #26BA28"
             onClick={() => navigate('dubbing')}>
             <IconImage src={mainDub} alt="dub icon" />
             <TextInside>더빙 </TextInside>
-            <TextUnder>재밌는 동영상<br/> 내 맘대로 더빙해요!</TextUnder>
+            <TextUnder>재밌는 동영상<br /> 내 맘대로 더빙해요!</TextUnder>
           </Circle>
           <Circle $size="33%"
-            $hoverBackground=" linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;"
+            $hoverBackground="linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;"
             onClick={() => navigate('/model/create')}>
             <IconImage src={mainVoice} alt="voice train icon" />
             <TextInside>음성 학습 </TextInside>
-            <TextUnder>딱 20분 녹음하고<br/>내 목소리 모델을 만들어요!</TextUnder>
+            <TextUnder>딱 20분 녹음하고<br />내 목소리 모델을 만들어요!</TextUnder>
           </Circle>
           <Circle $size="27%"
             $hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
             onClick={() => navigate('/cover/create')}>
             <IconImage src={mainCover} alt="cover icon" />
             <TextInside>커버</TextInside>
-            <TextUnder>클릭 한번으로<br/>AI 커버 만들어요!</TextUnder>
+            <TextUnder>클릭 한번으로<br />AI 커버 만들어요!</TextUnder>
           </Circle>
         </CircleContainer>
+
       </Page1>
       <Page2>
         <RightAlignedContainer>
