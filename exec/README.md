@@ -3,12 +3,10 @@
 ## 목차
 
 1. [환경 설정](#1-환경-설정)
-
 - [기술 스택](#기술-스택)
 - [외부 서비스](#외부-서비스)
 
 2. [빌드 및 배포](#2-빌드-및-배포)
-
 - [환경 변수 설정](#환경-변수-설정)
 - [빌드](#빌드)
 - [배포](#배포)
@@ -31,7 +29,7 @@
       - Ubuntu 20.04.6 LTS
       - Nginx 1.18.0
       - OpenSSL 1.1.1f
-      - Zenkins 2.448
+      - Jenkins 2.448
     - AWS S3 Bucket
     - GPU server
       - Ubuntu 20.04.4 LTS
@@ -62,6 +60,7 @@
 ### 환경 변수 설정
 
 - Front/.env
+
   ```
   VITE\_API\_URL={Base URL}
   VITE_S3_URL={AWS S3 Bucket URL}
@@ -70,6 +69,7 @@
 - Back/src/main/resources/application.yml
 
   - Base
+
     ```yml
     server:
       port : {port number}
@@ -214,6 +214,7 @@
 
 
 - ai/rvcmodel/.env
+
   ```env
   BASE_URL={Base URL}
   S3_URL={AWS S3 Bucket URL}
@@ -222,11 +223,14 @@
 ### 빌드
 
 - Front-End
+
   ```bash
   $ npm install
   $ npm run build
   ```
+
 - Back-End
+
   ```bash
   $ chmod +x ./gradlew
   $ ./gradlew clean build
@@ -249,9 +253,9 @@
       ```
 
       - 이후 tools 폴더 내에 생성된 파일들을 각 위치로 이동
-      - ai/rvcmodel/assets/hubert/hubert_base.pt
-      - ai/rvcmodel/assets/pretrained
-      - ai/rvcmodel/assets/uvr5_weights
+        - ai/rvcmodel/assets/hubert/hubert_base.pt
+        - ai/rvcmodel/assets/pretrained
+        - ai/rvcmodel/assets/uvr5_weights
 
     - `ai/rvcmodel/assets/rmvpe` 폴더에 RMVPE 피치 추출 파일 다운로드 ([rmvpe.pt](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/rmvpe.pt))
 
@@ -296,7 +300,9 @@
 ### 배포
 
 - Front-End
+
   - CI/CD : Jenkins pipeline
+
     ```shell
     pipeline {
         agent any
@@ -355,6 +361,7 @@
     ```
 
   - Shell Script
+
     ```shell
     fpid=$(pgrep -f dist)
     if [ -n "${fpid}" ]
@@ -375,6 +382,7 @@
 - Back-End
 
   - CI/CD : Jenkins pipeline
+
     ```shell
     pipeline {
       agent any
@@ -412,6 +420,7 @@
     ```
 
   - Shell Script
+
     ```shell
     #!/bin/bash
 
