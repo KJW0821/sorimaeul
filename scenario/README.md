@@ -4,7 +4,7 @@
 
 ### 카카오 및 구글 소셜 로그인 가능
 
-  <img src="./images/readme/login.png"  />
+  <img src="./images/readme/login.PNG"  />
 
 ## 2. 메인 페이지
 
@@ -22,9 +22,10 @@
 
 ## 4. 더빙 극장
 
-### 기본 화면
-
-  <img src="./images/readme/theather.gif"  />
+<details>
+<summary>기본 화면</summary>
+ <img src="./images/readme/theather.gif"  />
+</details>
 
 ### 원하는 영상 더빙 가능
 
@@ -34,7 +35,10 @@
 
 ### 기본 화면
 
+<details>
+<summary>기본 화면</summary>
   <img src="./images/readme/covermain.png"  />
+</details>
 
 ### 원하는 노래 원하는 목소리로 커버 가능
 
@@ -42,13 +46,21 @@
 
 ## 6. FAQ / 요청 게시판
 
-### 사이트의 사용법 확인 가능
+<details>
+<summary>FAQ 게시판</summary>
 
-  <img src="./images/readme/FAQ.png"  />
+### 사이트 이용방법 확인 가능
+
+   <img src="./images/readme/FAQ.png"  />
+</details>
+
+<details>
 
 ### 관리자에게 요청 가능
 
-  <img src="./images/readme/request.png"  />
+<summary>요청 게시판</summary>
+   <img src="./images/readme/request.png"  />
+</details>
 
 ## 7. 마이페이지
 
