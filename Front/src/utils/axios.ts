@@ -42,16 +42,11 @@ API.interceptors.response.use(
   },
   (err) => {
     if (err.response && err.response.status === 401) {
-      console.log('Access 토큰 만료');
-      console.log(err);
       const refreshToken = getCookie('refreshToken');
       const headers = { Authorization: refreshToken };
-      console.log(err.config);
       return reissueAPI
         .get('/oauth/reissue', { headers })
         .then((res) => {
-          console.log(res);
-          console.log('재발급 성공!');
           const access = res.data.accessToken;
           const refresh = res.data.refreshToken;
           setCookie('accessToken', `Bearer ${access}`, { path: '/' });
@@ -62,8 +57,6 @@ API.interceptors.response.use(
           return API(originalRequest);
         })
         .catch((err) => {
-          console.log('재발급 실패!');
-          console.log(err);
           if (err.response.status === 401) {
             // refresh 토큰도 만료된 경우 -> 재로그인 필요
             handleLogout();

@@ -101,7 +101,6 @@ function UploadModelMethod() {
   const startLearning = async () => {
     const res = await uploadExModelFile(modelCode, file);
     if (res?.status === 200) {
-      console.log('파일 업로드 성공');
       dispatch(setIsStart(false));
       dispatch(setIsLearning(3));
     }

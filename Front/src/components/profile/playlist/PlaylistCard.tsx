@@ -100,7 +100,6 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
     deletePlaylist(playlistCode)
       .then(() => {
         dispatch(removePlaylist(playlistCode));
-        console.log(`${playlistName} 삭제 성공`);
       })
       .catch(err => {
         console.log(err);
