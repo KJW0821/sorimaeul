@@ -24,7 +24,7 @@ class DataInput(BaseModel):
 
 data = DataInput(youtubeURL=youtubeURL, name=name, num=1)
 
-# @app.post('/diarizer')
+@app.post('/diarizer')
 def diarizer(request: DataInput):
     print('start diarizer')
 
