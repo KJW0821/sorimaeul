@@ -233,6 +233,10 @@ const StyledImage = styled.img<ImageInterface>`
   transform: rotate(${(props) => props.$rotation || '0deg'});
   width: ${(props) => props.$width};
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.5s ease-in-out; /* 부드러운 변환 효과 */
+  &:hover {
+    transform: rotate(${props => parseFloat(props.$rotation) + 10 + 'deg'}); /* 호버 시 추가 회전 */
+  }
 `;
 
 const MarqueeComponentStyled = styled.div`
