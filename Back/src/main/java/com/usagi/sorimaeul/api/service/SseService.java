@@ -24,11 +24,9 @@ public class SseService {
 
 		sseEmitter.onCompletion(() -> {
 			log.info("disconnected by complete server sent event : id={}", userCode);
-			emitterRepository.deleteByUserCode(userCode);
 		});
 		sseEmitter.onTimeout(() -> {
 			log.info("server sent event timed out : id={}", userCode);
-			emitterRepository.deleteByUserCode(userCode);
 		});
 		sseEmitter.onError((e) -> {
 			log.info("server sent event error occurred : id={}, message={}", userCode, e.getMessage());
