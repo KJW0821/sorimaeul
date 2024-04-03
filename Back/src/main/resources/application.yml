@@ -7,7 +7,7 @@ server:
 spring:
   # DataBase Settings : hikariCP : https://github.com/brettwooldridge/HikariCP
   datasource:
-    url: ENC(hCvBEph6iLKLQOpQy9xZQRmmvhBDjiVB7gN/gyqy0SE657Gdn1J5PLH0Kwg7h1smEul80t9QRFe/X49UNI4UDvBfIVMPLzGtMf20+CWP7lhWz+Y28pSkbve9CnooL1vyTKcemNvE890/dftge0v9Nw==)
+    url: ENC(PmNLzkIntvtI13MnbMrp0EGR4XWwLaXFg4pyF9/rgK++oRs/DVLyD7zxssTdNIHxK963gst9/1shqurZu0+RzZHZfSBE5vhXAKVfF2B3cFvU+q6LG+HYWuCQ7A5zDGKdJD0egPDgb1/+3Dy3ph9O7Q==)
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ENC(6D5UHgUn8PlWmRpNCLfvPg==)
     password: ENC(HchKvSrfF8OBFm/PILKNjD+EfHY5+hPi)
