@@ -87,7 +87,6 @@ const RightAlignedContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
-
 const DubContainer = styled.div`
   flex: 1;
   display: flex;
@@ -100,7 +99,7 @@ const DubTextContainer = styled.div`
 `;
 
 const DubText = styled.div`
-  font-size: 95px;
+  font-size: 10vh;
   font-family: 'PyeongChangPeace-Bold';
 `;
 
@@ -115,8 +114,8 @@ const DubSubtext = styled.div`
 
 const DubbingCategory = styled(CategoryBox)`
   position: absolute;
-  margin-top: 100px;
-  margin-right: 280px;
+  margin-top: 60px;
+  margin-left: 320px;
   z-index: 2;
 `;
 
@@ -307,8 +306,12 @@ const HomePage: React.FC = () => {
           <DubTextContainer>
             <DubSubtext>원하는 영상을 마음껏 더빙해봐요!</DubSubtext>
             <DubText>
-              인기 컨텐츠들을<br /> 더빙하고<br />
-              소리 어워드에<br /> 도전해보세요!</DubText>
+              인기 컨텐츠들을
+              <br /> 더빙하고
+              <br />
+              소리 어워드에
+              <br /> 도전해보세요!
+            </DubText>
           </DubTextContainer>
           <DubContainer>
             <DubbingCategory onClick={() => navigate('/dubbing')}>
@@ -317,7 +320,12 @@ const HomePage: React.FC = () => {
             </DubbingCategory>
             <DubbingContents />
 
-            <BackgroundTape src={tape} alt="Tape Image" />
+            <BackgroundTape
+              src={tape}
+              alt="Tape Image"
+              $marginTop={105}
+              style={{ marginLeft: '310px' }}
+            />
           </DubContainer>
         </RightAlignedContainer>
       </Page2>
