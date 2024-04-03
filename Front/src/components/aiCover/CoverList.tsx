@@ -19,8 +19,8 @@ const CoverList: React.FC<Props> = ({ data }) => {
     <>
       {data &&
         data.map((cover) => (
-          <CardContainer>
-            <CoverCard key={cover.coverCode} cover={cover} />
+          <CardContainer key={cover.coverCode}>
+            <CoverCard  cover={cover} />
           </CardContainer>
         ))}
     </>
