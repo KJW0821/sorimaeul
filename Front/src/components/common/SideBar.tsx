@@ -193,7 +193,7 @@ function SideBar() {
               </div>
               <div onClick={() => navigate('/dubbing')} className="col">
                 <img src={location.pathname === '/dubbing' ? voiceActive : voice} alt="dubbing" />
-                <p>더빙 학원</p>
+                <p>더빙 극장</p>
               </div>
               <div onClick={() => navigate('/cover')} className="col">
                 <img src={location.pathname === '/cover' ? recordActive : record} alt="aicover" />

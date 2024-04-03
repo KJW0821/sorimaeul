@@ -12,15 +12,15 @@ import SelectedPlaylistInfo from "./SelectedPlaylistInfo";
 
 
 export const CloseButton = styled.div`
-  width: 36px;
-  height: 34px;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   background: #BFEA44;
   color: #000;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 1.25rem;
 `;
 
 const PlaylistHeaderModal: React.FC = () => {
@@ -51,17 +51,15 @@ const PlaylistHeaderModal: React.FC = () => {
 
   return (
     <>
-    <Content $width={55} $height={55} $borderRadius={30} $background="black">
-    <ModalHeader>
-    <LogoIcon src={logo} alt="sorimaeul logo" />
-    <p>플레이리스트 목록</p>
-    
-    <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
-    </ModalHeader>
-    <PlaylistSelect onPlaylistSelect={handlePlaylistSelect}/>
-    
-    <SelectedPlaylistInfo />
-    </Content>
+      <Content $width={25} $height={30} $borderRadius={30} $background="black" $padding={1}>
+        <ModalHeader>
+          <LogoIcon src={logo} alt="sorimaeul logo" />
+          <p>플레이리스트 목록</p>
+          <CloseButton onClick={() => dispatch(closeModal())}>x</CloseButton>
+        </ModalHeader>
+        <PlaylistSelect onPlaylistSelect={handlePlaylistSelect}/>
+        <SelectedPlaylistInfo />
+      </Content>
     </>
   )
 }
