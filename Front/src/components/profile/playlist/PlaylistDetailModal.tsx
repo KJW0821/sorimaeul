@@ -15,25 +15,22 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-
-  img {
-    margin-right: 30px;
-  }
+  gap: .5rem;
   
   p {
-    font-size: 40px;
-    margin-right: 0px;
+    font-size: 1.5625rem;
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
     max-width: 80%; 
     color: #BFEA44;
+    padding-top: .4rem;
   }
 `;
 
 export const LogoIcon = styled.img`
-  width: 60px;
-  height: 65px;
+  width: 1.5rem;
+  height: 1.5rem;;
 `;
 
 

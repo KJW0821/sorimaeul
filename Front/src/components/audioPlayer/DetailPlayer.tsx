@@ -7,12 +7,12 @@ import { RootState } from '../../stores/store';
 import { setCurrentAudio } from '../../stores/audioPlayer';
 
 const Button = styled.button`
-  position: relative;
-  top: 5px; 
-  margin-right: 12px; 
-
+  margin-left: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   img {
-    width: 24px;
+    height: 100%;
   }
 `;
 
@@ -76,20 +76,20 @@ const DetailPlayer:  React.FC<CustomAudioPlayerProps & { isPublic: boolean }> = 
   };
 
   return (
-    <>
+    <div className="flex items-center">
       <audio ref={audioRef} src={src} preload="metadata" />
       {/* 비공개 음원이 아닌 경우에만 재생 시간 표시 */}
-      {isPublic && <span className="mr-6 text-stone-400">({formatDuration(duration)})</span>}
+      {isPublic && <span className="ml-2 text-xs text-stone-400">({formatDuration(duration)})</span>}
       
       {/* 비공개 음원이 아닐 경우에만 재생 버튼 표시 */}
       {isPublic && (
-        <Button className="mr-3" onClick={togglePlayPause}>
+        <Button onClick={togglePlayPause}>
           {isPlaying ? <img src={pauseBtn}/> : <img src={playBtn}/>}
         </Button>
       )}
       
       {!isPublic && <span className='text-stone-500'>비공개된 음원입니다.</span>}
-    </>
+    </div>
   );
 };
 

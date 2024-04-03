@@ -6,7 +6,10 @@ import HeaderPlayer from '../../../audioPlayer/HeaderPlayer';
 
 const HeaderPlayerContainer = styled.div`
   width: 25%;
-  margin-left: auto;
+  position: absolute;
+  right: 1rem;
+  height: 100%;
+  top: 25%;
 `;
 
 

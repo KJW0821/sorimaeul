@@ -8,18 +8,19 @@ import dropBtn from "../../../../assets/dropBtn.png";
 
 const PlaylistMenuBox = styled.div`
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1rem;
   display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  padding: 0.3rem;
-  border: 1px solid black;
+  gap: .5rem;
   border-radius: 5px;
   color:white;
-  background-color: black;
+  align-items: center;
+  margin-bottom: .5rem;
   img{
-    width: 30px;
-    height: 34px;
+    width: 1.45rem;
+    height: 1.625rem;
+  }
+  p {
+    padding-top: .1rem;
   }
 `;
 
@@ -97,14 +98,15 @@ const PlaylistSelect: React.FC<PlaylistSelectProps> = ({ onPlaylistSelect }) => 
   return (
     <>
       <PlaylistMenuBox onClick={onToggle}>
-      <img src={dropBtn} alt="dropdown playlist menu open" /> {playlistName || "플레이리스트 선택" } 
+        <img src={dropBtn} alt="dropdown playlist menu open" /> 
+        <p>{playlistName || "플레이리스트 선택" }</p> 
       </PlaylistMenuBox>
       {isOpen && (<ScrollableList>
          {covers && covers.map((playlist) => (
           <PlaylistItem key={playlist.playlistCode}
             onClick={() => handelSelect(playlist.playlistCode, playlist.playlistName)}>
 
-            <span className="mt-2">{playlist.playlistName}</span>
+            <span className="pt-1">{playlist.playlistName}</span>
             <PlaylistDate>
               {formatDate(playlist.createdTime)}
             </PlaylistDate>
