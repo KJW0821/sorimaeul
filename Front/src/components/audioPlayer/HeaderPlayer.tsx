@@ -25,6 +25,7 @@ const PlaylistComponent = styled.div`
   .list-icon {
     width: 10%;
     height: 100%;
+    cursor: pointer;
   }
 `;
 

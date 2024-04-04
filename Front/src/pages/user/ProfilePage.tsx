@@ -16,6 +16,7 @@ const Container = styled.div`
   width: 90%;
   margin: 0 auto;
   justify-content: space-between;
+  margin-bottom: 2rem;
 `;
 
 

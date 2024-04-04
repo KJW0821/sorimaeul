@@ -30,7 +30,6 @@ const PlaylistHeaderModal: React.FC = () => {
     try {
       // 플레이리스트 안 선택된 플레이리스트 정보 가져오기 
       const selectedPlaylist = playlists.find(playlist => playlist.playlistCode === playlistCode);
-      console.log(selectedPlaylist)
       // 선택된 플레이리스트의 커버 목록 가져오기 
       const res = await getPlaylist(playlistCode);
       const playlistCovers = res.playlist;
