@@ -12,5 +12,7 @@ public class UserInfoResponse {
     private String nickname;
     private String profileImage;
     private int learnCount;
+    private int coverCount;
+    private int dubCount;
 
 }
