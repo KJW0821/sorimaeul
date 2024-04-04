@@ -17,6 +17,8 @@ import mainDub from "../../assets/mainDub.png";
 import mainCover from "../../assets/mainCover.png";
 import { FadeIn } from '../../components/animation/FadeComponent';
 import { motion } from 'framer-motion';
+import { RootState } from '../../stores/store';
+import { useSelector } from 'react-redux';
 
 const Outer = styled.div`
   height: 100vh;
@@ -271,6 +273,8 @@ const HomePage: React.FC = () => {
   const DIVIDER_HEIGHT = 5;
   const outerDivRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태 관리
+  const coverCount = useSelector((state: RootState) => state.user.coverCount);
+
   useEffect(() => {
     const wheelHandler = (e: WheelEvent) => {
       e.preventDefault();
@@ -388,7 +392,7 @@ const HomePage: React.FC = () => {
           </Circle>
           <Circle $size="27%"
             $hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
-            onClick={() => navigate('/cover/create')}>
+            onClick={() => navigate('/cover')}>
             <IconImage src={mainCover} alt="cover icon" />
             <TextInside>커버</TextInside>
             <TextUnder>클릭 한번으로<br />AI 커버 만들어요!</TextUnder>
@@ -423,7 +427,7 @@ const HomePage: React.FC = () => {
       <Page3>
         <Temp>
           <CoverCategory onClick={() => navigate('/cover')}>
-            AI 노래방
+            AI 커버
             <GoBtnImg src={goBtnImg} alt="Button Image" />
           </CoverCategory>
           <CategoryDescription>

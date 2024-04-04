@@ -44,6 +44,7 @@ const Container = styled.div<{ $learnState: number }>`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: .5rem
   }
 
   .complete-box {
@@ -93,6 +94,7 @@ function ModelDetailPage() {
   const params = useParams();
   const modelInfo = useSelector((state: RootState) => state.voiceModel);
   const isLoading = useSelector((state: RootState) => state.voiceModel.isStart);
+  const learnCount = useSelector((state: RootState) => state.user.learnCount);
 
   const getData = async () => {
     if (params.code) {
@@ -139,6 +141,8 @@ function ModelDetailPage() {
                 $fontSize={1} 
                 $color="#7C87E3" 
                 disabled={
+                  learnCount === 0
+                  ||
                   (modelInfo.method === "self" && modelInfo.recordCount < 200) 
                   || 
                   (modelInfo.method === "file" && !modelInfo.isFileUploaded) 
@@ -157,7 +161,9 @@ function ModelDetailPage() {
       {
         modelInfo.learnState === 2 &&
         <div className="training">
-          <p className="text-white text-3xl text-center">음성 학습이 진행중입니다.</p>
+          <p className="text-white text-3xl mb-2 text-center">음성 학습이 진행중입니다.</p>
+          <p className="text-white text-center">학습 진행에 약 30~40분이 걸립니다.</p>
+          <p className="text-white text-ceter">학습 완료 후, 알림이 가오니 다른 서비스를 이용하고 계셔도 됩니다.</p>
           <Lottie 
             animationData={trainingLottie}
             style={{

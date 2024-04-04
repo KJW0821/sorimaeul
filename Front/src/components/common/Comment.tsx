@@ -115,9 +115,6 @@ const CommentComponent: React.FC<{ width?: number }> = ({width}) => {
       const res = await createDubComment(selectedPostId, data);
       dispatch(addComment(res));
     }
-    else {
-      console.log("실패");
-    }
 
     setNewComment("");
   }

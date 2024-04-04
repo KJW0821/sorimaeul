@@ -142,22 +142,15 @@ function SideBar() {
         }
       );
 
-      eventSource.onopen = (e) => {
-        console.log('연결 열림');
-      };
-
       eventSource.addEventListener("train", (e: any) => {
-        console.log(JSON.parse(e.data));
         getAlarmData();
       });
 
       eventSource.addEventListener("cover", (e: any) => {
-        console.log(JSON.parse(e.data));
         getAlarmData();
       });
 
       eventSource.addEventListener("dubbing", (e: any) => {
-        console.log(JSON.parse(e.data));
         getAlarmData();
       });
   

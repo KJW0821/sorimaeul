@@ -98,16 +98,11 @@ function UploadRecordMethod() {
     } else {
       dispatch(setIsFileUploaded(false));
     }
-    for (const x of files.entries()) {
-      console.log(x);
-     };
   }, [files])
 
   const startLearning = async () => {
     const res = await uploadExVoiceFiles(modelCode, files);
     if (res?.status === 200) {
-      console.log('파일 업로드 성공');
-
       await startModelLearning(modelCode);
 
       dispatch(setIsLearning(2));
