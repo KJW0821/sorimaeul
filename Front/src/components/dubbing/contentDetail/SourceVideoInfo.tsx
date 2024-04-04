@@ -189,7 +189,7 @@ function SourceVideoInfo() {
               >
                 더빙하기
               </Button>
-              <p className="tooltip">{dubCount === 0 && '⚠️ 잔여 제작 가능 횟수가 0입니다'}</p>
+              {dubCount === 0 && <p className="tooltip">'⚠️ 잔여 제작 가능 횟수가 0입니다'</p>}
             </TooltipBox>
           </div>
         </div>
