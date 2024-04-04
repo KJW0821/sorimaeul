@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { getSourceVideo } from "../../../utils/dubbingAPI";
 import { Button } from "../../common/Button";
 import { s3URL } from "../../../utils/s3";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../stores/store";
 
 const Container = styled.div`
   display: flex;
@@ -89,6 +91,8 @@ export interface VideoData {
 function SourceVideoInfo() {
   const params = useParams();
   const navigate = useNavigate();
+  const dubCount = useSelector((state: RootState) => state.user.dubCount);
+
   const [videoInfo, setVideoInfo] = useState<VideoData | null>(null);
 
   const getVideoInfo = async () => {
@@ -120,7 +124,19 @@ function SourceVideoInfo() {
               <p className="playtime">영상 길이: {videoInfo?.videoPlaytime}</p>
               <p className="date">업로드: {videoInfo?.createdTime.split('T')[0]}</p>
             </div>
-            <Button onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} $marginTop={0} $marginLeft={0} $background="black" $color="#BFFF0A" $width={7} $height={2.5} $fontSize={1.3}>더빙하기</Button>
+            <Button 
+              onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} 
+              $marginTop={0} 
+              $marginLeft={0} 
+              $background="black" 
+              $color="#BFFF0A" 
+              $width={7} 
+              $height={2.5} 
+              $fontSize={1.3}
+              disabled={dubCount === 0}
+            >
+              더빙하기
+            </Button>
           </div>
         </div>
       </div>

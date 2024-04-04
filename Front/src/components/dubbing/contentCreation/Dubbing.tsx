@@ -11,6 +11,8 @@ import { ReactComponent as StopDubBtn } from "../../../assets/stopDubBtn.svg";
 import { ReactComponent as PlayDubBtn } from "../../../assets/playDubBtn.svg";
 import { ReactComponent as ReDubBtn } from "../../../assets/reDubBtn.svg";
 import Tooltip from "../../common/Tooltip";
+import { useDispatch } from "react-redux";
+import { decreaseDubCount } from "../../../stores/user";
 
 const Container = styled.div`
   width: 85%;
@@ -209,6 +211,7 @@ interface ModelData {
 function Dubbing() {
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState('');
   const [videoPath, setVideoPath] = useState('');
@@ -234,7 +237,6 @@ function Dubbing() {
   const getOriginVoiceData = async () => {
     if (params.sourceCode) {
       const res = await getOriginVoices(params.sourceCode);
-      console.log(res);
       setVideoPath(res.videoPath);
       setOriginVoiceList(res.voiceSources);
       setOriginVoicePaths(res.voiceSources.map((el: VoiceData) => {
@@ -259,7 +261,6 @@ function Dubbing() {
   const getVoiceModelData = async () => {
     if (params.sourceCode) {
       const res = await getVoiceModels(params.sourceCode);
-      console.log(res);
       const sortedData = res.voiceModels.sort((a: ModelData, b:ModelData) => {
         if (a.existSource) return -1;
         if (b.existSource) return 1;
@@ -491,13 +492,10 @@ function Dubbing() {
         dubName: title,
         voicePaths
       });
+      dispatch(decreaseDubCount());
       navigate(`/dubbing/${params.sourceCode}/${res.dubCode}/edit`);
     }
   }
-
-  useEffect(() => {
-    console.log(model)
-  }, [model])
 
   return (
     <Container>
