@@ -142,7 +142,6 @@ public class DubbingServiceImpl implements DubbingService {
                 .storagePath(videoSource.getStoragePath())
                 .thumbnailPath(videoSource.getThumbnailPath())
                 .createdTime(videoSource.getCreatedTime())
-                .dubCount(user.getDubCount())
                 .build();
 
         return ResponseEntity.ok(response);
