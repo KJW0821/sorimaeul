@@ -14,5 +14,6 @@ public class CoverListResponse {
 
     private List<CoverInfoDto> covers;
     private int totalPages;
+    private int coverCount;
 
 }
