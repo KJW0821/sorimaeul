@@ -51,7 +51,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     public UserInfoResponse getUserInfo(long userCode) {
         Tuple userInfo = queryFactory
-                .select(quser.nickname, quser.profileImage, quser.learnCount)
+                .select(quser.nickname, quser.profileImage, quser.learnCount, quser.coverCount, quser.dubCount)
                 .from(quser)
                 .where(quser.userCode.eq(userCode))
                 .fetchFirst();
@@ -60,6 +60,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .nickname(userInfo.get(quser.nickname))
                 .profileImage(userInfo.get(quser.profileImage))
                 .learnCount(userInfo.get(quser.learnCount))
+                .coverCount(userInfo.get(quser.coverCount))
+                .dubCount(userInfo.get(quser.dubCount))
                 .build();
     }
 

@@ -53,7 +53,6 @@ public class CoverServiceImpl implements CoverService {
         int endIdx = 0;
         // 총 페이지 수 선언
         int totalPages = 1;
-        int coverCount = 1;
         // 모든 게시물 조회
         if (target.equals("all")) {
             // keyword 가 null 이면 전체 조회, isComplete = true : 제작 완료된 게시물만
@@ -70,9 +69,6 @@ public class CoverServiceImpl implements CoverService {
             else {
                 endIdx = covers.size();
             }
-            // 유저의 커버 가능 횟수 정의
-            coverCount = user.getCoverCount();
-
             // 총 페이지 수 계산
             totalPages = (int) Math.ceil((double) covers.size() / 10);
 
@@ -159,7 +155,6 @@ public class CoverServiceImpl implements CoverService {
         CoverListResponse coverListResponse = CoverListResponse.builder()
                 .covers(customCovers)
                 .totalPages(totalPages)
-                .coverCount(coverCount)
                 .build();
 
         return ResponseEntity.ok(coverListResponse);
