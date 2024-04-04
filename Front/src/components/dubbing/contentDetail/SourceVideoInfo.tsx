@@ -95,7 +95,6 @@ function SourceVideoInfo() {
     if (params.sourceCode) {
       const res = await getSourceVideo(params.sourceCode);
       setVideoInfo(res);
-      console.log(res);
     }
   }
 

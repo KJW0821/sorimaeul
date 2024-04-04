@@ -11,11 +11,12 @@ import album3 from '../../assets/album3.jpg';
 import album4 from '../../assets/album4.jpg';
 import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
-import logoimage from '../../assets/logo.png';
-import Lottie from 'lottie-react';
-import anime from '../../assets/lottie/mainAnime.json';
-import HomeInfo from './HomeInfo';
 import { useLocation } from 'react-router-dom';
+import mainVoice from '../../assets/mainVoice.png';
+import mainDub from "../../assets/mainDub.png";
+import mainCover from "../../assets/mainCover.png";
+import { FadeIn } from '../../components/animation/FadeComponent';
+import { motion } from 'framer-motion';
 
 const Outer = styled.div`
   height: 100vh;
@@ -26,17 +27,84 @@ const Outer = styled.div`
   }
 `;
 
-const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: -100px;
-`;
-
 const Page1 = styled.div`
   height: calc(100vh - 0px);
   display: flex;
-  background-color: #f7f6cf;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: linear-gradient(199.09deg, rgba(253, 255, 0, 0.119) -67.25%, rgba(255, 255, 255, 0.7) 87.08%), #C9F647;
+`;
+
+const CircleContainer = styled(motion.div)`
+  padding: 20px; /* 그림자가 잘리지 않도록 padding 추가 */
+  margin: -20px; /* padding으로 인한 컨테이너 크기 증가를 상쇄 */
+  width: calc(90% - 40px); /* padding을 고려한 실제 너비 조정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+`;
+
+interface CircleProps {
+  $size: string;
+  $hoverBackground: string;
+}
+
+const TextInside = styled.div`
+  position: absolute;
+  top: 55%;
+  font-family: 'GmarketSansBold';
+  font-size: 40px;
+  margin-top: 30px; 
+  text-align: center;
+`;
+
+const TextUnder = styled.div`
+  position: absolute;
+  top: 70%;
+  font-size: 25px;
+  margin-top: 30px; 
+  text-align: center;
+`;
+
+const Circle = styled.div<CircleProps>`
+  width: ${props => props.$size};
+  height: 400px;
+  padding-top: ${props => props.$size};
+  border-radius: 20%;
+  background: #F3F4F6;
+  position: relative;
+  margin: 0 20px;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; 
+  transition: background 0.5s ease;
+  &:hover {
+    background: ${props => props.$hoverBackground}
+  }
+  cursor: pointer;
+`;
+
+const IconImage = styled.img`
+  position: absolute;
+  top: 10%;
+  width: 50%; 
+  height: auto;
+`;
+
+
+
+const Page1Text = styled.div`
+  position: absolute;
+  top: 80px;
+  left: 50%; 
+  transform: translateX(-50%);
+  font-size: 45px;
+  font-family: 'PyeongChangPeace-Bold';
 `;
 
 const Page2 = styled.div`
@@ -44,7 +112,7 @@ const Page2 = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  background-color: #b6d8f2;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(176.44deg, rgba(0, 240, 255, 0.7) 2.93%, rgba(255, 255, 255, 0.7) 51.76%), #5546FF;
 `;
 const GoBtnImg = styled.img`
   position: absolute;
@@ -60,14 +128,6 @@ interface MarginProps {
   $marginRight?: number;
 }
 
-const Line = styled.div`
-  position: absolute;
-  width: '627px';
-  height: 0px;
-  border: 1px solid #000000;
-  margin-top: '175px';
-  margin-right: '50px';
-`;
 
 const BackgroundTape = styled.img<MarginProps>`
   position: absolute;
@@ -81,24 +141,44 @@ const BackgroundTape = styled.img<MarginProps>`
 
 const RightAlignedContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
   padding-right: 20px;
-  width: 100%;
+  width: 90%;
   position: relative;
+  margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+`;
+
+const DubContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DubTextContainer = styled.div`
+  flex: 0.8;
+  margin-right: auto;
+`;
+
+const DubText = styled.div`
+  font-size: 10vh;
+  font-family: 'PyeongChangPeace-Bold';
+`;
+
+const DubSubtext = styled.div`
+  margin-top: 18%;
+  margin-bottom: 2%;
+  width: 600px;
+  line-height: 63px;
+  font-size: 35px;
+  font-family: GmarketSansLight;
 `;
 
 const DubbingCategory = styled(CategoryBox)`
   position: absolute;
-  margin-top: 100px;
-  margin-right: 280px;
+  margin-top: 60px;
+  margin-left: 320px;
   z-index: 2;
-`;
-
-const DubbingContentsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
 `;
 
 const CategoryDescription = styled.p`
@@ -116,7 +196,8 @@ const Page3 = styled.div`
   height: 100vh;
   width: 100%;
   display: flex;
-  background-color: #f4cfdf;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;
+
 `;
 
 const Temp = styled.div`
@@ -134,7 +215,7 @@ const CoverCategory = styled(CategoryBox)`
 const ImagesContainer = styled.div`
   display: flex;
   align-items: center;
-  justify=content: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
   padding-left: 70px;
@@ -151,6 +232,11 @@ const StyledImage = styled.img<ImageInterface>`
   border-radius: 10px;
   transform: rotate(${(props) => props.$rotation || '0deg'});
   width: ${(props) => props.$width};
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.5s ease-in-out; /* 부드러운 변환 효과 */
+  &:hover {
+    transform: rotate(${props => parseFloat(props.$rotation) + 10 + 'deg'}); /* 호버 시 추가 회전 */
+  }
 `;
 
 const MarqueeComponentStyled = styled.div`
@@ -165,6 +251,8 @@ const PlayButton = styled(PlayBox)`
   position: absolute;
   top: 150px; /* 상단에서 20px의 여백 */
   right: 20px; /* 우측에서 20px의 여백 */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
   z-index: 10;
 `;
 
@@ -277,23 +365,59 @@ const HomePage: React.FC = () => {
     <Outer ref={outerDivRef}>
       <PlayButton onClick={MusicClick}>🎵</PlayButton>
       <Page1>
-        <LogoContainer>
-          <img src={logoimage}></img>
-          <HomeInfo />
-        </LogoContainer>
-        <Lottie animationData={anime} style={{ width: 2000 }} />
+        <FadeIn>
+          <Page1Text>소리마을에서 Creator가 되어보세요!</Page1Text>
+        </FadeIn>
+        <CircleContainer
+          initial={{ y: '100vh' }}
+          animate={{ y: 0 }}
+          transition={{ duration: 1.5, type: 'spring' }}>
+          <Circle $size="27%"
+            $hoverBackground="linear-gradient(90deg, rgba(253, 255, 0, 0.7) 0%, rgba(99, 218, 255, 0.7) 100%), #26BA28"
+            onClick={() => navigate('dubbing')}>
+            <IconImage src={mainDub} alt="dub icon" />
+            <TextInside>더빙 </TextInside>
+            <TextUnder>재밌는 동영상<br /> 내 맘대로 더빙해요!</TextUnder>
+          </Circle>
+          <Circle $size="33%"
+            $hoverBackground="linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;"
+            onClick={() => navigate('/model/create')}>
+            <IconImage src={mainVoice} alt="voice train icon" />
+            <TextInside>음성 학습 </TextInside>
+            <TextUnder>딱 20분 녹음하고<br />내 목소리 모델을 만들어요!</TextUnder>
+          </Circle>
+          <Circle $size="27%"
+            $hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
+            onClick={() => navigate('/cover/create')}>
+            <IconImage src={mainCover} alt="cover icon" />
+            <TextInside>커버</TextInside>
+            <TextUnder>클릭 한번으로<br />AI 커버 만들어요!</TextUnder>
+          </Circle>
+        </CircleContainer>
+
       </Page1>
       <Page2>
         <RightAlignedContainer>
-          <DubbingCategory onClick={() => navigate('/dubbing')}>
-            더빙 극장
-            <GoBtnImg src={goBtnImg} alt="Button Image" />
-          </DubbingCategory>
-          <DubbingContentsWrapper>
+          <DubTextContainer>
+            <DubSubtext>원하는 영상을 마음껏 더빙해봐요!</DubSubtext>
+            <DubText>
+              인기 컨텐츠를<br /> 더빙하고<br />
+              소리 어워드에<br /> 도전해보세요!</DubText>
+          </DubTextContainer>
+          <DubContainer>
+            <DubbingCategory onClick={() => navigate('/dubbing')}>
+              더빙 극장
+              <GoBtnImg src={goBtnImg} alt="Button Image" />
+            </DubbingCategory>
             <DubbingContents />
-          </DubbingContentsWrapper>
-          <Line />
-          <BackgroundTape src={tape} alt="Tape Image" />
+
+            <BackgroundTape
+              src={tape}
+              alt="Tape Image"
+              $marginTop={105}
+              style={{ marginLeft: '310px' }}
+            />
+          </DubContainer>
         </RightAlignedContainer>
       </Page2>
       <Page3>

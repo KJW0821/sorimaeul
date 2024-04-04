@@ -209,7 +209,6 @@ const CoverPostForm: React.FC<Props> = ({ initialData, onSubmit }) => {
         await deleteCover(data.coverCode);
         // 삭제 후 이전 페이지로 이동 : 마이페이지 - 커버 확인 페이지로 
         navigate(-1);
-        console.log("삭제 성공");
       }
     } catch (err) {
       console.log(err);

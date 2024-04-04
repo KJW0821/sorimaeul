@@ -59,9 +59,14 @@ const ButtonBox = styled.div`
 
 
 // 날짜 형식을 변경하는 함수
-function formatDate(dateString: string) {
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-  return new Date(dateString).toLocaleDateString('ko-KR', options).replace(/\. /g, '.');
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  // getMonth()는 0부터 시작하므로 +1을 해줍니다.
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  
+  return `${year}.${month}.${day}`;
 }
 
 interface Props {
@@ -95,7 +100,6 @@ export const PlaylistCard: React.FC<Props> = ({ playlistCode, playlistName, crea
     deletePlaylist(playlistCode)
       .then(() => {
         dispatch(removePlaylist(playlistCode));
-        console.log(`${playlistName} 삭제 성공`);
       })
       .catch(err => {
         console.log(err);

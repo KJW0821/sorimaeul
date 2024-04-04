@@ -124,7 +124,6 @@ function ModelEditForm() {
   const params = useParams();
 
   const [modelName, setModelName] = useState('');
-  const [newName, setNewName] = useState('');
   const [imagePath, setImagePath] = useState('');
   const [isNameEdit, setNameIsEdit] = useState(false);
   const [selectedImg, setSelectedImg] = useState<File | null>(null);
@@ -185,15 +184,14 @@ function ModelEditForm() {
     if (params.code) {
       setNameIsEdit(false);
       await updateModel(params.code, {
-        modelName: newName,
+        modelName,
         imagePath
       });
-      setModelName(newName);
     }
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewName(e.target.value);
+    setModelName(e.target.value);
   };
 
   return (

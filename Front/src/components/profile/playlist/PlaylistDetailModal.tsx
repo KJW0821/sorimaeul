@@ -144,7 +144,6 @@ function PlaylistDetailModal() {
         try {
           const data = await getPlaylist(playlistCode);
           setData(data);
-          console.log(data);
         } catch (err) {
           console.error(err);
         }
@@ -156,7 +155,6 @@ function PlaylistDetailModal() {
   const deletCoverFromPlaylist = async (coverCode: string) => {
     const res = await deleteCoverFromList(playlistCode, coverCode);
     if (res.status == 200) {
-      console.log("삭제 성공!");
       const updateData = await getPlaylist(playlistCode);
       setData(updateData);
     }

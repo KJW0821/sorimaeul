@@ -25,7 +25,7 @@ export const PlayBox = styled.div`
   height: 45px;
   padding-top: 10px; /* 상단 패딩 추가 */
   background: #ffffff;
-  border: 1px solid #000000;
+
 
   font-style: normal;
   font-weight: 900;
