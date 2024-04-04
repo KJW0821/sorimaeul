@@ -577,6 +577,10 @@ public class DubbingServiceImpl implements DubbingService {
         // Python 서버 응답
         responseClient.block();
 
+        // 더빙 생성시 더빙 가능 횟수 1 차감
+        user.setDubCount(user.getDubCount() - 1);
+        userRepository.save(user);
+
         DubbingCreateResponse response = DubbingCreateResponse.builder()
                 .dubCode(dubbing.getDubCode())
                 .storagePath(dubbing.getStoragePath())

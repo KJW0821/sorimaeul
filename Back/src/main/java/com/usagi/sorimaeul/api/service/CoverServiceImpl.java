@@ -238,6 +238,9 @@ public class CoverServiceImpl implements CoverService {
         coverRepository.save(cover);
         int coverCode = cover.getCoverCode();
 
+        // 커버 생성시 커버 가능 횟수 1 차감
+        user.setCoverCount(user.getCoverCount() - 1);
+        userRepository.save(user);
 
         // GPU 서버에 AI 커버 생성 요청 보내기
         String youtubeLink = request.getYoutubeLink();
