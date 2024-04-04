@@ -51,7 +51,13 @@ const LoginCallbackPage: React.FC = () => {
                 setStatus(res.status);
                 // redux store user 상태를 업데이트 
                 dispatch(login()); 
-                dispatch(set({ nickname: res.data.nickname , profileImage: res.data.profileImage, learnCount: res.data.learnCount }));
+                dispatch(set({ 
+                  nickname: res.data.nickname ,
+                   profileImage: res.data.profileImage, 
+                   learnCount: res.data.learnCount,
+                   coverCount: res.data.coverCount,
+                   dubCount: res.data.dubCount
+                  }));
               })
               .catch((err) => {
                   console.log(err);

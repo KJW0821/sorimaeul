@@ -5,14 +5,18 @@ export interface UserState {
   nickname: string,
   profileImage: string,
   loggedIn: boolean,
-  learnCount: number
+  learnCount: number,
+  coverCount: number,
+  dubCount: number
 }
 
 const initialState: UserState = {
   nickname: "",
   profileImage: "",
   loggedIn: false,
-  learnCount: 0
+  learnCount: 0,
+  coverCount: 0,
+  dubCount: 0
 }
 
 export const userSlice = createSlice({
@@ -20,10 +24,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     set(state, action) {
-      const { nickname, profileImage, learnCount } = action.payload;
+      const { nickname, profileImage, learnCount, coverCount, dubCount } = action.payload;
       state.nickname = nickname;
       state.profileImage = profileImage;
       state.learnCount = learnCount;
+      state.coverCount = coverCount;
+      state.dubCount = dubCount;
     },
     login(state) {
       state.loggedIn = true;
@@ -33,9 +39,17 @@ export const userSlice = createSlice({
       state.nickname = "";
       state.profileImage = "";
       state.learnCount = 0;
+      state.coverCount = 0;
+      state.dubCount = 0;
     },
     decreaseLearnCount(state) {
       state.learnCount -= 1;
+    },
+    decreaseCoverCount(state) {
+      state.coverCount -= 1;
+    },
+    decreaseDubCount(state) {
+      state.dubCount -= 1;
     }
   },
   extraReducers: (builder) => {
@@ -43,5 +57,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { set, login, logout, decreaseLearnCount } = userSlice.actions;
+export const { set, login, logout, decreaseLearnCount, decreaseCoverCount, decreaseDubCount } = userSlice.actions;
 export default userSlice.reducer;

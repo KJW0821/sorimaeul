@@ -7,6 +7,8 @@ import PopularCoverList from '../../components/aiCover/PopularCoverList';
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/common/Button';
 import Pagination from '../../components/common/Pagination';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../stores/store';
 
 const ColorBlock = styled.div`
   width: 100%;
@@ -75,6 +77,7 @@ const DetailLine = styled.div`
 // 커버 전체 목록 페이지
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
+  const coverCount = useSelector((state: RootState) => state.user.coverCount);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataList, setDataList] = useState<Cover[]>([]);
@@ -118,6 +121,7 @@ const CoverListPage: React.FC = () => {
             onClick={() => navigate('/cover/create')}
             $marginLeft={0}
             $marginTop={0}
+            disabled={coverCount === 0}
           >
             나만의 커버 만들기
           </Button>
