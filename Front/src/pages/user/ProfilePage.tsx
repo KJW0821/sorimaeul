@@ -56,7 +56,8 @@ const LearnCountText = styled.div`
 function ProfilePage() {
   const learnCount = useSelector((state: RootState) => state.user.learnCount);
   const selectedMenu = useSelector((state: RootState) => state.menu.selectedMenu);
-
+  const coverCount = useSelector((state: RootState) => state.user.coverCount);
+  const dubCount = useSelector((state: RootState) => state.user.dubCount);
 
   let ComponentToShow;
   switch (selectedMenu) {
@@ -85,8 +86,13 @@ function ProfilePage() {
         <MenuBarContainer>
           <UserEditor />
           <LearnCountContainer>
-            <img src={learnCnt} className="img" alt="Learn Count" />
             <LearnCountText>남은 모델 학습 횟수: {learnCount}회</LearnCountText>
+          </LearnCountContainer>
+          <LearnCountContainer>
+            <LearnCountText>남은 커버 제작 횟수: {coverCount}회</LearnCountText>
+          </LearnCountContainer>
+          <LearnCountContainer>
+            <LearnCountText>남은 더빙 제작 횟수: {dubCount}회</LearnCountText>
           </LearnCountContainer>
           <MenuBar />
         </MenuBarContainer>
