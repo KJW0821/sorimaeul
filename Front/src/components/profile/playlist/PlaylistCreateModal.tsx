@@ -57,8 +57,6 @@ function PlaylistCreateModal () {
     const res = await createPlaylist(data);
     if (res?.status === 201) {
       dispatch(addPlaylist(res.data));
-    } else {
-      console.log("실패");
     }
     dispatch(closeModal());
   }

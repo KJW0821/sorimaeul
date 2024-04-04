@@ -36,34 +36,52 @@ API.interceptors.request.use(
 );
 
 // 응답 인터셉터(토큰 만료 처리)
+let isRefreshing = false; // 토큰 재발급 중인지 여부 확인 
+let refreshPromise: Promise<any> | null = null; // 토큰 재발급 요청의 프로미스 객체 저장
+
 API.interceptors.response.use(
   (res) => {
     return res;
   },
   (err) => {
     if (err.response && err.response.status === 401) {
-      const refreshToken = getCookie('refreshToken');
-      const headers = { Authorization: refreshToken };
-      return reissueAPI
-        .get('/oauth/reissue', { headers })
-        .then((res) => {
-          const access = res.data.accessToken;
-          const refresh = res.data.refreshToken;
-          setCookie('accessToken', `Bearer ${access}`, { path: '/' });
-          setCookie('refreshToken', `Bearer ${refresh}`, { path: '/' });
-          // token 재발급 요청 이전에 행한(실패한) 요청을 재실행
-          const originalRequest = err.config;
-          originalRequest.headers['Authorization'] = `Bearer ${access}`;
-          return API(originalRequest);
-        })
-        .catch((err) => {
-          if (err.response.status === 401) {
-            // refresh 토큰도 만료된 경우 -> 재로그인 필요
-            handleLogout();
-          }
-          return err;
+      if (!isRefreshing) {
+        isRefreshing = true;
+        const refreshToken = getCookie('refreshToken');
+        const headers = { Authorization: refreshToken };
+
+        // 토큰 재발급
+        refreshPromise = reissueAPI
+          .get('/oauth/reissue', { headers })
+          .then((res) => {
+            const access = res.data.accessToken;
+            const refresh = res.data.refreshToken;
+            setCookie('accessToken', `Bearer ${access}`, { path: '/' });
+            setCookie('refreshToken', `Bearer ${refresh}`, { path: '/' });
+            return Promise.resolve();
+          })
+          .catch((err) => {
+            if (err.response.status === 401) {
+              handleLogout();
+            }
+            return Promise.reject(err);
+          })
+          .finally(() => {
+            isRefreshing = false;
+            refreshPromise = null;
+          });
+      }
+      // 토큰 재발급 요청 promise가 존재하면 토큰 재발급이 완료되면 원래의 요청(재발급 이전실패한 api 요청: err.confing) 재시도 
+      if (refreshPromise) {
+        return refreshPromise.then(() => {
+          return API(err.config);
         });
+      } else {
+        // 없으면 원래의 요청을 거부하고 에러를 반환 
+        return Promise.reject(err);
+      }
     }
+    // 401 에러가 아닌 다른 에러 반환 
     return Promise.reject(err);
   },
 );

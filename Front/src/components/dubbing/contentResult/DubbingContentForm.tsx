@@ -198,10 +198,6 @@ function DubbingContentForm() {
     navigate(`/dubbing/${params.sourceCode}/${params.dubCode}`);
   };
 
-  useEffect(() => {
-    console.log(Boolean(title), Boolean(content))
-  }, [content])
-
   return (
     isLoaded && isComplete ?
     <Container>

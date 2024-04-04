@@ -127,8 +127,6 @@ function ModelForm() {
         dispatch(initModelInfo(res.data.modelCode));
         dispatch(decreaseLearnCount());
         navigate(`/model/${res.data.modelCode}`);
-      } else {
-        console.log(res);
       }
     } else {
       window.alert('제목을 입력해주세요');

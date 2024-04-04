@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { s3URL } from "../../../../utils/s3";
+import { defaultCover, s3URL } from "../../../../utils/s3";
 import { Cover } from "../../../aiCover/CoverInterface";
 import { useNavigate } from "react-router-dom";
 
@@ -39,7 +39,7 @@ const LikeCoverCard: React.FC<{data: Cover }> = ({data}) => {
   return (
 
       <Container onClick={() => navigate(`/cover/${data.coverCode}`)}>
-      <img src={s3URL + data.thumbnailPath} className="thumbnail" alt="cover thumbnail" />
+      <img src={data.thumbnailPath ? s3URL + data.thumbnailPath : defaultCover} className="thumbnail" alt="cover thumbnail" />
       <div className="p-2">
       <p className="title">{data.coverName}</p> 
       <p className="info">{data.nickname}</p>
