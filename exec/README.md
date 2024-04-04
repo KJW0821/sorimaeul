@@ -62,7 +62,7 @@
 - Front/.env
 
   ```
-  VITE\_API\_URL={Base URL}
+  VITE_API_URL={Base URL}
   VITE_S3_URL={AWS S3 Bucket URL}
   ```
 
