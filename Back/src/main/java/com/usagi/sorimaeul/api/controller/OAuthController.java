@@ -45,8 +45,6 @@ public class OAuthController {
     public ResponseEntity<TokenResponse> login(@PathVariable String provider,
                                        @RequestParam("code") String code) {
         TokenResponse response = oAuthService.login(provider, code);
-        long userCode = Long.parseLong(jwtTokenProvider.getPayload(response.getAccessToken()));
-        if (userCode != 492104431787904L) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.ok(response);
     }
 
