@@ -391,6 +391,12 @@ public class DubbingServiceImpl implements DubbingService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 더빙 가능 횟수가 남아있지 않으면 400 반환
+        if (user.getDubCount() < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         // 음성 조회
         List<VoiceSource> voiceSources = voiceSourceRepository.findByVideoSource_videoSourceCode(videoSourceCode);
         List<VideoSourceVoiceInfoDto> videoSourceVoiceInfoDtos = new ArrayList<>();
@@ -538,10 +544,6 @@ public class DubbingServiceImpl implements DubbingService {
     public ResponseEntity<DubbingCreateResponse> createDubbing(long userCode, DubbingCreateRequest request) {
         User user = userRepository.getUser(userCode);
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode());
-
-        if (user.getDubCount() < 1) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         Dubbing dubbing = Dubbing.builder()
                 .user(user)
