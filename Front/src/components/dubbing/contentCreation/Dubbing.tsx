@@ -10,7 +10,6 @@ import { ReactComponent as StartDubBtn } from "../../../assets/startDubBtn.svg";
 import { ReactComponent as StopDubBtn } from "../../../assets/stopDubBtn.svg";
 import { ReactComponent as PlayDubBtn } from "../../../assets/playDubBtn.svg";
 import { ReactComponent as ReDubBtn } from "../../../assets/reDubBtn.svg";
-import Tooltip from "../../common/Tooltip";
 import { useDispatch } from "react-redux";
 import { decreaseDubCount } from "../../../stores/user";
 

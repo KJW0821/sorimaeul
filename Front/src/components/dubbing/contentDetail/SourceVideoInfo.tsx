@@ -78,6 +78,57 @@ const Container = styled.div`
   }
 `
 
+const TooltipBox = styled.span`
+  position: relative;
+  height: 2rem;
+  .tooltip {
+    position: absolute;
+    right: 0;
+    bottom: -175%;
+    padding: .5rem;
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+    border-radius: 5px;
+    z-index: 10;
+    display: none;
+    min-width: 20rem;
+    text-align: center;
+    border: 1px solid #C9F647;
+  }
+  .tooltip::after {
+    border-color: white transparent;
+    border-style: solid;
+    border-width: 0 6px 8px 6.5px;
+    content: "";
+    display: block;
+    left: 95%;
+    transform: translateX(-95%);
+    position: absolute;
+    top: -6px;
+    width: 0;
+    z-index: 1;
+  }
+  .tooltip::before {
+    border-color: #C9F647 transparent;
+    border-style: solid;
+    border-width: 0 6px 8px 6.5px;
+    content: "";
+    display: block;
+    left: 95%;
+    transform: translateX(-95%);
+    position: absolute;
+    top: -8px;
+    width: 0;
+    z-index: 0;
+  }
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+`
+
 export interface VideoData {
   videoSourceCode: number;
   sourceName: string;
@@ -124,19 +175,22 @@ function SourceVideoInfo() {
               <p className="playtime">영상 길이: {videoInfo?.videoPlaytime}</p>
               <p className="date">업로드: {videoInfo?.createdTime.split('T')[0]}</p>
             </div>
-            <Button 
-              onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} 
-              $marginTop={0} 
-              $marginLeft={0} 
-              $background="black" 
-              $color="#BFFF0A" 
-              $width={7} 
-              $height={2.5} 
-              $fontSize={1.3}
-              disabled={dubCount === 0}
-            >
-              더빙하기
-            </Button>
+            <TooltipBox>
+              <Button 
+                onClick={() => navigate(`/dubbing/${params.sourceCode}/create`)} 
+                $marginTop={0} 
+                $marginLeft={0} 
+                $background="black" 
+                $color="#BFFF0A" 
+                $width={7} 
+                $height={2.5} 
+                $fontSize={1.3}
+                disabled={dubCount === 0}
+              >
+                더빙하기
+              </Button>
+              <p className="tooltip">{dubCount === 0 && '⚠️ 잔여 제작 가능 횟수가 0입니다'}</p>
+            </TooltipBox>
           </div>
         </div>
       </div>
