@@ -18,4 +18,5 @@ public class VideoSourceDetailResponse {
     private String thumbnailPath;
     private String videoPlaytime;
     private String sourceDetail;
+    private int dubCount;
 }

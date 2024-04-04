@@ -142,6 +142,7 @@ public class DubbingServiceImpl implements DubbingService {
                 .storagePath(videoSource.getStoragePath())
                 .thumbnailPath(videoSource.getThumbnailPath())
                 .createdTime(videoSource.getCreatedTime())
+                .dubCount(user.getDubCount())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -391,6 +392,12 @@ public class DubbingServiceImpl implements DubbingService {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+        // 더빙 가능 횟수가 남아있지 않으면 400 반환
+        if (user.getDubCount() < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         // 음성 조회
         List<VoiceSource> voiceSources = voiceSourceRepository.findByVideoSource_videoSourceCode(videoSourceCode);
         List<VideoSourceVoiceInfoDto> videoSourceVoiceInfoDtos = new ArrayList<>();
@@ -570,6 +577,10 @@ public class DubbingServiceImpl implements DubbingService {
 
         // Python 서버 응답
         responseClient.block();
+
+        // 더빙 생성시 더빙 가능 횟수 1 차감
+        user.setDubCount(user.getDubCount() - 1);
+        userRepository.save(user);
 
         DubbingCreateResponse response = DubbingCreateResponse.builder()
                 .dubCode(dubbing.getDubCode())

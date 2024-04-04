@@ -37,4 +37,12 @@ public class User {
     @Column(name = "learn_count")
     private int learnCount;
 
+    @Column(name = "cover_count")
+    private int coverCount;
+
+    @Column(name = "dub_count")
+    private int dubCount;
+
+
+
 }

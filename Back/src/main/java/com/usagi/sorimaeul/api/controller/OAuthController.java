@@ -2,6 +2,7 @@ package com.usagi.sorimaeul.api.controller;
 
 import com.usagi.sorimaeul.api.service.OAuthService;
 import com.usagi.sorimaeul.dto.response.TokenResponse;
+import com.usagi.sorimaeul.utils.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -43,7 +44,6 @@ public class OAuthController {
     public ResponseEntity<TokenResponse> login(@PathVariable String provider,
                                        @RequestParam("code") String code) {
         TokenResponse response = oAuthService.login(provider, code);
-
         return ResponseEntity.ok(response);
     }
 
