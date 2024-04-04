@@ -180,7 +180,7 @@ const CoverListPage: React.FC = () => {
               나만의 커버 만들기
             </Button>
             </ButtonContainer>
-            {coverCount === 0 && <p className='tooltip'>'⚠️ 잔여 제작 가능 횟수가 0입니다'</p>}
+            {coverCount === 0 && <p className='tooltip'>⚠️ 잔여 제작 가능 횟수가 0입니다</p>}
           </TooltipBox>
        
         <PopularCoverList data={popularDataList} />
