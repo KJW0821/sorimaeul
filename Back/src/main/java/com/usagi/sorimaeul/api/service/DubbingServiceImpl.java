@@ -539,6 +539,10 @@ public class DubbingServiceImpl implements DubbingService {
         User user = userRepository.getUser(userCode);
         VideoSource videoSource = videoSourceRepository.findByVideoSourceCode(request.getVideoSourceCode());
 
+        if (user.getDubCount() < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         Dubbing dubbing = Dubbing.builder()
                 .user(user)
                 .videoSource(videoSource)
