@@ -427,7 +427,7 @@ const HomePage: React.FC = () => {
       <Page3>
         <Temp>
           <CoverCategory onClick={() => navigate('/cover')}>
-            AI 노래방
+            AI 커버
             <GoBtnImg src={goBtnImg} alt="Button Image" />
           </CoverCategory>
           <CategoryDescription>

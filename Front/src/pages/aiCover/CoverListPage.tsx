@@ -110,7 +110,7 @@ const CoverListPage: React.FC = () => {
     <>
       <ColorBlock>
         <div className="flex ml-32 items-end gap-4">
-          <Title>AI 노래방</Title>
+          <Title>AI 커버</Title>
           <p className="description">나만의 노래 커버를 만들어 보세요!</p>
         </div>
       </ColorBlock>
