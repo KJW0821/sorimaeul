@@ -11,10 +11,6 @@ import album3 from '../../assets/album3.jpg';
 import album4 from '../../assets/album4.jpg';
 import MarqueeComponent from '../../components/home/MarqueeComponent';
 import DubbingContents from '../../components/home/DubbingContents';
-import logoimage from '../../assets/logo.png';
-import Lottie from 'lottie-react';
-import anime from '../../assets/lottie/mainAnime.json';
-import HomeInfo from './HomeInfo';
 import { useLocation } from 'react-router-dom';
 import mainVoice from '../../assets/mainVoice.png';
 import mainDub from "../../assets/mainDub.png";
@@ -37,6 +33,7 @@ const Page1 = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  background: linear-gradient(199.09deg, rgba(253, 255, 0, 0.119) -67.25%, rgba(255, 255, 255, 0.7) 87.08%), #C9F647;
 `;
 
 const CircleContainer = styled(motion.div)`
@@ -115,6 +112,7 @@ const Page2 = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(176.44deg, rgba(0, 240, 255, 0.7) 2.93%, rgba(255, 255, 255, 0.7) 51.76%), #5546FF;
 `;
 const GoBtnImg = styled.img`
   position: absolute;
@@ -198,6 +196,8 @@ const Page3 = styled.div`
   height: 100vh;
   width: 100%;
   display: flex;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(24, 38, 157, 0.7) -9.39%, rgba(255, 120, 217, 0.7) 119.24%), linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(181.35deg, rgba(235, 0, 255, 0.7) -9.39%, rgba(255, 255, 255, 0.7) 119.24%), #6D9FFF;
+
 `;
 
 const Temp = styled.div`
