@@ -299,6 +299,64 @@
 
 ### 배포
 
+- Nginx 설정
+  ```conf
+  server {
+      listen 80;
+      server_name {Base URL};
+      return 301 https://$host$request_uri;
+  }
+
+  server {
+      listen 443 ssl;
+
+      server_name {Base URL};
+
+      ssl_certificate /etc/letsencrypt/live/{Base URL}/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/{Base URL}/privkey.pem;
+
+
+      access_log   /var/log/nginx/access.log;
+      error_log    /var/log/nginx/error.log;
+
+      location /api {
+          proxy_pass http://localhost:8000;
+          proxy_set_header Connection '';
+          proxy_http_version 1.1;
+      }
+
+      location /api/sse {
+          proxy_pass http://localhost:8000;
+          proxy_set_header Connection '';
+          proxy_set_header Cache-Control 'no-cache';
+          proxy_set_header X-Accel-Buffering 'no';
+          proxy_set_header Content-Type 'text/event-stream';
+          proxy_buffering off;
+          chunked_transfer_encoding on;
+          proxy_read_timeout 3600s;
+      }
+
+      location / {
+          proxy_pass http://localhost:3000;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header Connection '';
+          proxy_http_version 1.1;
+      }
+
+      location /create-dubbing {
+          proxy_pass http://localhost:7864;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header Connection '';
+          proxy_http_version 1.1;
+      }
+  }
+  ```
+
 - Front-End
 
   - CI/CD : Jenkins pipeline
