@@ -45,6 +45,8 @@ public class UserController {
 				.nickname(user.getNickname())
 				.profileImage(user.getProfileImage())
 				.learnCount(user.getLearnCount())
+				.coverCount(user.getCoverCount())
+				.dubCount(user.getDubCount())
 				.build();
 
 		return ResponseEntity.ok(response);
