@@ -114,16 +114,15 @@
 
 ### 💻 IDE
 > Visual Studio Code 1.85.1 <br> 
-> IntelliJ 11.0.19
+> IntelliJ IDEA 2023.3.2 (Community Edition)
 
 <br>
 
 ### 🛢 Back-End
-
-> IntelliJ IDEA 2023.3.2 (Community Edition) <br>
 > Java 17 (Azul Zulu version 17.0.9) <br>
-> Spring boot 3.2.2 <br>
-> MySQL 8.0.36
+> Spring boot 3.2.3 <br>
+> MySQL 8.0.35 <br>
+> Redis 7.2.4
 
 <br>
 
@@ -145,9 +144,9 @@
 ### 🌐 Server
 > - AWS EC2
 >   - Ubuntu 20.04.6 LTS
->   - Jenkins 2.443
 >   - Nginx 1.18.0
 >   - OpenSSL 1.1.1f
+>   - Jenkins 2.448
 > - AWS S3 Bucket
 > - GPU server
 >   - Ubuntu 20.04.4 LTS
