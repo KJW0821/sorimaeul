@@ -392,7 +392,7 @@ const HomePage: React.FC = () => {
           </Circle>
           <Circle $size="27%"
             $hoverBackground="linear-gradient(90deg, rgba(255, 200, 200, 0.5) 0%, rgba(255, 154, 158, 0.5) 100%), #FFD700"
-            onClick={() => coverCount && navigate('/cover/create')}>
+            onClick={() => navigate('/cover')}>
             <IconImage src={mainCover} alt="cover icon" />
             <TextInside>커버</TextInside>
             <TextUnder>클릭 한번으로<br />AI 커버 만들어요!</TextUnder>
