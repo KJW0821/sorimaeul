@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteCover, getCover, likeCover, unlikeCover } from "../../utils/coverAPI";
-import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
+import { deleteCover, getCover, likeCover} from "../../utils/coverAPI";
+import { Cover, CoverDetailInterface } from "../../components/aiCover/CoverInterface";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import { openModal } from "../../stores/modal";
@@ -198,14 +198,21 @@ const ButtonBox = styled.div`
       height: 80%;
     }
 `;
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  // getMonth()는 0부터 시작하므로 +1을 해줍니다.
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  
+  return `${year}.${month}.${day}`;
+}
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
 
@@ -215,8 +222,6 @@ const CoverDetailPage: React.FC = () => {
         if (coverCode) {
           const data = await getCover(coverCode);
           setData(data);
-          setIsLiked(data.isLiked);
-          setLikeCount(data.likeCount);
           const commentData = await getCoverComment(coverCode);
           dispatch(setCategory("cover"));
           dispatch(setSelectedPostId(coverCode));
@@ -226,7 +231,7 @@ const CoverDetailPage: React.FC = () => {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
     })();
-  }, [coverCode, isLiked, dispatch]);
+  }, [coverCode, dispatch]);
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -241,25 +246,20 @@ const CoverDetailPage: React.FC = () => {
   };
 
   const handleLike = async () => {
-    if (coverCode) {
-      if (isLiked) {
-        // 이미 좋아요를 누른 상태라면 좋아요 취소
-        try {
-          await unlikeCover(coverCode);
-          setIsLiked(false);
-        } catch (err) {
-          console.error("좋아요 취소 처리 중 오류가 발생했습니다.", err);
-        }
-      } else {
-        // 좋아요를 누르지 않은 상태라면 좋아요를 시도
-        try {
-          await likeCover(coverCode);
-          setIsLiked(true);
-        } catch (err) {
-          console.error("좋아요 처리 중 오류가 발생했습니다.", err);
-        }
-      }
-    };
+    if (coverCode && data) {
+      await likeCover(coverCode, data.isLiked);
+      setData((prev: CoverDetailInterface | null) => {
+        if (prev === null) {
+          return null;
+        } 
+        const newData = {...prev};
+        return {
+          ...newData,
+          isLiked: newData.isLiked ? 0 : 1,
+          likeCount: newData.isLiked ? newData.likeCount - 1 : newData.likeCount + 1,
+        } as CoverDetailInterface
+      })
+    }
   };
 
   const openPlaylistAddModal = () => {
@@ -269,15 +269,7 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
-  function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    // getMonth()는 0부터 시작하므로 +1을 해줍니다.
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    
-    return `${year}.${month}.${day}`;
-  }
+
 
   return (
     <>
@@ -314,7 +306,7 @@ const CoverDetailPage: React.FC = () => {
                     플레이리스트에 추가</AddPlaylistBtn>
                   <LikeContainer>
                     <span onClick={handleLike}>
-                      {isLiked ? (
+                      {data.isLiked ? (
                         <img src={heart} alt="Active Heart" />
                       ) : (
                         <img src={inactiveHeart} alt="Inactive Heart" />

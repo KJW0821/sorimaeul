@@ -89,16 +89,16 @@ export const deleteCover = (coverCode: string) => {
   .catch(err => err)
 }
 
-// AI 커버 좋아요
-export const likeCover = (coverCode: string) => {
-  return API.get(`/like/cover/${coverCode}`)
-  .then(res => res)
-  .catch(err => err)
+// AI 커버 좋아요/취소 로직 병합
+export const likeCover = (coverCode: string, isLiked: number) => {
+  if (isLiked) {
+    return API.delete(`/like/cover/${coverCode}`)
+    .then(res => res)
+    .catch(err => err)
+  } else {
+    return API.get(`/like/cover/${coverCode}`)
+    .then(res => res)
+    .catch(err => err)
+  }
 }
 
-// AI 커버 좋아요 취소
-export const unlikeCover = (coverCode: string) => {
-  return API.delete(`/like/cover/${coverCode}`)
-  .then(res => res)
-  .catch(err => err)
-}
