@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteCover, getCover, likeCover, unlikeCover } from "../../utils/coverAPI";
-import { CoverDetailInterface } from "../../components/aiCover/CoverInterface";
+import { Cover, CoverDetailInterface } from "../../components/aiCover/CoverInterface";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import { openModal } from "../../stores/modal";
@@ -213,8 +213,6 @@ const CoverDetailPage: React.FC = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
-  const [isLiked, setIsLiked] = useState(data?.isLiked);
-  const [likeCount, setLikeCount] = useState(data?.likeCount);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
 
@@ -224,8 +222,6 @@ const CoverDetailPage: React.FC = () => {
         if (coverCode) {
           const data = await getCover(coverCode);
           setData(data);
-          setIsLiked(data.isLiked);
-          setLikeCount(data.likeCount);
           const commentData = await getCoverComment(coverCode);
           dispatch(setCategory("cover"));
           dispatch(setSelectedPostId(coverCode));
@@ -251,32 +247,19 @@ const CoverDetailPage: React.FC = () => {
 
   const handleLike = async () => {
     if (coverCode && data) {
-      if (isLiked) {
-        // 이미 좋아요를 누른 상태라면 좋아요 취소
-        try {
-          await unlikeCover(coverCode);
-          setIsLiked(0);
-          if (likeCount) {
-            setLikeCount(likeCount -1);
-          }
-          
-        } catch (err) {
-          console.error("좋아요 취소 처리 중 오류가 발생했습니다.", err);
-        }
-      } else {
-        // 좋아요를 누르지 않은 상태라면 좋아요를 시도
-        try {
-          await likeCover(coverCode);
-          setIsLiked(1);
-          if (likeCount) {
-            setLikeCount(likeCount +1);
-          }
-          
-        } catch (err) {
-          console.error("좋아요 처리 중 오류가 발생했습니다.", err);
-        }
-      }
-    };
+      await likeCover(coverCode, data.isLiked);
+      setData((prev: CoverDetailInterface | null) => {
+        if (prev === null) {
+          return null;
+        } 
+        const newData = {...prev};
+        return {
+          ...newData,
+          isLiked: newData.isLiked ? 0 : 1,
+          likeCount: newData.isLiked ? newData.likeCount - 1 : newData.likeCount + 1,
+        } as CoverDetailInterface
+      })
+    }
   };
 
   const openPlaylistAddModal = () => {
@@ -323,13 +306,13 @@ const CoverDetailPage: React.FC = () => {
                     플레이리스트에 추가</AddPlaylistBtn>
                   <LikeContainer>
                     <span onClick={handleLike}>
-                      {isLiked ? (
+                      {data.isLiked ? (
                         <img src={heart} alt="Active Heart" />
                       ) : (
                         <img src={inactiveHeart} alt="Inactive Heart" />
                       )}
                     </span>
-                    <span className="like-count"> {likeCount}</span>
+                    <span className="like-count"> {data.likeCount}</span>
                   </LikeContainer>
                 </Actions>
                 <DetailLine />
