@@ -250,13 +250,16 @@ const CoverDetailPage: React.FC = () => {
   };
 
   const handleLike = async () => {
-    if (coverCode && isLiked && likeCount) {
+    if (coverCode && data) {
       if (isLiked) {
         // 이미 좋아요를 누른 상태라면 좋아요 취소
         try {
           await unlikeCover(coverCode);
           setIsLiked(0);
-          setLikeCount(likeCount -1);
+          if (likeCount) {
+            setLikeCount(likeCount -1);
+          }
+          
         } catch (err) {
           console.error("좋아요 취소 처리 중 오류가 발생했습니다.", err);
         }
@@ -265,7 +268,10 @@ const CoverDetailPage: React.FC = () => {
         try {
           await likeCover(coverCode);
           setIsLiked(1);
-          setLikeCount(likeCount +1);
+          if (likeCount) {
+            setLikeCount(likeCount +1);
+          }
+          
         } catch (err) {
           console.error("좋아요 처리 중 오류가 발생했습니다.", err);
         }
