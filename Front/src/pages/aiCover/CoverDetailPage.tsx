@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteCover, getCover, likeCover, unlikeCover } from "../../utils/coverAPI";
+import { deleteCover, getCover, likeCover} from "../../utils/coverAPI";
 import { Cover, CoverDetailInterface } from "../../components/aiCover/CoverInterface";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
