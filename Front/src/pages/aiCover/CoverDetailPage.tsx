@@ -198,14 +198,23 @@ const ButtonBox = styled.div`
       height: 80%;
     }
 `;
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  // getMonth()는 0부터 시작하므로 +1을 해줍니다.
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  
+  return `${year}.${month}.${day}`;
+}
 
 const CoverDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const [data, setData] = useState<CoverDetailInterface | null>(null);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(data?.isLiked);
+  const [likeCount, setLikeCount] = useState(data?.likeCount);
   const loggedInUserNickname = useSelector((state: RootState) => state.user.nickname);
   const coverCode = params.id;
 
@@ -226,7 +235,7 @@ const CoverDetailPage: React.FC = () => {
         console.error("커버 데이터를 가져오는데 실패했습니다.");
       }
     })();
-  }, [coverCode, isLiked, dispatch]);
+  }, [coverCode, dispatch]);
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -241,12 +250,13 @@ const CoverDetailPage: React.FC = () => {
   };
 
   const handleLike = async () => {
-    if (coverCode) {
+    if (coverCode && isLiked && likeCount) {
       if (isLiked) {
         // 이미 좋아요를 누른 상태라면 좋아요 취소
         try {
           await unlikeCover(coverCode);
-          setIsLiked(false);
+          setIsLiked(0);
+          setLikeCount(likeCount -1);
         } catch (err) {
           console.error("좋아요 취소 처리 중 오류가 발생했습니다.", err);
         }
@@ -254,7 +264,8 @@ const CoverDetailPage: React.FC = () => {
         // 좋아요를 누르지 않은 상태라면 좋아요를 시도
         try {
           await likeCover(coverCode);
-          setIsLiked(true);
+          setIsLiked(1);
+          setLikeCount(likeCount +1);
         } catch (err) {
           console.error("좋아요 처리 중 오류가 발생했습니다.", err);
         }
@@ -269,15 +280,7 @@ const CoverDetailPage: React.FC = () => {
     }))
   };
 
-  function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    // getMonth()는 0부터 시작하므로 +1을 해줍니다.
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    
-    return `${year}.${month}.${day}`;
-  }
+
 
   return (
     <>
@@ -320,7 +323,7 @@ const CoverDetailPage: React.FC = () => {
                         <img src={inactiveHeart} alt="Inactive Heart" />
                       )}
                     </span>
-                    <span className="like-count"> {data.likeCount}</span>
+                    <span className="like-count"> {likeCount}</span>
                   </LikeContainer>
                 </Actions>
                 <DetailLine />
