@@ -74,6 +74,58 @@ const DetailLine = styled.div`
   background-color: #a3a3a3;
 `;
 
+
+const TooltipBox = styled.span`
+  position: relative;
+  height: 2rem;
+  .tooltip {
+    position: absolute;
+    right: 0;
+    bottom: -160%;
+    padding: .5rem;
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+    border-radius: 5px;
+    z-index: 10;
+    display: none;
+    min-width: 15rem;
+    text-align: center;
+    border: 1px solid #FE9D6B;
+  }
+  .tooltip::after {
+    border-color: white transparent;
+    border-style: solid;
+    border-width: 0 6px 8px 6.5px;
+    content: "";
+    display: block;
+    left: 95%;
+    transform: translateX(-95%);
+    position: absolute;
+    top: -6px;
+    width: 0;
+    z-index: 1;
+  }
+  .tooltip::before {
+    border-color: #FE9D6B transparent;
+    border-style: solid;
+    border-width: 0 6px 8px 6.5px;
+    content: "";
+    display: block;
+    left: 95%;
+    transform: translateX(-95%);
+    position: absolute;
+    top: -8px;
+    width: 0;
+    z-index: 0;
+  }
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+`;
+
 // 커버 전체 목록 페이지
 const CoverListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -110,22 +162,27 @@ const CoverListPage: React.FC = () => {
     <>
       <ColorBlock>
         <div className="flex ml-32 items-end gap-4">
-          <Title>AI 노래방</Title>
+          <Title>AI 커버</Title>
           <p className="description">나만의 노래 커버를 만들어 보세요!</p>
         </div>
       </ColorBlock>
       <Container>
         <h2 className="title">Hot Contents</h2>
-        <ButtonContainer>
-          <Button
-            onClick={() => navigate('/cover/create')}
-            $marginLeft={0}
-            $marginTop={0}
-            disabled={coverCount === 0}
-          >
-            나만의 커버 만들기
-          </Button>
-        </ButtonContainer>
+
+          <TooltipBox>
+          <ButtonContainer>
+            <Button
+              onClick={() => navigate('/cover/create')}
+              $marginLeft={0}
+              $marginTop={0}
+              disabled={coverCount === 0}
+            >
+              나만의 커버 만들기
+            </Button>
+            </ButtonContainer>
+            {coverCount === 0 && <p className='tooltip'>⚠️ 잔여 제작 가능 횟수가 0입니다</p>}
+          </TooltipBox>
+       
         <PopularCoverList data={popularDataList} />
         <DetailLine />
         <CoverListContainer>
