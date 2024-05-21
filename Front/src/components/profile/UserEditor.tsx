@@ -29,6 +29,7 @@ const ProfileImage = styled.div<ProfileImageProps>`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   background-size: cover;
   background-position: center;
+  background-color: white;
 `;
 
 const EditIcon = styled.img`
