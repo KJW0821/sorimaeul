@@ -6,7 +6,6 @@ import ColorLine from "../../components/profile/ColorLine";
 import CoverBox from "../../components/profile/aiCover/CoverBox";
 import { styled } from "styled-components";
 import UserEditor from "../../components/profile/UserEditor";
-import learnCnt from "../../assets/learnCnt.png";
 import ModelList from "../../components/profile/voiceModel/ModelList";
 import DubbingList from "../../components/profile/dubbing/DubbingList";
 import LikeContentsBox from "../../components/profile/likeContents/LikeContentsBox";
@@ -22,9 +21,9 @@ const Container = styled.div`
 
 const MenuBarContainer = styled.div`
   width: 20%;
-
   display: flex;
   flex-direction: column;
+  top: -9.5rem;
 `;
 
 const ContentContainer = styled.div`
