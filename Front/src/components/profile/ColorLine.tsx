@@ -14,7 +14,7 @@ const Title = styled.h1`
   font-size: 4rem;
   color: rgba(255, 255, 255, 0.5);
   -webkit-text-stroke: 1px white;
-  margin-left: 8rem;
+  margin-left: calc(20% + 8rem);
 `
 
 function ColorLine() {
