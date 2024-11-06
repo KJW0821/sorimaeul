@@ -107,7 +107,7 @@
 ### ⚙ Management Tool
 > 형상 관리 : Gitlab <br>
 > 이슈 관리 : Jira <br>
-> 커뮤니케이션 : Mattermost, Notion, KakaoTalk <br>
+> 커뮤니케이션 : Mattermost, Notion, Discord, KakaoTalk <br>
 > 디자인 : Figma
 
 <br>
